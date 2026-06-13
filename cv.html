@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tushar Pandey — Curriculum Vitæ</title>
-<meta name="description" content="Curriculum Vitae of Dr. Tushar Pandey — Ph.D. Mathematics (Texas A&M). Quantum topology, quantum error correction, quantum machine learning." />
+<meta name="description" content="Tushar Pandey — mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -15,7 +15,7 @@
     --text:#e8ecf6;--text-2:#9aa4c0;--text-3:#69728e;
     --cyan:#52d6e6;--violet:#9b7bff;--magenta:#f06ab0;
     --grad:linear-gradient(100deg,var(--cyan),var(--violet) 58%,var(--magenta));
-    --maxw:880px;
+    --maxw:820px;
     --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
   }
   *{box-sizing:border-box}
@@ -26,7 +26,6 @@
   ::selection{background:rgba(155,123,255,.32)}
   :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
 
-  /* toolbar */
   .bar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;
     padding:13px 28px;backdrop-filter:blur(12px);background:rgba(7,10,20,.78);border-bottom:1px solid var(--line)}
   .bar a,.bar button{font-family:var(--mono);font-size:12.5px;color:var(--text-2);border:1px solid var(--line-strong);
@@ -34,120 +33,105 @@
   .bar a:hover,.bar button:hover{color:var(--text);background:var(--surface-2);border-color:transparent}
   .bar .print{background:var(--grad);color:#0a0e1a;border-color:transparent;font-weight:500}
   .bar .print:hover{filter:brightness(1.08);background:var(--grad)}
-  .bar .right{display:flex;gap:10px}
 
   .page{max-width:var(--maxw);margin:0 auto;padding:54px 28px 90px}
 
-  /* header */
-  .cvhead{border-bottom:1px solid var(--line-strong);padding-bottom:26px;margin-bottom:8px}
   .cvhead h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,52px);line-height:1;letter-spacing:-.02em;margin:0}
   .cvhead h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .role-line{font-family:var(--serif);font-style:italic;font-size:clamp(15px,2.4vw,19px);color:var(--text-2);margin:14px 0 0}
-  .contact{display:flex;flex-wrap:wrap;gap:7px 18px;margin:20px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--text-2)}
+  .role-line{font-family:var(--serif);font-style:italic;font-size:clamp(15px,2.4vw,20px);color:var(--text-2);margin:14px 0 0}
+  .contact{display:flex;flex-wrap:wrap;gap:7px 18px;margin:18px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--text-2)}
   .contact a{color:var(--text-2);border-bottom:1px solid var(--line);padding-bottom:1px;transition:.2s}
   .contact a:hover{color:var(--text);border-color:var(--cyan)}
   .contact .loc{color:var(--text-3)}
 
-  /* sections */
-  section{padding:30px 0 4px;border-top:1px solid var(--line)}
-  section:first-of-type{border-top:0}
+  /* lead / summary */
+  .lead{font-size:clamp(16px,2vw,18px);line-height:1.62;color:var(--text);margin:30px 0 0;max-width:64ch}
+  .lead b{font-weight:600}
+  .lead .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+
+  section{padding:32px 0 4px;border-top:1px solid var(--line);margin-top:34px}
+  section:first-of-type{margin-top:34px}
   h2{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);margin:0 0 20px;display:flex;align-items:center;gap:13px}
   h2::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--grad);flex:0 0 auto}
 
-  .row{display:grid;grid-template-columns:128px 1fr;gap:24px;padding:11px 0;align-items:baseline}
+  /* highlights */
+  .hl{display:grid;grid-template-columns:16px 1fr;gap:14px;padding:11px 0;align-items:start}
+  .hl+.hl{border-top:1px solid var(--line)}
+  .hl .dot{width:7px;height:7px;border-radius:50%;background:var(--grad);margin-top:8px}
+  .hl .tx{font-size:15px;line-height:1.5;color:var(--text-2)}
+  .hl .tx b{color:var(--text);font-weight:600}
+  .hl a.lk{color:var(--violet);font-family:var(--mono);font-size:11px;border-bottom:1px solid transparent;transition:.2s;white-space:nowrap}
+  .hl a.lk:hover{border-color:var(--violet)}
+
+  /* trajectory rows */
+  .row{display:grid;grid-template-columns:140px 1fr;gap:24px;padding:13px 0;align-items:baseline}
   .row+.row{border-top:1px solid var(--line)}
-  .when{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.03em;line-height:1.5}
+  .when{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.02em;line-height:1.5}
   .what .t{display:block;font-size:15px;color:var(--text);line-height:1.45}
   .what .t b{font-weight:600}
-  .what .s{display:block;color:var(--text-2);font-size:13.5px;margin-top:2px}
-  .what .n{display:block;color:var(--text-3);font-size:13px;margin-top:5px;line-height:1.55}
-  .what a.lk{color:var(--violet);font-family:var(--mono);font-size:11.5px;border-bottom:1px solid transparent;transition:.2s;white-space:nowrap}
-  .what a.lk:hover{border-color:var(--violet)}
-  .what a.inl{color:var(--text);border-bottom:1px solid var(--line-strong)}
-  .what a.inl:hover{border-color:var(--cyan)}
+  .what .n{display:block;color:var(--text-2);font-size:13.5px;margin-top:4px;line-height:1.55}
 
-  /* publications */
-  .grp{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--text-2);margin:22px 0 4px}
-  .grp:first-child{margin-top:0}
-  .pub{display:grid;grid-template-columns:26px 1fr;gap:14px;padding:10px 0;border-top:1px solid var(--line);align-items:baseline}
-  .grp+.pub{border-top:0}
-  .pub .num{font-family:var(--mono);font-size:12px;color:var(--text-3);text-align:right}
-  .pub .body{font-size:14.5px;line-height:1.5}
-  .pub .ttl{color:var(--text)}
-  .pub .venue{color:var(--text-2);font-size:13px}
-  .pub .co{color:var(--text-3)}
-  .pub a.lk{color:var(--violet);font-family:var(--mono);font-size:11.5px;border-bottom:1px solid transparent;transition:.2s;white-space:nowrap}
+  /* selected research */
+  .pub{display:grid;grid-template-columns:1fr;gap:2px;padding:10px 0;border-top:1px solid var(--line)}
+  .pub:first-of-type{border-top:0}
+  .pub .ttl{font-size:14.5px;color:var(--text);line-height:1.45}
+  .pub .meta{font-size:12.5px;color:var(--text-3)}
+  .pub .meta b{color:var(--text-2);font-weight:500}
+  .pub a.lk{color:var(--violet);font-family:var(--mono);font-size:11px;border-bottom:1px solid transparent;transition:.2s;white-space:nowrap}
   .pub a.lk:hover{border-color:var(--violet)}
+  .more{font-family:var(--mono);font-size:12px;color:var(--text-3);margin:12px 0 0}
+  .more a{color:var(--violet);border-bottom:1px solid transparent;transition:.2s}
+  .more a:hover{border-color:var(--violet)}
 
-  /* compact tag rows */
-  .tags{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 6px}
+  .tags{display:flex;flex-wrap:wrap;gap:8px}
   .tag{font-family:var(--mono);font-size:11.5px;color:var(--text-2);border:1px solid var(--line);padding:5px 11px;border-radius:99px}
+  .tag b{color:var(--text);font-weight:600}
 
-  /* awards / service lists */
-  .plain{list-style:none;margin:0;padding:0}
-  .plain li{padding:9px 0;border-top:1px solid var(--line);color:var(--text-2);font-size:14px}
-  .plain li:first-child{border-top:0}
-  .plain .sub{display:block;color:var(--text-3);font-size:12.5px;margin-top:3px}
-  .plain a{color:var(--text);border-bottom:1px solid var(--line-strong)}
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px 44px}
-
-  /* conferences condensed */
-  .conf{display:grid;grid-template-columns:90px 1fr;gap:18px;padding:9px 0;border-top:1px solid var(--line);align-items:baseline}
-  .conf:first-of-type{border-top:0}
-  .conf .yr{font-family:var(--mono);font-size:12px;color:var(--cyan)}
-  .conf .ev{font-size:13.5px;color:var(--text-2);line-height:1.5}
-  .conf .ev .rl{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border:1px solid var(--line);border-radius:4px;padding:1px 6px;margin-left:4px}
-
-  .skill{display:grid;grid-template-columns:128px 1fr;gap:24px;padding:10px 0;border-top:1px solid var(--line);align-items:baseline}
-  .skill:first-of-type{border-top:0}
+  .skill{display:grid;grid-template-columns:140px 1fr;gap:24px;padding:10px 0;align-items:baseline}
+  .skill+.skill{border-top:1px solid var(--line)}
   .skill .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
   .skill .v{font-size:14px;color:var(--text-2);line-height:1.55}
+
+  .oneline{font-size:14px;color:var(--text-2);line-height:1.6}
+  .oneline a{color:var(--text);border-bottom:1px solid var(--line-strong)}
 
   .foot{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--text-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
 
   @media (max-width:620px){
     .row,.skill{grid-template-columns:1fr;gap:5px}
     .when{color:var(--text-3)}
-    .two{grid-template-columns:1fr;gap:14px}
-    .conf{grid-template-columns:62px 1fr;gap:12px}
     .page{padding:38px 20px 70px}
     .bar{padding:11px 18px}
   }
 
   /* ============ PRINT ============ */
   @media print{
-    @page{margin:14mm 15mm}
-    html,body{background:#fff!important;color:#15171c!important;font-size:9.6pt;line-height:1.4}
+    @page{margin:14mm 16mm}
+    html,body{background:#fff!important;color:#15171c!important;font-size:9.8pt;line-height:1.4}
     .bar{display:none!important}
     .page{max-width:none;margin:0;padding:0}
     a{color:#1a2b6b!important}
     ::selection{background:transparent}
-    .cvhead{border-color:#bbb}
     .cvhead h1{color:#0d0f14!important;font-size:25pt}
     .cvhead h1 span{-webkit-text-fill-color:#0d0f14;color:#0d0f14!important;background:none}
     .role-line{color:#3a3f4a!important;font-size:11pt}
-    .contact,.contact a,.contact .loc{color:#2a2e38!important}
-    .contact a{border-color:#bbb}
-    section{border-color:#ccc;padding:11px 0 2px;break-inside:auto}
-    h2{color:#5a3fb0!important;font-size:9pt}
-    h2::before{background:#7b5cff}
+    .contact,.contact a,.contact .loc{color:#2a2e38!important}.contact a{border-color:#bbb}
+    .lead{color:#15171c!important;font-size:11pt}
+    .lead .accent{-webkit-text-fill-color:#15171c;color:#15171c!important;background:none}
+    section{border-color:#ccc;margin-top:16px;padding:14px 0 2px;break-inside:auto}
+    h2{color:#5a3fb0!important;font-size:9pt;break-after:avoid}h2::before{background:#7b5cff}
     .when{color:#7a3aa0!important}
-    .what .t,.pub .ttl,.cvhead h1{color:#15171c!important}
-    .what .s,.pub .venue,.skill .v,.plain li{color:#2f333d!important}
-    .what .n,.pub .co,.plain .sub,.conf .ev{color:#555b66!important}
-    .pub .num,.skill .k,.grp,.conf .yr{color:#444!important}
-    .conf .yr{color:#7a3aa0!important}
-    .what a.lk,.pub a.lk{color:#1a2b6b!important}
-    .tag{color:#333!important;border-color:#bbb}
-    .row,.pub,.conf,.plain li,.skill,.emp,.edu{break-inside:avoid}
-    h2{break-after:avoid}
-    .grp{break-after:avoid;color:#333!important}
-    section{break-before:auto}
+    .what .t,.pub .ttl{color:#15171c!important}
+    .what .n,.hl .tx,.skill .v,.oneline,.pub .meta{color:#2f333d!important}
+    .hl .tx b,.what .t b,.pub .meta b{color:#15171c!important}
+    .hl .dot{background:#7b5cff}
+    .hl a.lk,.pub a.lk{color:#1a2b6b!important}
+    .skill .k{color:#444!important}
+    .tag{color:#333!important;border-color:#bbb}.tag b{color:#111!important}
+    .more,.more a{color:#555!important}
+    .hl,.row,.pub,.skill{break-inside:avoid}
     .foot{color:#666!important;border-color:#ccc}
-    /* tighten grids a touch for print */
-    .row{grid-template-columns:118px 1fr;gap:18px;padding:7px 0}
-    .pub{padding:6px 0}
-    .two{gap:6px 30px}
+    .row{grid-template-columns:128px 1fr;gap:18px;padding:8px 0}
   }
 </style>
 </head>
@@ -155,16 +139,14 @@
 
 <div class="bar">
   <a href="index.html" aria-label="Back to site">&larr; Back to site</a>
-  <div class="right">
-    <button class="print" id="printBtn" aria-label="Print or save as PDF">&#x2913; Print / Save PDF</button>
-  </div>
+  <button class="print" id="printBtn" aria-label="Print or save as PDF">&#x2913; Print / Save PDF</button>
 </div>
 
 <div class="page">
 
   <header class="cvhead">
     <h1>Tushar <span>Pandey</span>, PhD</h1>
-    <p class="role-line">Quantum Topology · Quantum Error Correction · Quantum Machine Learning</p>
+    <p class="role-line">Mathematician and builder — from quantum-topology proofs to production AI.</p>
     <div class="contact">
       <span class="loc">Dallas, TX</span>
       <a href="mailto:tusharp@tamu.edu">tusharp@tamu.edu</a>
@@ -172,220 +154,93 @@
       <a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">sites.google.com/view/tusharpandey</a>
       <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
     </div>
+
+    <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: designing fault-tolerant error correction at Oak Ridge, inventing a test-time reasoning framework now cited across the field, and building production machine-learning infrastructure at scale, while winning the discipline&rsquo;s hardest challenges along the way.</p>
   </header>
 
-  <section id="education"><h2>Education</h2><div id="cv-education"></div></section>
-  <section id="employment"><h2>Employment</h2><div id="cv-employment"></div></section>
-  <section id="interests"><h2>Research Interests</h2><div class="tags" id="cv-interests"></div></section>
-  <section id="publications"><h2>Publications &amp; Preprints</h2><div id="cv-pubs"></div></section>
-  <section id="surveys"><h2>Survey Articles</h2><div id="cv-surveys"></div></section>
-  <section id="talks"><h2>Invited Talks &amp; Presentations</h2><div id="cv-talks"></div></section>
-  <section id="teaching"><h2>Teaching</h2><div id="cv-teaching"></div></section>
-  <section id="awards"><h2>Awards &amp; Honors</h2><ul class="plain two" id="cv-awards"></ul></section>
-  <section id="service"><h2>Academic Service &amp; Leadership</h2><ul class="plain" id="cv-service"></ul></section>
-  <section id="software"><h2>Selected Software &amp; Projects</h2><div class="tags" id="cv-software"></div></section>
-  <section id="conferences"><h2>Conference &amp; Workshop Participation</h2><div id="cv-conf"></div></section>
-  <section id="skills"><h2>Technical Skills</h2><div id="cv-skills"></div></section>
+  <section id="highlights"><h2>Selected Highlights</h2><div id="cv-hl"></div></section>
+  <section id="experience"><h2>Experience</h2><div id="cv-exp"></div></section>
+  <section id="research"><h2>Selected Research</h2><div id="cv-pubs"></div></section>
+  <section id="recognition"><h2>Recognition</h2><div class="tags" id="cv-rec"></div></section>
+  <section id="education"><h2>Education</h2><div id="cv-edu"></div></section>
+  <section id="leadership"><h2>Leadership &amp; Service</h2><p class="oneline" id="cv-lead"></p></section>
+  <section id="skills"><h2>Range &amp; Skills</h2><div id="cv-skills"></div></section>
 
   <div class="foot">
     <span id="cv-updated"></span>
-    <span>References available on request</span>
+    <span>Full publication list &amp; talks: Google Scholar / personal site</span>
   </div>
 
 </div>
 
 <script>
-/* ============ DATA (kept in sync with index.html) ============ */
+const highlights = [
+  {b:"Invented Adaptive Graph of Thoughts (AGoT)", r:", a test-time reasoning framework unifying chain, tree, and graph structures — cited across the field and shipped to production.", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
+  {b:"Sole-authored a proof of the Bonahon–Wong–Yang volume conjecture", r:" for the four-puncture sphere — independent results at the frontier of quantum topology.", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
+  {b:"Built production multi-tenant LLM inference at scale", r:" at DataRobot, cutting model-deployment latency 30–40% and lifting throughput 300%."},
+  {b:"Cut LLM fine-tuning cost by 99%", r:" at Agnostiq with a CPU-first, federated architecture that matched quality at a fraction of the spend."},
+  {b:"Designed a fault-tolerant quantum error-correction pipeline", r:" for a non-abelian topological code at Oak Ridge National Laboratory, published in APL Quantum.", link:"https://doi.org/10.1063/5.0255351", id:"APL Quantum"},
+  {b:"Won three first-place titles", r:" at the field&rsquo;s hardest challenges — IBM Quantum Developer Conference, MIT iQuHACK, and Q-Volution."},
+];
+const experience = [
+  {y:"2026 – Present", r:"Senior Software Engineer", o:"DataRobot", n:"Production multi-tenant LLM inference infrastructure; certified Covalent for orchestrating GenAI and hybrid quantum–classical / HPC pipelines. (Software Developer II, 2025–26.)"},
+  {y:"2024 – 2025", r:"Research Software Engineer", o:"Agnostiq", n:"Invented and shipped AGoT; cut LLM fine-tuning cost 99% via a CPU-first federated architecture on the Covalent distributed-compute framework."},
+  {y:"2019 – 2024", r:"Doctoral Researcher", o:"Texas A&M University", n:"Original quantum-topology results including a sole-authored conjecture proof; founded a Directed Reading Program and mentored 20+ students. Advisor: Prof. Tian Yang."},
+  {y:"Summers 2021 & 2022", r:"Summer Researcher (NSF-MSGI)", o:"Oak Ridge National Laboratory", n:"Fault-tolerant quantum error correction for the doubled Semion model; topological phases of matter (APL Quantum, 2025)."},
+];
+const research = [
+  {t:"Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures", m:"First author · test-time reasoning, cited across the field", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
+  {t:"Topological Phases of Matter, Quantum Error Correction, and Topological Twists", m:"APL Quantum 2(3):031501 (2025) · lead author", link:"https://doi.org/10.1063/5.0255351", id:"DOI"},
+  {t:"Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes", m:"qLDPC codes · quantum-advantage threshold assessment", link:"https://arxiv.org/pdf/2603.19062", id:"arXiv:2603.19062"},
+  {t:"Fixed-Reservoir vs. Variational Quantum Architectures for Chaotic Dynamics", m:"Sole author · quantum machine learning", link:"https://arxiv.org/pdf/2604.23743", id:"arXiv:2604.23743"},
+  {t:"The Bonahon–Wong–Yang Volume Conjecture for the Four-Puncture Sphere", m:"Sole author · quantum topology", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
+];
+const recognition = [
+  {b:"1st", r:"IBM Quantum Developer Conference, 2025"},
+  {b:"1st", r:"MIT iQuHACK, 2024"},
+  {b:"1st", r:"Q-Volution Hackathon, 2026"},
+  {b:"Guseman Prize", r:"TAMU Mathematics, 2023"},
+  {b:"4×", r:"TAMIDS Data Science Competition winner"},
+];
 const education = [
-  {y:"2024", d:"Ph.D., Mathematics", s:"Texas A&M University", n:"Advisor: Prof. Tian Yang. Dissertation area: hyperbolic geometry, topological quantum field theories, and skein-theoretic quantum invariants (the Volume Conjecture)."},
+  {y:"2024", d:"Ph.D., Mathematics", s:"Texas A&M University", n:"Advisor: Prof. Tian Yang · quantum topology, TQFT, the Volume Conjecture"},
   {y:"2019", d:"B.S., Mathematics & Scientific Computing", s:"Indian Institute of Technology (IIT) Kanpur"},
 ];
-const employment = [
-  {y:"Mar 2026 – Present", r:"Senior Software Engineer", o:"DataRobot", n:"Multi-tenant LLM inference infrastructure; production certification of Covalent for orchestrating GenAI and hybrid quantum–classical / HPC pipelines. Software Developer II, Mar 2025 – Mar 2026."},
-  {y:"Jul 2024 – Feb 2025", r:"Research Software Engineer", o:"Agnostiq", n:"Authored Adaptive Graph of Thoughts (AGoT); quantum–classical and GenAI algorithm research on the Covalent distributed-compute framework."},
-  {y:"Aug 2019 – Jul 2024", r:"Graduate Research & Teaching Assistant", o:"Texas A&M University", n:"Doctoral research in quantum topology under Prof. Tian Yang; multiple NSF-funded research terms; founded a Directed Reading Program mentoring 20+ students."},
-  {y:"Summers 2021 & 2022", r:"Summer Research Intern (NSF-MSGI)", o:"Oak Ridge National Laboratory", n:"Fault-tolerant quantum error correction for the doubled Semion model; topological phases of matter (APL Quantum, 2025)."},
-];
-const interests = ["Quantum Topology","Hyperbolic Geometry","Topological QFT","Volume Conjecture","Quantum Error Correction","qLDPC & Topological Codes","Quantum Machine Learning","Quantum Algorithms","Topological Data Analysis"];
-
-const papers = [
-  {g:"qml", y:"Apr 2026", t:"Fixed-Reservoir vs. Variational Quantum Architectures for Chaotic Dynamics: Benchmarking QRC and QPINN on the Lorenz System", v:"preprint", link:"https://arxiv.org/pdf/2604.23743", id:"arXiv:2604.23743"},
-  {g:"qml", y:"Apr 2026", t:"Quantum Kernels for Parity-Structured Classification", v:"to appear, IEEE DCAS conference proceedings"},
-  {g:"qc", y:"Mar 2026", t:"Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel", v:"preprint", link:"https://arxiv.org/pdf/2603.19062", id:"arXiv:2603.19062"},
-  {g:"qc", y:"Mar 2026", t:"Machine Learning-Driven Quantum Hacking of CHSH-Based QKD: Exploiting Entropy Vulnerabilities in Self-Testing Protocols", v:"QUEST-IS 2025, Springer", link:"https://link.springer.com/book/9783032138545", id:"Springer"},
-  {g:"qc", y:"Jun 2025", t:"Topological phases of matter, Quantum Error Correction, and Topological twists", v:"APL Quantum 2(3):031501", link:"https://doi.org/10.1063/5.0255351", id:"DOI"},
-  {g:"ml", y:"Feb 2025", t:"Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures", v:"preprint", co:"Tushar et al.", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
-  {g:"qc", y:"Jul 2024", t:"Efficient variational quantum eigensolver methodologies on quantum processors", v:"in revision, Physica Scripta", co:"Tushar et al.", link:"https://arxiv.org/abs/2407.16107", id:"arXiv:2407.16107"},
-  {g:"ml", y:"Jun 2024", t:"Modeling Sea Level Rise Using Ensemble Techniques: Impacts on Coastal Adaptation, Freshwater Ecosystems, Agriculture and Infrastructure", v:"Analytics 3(3):276–296", co:"Sambandh et al.", link:"https://www.mdpi.com/2813-2203/3/3/16", id:"MDPI"},
-  {g:"qt", y:"Feb 2024", t:"Generalized Bonahon–Wong–Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure-eight knot complement", v:"in revision, Algebraic & Geometric Topology", co:"with Ka Ho Wong", link:"https://arxiv.org/abs/2402.04483", id:"arXiv:2402.04483"},
-  {g:"qt", y:"Nov 2023", t:"The Bonahon–Wong–Yang volume conjecture for the four-puncture sphere", v:"preprint", co:"sole author", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
-  {g:"qt", y:"Sep 2023", t:"Geometry of fundamental shadow link complements and applications to the 1-loop conjecture", v:"submitted to Journal of Topology", co:"with Ka Ho Wong", link:"https://arxiv.org/pdf/2308.06643.pdf", id:"arXiv:2308.06643"},
-  {g:"qt", y:"Sep 2022", t:"Topological Characterization with a Twist, Condensation, and Reflection", v:"preprint", co:"with E. Dumitrescu", link:"https://arxiv.org/pdf/2209.11126.pdf", id:"arXiv:2209.11126"},
-  {g:"qt", y:"May 2021", t:"On the asymptotic expansion for the relative Reshetikhin–Turaev invariants of fundamental shadow link pairs", v:"preprint", co:"with Ka Ho Wong", link:"https://arxiv.org/pdf/2105.08805v2.pdf", id:"arXiv:2105.08805"},
-];
-const surveys = [
-  {y:"2023", t:"Quantum Computing through ChatGPT", v:"Tushar Pandey, ChatGPT", link:"https://drive.google.com/file/d/1cK8XUmHm6yp_gYrGcezFZQ3bhs6mOpV1/view?usp=share_link", id:"PDF"},
-  {y:"2022", t:"Topological Understanding of Neural Networks", v:"Tushar Pandey", link:"https://arxiv.org/pdf/2301.09742.pdf", id:"arXiv:2301.09742"},
-];
-const talks = [
-  {t:"Understanding Quantum through pictures", v:"QuantA&M seminar, Texas A&M University"},
-  {t:"BWY volume conjecture for incomplete structures", v:"Geometry/Topology seminar, Rutgers University", link:"https://drive.google.com/file/d/1uJfErlCJu-t7Eb4bWwPJmbPbafxe-94o/view?usp=sharing"},
-  {t:"Generalized BWY volume conjecture", v:"Topology seminar, Michigan State University", link:"https://drive.google.com/file/d/1VJM0g5k03fQjJQZFeVCtusQ4fmEiOkfU/view?usp=drive_link"},
-  {t:"Quantum invariants for punctured sphere", v:"Workshop in Geometric Topology, Colorado College", link:"https://drive.google.com/file/d/1mDcCgrBYz9QKre9CJJU1W2Tj7s3IqZRS/view?usp=drive_link"},
-  {t:"ZX-live", v:"Quantinuum hackathon, ICTP, Italy", link:"https://drive.google.com/file/d/1szrSaMR3E3HcT2eJ32NTt1xCH2SsavWC/view?usp=share_link"},
-  {t:"Quantum invariants for surface diffeomorphisms", v:"AMS Southeastern Sectional Meeting, Georgia Tech", link:"https://drive.google.com/file/d/1ZTEP3ezmd_xkxLmGkl9zwRy_GvFY-IFX/view"},
-  {t:"Toric Code, Doubled Semion and Ising anyons", v:"Quantum workshop, NC State University", link:"https://docs.google.com/presentation/d/15nmpuc6cNdlORYocoTp1MM8mLQzE0FxG/edit?usp=share_link"},
-  {t:"From Jones Polynomial to Volume Conjecture", v:"Low-Dimension Topology Seminar, Texas A&M", link:"https://drive.google.com/file/d/1bezYT658rSQz-aS8VWQfeXRdB3TDZZHL/view?usp=sharing"},
-  {t:"Category Theory and Topological phases of matter", v:"Oak Ridge National Labs, Oak Ridge, TN", link:"https://drive.google.com/file/d/1ePPwCUOOjb_vAIsCzUH38U3ybuvV0npn/view?usp=sharing"},
-  {t:"Tetrahedral Decomposition", v:"Graduate School on GGT & Low Dim. Topology, ICMAT, Madrid", link:"https://drive.google.com/file/d/1INR4KSCOf-gdcvIyDRS4vzLEQ_MAr-qv/view?usp=sharing"},
-  {t:"Brief History of Volume Conjecture", v:"Braids in Low Dimension Topology, ICERM, Brown University", link:"https://drive.google.com/file/d/18dW5byH6CtKLi0S_Z9BFJp835TLRkNFg/view?usp=sharing"},
-  {t:"Topological data from the ground state Hamiltonian", v:"NSF MSGI Symposium, Oak Ridge National Labs", co:"with Eugene Dumitrescu", link:"https://drive.google.com/file/d/1G-4lddB3G1LdB4CpNggkAuI1tnzBPznm/view?usp=sharing"},
-  {t:"Art to Mathematics to Quantum", v:"Gathering in Graduate Expository Mathematics, Texas A&M", link:"https://drive.google.com/file/d/1jIWQtJwH9Ib_oU5QsC14RqqJp7cYaOz1/view?usp=sharing"},
-];
-const teaching = [
-  {code:"MATH 628", t:"Mathematics of Finance", terms:"Fall 2023", l:"https://www.math.tamu.edu/courses/math628/"},
-  {code:"MATH 409", t:"Advanced Calculus I", terms:"Fall 2023", l:"https://www.math.tamu.edu/courses/math409/"},
-  {code:"MATH 677", t:"Mathematical Foundations for Data Science", terms:"Fall 2021", l:"https://www.math.tamu.edu/courses/math677/?semester=2021A"},
-  {code:"MATH 425", t:"Mathematics of Contingent Claims", terms:"Spring 2021", l:"https://www.math.tamu.edu/courses/math425/"},
-  {code:"MATH 151", t:"Engineering Mathematics I", terms:"Fall 2020, Fall 2022", l:"https://www.math.tamu.edu/courses/math151/"},
-];
-const projects = [
-  {n:"Quantum ODE solver for large-scale linear systems (2026)"},
-  {n:"NeurotiQ — Quantum ML for EEG Analysis", l:"https://github.com/Valmohaugen/NYUAD-Hackathon-2025/tree/main"},
-  {n:"Adaptive Graph of Thoughts", l:"https://github.com/AgnostiqHQ/multi-agent-llm/tree/main"},
-  {n:"Toric Code — PennyLane implementation", l:"https://github.com/pandey-tushar/Error_Correction"},
-  {n:"QMPRS — linear-depth MPS encoding (QHACK)", l:"https://zenodo.org/records/15437417"},
-  {n:"ZX-Live (Quantomatic)", l:"https://github.com/Quantomatic/zxlive"},
-  {n:"Efficient ground-state methods (QHACK 2023)", l:"https://github.com/jsaroni/QHack2023_Feynmanprodigies"},
-  {n:"Approximating tanh(x) — iQuHACK / Classiq", l:"https://github.com/pandey-tushar/IQuhack_Classiq"},
-  {n:"Topological Data Analysis", l:"https://github.com/pandey-tushar/intro_to_TDA"},
-  {n:"Compressed Sensing", l:"https://github.com/pandey-tushar/Compressed-Sensing"},
-];
-const conferences = {
-  "2026":[
-    {short:"QCTiP, Oxford University, UK", rl:"Poster"},
-    {short:"AQ-QCAS, SMU, TX", rl:"Invited"},
-  ],
-  "2025":[
-    {short:"IBM Quantum Developer Conference, Atlanta", rl:"Participant"},
-    {short:"AMS Special Session on QEC: Categorical Approaches to Topological Codes", rl:"Organizer"},
-    {short:"QSIM Quantum Simulation Conference, IBM, NYC", rl:""},
-    {short:"NYUAD Hackathon, Abu Dhabi", rl:"Mentor"},
-    {short:"Quantum Computing Stack workshop, Yale", rl:""},
-  ],
-  "2024":[
-    {short:"Quantum Topology & Mathematical Physics, Texas A&M", rl:""},
-    {short:"Toric code seminar, Texas A&M", rl:"Invited"},
-    {short:"Algebra & Combinatorics seminar, Texas A&M", rl:"Invited"},
-    {short:"Joint Mathematical Meetings (JMM), San Francisco", rl:"Invited"},
-  ],
-  "2023":[
-    {short:"Friday Morning Seminar, Yale", rl:"Invited"},
-    {short:"Topology Seminar, UCSB", rl:"Invited"},
-    {short:"Topological Quantum Computation, ICMS Edinburgh", rl:"Participant"},
-    {short:"Geometry/Topology seminar, Rutgers", rl:"Invited"},
-    {short:"Topology Seminar, Michigan State", rl:"Invited"},
-    {short:"Quantum Invariants & Low-Dim. Topology, AIM Pasadena", rl:"Participant"},
-    {short:"Characters & Moduli of Surfaces, RIMS Kyoto", rl:""},
-    {short:"Workshop in Geometric Topology, Colorado College", rl:"Invited"},
-    {short:"ICTP–Quantinuum Quantum Hackathon, Trieste", rl:"Participant"},
-    {short:"AMS Spring Southeastern Sectional, Georgia Tech", rl:"Invited"},
-  ],
-  "2021–2022":[
-    {short:"QMATH, UC Davis", rl:""},
-    {short:"GGT & Low-Dim. Topology, ICMAT Madrid", rl:""},
-    {short:"Braids in Low-Dim. Topology, ICERM Brown", rl:""},
-    {short:"GIG'EM Conference, Texas A&M", rl:"Invited"},
-  ],
-};
-const leadership = [
-  {t:'<a href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" target="_blank" rel="noopener">Organizer</a>, AMS 2025 Fall Eastern Sectional Special Session', s:"New Horizons for Quantum Error Correction — Categorical Approaches to Topological Codes"},
-  {t:"Reviewer — Quantum Science and Technology (IOP), Physica Scripta", s:"Peer review for quantum-science journals"},
-  {t:'<a href="https://hackathon.nyuad.nyu.edu/" target="_blank" rel="noopener">NYUAD</a> Mentor, Quantum Hackathon', s:"Team mentor, April 2025"},
-  {t:'<a href="https://www.math.tamu.edu/undergraduate/drp/" target="_blank" rel="noopener">Directed Reading Program</a> Mentor, Texas A&M', s:"Hyperbolic geometry · Knot invariants & cablings · Computational topology · Linear algebra in finance · Convex optimization (20+ students)"},
-  {t:"Department of Mathematics Volunteer, Texas A&M", s:"Derivative Bee (2019, 2022, 2023) · Integral Bee (2023) · High School Math Contest (2022, 2023)"},
-];
-const prizes = [
-  "First Prize, Q-Volution Hackathon, GiQ, 2026",
-  "First Prize, IBM Quantum Developer Conference, 2025",
-  "First Prize, MIT iQuHACK, 2024",
-  "Guseman Prize, Department of Mathematics, Texas A&M, 2023",
-  "Top 15, Quantum Algorithms Challenge, QHACK 2023",
-  "Third Prize, TAMIDS Data Science Competition, 2024",
-  "2nd Prize + Best Presentation, TAMIDS Data Science Competition, 2022",
-  "1st Prize + Best Presentation, TAMIDS Data Science Competition, 2021",
-  "First Prize, TAMU Datathon (HPE Challenge), 2020",
-  "Special Appreciation Award, IIT Kanpur, 2019",
-];
 const skills = {
-  "Quantum":"Qiskit, PennyLane, Cirq, Covalent; Quantum Error Correction (surface, color, bivariate-bicycle, doubled-Semion, topological & twist-defect codes); VQE / QAOA / ADAPT-VQE, entanglement forging, error mitigation (TREX, ZNE); QML, tensor networks, ZX-calculus",
-  "Mathematics":"Topological QFT, quantum topology, hyperbolic geometry, volume conjectures, skein theory, category theory, representation theory, asymptotic analysis",
-  "Programming":"Python (primary), Go, Java, SQL; PyTorch, NumPy/SciPy; Docker, Kubernetes, CI/CD, AWS / Azure / GCP",
+  "Quantum":"Qiskit, PennyLane, Cirq; quantum error correction (surface, color, bivariate-bicycle, topological codes); VQE / QAOA / ADAPT-VQE; quantum machine learning",
+  "AI & Systems":"LLMs, agentic AI, test-time reasoning, model serving at scale, PyTorch; Docker, Kubernetes, CI/CD, AWS / Azure / GCP",
+  "Mathematics":"Quantum topology, topological QFT, hyperbolic geometry, optimization, asymptotic analysis",
 };
+const leadership = 'Organizer, <a href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" target="_blank" rel="noopener">AMS 2025 Special Session on Quantum Error Correction</a> · Reviewer for Quantum Science and Technology and Physica Scripta · Invited talks at JMM, IBM Quantum Developer Conference, ICTP, ICERM, Yale, and UCSB · Mentored 20+ students.';
 
-/* ============ RENDER ============ */
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+// allow pre-escaped entities (rsquo, ndash, amp) we wrote on purpose
+const safe = s => String(s);
 
-document.getElementById("cv-education").innerHTML = education.map(e=>
-  '<div class="row edu"><span class="when">'+esc(e.y)+'</span><span class="what">'+
+document.getElementById("cv-hl").innerHTML = highlights.map(h=>{
+  let lk = h.link?' <a class="lk" href="'+h.link+'" target="_blank" rel="noopener">'+safe(h.id||'link')+' &#8599;</a>':'';
+  return '<div class="hl"><span class="dot"></span><span class="tx"><b>'+safe(h.b)+'</b>'+safe(h.r)+lk+'</span></div>';
+}).join("");
+
+document.getElementById("cv-exp").innerHTML = experience.map(e=>
+  '<div class="row"><span class="when">'+esc(e.y)+'</span><span class="what">'+
+  '<span class="t"><b>'+esc(e.r)+'</b>, '+esc(e.o)+'</span>'+
+  '<span class="n">'+esc(e.n)+'</span></span></div>').join("");
+
+document.getElementById("cv-pubs").innerHTML = research.map(p=>{
+  let lk = p.link?' &nbsp;<a class="lk" href="'+p.link+'" target="_blank" rel="noopener">'+safe(p.id)+' &#8599;</a>':'';
+  return '<div class="pub"><span class="ttl">'+esc(p.t)+'</span><span class="meta">'+esc(p.m)+lk+'</span></div>';
+}).join("")+'<p class="more">Full list of 13+ publications across quantum topology, error correction, and quantum machine learning on <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener">Google Scholar</a>.</p>';
+
+document.getElementById("cv-rec").innerHTML = recognition.map(r=>
+  '<span class="tag"><b>'+esc(r.b)+'</b> &nbsp;'+esc(r.r)+'</span>').join("");
+
+document.getElementById("cv-edu").innerHTML = education.map(e=>
+  '<div class="row"><span class="when">'+esc(e.y)+'</span><span class="what">'+
   '<span class="t"><b>'+esc(e.d)+'</b>, '+esc(e.s)+'</span>'+
   (e.n?'<span class="n">'+esc(e.n)+'</span>':'')+'</span></div>').join("");
 
-document.getElementById("cv-employment").innerHTML = employment.map(e=>
-  '<div class="row emp"><span class="when">'+esc(e.y)+'</span><span class="what">'+
-  '<span class="t"><b>'+esc(e.r)+'</b>, '+esc(e.o)+'</span>'+
-  (e.n?'<span class="n">'+esc(e.n)+'</span>':'')+'</span></div>').join("");
-
-document.getElementById("cv-interests").innerHTML = interests.map(i=>'<span class="tag">'+esc(i)+'</span>').join("");
-
-const PG=[["qt","Quantum Topology & Geometry"],["qc","Quantum Computing & Error Correction"],["qml","Quantum Machine Learning"],["ml","Machine Learning & AI"]];
-let pn=0;
-document.getElementById("cv-pubs").innerHTML = PG.map(([k,label])=>{
-  const rows = papers.filter(p=>p.g===k).map(p=>{
-    pn++;
-    let meta = esc(p.v||"");
-    if(p.co) meta += (meta?' · ':'')+'<span class="co">'+esc(p.co)+'</span>';
-    let lk = p.link?'<a class="lk" href="'+p.link+'" target="_blank" rel="noopener">'+(p.id||'link')+' &#8599;</a>':'';
-    return '<div class="pub"><span class="num">'+pn+'.</span><span class="body">'+
-      '<span class="ttl">'+esc(p.t)+'</span> '+
-      '<span class="venue">'+meta+(lk?' · '+lk:'')+'</span></span></div>';
-  }).join("");
-  return rows?'<div class="grp">'+esc(label)+'</div>'+rows:'';
-}).join("");
-
-document.getElementById("cv-surveys").innerHTML = surveys.map(p=>{
-  let lk = p.link?'<a class="lk" href="'+p.link+'" target="_blank" rel="noopener">'+(p.id||'link')+' &#8599;</a>':'';
-  return '<div class="row"><span class="when">'+esc(p.y)+'</span><span class="what">'+
-    '<span class="t">'+esc(p.t)+'</span>'+
-    '<span class="s">'+esc(p.v)+(lk?' · '+lk:'')+'</span></span></div>';
-}).join("");
-
-document.getElementById("cv-talks").innerHTML = talks.map(t=>{
-  let s = esc(t.v); if(t.co) s = esc(t.co)+' · '+s;
-  let lk = t.link?' · <a class="lk" href="'+t.link+'" target="_blank" rel="noopener">slides &#8599;</a>':'';
-  return '<div class="row"><span class="when">talk</span><span class="what">'+
-    '<span class="t">'+esc(t.t)+'</span><span class="s">'+s+lk+'</span></span></div>';
-}).join("");
-
-document.getElementById("cv-teaching").innerHTML = teaching.map(c=>
-  '<div class="row"><span class="when">'+esc(c.terms)+'</span><span class="what">'+
-  '<span class="t"><b>'+esc(c.code)+'</b> &nbsp;'+
-  (c.l?'<a class="inl" href="'+c.l+'" target="_blank" rel="noopener">'+esc(c.t)+'</a>':esc(c.t))+'</span>'+
-  '</span></div>').join("")+
-  '<div class="row"><span class="when">2021–2024</span><span class="what"><span class="s">Graduate teaching assistant across calculus, analysis, and data-science courses; several terms supported by NSF research grant (P.I. Prof. Tian Yang).</span></span></div>';
-
-document.getElementById("cv-awards").innerHTML = prizes.map(p=>'<li>'+esc(p)+'</li>').join("");
-
-document.getElementById("cv-service").innerHTML = leadership.map(l=>
-  '<li>'+l.t+'<span class="sub">'+l.s+'</span></li>').join("");
-
-document.getElementById("cv-software").innerHTML = projects.map(p=>
-  p.l?'<a class="tag" href="'+p.l+'" target="_blank" rel="noopener">'+esc(p.n)+'</a>':'<span class="tag">'+esc(p.n)+'</span>').join("");
-
-document.getElementById("cv-conf").innerHTML = Object.entries(conferences).map(([yr,items])=>
-  '<div class="conf"><span class="yr">'+esc(yr)+'</span><span class="ev">'+
-  items.map(c=>esc(c.short)+(c.rl?'<span class="rl">'+esc(c.rl)+'</span>':'')).join(' &nbsp;·&nbsp; ')+
-  '</span></div>').join("");
+document.getElementById("cv-lead").innerHTML = safe(leadership);
 
 document.getElementById("cv-skills").innerHTML = Object.entries(skills).map(([k,v])=>
   '<div class="skill"><span class="k">'+esc(k)+'</span><span class="v">'+esc(v)+'</span></div>').join("");
