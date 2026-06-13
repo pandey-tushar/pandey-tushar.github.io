@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tushar Pandey — Quantum Topology & Applied Quantum Computing</title>
+<meta name="description" content="Dr. Tushar Pandey — Ph.D. Mathematics (Texas A&M). Research in quantum topology, hyperbolic geometry, applied quantum computing, and machine intelligence." />
+<meta property="og:title" content="Tushar Pandey" />
+<meta property="og:description" content="Quantum topology, applied quantum computing, and the geometry in between." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#070a14;
+    --ink-2:#0c1020;
+    --surface:#121829;
+    --surface-2:#171e33;
+    --line:rgba(150,170,210,.14);
+    --line-strong:rgba(150,170,210,.28);
+    --text:#e8ecf6;
+    --text-2:#9aa4c0;
+    --text-3:#69728e;
+    --cyan:#52d6e6;
+    --violet:#9b7bff;
+    --magenta:#f06ab0;
+    --grad:linear-gradient(100deg,var(--cyan),var(--violet) 58%,var(--magenta));
+    --maxw:1080px;
+    --serif:"Fraunces",Georgia,serif;
+    --sans:"Inter",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:rgba(155,123,255,.32)}
+  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+
+  /* WebGL canvas sits fixed behind everything; opaque sections scroll over it */
+  #scene{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  section{padding:96px 0;border-top:1px solid var(--line);position:relative;z-index:2;background:var(--ink);scroll-margin-top:64px}
+  section:first-of-type{border-top:0}
+
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-3);margin:0 0 22px;display:flex;align-items:center;gap:14px}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--line-strong)}
+  h2{font-family:var(--serif);font-weight:500;font-size:clamp(28px,4.2vw,42px);line-height:1.08;letter-spacing:-.01em;margin:0 0 36px}
+  h3{font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.16em;color:var(--text-2);margin:0 0 18px;text-transform:uppercase}
+
+  /* nav */
+  header{position:sticky;top:0;z-index:40;backdrop-filter:blur(12px);background:rgba(7,10,20,.55);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+  header.scrolled{border-bottom:1px solid var(--line);background:rgba(7,10,20,.82)}
+  nav{max-width:var(--maxw);margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .brand{font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:-.01em}
+  .brand span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .navlinks{display:flex;gap:4px;flex-wrap:wrap}
+  .navlinks a{font-family:var(--mono);font-size:12.5px;color:var(--text-2);padding:7px 11px;border-radius:7px;transition:color .2s,background .2s}
+  .navlinks a:hover{color:var(--text);background:var(--surface)}
+  .navlinks a.active{color:var(--text);background:var(--surface-2)}
+  .menu-btn{display:none;background:none;border:1px solid var(--line-strong);color:var(--text);border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:12px;cursor:pointer}
+
+  /* hero — transparent so the WebGL shows through */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;border-top:0;background:transparent;z-index:2;padding:120px 0}
+  .hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+    background:radial-gradient(95% 75% at 26% 46%,rgba(7,10,20,.74),rgba(7,10,20,.18) 62%,transparent 80%),
+    linear-gradient(180deg,transparent 72%,var(--ink) 100%)}
+  @media (max-width:900px){.hero::after{background:radial-gradient(120% 70% at 50% 52%,rgba(7,10,20,.72),rgba(7,10,20,.3) 60%,transparent 85%),linear-gradient(180deg,transparent 72%,var(--ink))}}
+  .hero .wrap{position:relative;z-index:2}
+  .hero-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin:0 0 26px}
+  .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(48px,9vw,112px);line-height:.94;letter-spacing:-.025em;margin:0}
+  .hero h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lede{font-size:clamp(17px,2.2vw,21px);color:var(--text-2);max-width:33ch;margin:30px 0 0;line-height:1.5}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px 22px;margin:34px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--text-3);letter-spacing:.04em}
+  .meta-row b{color:var(--text-2);font-weight:500}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:40px 0 0}
+  .btn{font-family:var(--mono);font-size:13px;letter-spacing:.03em;padding:12px 20px;border-radius:9px;border:1px solid var(--line-strong);color:var(--text);transition:transform .22s,background .22s,border-color .22s;display:inline-flex;align-items:center;gap:9px;will-change:transform}
+  .btn:hover{border-color:transparent;background:var(--surface-2)}
+  .btn.primary{background:var(--grad);color:#0a0e1a;border-color:transparent;font-weight:500}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .scroll-cue{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;animation:bob 2.4s ease-in-out infinite}
+  .scroll-cue::after{content:"";width:1px;height:34px;background:linear-gradient(var(--text-3),transparent)}
+  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+  @media (prefers-reduced-motion:reduce){.scroll-cue{animation:none}}
+
+  /* about */
+  .about-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:56px;align-items:start}
+  .prose p{margin:0 0 18px;color:var(--text-2);font-size:16.5px}
+  .prose p:last-child{margin-bottom:0}
+  .prose a{color:var(--text);border-bottom:1px solid var(--line-strong);transition:border-color .2s}
+  .prose a:hover{border-color:var(--cyan)}
+  .facts{border:1px solid var(--line);border-radius:14px;padding:8px 22px;background:linear-gradient(180deg,var(--surface),var(--ink-2))}
+  .fact{padding:18px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+  .fact:last-child{border-bottom:0}
+  .fact .k{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3)}
+  .fact .v{font-size:15px;color:var(--text)}
+  .fact .v a{border-bottom:1px solid var(--line-strong)}
+
+  .tags{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 44px}
+  .tag{font-family:var(--mono);font-size:12px;color:var(--text-2);border:1px solid var(--line);padding:7px 13px;border-radius:99px;transition:.2s}
+  .tag:hover{border-color:var(--cyan);color:var(--text)}
+
+  .list{display:flex;flex-direction:column}
+  .item{display:grid;grid-template-columns:88px 1fr;gap:22px;padding:13px 0;border-top:1px solid var(--line);align-items:baseline}
+  .item:first-child{border-top:0}
+  .yr{font-family:var(--mono);font-size:12.5px;color:var(--cyan);letter-spacing:.04em;padding-top:3px}
+  .item .ttl{font-size:15px;color:var(--text);line-height:1.38}
+  .item .meta{color:var(--text-3);font-size:12.5px}
+  .item .meta a{color:var(--violet);font-family:var(--mono);font-size:11.5px;border-bottom:1px solid transparent;transition:border-color .2s}
+  .item .meta a:hover{border-color:var(--violet)}
+  .item .meta .co{color:var(--text-2)}
+  .item .co{color:var(--text-2)}
+  .subhead{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);margin:56px 0 6px}
+
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .card{border:1px solid var(--line);border-radius:13px;padding:20px 20px 18px;background:linear-gradient(180deg,var(--surface),var(--ink-2));transition:transform .22s,border-color .22s;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;height:2px;width:0;background:var(--grad);transition:width .35s}
+  .card:hover{border-color:var(--line-strong);transform:translateY(-2px)}
+  .card:hover::before{width:100%}
+  .card .py{font-family:var(--mono);font-size:11.5px;color:var(--text-3);letter-spacing:.06em}
+  .card .pn{display:block;font-size:15.5px;color:var(--text);margin:9px 0 0;line-height:1.4}
+  .card a.pn:hover{color:var(--cyan)}
+  .card .arrow{position:absolute;right:18px;bottom:16px;color:var(--text-3);font-family:var(--mono);font-size:13px;transition:.2s}
+  .card:hover .arrow{color:var(--cyan);transform:translate(2px,-2px)}
+
+  .role{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:5px;border:1px solid var(--line);color:var(--text-3);margin-right:9px;white-space:nowrap}
+  .role.speak{color:var(--cyan);border-color:rgba(82,214,230,.3)}
+  .role.org{color:var(--magenta);border-color:rgba(240,106,176,.3)}
+  .tag.org{border-color:rgba(240,106,176,.4);color:var(--magenta)}
+  .tag.org:hover{border-color:var(--magenta);color:var(--magenta)}
+  .cfg{display:grid;grid-template-columns:120px 1fr;gap:22px;align-items:baseline;padding:15px 0;border-top:1px solid var(--line)}
+  .cfg:first-child{border-top:0}
+  .cfg .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+  @media (max-width:560px){.cfg{grid-template-columns:1fr;gap:8px}}
+  .conf-item .ttl{font-size:15.5px}
+  /* topic group subhead */
+  .grp{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);margin:38px 0 6px;display:flex;align-items:center;gap:11px}
+  .grp::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--grad);flex:0 0 auto}
+  .grp:first-child{margin-top:14px}
+  /* compact definition list (teaching) */
+  .deflist{display:flex;flex-direction:column}
+  .earlier{display:grid;grid-template-columns:88px 1fr;gap:22px;align-items:baseline;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+  .foot{color:var(--text-3);font-size:13px;line-height:1.65;margin:20px 0 0;max-width:64ch}
+  .earlier .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);line-height:1.4}
+  @media (max-width:560px){.earlier{grid-template-columns:1fr;gap:8px}}
+
+  .award-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+  .award-list li,.lead-list li{list-style:none;padding:13px 0;border-top:1px solid var(--line);color:var(--text-2);font-size:15px}
+  .award-list li:first-child,.lead-list li:first-child{border-top:0}
+  ul{margin:0;padding:0}
+  .lead-list .sub2{display:block;color:var(--text-3);font-size:13px;margin-top:3px;padding-left:14px}
+  .lead-list a{color:var(--text);border-bottom:1px solid var(--line-strong)}
+
+  .contact-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:40px;align-items:flex-end}
+  .contact-inner h2{margin-bottom:0;max-width:18ch}
+  .contact-links{display:flex;flex-direction:column;gap:14px;font-family:var(--mono);font-size:14px}
+  .contact-links a{color:var(--text-2);display:inline-flex;align-items:center;gap:12px;transition:color .2s;width:fit-content}
+  .contact-links a:hover{color:var(--text)}
+  .contact-links .lbl{color:var(--text-3);font-size:11px;letter-spacing:.14em;text-transform:uppercase;width:64px}
+
+  footer{padding:40px 0 56px;border-top:1px solid var(--line);color:var(--text-3);font-family:var(--mono);font-size:12px;position:relative;z-index:2;background:var(--ink)}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+  /* intro overlay */
+  #intro{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .8s ease,transform .9s cubic-bezier(.7,0,.2,1)}
+  #intro.done{opacity:0;transform:translateY(-100%);pointer-events:none}
+  .intro-name{font-family:var(--serif);font-weight:500;font-size:clamp(30px,6vw,64px);letter-spacing:-.02em;display:flex;gap:.28em}
+  .intro-name span{opacity:0;transform:translateY(110%);display:inline-block;animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+  .intro-name .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .intro-bar{width:0;height:1px;background:var(--grad);animation:grow 1.1s ease .5s forwards;max-width:240px}
+  @keyframes grow{to{width:240px}}
+  .intro-sub{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--text-3);opacity:0;animation:fadein .6s ease 1s forwards}
+  @keyframes fadein{to{opacity:1}}
+
+  /* collapsible panels (accordion) */
+  section.panel{padding:0}
+  section.panel .reveal{opacity:1!important;transform:none!important}
+  .phead{width:100%;background:none;border:0;color:inherit;cursor:pointer;display:flex;align-items:center;gap:18px;padding:30px 0;font:inherit;text-align:left;transition:opacity .2s}
+  .phead:hover{opacity:.85}
+  .phead:hover .chev{border-color:var(--cyan)}
+  .pkey{font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-3);flex:0 0 auto;min-width:92px}
+  .ptitle{font-family:var(--serif);font-weight:500;font-size:clamp(20px,3vw,31px);letter-spacing:-.01em;color:var(--text);line-height:1.1;transition:color .3s}
+  .pcount{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;color:var(--text-3);margin-left:auto;white-space:nowrap}
+  .chev{width:10px;height:10px;border-right:1.6px solid var(--text-3);border-bottom:1.6px solid var(--text-3);transform:rotate(45deg);transition:transform .45s cubic-bezier(.4,0,.2,1),border-color .2s;flex:0 0 auto;margin-top:-4px}
+  section.open .chev{transform:rotate(-135deg);margin-top:3px;border-color:var(--cyan)}
+  section.open .phead .ptitle{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .pbody{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.4,0,.2,1)}
+  .pbody>.pinner{overflow:hidden;min-height:0;opacity:0;transform:translateY(8px);transition:opacity .5s ease .06s,transform .5s ease .06s}
+  section.open .pbody{grid-template-rows:1fr}
+  section.open .pbody>.pinner{opacity:1;transform:none}
+  .pinner-pad{padding:4px 0 48px}
+  @media (prefers-reduced-motion:reduce){.pbody,.pbody>.pinner,.chev{transition:none}}
+  @media (max-width:680px){.pkey{display:none}.phead{gap:12px;padding:24px 0}.pcount{font-size:10.5px}}
+
+  @media (max-width:820px){
+    .about-grid{grid-template-columns:1fr;gap:34px}
+    .award-grid{grid-template-columns:1fr;gap:34px}
+    .navlinks{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--ink-2);border-bottom:1px solid var(--line);padding:10px 18px 18px}
+    .navlinks.open{display:flex}
+    .navlinks a{padding:11px 8px}
+    .menu-btn{display:block}
+    nav{position:relative}
+  }
+  @media (max-width:560px){
+    .item{grid-template-columns:1fr;gap:6px}
+    .yr{padding-top:0}
+    section{padding:72px 0}
+    .wrap{padding:0 20px}
+    nav{padding:12px 20px}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="scene" aria-hidden="true"></canvas>
+
+<div id="intro" aria-hidden="true">
+  <div class="intro-name">
+    <span style="animation-delay:.05s">T</span><span style="animation-delay:.09s">u</span><span style="animation-delay:.13s">s</span><span style="animation-delay:.17s">h</span><span style="animation-delay:.21s">a</span><span style="animation-delay:.25s">r</span>
+    <span class="g" style="animation-delay:.34s">P</span><span class="g" style="animation-delay:.38s">a</span><span class="g" style="animation-delay:.42s">n</span><span class="g" style="animation-delay:.46s">d</span><span class="g" style="animation-delay:.5s">e</span><span class="g" style="animation-delay:.54s">y</span>
+  </div>
+  <div class="intro-bar"></div>
+  <div class="intro-sub">Quantum Topology</div>
+</div>
+
+<header id="hdr">
+  <nav>
+    <a class="brand" href="#top">Tushar <span>Pandey</span></a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">menu</button>
+    <div class="navlinks" id="navlinks">
+      <a href="#about">About</a>
+      <a href="#research">Research</a>
+      <a href="#projects">Projects</a>
+      <a href="#teaching">Teaching</a>
+      <a href="#conferences">Conferences</a>
+      <a href="#service">Service &amp; Awards</a>
+      <a href="cv.html">CV</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <p class="hero-eyebrow">Ph.D. Mathematics · Texas A&amp;M University</p>
+    <h1>Tushar<br><em>Pandey</em></h1>
+    <p class="lede">Quantum topology, applied quantum computing, and the geometry in between.</p>
+    <div class="meta-row">
+      <span><b>Now</b> &nbsp;Senior Software Engineer @ DataRobot</span>
+      <span><b>Based in</b> &nbsp;Dallas, TX</span>
+      <span><b>Field</b> &nbsp;Quantum Topology · QML · CFD</span>
+    </div>
+    <div class="cta-row">
+      <a class="btn primary" href="cv.html">Curriculum Vitae →</a>
+      <a class="btn" href="#research">Research</a>
+      <a class="btn" href="mailto:tusharp@tamu.edu">Email</a>
+    </div>
+  </div>
+  <div class="scroll-cue">scroll</div>
+</section>
+
+<section id="about" class="panel">
+  <div class="wrap">
+    <button class="phead" aria-expanded="false" aria-controls="about-body"><span class="pkey">About</span><span class="ptitle">Bio &amp; background</span><span class="pcount" id="c-about"></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="pbody" id="about-body"><div class="pinner"><div class="pinner-pad">
+    <div class="about-grid">
+      <div class="prose reveal">
+        <p>I work where quantum topology meets applied quantum computing. My doctoral research centered on the volume conjecture — hyperbolic geometry, topological quantum field theories, and skein-theoretic approaches to quantum invariants.</p>
+        <p>Beyond pure topology I build with quantum algorithms, error correction, ZX-calculus, and machine learning, with a continuing pull toward topological phases of matter, topological quantum computing, and topological data analysis.</p>
+      </div>
+      <aside class="facts reveal">
+        <div class="fact"><span class="k">Doctorate</span><span class="v">Ph.D. Mathematics, Texas A&amp;M (2024)</span></div>
+        <div class="fact"><span class="k">Advisor</span><span class="v"><a href="https://www.math.tamu.edu/~tianyang/" target="_blank" rel="noopener">Prof. Tian Yang</a></span></div>
+        <div class="fact"><span class="k">Focus</span><span class="v">Quantum topology · Applied QC · Machine intelligence</span></div>
+      </aside>
+    </div>
+    </div></div></div>
+  </div>
+</section>
+
+<section id="research" class="panel">
+  <div class="wrap">
+    <button class="phead" aria-expanded="false" aria-controls="research-body"><span class="pkey">Research</span><span class="ptitle">Interests &amp; publications</span><span class="pcount" id="c-research"></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="pbody" id="research-body"><div class="pinner"><div class="pinner-pad">
+    <div class="tags reveal">
+      <a class="tag" href="https://en.wikipedia.org/wiki/Quantum_topology" target="_blank" rel="noopener">Quantum Topology</a>
+      <a class="tag" href="https://en.wikipedia.org/wiki/Hyperbolic_geometry" target="_blank" rel="noopener">Hyperbolic Geometry</a>
+      <a class="tag" href="https://en.wikipedia.org/wiki/Topological_quantum_field_theory" target="_blank" rel="noopener">TQFTs</a>
+      <a class="tag" href="https://en.wikipedia.org/wiki/Volume_conjecture" target="_blank" rel="noopener">Volume Conjecture</a>
+      <a class="tag" href="https://en.wikipedia.org/wiki/Topological_order" target="_blank" rel="noopener">Topological Phases</a>
+      <a class="tag" href="https://en.wikipedia.org/wiki/Topological_quantum_computer" target="_blank" rel="noopener">Topological QC</a>
+    </div>
+    <h3 class="reveal" style="margin-bottom:0">Publications</h3>
+    <div class="list" id="papers"></div>
+    <h3 class="subhead reveal">Selected Talks</h3>
+    <div class="list" id="talks"></div>
+    </div></div></div>
+  </div>
+</section>
+
+<section id="projects" class="panel">
+  <div class="wrap">
+    <button class="phead" aria-expanded="false" aria-controls="projects-body"><span class="pkey">Projects</span><span class="ptitle">Code, hackathons &amp; experiments</span><span class="pcount" id="c-projects"></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="pbody" id="projects-body"><div class="pinner"><div class="pinner-pad">
+    <div class="proj-grid reveal" id="projgrid"></div>
+    <h3 class="subhead reveal">Survey Papers</h3>
+    <div class="list" id="surveys"></div>
+    </div></div></div>
+  </div>
+</section>
+
+<section id="teaching" class="panel">
+  <div class="wrap">
+    <button class="phead" aria-expanded="false" aria-controls="teaching-body"><span class="pkey">Teaching</span><span class="ptitle">Graduate assistantships, Texas A&amp;M</span><span class="pcount" id="c-teaching"></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="pbody" id="teaching-body"><div class="pinner"><div class="pinner-pad">
+    <div class="list reveal" id="teaching-list"></div>
+    </div></div></div>
+  </div>
+</section>
+
+<section id="conferences" class="panel">
+  <div class="wrap">
+    <button class="phead" aria-expanded="false" aria-controls="conferences-body"><span class="pkey">Travel</span><span class="ptitle">Conferences &amp; talks given</span><span class="pcount" id="c-conferences"></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="pbody" id="conferences-body"><div class="pinner"><div class="pinner-pad">
+    <div id="conf-wrap"></div>
+    </div></div></div>
+  </div>
+</section>
+
+<section id="service" class="panel">
+  <div class="wrap">
+    <button class="phead" aria-expanded="false" aria-controls="service-body"><span class="pkey">Service</span><span class="ptitle">Leadership, mentoring &amp; awards</span><span class="pcount" id="c-service"></span><span class="chev" aria-hidden="true"></span></button>
+    <div class="pbody" id="service-body"><div class="pinner"><div class="pinner-pad">
+    <div class="award-grid">
+      <div class="reveal">
+        <h3>Leadership &amp; Mentoring</h3>
+        <ul class="lead-list" id="lead-list"></ul>
+      </div>
+      <div class="reveal">
+        <h3>Prizes</h3>
+        <ul class="award-list" id="prize-list"></ul>
+      </div>
+    </div>
+    </div></div></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <p class="eyebrow reveal">Contact</p>
+    <div class="contact-inner">
+      <h2 class="reveal">Let&rsquo;s talk topology, quantum, or anything in between.</h2>
+      <div class="contact-links reveal">
+        <a href="mailto:tusharp@tamu.edu"><span class="lbl">Email</span> tusharp [at] tamu [dot] edu</a>
+        <a href="https://github.com/pandey-tushar" target="_blank" rel="noopener"><span class="lbl">GitHub</span> github.com/pandey-tushar</a>
+        <a href="cv.html"><span class="lbl">CV</span> Curriculum Vitae →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Tushar Pandey</span>
+    <span>Built with WebGL, a figure-eight knot &amp; a little turbulence.</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ============ CONTENT DATA ============ */
+const papers = [
+  {g:"qml", y:"Apr 2026", t:"Fixed-Reservoir vs. Variational Quantum Architectures for Chaotic Dynamics: Benchmarking QRC and QPINN on the Lorenz System", v:"preprint", link:"https://arxiv.org/pdf/2604.23743", id:"arXiv:2604.23743"},
+  {g:"qml", y:"Apr 2026", t:"Quantum Kernels for Parity-Structured Classification", v:"to appear, IEEE DCAS conference proceedings"},
+  {g:"qc", y:"Mar 2026", t:"Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel", v:"preprint", link:"https://arxiv.org/pdf/2603.19062", id:"arXiv:2603.19062"},
+  {g:"qc", y:"Mar 2026", t:"Machine Learning-Driven Quantum Hacking of CHSH-Based QKD: Exploiting Entropy Vulnerabilities in Self-Testing Protocols", v:"QUEST-IS 2025, Springer", link:"https://link.springer.com/book/9783032138545", id:"Springer"},
+  {g:"qc", y:"Jun 2025", t:"Topological phases of matter, Quantum Error Correction, and Topological twists", v:"APL Quantum 2(3):031501", link:"https://doi.org/10.1063/5.0255351", id:"DOI"},
+  {g:"ml", y:"Feb 2025", t:"Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures", v:"preprint", co:"Tushar et al.", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
+  {g:"qc", y:"Jul 2024", t:"Efficient variational quantum eigensolver methodologies on quantum processors", v:"in revision, Physica Scripta", co:"Tushar et al.", link:"https://arxiv.org/abs/2407.16107", id:"arXiv:2407.16107"},
+  {g:"ml", y:"Jun 2024", t:"Modeling Sea Level Rise Using Ensemble Techniques: Impacts on Coastal Adaptation, Freshwater Ecosystems, Agriculture and Infrastructure", v:"Analytics 3(3):276–296", co:"Sambandh et al.", link:"https://www.mdpi.com/2813-2203/3/3/16", id:"MDPI"},
+  {g:"qt", y:"Feb 2024", t:"Generalized Bonahon–Wong–Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure-eight knot complement", v:"in revision, Algebraic & Geometric Topology", co:"with Ka Ho Wong", link:"https://arxiv.org/abs/2402.04483", id:"arXiv:2402.04483"},
+  {g:"qt", y:"Nov 2023", t:"The Bonahon–Wong–Yang volume conjecture for the four-puncture sphere", v:"preprint", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
+  {g:"qt", y:"Sep 2023", t:"Geometry of fundamental shadow link complements and applications to the 1-loop conjecture", v:"submitted to Journal of Topology", co:"with Ka Ho Wong", link:"https://arxiv.org/pdf/2308.06643.pdf", id:"arXiv:2308.06643"},
+  {g:"qt", y:"Sep 2022", t:"Topological Characterization with a Twist, Condensation, and Reflection", v:"preprint", co:"with E. Dumitrescu", link:"https://arxiv.org/pdf/2209.11126.pdf", id:"arXiv:2209.11126"},
+  {g:"qt", y:"May 2021", t:"On the asymptotic expansion for the relative Reshetikhin–Turaev invariants of fundamental shadow link pairs", v:"preprint", co:"with Ka Ho Wong", link:"https://arxiv.org/pdf/2105.08805v2.pdf", id:"arXiv:2105.08805"},
+];
+const talks = [
+  {t:"Understanding Quantum through pictures", v:"QuantA&M seminar, Texas A&M University"},
+  {t:"BWY volume conjecture for incomplete structures", v:"Geometry/Topology seminar, Rutgers University", link:"https://drive.google.com/file/d/1uJfErlCJu-t7Eb4bWwPJmbPbafxe-94o/view?usp=sharing"},
+  {t:"Generalized BWY volume conjecture", v:"Topology seminar, Michigan State University", link:"https://drive.google.com/file/d/1VJM0g5k03fQjJQZFeVCtusQ4fmEiOkfU/view?usp=drive_link"},
+  {t:"Quantum invariants for punctured sphere", v:"Workshop in Geometric Topology, Colorado College", link:"https://drive.google.com/file/d/1mDcCgrBYz9QKre9CJJU1W2Tj7s3IqZRS/view?usp=drive_link"},
+  {t:"ZX-live", v:"Quantinuum hackathon, ICTP, Italy", link:"https://drive.google.com/file/d/1szrSaMR3E3HcT2eJ32NTt1xCH2SsavWC/view?usp=share_link"},
+  {t:"Quantum invariants for surface diffeomorphisms", v:"AMS Southeastern Sectional Meeting, Georgia Tech", link:"https://drive.google.com/file/d/1ZTEP3ezmd_xkxLmGkl9zwRy_GvFY-IFX/view"},
+  {t:"Toric Code, Doubled Semion and Ising anyons", v:"Quantum workshop, NC State University", link:"https://docs.google.com/presentation/d/15nmpuc6cNdlORYocoTp1MM8mLQzE0FxG/edit?usp=share_link"},
+  {t:"From Jones Polynomial to Volume Conjecture", v:"Low-Dimension Topology Seminar, Texas A&M", link:"https://drive.google.com/file/d/1bezYT658rSQz-aS8VWQfeXRdB3TDZZHL/view?usp=sharing"},
+  {t:"Category Theory and Topological phases of matter", v:"Oak Ridge National Labs, Oak Ridge, TN", link:"https://drive.google.com/file/d/1ePPwCUOOjb_vAIsCzUH38U3ybuvV0npn/view?usp=sharing"},
+  {t:"Tetrahedral Decomposition", v:"Graduate School on GGT & Low Dim. Topology, ICMAT, Madrid", link:"https://drive.google.com/file/d/1INR4KSCOf-gdcvIyDRS4vzLEQ_MAr-qv/view?usp=sharing"},
+  {t:"Brief History of Volume Conjecture", v:"Braids in Low Dimension Topology, ICERM, Brown University", link:"https://drive.google.com/file/d/18dW5byH6CtKLi0S_Z9BFJp835TLRkNFg/view?usp=sharing"},
+  {t:"Topological data from the ground state Hamiltonian", v:"NSF MSGI Symposium, Oak Ridge National Labs", co:"with Eugene Dumitrescu", link:"https://drive.google.com/file/d/1G-4lddB3G1LdB4CpNggkAuI1tnzBPznm/view?usp=sharing"},
+  {t:"Art to Mathematics to Quantum", v:"Gathering in Graduate Expository Mathematics, Texas A&M", link:"https://drive.google.com/file/d/1jIWQtJwH9Ib_oU5QsC14RqqJp7cYaOz1/view?usp=sharing"},
+];
+const projects = [
+  {g:"q", y:"2026", n:"Quantum ODE solver for large-scale linear systems"},
+  {g:"q", y:"2025", n:"NeurotiQ — Quantum ML for EEG Analysis", l:"https://github.com/Valmohaugen/NYUAD-Hackathon-2025/tree/main"},
+  {g:"ml", y:"2025", n:"Adaptive Graph of Thought", l:"https://github.com/AgnostiqHQ/multi-agent-llm/tree/main"},
+  {g:"ml", y:"2024", n:"Alzheimer Detection using biomarkers", l:"https://github.com/ckaraguzel/AD_detection_DL_approach"},
+  {g:"ml", y:"2024", n:"Sea Level Rise Impact", l:"https://tamids2024.streamlit.app/"},
+  {g:"ml", y:"2024", n:"Harmful Brain Activity", l:"https://github.com/allispaul/brains"},
+  {g:"q", y:"2024", n:"Toric Code — PennyLane implementation", l:"https://github.com/pandey-tushar/Error_Correction"},
+  {g:"q", y:"2024", n:"Efficient MPS encoding of classical data with linear depth (QHACK)", l:"https://zenodo.org/records/15437417"},
+  {g:"q", y:"2024", n:"Approximating tanh(x)", l:"https://github.com/pandey-tushar/IQuhack_Classiq"},
+  {g:"ml", y:"2023", n:"Credit-Guards", l:"https://github.com/tanujmath/CreditGuard"},
+  {g:"q", y:"2023", n:"ZX-Live", l:"https://github.com/Quantomatic/zxlive"},
+  {g:"q", y:"2023", n:"Efficient Ground-state computation methodologies", l:"https://github.com/jsaroni/QHack2023_Feynmanprodigies"},
+  {g:"ml", y:"2022", n:"Research in Academia", l:"https://pandey-tushar-tamids-22-streamlit-app-n2llrp.streamlit.app/"},
+];
+const earlierProjects = [
+  {n:"Topological Data Analysis", l:"https://github.com/pandey-tushar/intro_to_TDA"},
+  {n:"Compressed Sensing", l:"https://github.com/pandey-tushar/Compressed-Sensing"},
+  {n:"Mathematical Algorithms", l:"https://github.com/pandey-tushar/MATH_Algorithms"},
+  {n:"COVID-19 K-12 Impact", l:"https://github.com/pandey-tushar/TAMUDatathon-HPE"},
+  {n:"A Voyage into US Elections", l:"https://share.streamlit.io/ritesh-suhag/us_elections_analysis/us_elections_app.py"},
+];
+const surveys = [
+  {y:"2023", t:"Quantum Computing through ChatGPT", v:"Tushar Pandey, ChatGPT", link:"https://drive.google.com/file/d/1cK8XUmHm6yp_gYrGcezFZQ3bhs6mOpV1/view?usp=share_link", id:"PDF"},
+  {y:"2022", t:"Topological Understanding of Neural Networks", v:"Tushar Pandey", link:"https://arxiv.org/pdf/2301.09742.pdf", id:"arXiv:2301.09742"},
+];
+const teaching = [
+  {code:"MATH 151", t:"Engineering Mathematics I", terms:"Fall '20 · Fall '22", l:"https://www.math.tamu.edu/courses/math151/"},
+  {code:"MATH 425", t:"Mathematics of Contingent Claims", terms:"Spring '21", l:"https://www.math.tamu.edu/courses/math425/"},
+  {code:"MATH 677", t:"Mathematical Foundations for Data Science", terms:"Fall '21", l:"https://www.math.tamu.edu/courses/math677/?semester=2021A"},
+  {code:"MATH 409", t:"Advanced Calculus I", terms:"Fall '23", l:"https://www.math.tamu.edu/courses/math409/"},
+  {code:"MATH 628", t:"Mathematics of Finance", terms:"Fall '23", l:"https://www.math.tamu.edu/courses/math628/"},
+  {code:"Oak Ridge", t:"Mathematics Summer Intern, Oak Ridge National Labs (NSF-MSGI)", terms:"Summers 2021, 2022"},
+  {code:"NSF", t:"Several terms supported by NSF research grant (P.I. Tian Yang)", terms:"2020–2024"},
+];
+const conferences = {
+  "2026":[
+    {short:"Oxford · QCTiP", role:"speak",rl:"Poster",t:"Quantum Computing Theory in Practice (QCTiP) 2026 — Oxford University, UK",d:"Apr 20–22"},
+    {short:"SMU · AQ-QCAS", role:"speak",rl:"Invited",t:"Workshop on Applied Quantum Computing & Quantum Circuits & Systems (AQ-QCAS) — SMU, TX",d:"Apr 10–12"},
+  ],
+  "2025":[
+    {t:"IBM Quantum Developer Conference 2025 — IBM, Atlanta, GA",d:"Nov 11–15",role:"",rl:"Participant"},
+    {short:"AMS · QEC Session", role:"org",rl:"Organizer",t:"AMS — New Horizons for Quantum Error Correction: Categorical Approaches to Topological Codes (Online)",d:"Oct 25–26"},
+    {t:"QSIM — Annual Quantum Simulation Conference & Summer School, IBM, NYC",d:"Aug 4–8",role:"",rl:""},
+    {short:"NYUAD Hackathon", role:"speak",rl:"Mentor",t:"NYUAD Hackathon — Quantum Computing & UN SDGs, NYUAD, Abu Dhabi, UAE",d:"Apr 24–28"},
+    {t:"Opportunities across the quantum computing stack — Yale University, CT",d:"Feb 18–19",role:"",rl:""},
+  ],
+  "2024":[
+    {t:"Quantum Topology, Quantum Information & Connections to Mathematical Physics — Texas A&M",d:"May 27–31",role:"",rl:""},
+    {short:"Texas A&M · Toric Code", role:"speak",rl:"Invited",t:"Toric code: a blend of physics, math, and (maybe) computer science — Texas A&M",d:"Feb 29"},
+    {short:"Texas A&M · Alg & Comb", role:"speak",rl:"Invited",t:"Algebra & Combinatorics seminar — Texas A&M",d:"Feb 9"},
+    {short:"JMM · San Francisco", role:"speak",rl:"Invited",t:"Joint Mathematical Meetings (JMM 2024) — Moscone Center, San Francisco",d:"Jan 4–6"},
+  ],
+  "2023":[
+    {t:"Quantum Computing Workshop (Online) — NCSU",d:"Nov 18–19",role:"",rl:""},
+    {short:"Yale", role:"speak",rl:"Invited",t:"Friday Morning Seminar — Yale University, CT",d:"Nov 6–10"},
+    {short:"UCSB", role:"speak",rl:"Invited",t:"Topology Seminar — UCSB, CA",d:"Oct 31–Nov 3"},
+    {t:"Topological Quantum Computation — ICMS, Edinburgh, Scotland",d:"Oct 9–13",role:"",rl:"Participant"},
+    {short:"Rutgers", role:"speak",rl:"Invited",t:"Geometry/Topology seminar — Rutgers University, NJ",d:"Oct 3"},
+    {short:"Michigan State", role:"speak",rl:"Invited",t:"Topology Seminar — Michigan State University, MI",d:"Sep 25–29"},
+    {t:"Quantum Invariants & Low-Dimensional Topology — AIM, Pasadena",d:"Aug 14–18",role:"",rl:"Participant"},
+    {t:"Characters & Moduli of Surfaces — RIMS, Kyoto, Japan",d:"Jul 17–19",role:"",rl:""},
+    {short:"Colorado College", role:"speak",rl:"Invited",t:"Workshop in Geometric Topology — Colorado College",d:"Jun 15–17"},
+    {t:"ICTP–Quantinuum Quantum Hackathon — ICTP, Trieste, Italy",d:"Apr 17–23",role:"",rl:"Participant"},
+    {short:"Georgia Tech · AMS", role:"speak",rl:"Invited",t:"Spring Southeastern Sectional Meeting, AMS — Georgia Tech",d:"Mar 18–19"},
+    {t:"Winter School on Contemporary Quantum Algorithms — UCLA",d:"Feb 22–24",role:"",rl:"Participant"},
+    {t:"Quantum Machine Learning Workshop — NC State University",d:"Jan 21–22",role:"",rl:""},
+  ],
+  "2022":[
+    {t:"QMATH — UC Davis, California",d:"Sep 12–16",role:"",rl:""},
+    {t:"Graduate school on GGT & Low-Dimensional Topology — ICMAT, Spain",d:"May 16–27",role:"",rl:""},
+    {t:"Braids in Low-Dimensional Topology — ICERM, Brown University",d:"Apr 25–29",role:"",rl:""},
+    {t:"Joint Mathematical Meeting (Online)",d:"Apr 6–9",role:"",rl:""},
+    {t:"AMS Sectional Meeting — Purdue University (Online)",d:"Mar 26–27",role:"",rl:""},
+    {t:"Texas Geometry & Topology Conference — UT Dallas",d:"Feb 25–27",role:"",rl:""},
+    {t:"Quantum Geometry & Representation Theory II — Osaka City University (Online)",d:"Feb 12–14",role:"",rl:""},
+  ],
+  "2021":[
+    {t:"TAMIDS Research Conference — Texas A&M",d:"Dec 9",role:"",rl:""},
+    {t:"South Central Topology Conference — Texas A&M",d:"Sep 25–26",role:"",rl:""},
+    {t:"Remote Rendezvous for Quantum Topologists (Online)",d:"Aug 9–13",role:"",rl:""},
+    {t:"Graduate Student Topology & Geometry Conference — Indiana University (Online)",d:"Apr 9–11",role:"",rl:""},
+    {short:"Texas A&M · GIG'EM", role:"speak",rl:"Invited",t:"GIG'EM Conference — Texas A&M",d:"Mar 26–27"},
+    {t:"Diversity in Quantum Computing Conference (Online)",d:"Feb 27",role:"",rl:""},
+  ],
+  "2019–2020":[
+    {t:"Knots through Web — IISER (Online), India",d:"Aug 24–28, 2020",role:"",rl:""},
+    {t:"Texas Geometry & Topology Conference — Texas A&M",d:"Nov 8–10, 2019",role:"",rl:""},
+  ],
+};
+const leadership = [
+  {t:'<a href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" target="_blank" rel="noopener">Organizer</a>, AMS 2025 Fall Eastern Virtual Sectional Meeting', s:"Special Session: New Horizons for Quantum Error Correction — Categorical Approaches to Topological Codes"},
+  {t:'<a href="https://hackathon.nyuad.nyu.edu/" target="_blank" rel="noopener">NYUAD</a> Mentor, Quantum Hackathon', s:"Team mentor, April 2025"},
+  {t:'<a href="https://www.math.tamu.edu/undergraduate/drp/" target="_blank" rel="noopener">Directed Reading Program</a> Mentor, Texas A&M', s:"Hyperbolic geometry · Knot invariants & cablings · Computational topology · Axiomatic music theory · Linear algebra in finance · Convex optimization"},
+  {t:"Department of Mathematics Volunteer, Texas A&M", s:"Derivative Bee (2019, 2022, 2023) · Integral Bee (2023) · High School Math Contest (2022, 2023)"},
+  {t:"Gymkhana Council, IIT Kanpur", s:"Vice Captain, Institute Basketball Team (2018) · Senior Executive, PR, Techkriti 2017"},
+];
+const prizes = [
+  "First Prize, Q-Volution Hackathon, GiQ, 2026",
+  "First Prize, IBM Quantum Developer Conference, 2025",
+  "Third Prize, TAMIDS Data Science Competition, 2024",
+  "First Prize, MIT iQuHack, 2024",
+  "Guseman Prize, Department of Mathematics, Texas A&M, 2023",
+  "Top 15, Quantum Algorithms Challenge, QHACK 2023",
+  "Second Prize + Best Presentation, TAMIDS Data Science Competition, 2022",
+  "First Prize + Best Presentation, TAMIDS Data Science Competition, 2021",
+  "First Prize, TAMU Datathon (HPE Challenge), 2020",
+  "Special Appreciation Award, IIT Kanpur, 2019",
+  "Runner-up, Inter-IIT Basketball Tournament (Nationals), 2018",
+];
+
+/* ============ RENDER CONTENT ============ */
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+function pubRow(p){
+  const sub=[]; if(p.v) sub.push(esc(p.v)); if(p.co) sub.push('<span class="co">'+esc(p.co)+'</span>');
+  let s=sub.join(" · ");
+  if(p.link) s+=(s?" · ":"")+'<a href="'+p.link+'" target="_blank" rel="noopener">'+(p.id||"link")+' ↗</a>';
+  return '<div class="item"><span class="yr">'+p.y+'</span><span class="ttl">'+esc(p.t)+(s?' <span class="meta">'+s+'</span>':'')+'</span></div>';
+}
+const PG=[["qt","Quantum Topology & Geometry"],["qc","Quantum Computing & Error Correction"],["qml","Quantum Machine Learning"],["ml","Machine Learning & AI"]];
+document.getElementById("papers").innerHTML = PG.map(([k,label])=>{
+  const rows=papers.filter(p=>p.g===k).map(pubRow).join("");
+  return rows?'<h4 class="grp">'+label+'</h4><div class="list">'+rows+'</div>':'';
+}).join("");
+document.getElementById("surveys").innerHTML = surveys.map(pubRow).join("");
+document.getElementById("talks").innerHTML = talks.map(t=>{
+  let s=esc(t.v); if(t.co) s='<span class="co">'+esc(t.co)+'</span> · '+s;
+  if(t.link) s+=' · <a href="'+t.link+'" target="_blank" rel="noopener">slides ↗</a>';
+  return '<div class="item"><span class="yr">talk</span><span class="ttl">'+esc(t.t)+' <span class="meta">'+s+'</span></span></div>';
+}).join("");
+const projCard=p=>{const inner='<span class="py">'+p.y+'</span><span class="pn">'+esc(p.n)+'</span>'+(p.l?'<span class="arrow">↗</span>':'');return p.l?'<a class="card" href="'+p.l+'" target="_blank" rel="noopener">'+inner+'</a>':'<div class="card">'+inner+'</div>';};
+const PRG=[["q","Quantum Computing & Algorithms"],["ml","Machine Learning & AI"]];
+const pg=document.getElementById("projgrid"); pg.classList.remove("proj-grid");
+pg.innerHTML = PRG.map(([k,label])=>{
+  const cards=projects.filter(p=>p.g===k).map(projCard).join("");
+  return cards?'<h4 class="grp">'+label+'</h4><div class="proj-grid">'+cards+'</div>':'';
+}).join("");
+pg.insertAdjacentHTML("afterend",
+  '<div class="earlier"><span class="lbl">Earlier<br>2020–21</span><div class="tags">'+
+  earlierProjects.map(p=>'<a class="tag" href="'+p.l+'" target="_blank" rel="noopener">'+esc(p.n)+'</a>').join("")+
+  '</div></div>');
+(function(){
+  const courses=teaching.filter(t=>t.code.indexOf("MATH")===0);
+  document.getElementById("teaching-list").innerHTML=
+    '<div class="tags">'+courses.map(c=>'<a class="tag" href="'+c.l+'" target="_blank" rel="noopener" title="'+esc(c.t)+'">'+c.code+'</a>').join("")+'</div>'+
+    '<p class="foot">Summer research intern at Oak Ridge National Labs (NSF-MSGI), plus several NSF-funded research terms under Prof. Tian Yang, 2020–2024.</p>';
+})();
+(function(){
+  let attended=0; const sp=[], og=[];
+  Object.values(conferences).forEach(items=>items.forEach(c=>{
+    if(c.role==="org") og.push(c);
+    else if(c.role==="speak") sp.push(c);
+    else attended++;
+  }));
+  const pill=c=>'<span class="tag'+(c.role==="org"?" org":"")+'" title="'+esc(c.t)+'">'+esc(c.short||c.t)+'</span>';
+  let h="";
+  if(sp.length) h+='<div class="cfg"><span class="lbl">Invited &amp; speaking</span><div class="tags">'+sp.map(pill).join("")+'</div></div>';
+  if(og.length) h+='<div class="cfg"><span class="lbl">Organized</span><div class="tags">'+og.map(pill).join("")+'</div></div>';
+  h+='<p class="foot">Plus '+attended+' more conferences and workshops attended across 2019–2026 — among them QMATH, ICERM, ICMS Edinburgh, AIM, RIMS Kyoto, ICTP Trieste and UCLA.</p>';
+  document.getElementById("conf-wrap").innerHTML=h;
+})();
+document.getElementById("lead-list").innerHTML = leadership.map(l=>'<li>'+l.t+'<span class="sub2">'+l.s+'</span></li>').join("");
+document.getElementById("prize-list").innerHTML = prizes.map(p=>'<li>'+esc(p)+'</li>').join("");
+document.getElementById("yr").textContent = new Date().getFullYear();
+
+/* ============ NAV + REVEAL ============ */
+const hdr=document.getElementById("hdr");
+addEventListener("scroll",()=>hdr.classList.toggle("scrolled",scrollY>20),{passive:true});
+const menuBtn=document.getElementById("menuBtn"), navlinks=document.getElementById("navlinks");
+menuBtn.addEventListener("click",()=>navlinks.classList.toggle("open"));
+navlinks.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>navlinks.classList.remove("open")));
+const navMap={}; navlinks.querySelectorAll("a").forEach(a=>navMap[a.getAttribute("href").slice(1)]=a);
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){Object.values(navMap).forEach(a=>a.classList.remove("active"));navMap[e.target.id]&&navMap[e.target.id].classList.add("active");}}),{rootMargin:"-45% 0px -50% 0px"});
+document.querySelectorAll("section[id]").forEach(s=>so.observe(s));
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target);}}),{rootMargin:"0px 0px -8% 0px"});
+document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
+
+/* section counts */
+document.getElementById("c-about").textContent="PhD · IIT-K · DataRobot";
+document.getElementById("c-research").textContent=papers.length+" papers · "+talks.length+" talks";
+document.getElementById("c-projects").textContent=(projects.length+earlierProjects.length)+" projects · "+surveys.length+" surveys";
+document.getElementById("c-teaching").textContent="5 courses · Texas A&M";
+document.getElementById("c-conferences").textContent=Object.values(conferences).reduce((s,a)=>s+a.length,0)+" events · 2019–2026";
+document.getElementById("c-service").textContent=prizes.length+" prizes · "+leadership.length+" roles";
+
+/* accordion — one panel open at a time, all closed by default */
+const panels=[...document.querySelectorAll("section.panel")];
+function setOpen(sec,o){sec.classList.toggle("open",o);sec.querySelector(".phead").setAttribute("aria-expanded",o?"true":"false");}
+panels.forEach(sec=>sec.querySelector(".phead").addEventListener("click",()=>{
+  const willOpen=!sec.classList.contains("open");
+  panels.forEach(p=>setOpen(p,false));
+  if(willOpen) setOpen(sec,true);
+}));
+function openAndScroll(id){
+  const sec=document.getElementById(id); if(!sec) return;
+  if(sec.classList.contains("panel")) panels.forEach(p=>setOpen(p,p===sec));
+  const smooth=!matchMedia("(prefers-reduced-motion:reduce)").matches;
+  requestAnimationFrame(()=>sec.scrollIntoView({behavior:smooth?"smooth":"auto",block:"start"}));
+}
+document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{
+  const id=a.getAttribute("href").slice(1), sec=document.getElementById(id);
+  if(sec&&sec.classList.contains("panel")){e.preventDefault();navlinks.classList.remove("open");openAndScroll(id);}
+}));
+
+/* magnetic buttons */
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+if(!reduce && matchMedia("(pointer:fine)").matches){
+  document.querySelectorAll(".btn").forEach(b=>{
+    b.addEventListener("mousemove",e=>{const r=b.getBoundingClientRect();b.style.transform="translate("+((e.clientX-r.left-r.width/2)*.18)+"px,"+((e.clientY-r.top-r.height/2)*.3)+"px)";});
+    b.addEventListener("mouseleave",()=>b.style.transform="");
+  });
+}
+
+/* ============ WEBGL : KNOT IN A TURBULENCE FIELD ============ */
+(function(){
+  const canvas=document.getElementById("scene");
+  const intro=document.getElementById("intro");
+  function finishIntro(){ intro.classList.add("done"); }
+
+  if(typeof THREE==="undefined"){ canvas.style.background="radial-gradient(80% 60% at 20% 30%,#1a1340,#070a14)"; setTimeout(finishIntro,900); return; }
+
+  let renderer;
+  try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false}); }
+  catch(e){ canvas.style.background="radial-gradient(80% 60% at 20% 30%,#1a1340,#070a14)"; setTimeout(finishIntro,900); return; }
+
+  renderer.setClearColor(0x070a14,1);
+  renderer.autoClear=false;
+  const DPR=Math.min(devicePixelRatio||1, 2);
+  renderer.setPixelRatio(DPR);
+
+  /* ---- background turbulence (domain-warped fbm) ---- */
+  const bgScene=new THREE.Scene();
+  const bgCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+  const bgMat=new THREE.ShaderMaterial({
+    uniforms:{uRes:{value:new THREE.Vector2(1,1)},uTime:{value:0}},
+    vertexShader:"void main(){gl_Position=vec4(position,1.0);}",
+    fragmentShader:[
+      "precision highp float;","uniform vec2 uRes;uniform float uTime;",
+      "vec2 hash(vec2 p){p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));return -1.0+2.0*fract(sin(p)*43758.5453);}",
+      "float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.0-2.0*f);",
+      "return mix(mix(dot(hash(i),f),dot(hash(i+vec2(1,0)),f-vec2(1,0)),u.x),mix(dot(hash(i+vec2(0,1)),f-vec2(0,1)),dot(hash(i+vec2(1,1)),f-vec2(1,1)),u.x),u.y);}",
+      "float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.0;a*=0.5;}return v;}",
+      "void main(){vec2 uv=gl_FragCoord.xy/uRes.xy;vec2 p=(uv-0.5);p.x*=uRes.x/uRes.y;",
+      "float t=uTime*0.035;",
+      "vec2 q=vec2(fbm(p*1.4+t),fbm(p*1.4-t+5.2));",
+      "float f=fbm(p*1.7+q*1.6+t*0.4);",
+      "vec3 cyan=vec3(0.12,0.42,0.52),violet=vec3(0.26,0.17,0.5),magenta=vec3(0.45,0.12,0.32);",
+      "vec3 col=mix(violet,cyan,smoothstep(-0.25,0.3,f));col=mix(col,magenta,smoothstep(0.28,0.72,f));",
+      "col*=0.55;col+=vec3(0.018,0.026,0.052);",
+      "float vig=smoothstep(1.15,0.25,length(uv-0.5));col*=mix(0.32,1.0,vig);",
+      "gl_FragColor=vec4(col,1.0);}"
+    ].join("\n")
+  });
+  bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),bgMat));
+
+  /* ---- knot scene ---- */
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(42,1,0.1,100);
+  camera.position.set(0,0,9);
+  const group=new THREE.Group(); scene.add(group);
+
+  function curve(fn){ const c=new THREE.Curve(); c.getPoint=(u,o)=>{const p=fn(u*Math.PI*2);return (o||new THREE.Vector3()).set(p[0],p[1],p[2]);}; return c; }
+  const fig8=curve(t=>[(2+Math.cos(2*t))*Math.cos(3*t),(2+Math.cos(2*t))*Math.sin(3*t),Math.sin(4*t)]);
+  const tref=curve(t=>[Math.sin(t)+2*Math.sin(2*t),Math.cos(t)-2*Math.cos(2*t),-Math.sin(3*t)]);
+
+  const TUB=(innerWidth<640)?260:440, RAD=16;
+  const g1=new THREE.TubeGeometry(fig8,TUB,0.30,RAD,true);
+  const g2=new THREE.TubeGeometry(tref,TUB,0.30,RAD,true);
+  const N=g1.attributes.position.count;
+  const aU=new Float32Array(N);
+  for(let k=0;k<N;k++){ aU[k]=Math.floor(k/(RAD+1))/TUB; }
+  g1.setAttribute("aPos2",new THREE.BufferAttribute(g2.attributes.position.array.slice(),3));
+  g1.setAttribute("aNrm2",new THREE.BufferAttribute(g2.attributes.normal.array.slice(),3));
+  g1.setAttribute("aU",new THREE.BufferAttribute(aU,1));
+  g2.dispose();
+
+  const uniforms={uTime:{value:0},uMorph:{value:0},uFade:{value:1},uIntro:{value:0}};
+  const vert=[
+    "attribute vec3 aPos2;attribute vec3 aNrm2;attribute float aU;",
+    "uniform float uMorph;varying float vU;varying vec3 vN;varying vec3 vV;",
+    "void main(){vec3 p=mix(position,aPos2,uMorph);vec3 n=normalize(mix(normal,aNrm2,uMorph));",
+    "vU=aU;vec4 mv=modelViewMatrix*vec4(p,1.0);vV=mv.xyz;vN=normalize(normalMatrix*n);",
+    "gl_Position=projectionMatrix*mv;}"
+  ].join("\n");
+  function frag(boost){return [
+    "precision highp float;uniform float uTime;uniform float uFade;uniform float uIntro;",
+    "varying float vU;varying vec3 vN;varying vec3 vV;",
+    "vec3 pal(float t){vec3 c=vec3(0.322,0.839,0.902),v=vec3(0.608,0.482,1.0),m=vec3(0.941,0.416,0.690);",
+    "t=fract(t)*2.0;return t<1.0?mix(c,v,t):mix(v,m,t-1.0);}",
+    "void main(){vec3 N=normalize(vN);vec3 V=normalize(-vV);",
+    "float fr=pow(1.0-max(dot(N,V),0.0),2.2);",
+    "vec3 base=pal(vU+uTime*0.025);",
+    "vec3 col=base*0.30+base*fr*"+boost.toFixed(1)+"+vec3(fr)*0.22;",
+    "float a=("+(boost>2.0?"fr*0.6":"max(fr,0.22)")+")*uFade*uIntro;",
+    "gl_FragColor=vec4(col,a);}"
+  ].join("\n");}
+  const matMain=new THREE.ShaderMaterial({uniforms,vertexShader:vert,fragmentShader:frag(1.8),transparent:true,depthWrite:true});
+  const matHalo=new THREE.ShaderMaterial({uniforms,vertexShader:vert,fragmentShader:frag(2.6),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
+  const knot=new THREE.Mesh(g1,matMain); group.add(knot);
+  const halo=new THREE.Mesh(g1,matHalo); halo.scale.setScalar(1.06); group.add(halo);
+  const BASE=(innerWidth<640)?0.8:0.95; group.scale.setScalar(BASE);
+  group.position.x=(innerWidth<900)?0:2.2;   // bias knot right of the headline on wide screens
+
+  /* sizing */
+  function resize(){
+    const w=innerWidth,h=innerHeight;
+    renderer.setSize(w,h,false);
+    camera.aspect=w/h; camera.updateProjectionMatrix();
+    bgMat.uniforms.uRes.value.set(w*DPR,h*DPR);
+    group.position.x=(w<900)?0:2.2;
+  }
+  resize(); addEventListener("resize",resize);
+
+  /* pointer parallax */
+  let tx=0,ty=0,cx=0,cy=0;
+  if(matchMedia("(pointer:fine)").matches){
+    addEventListener("pointermove",e=>{ tx=(e.clientX/innerWidth-0.5); ty=(e.clientY/innerHeight-0.5); });
+  }
+
+  /* scroll choreography */
+  let prog=0;
+  addEventListener("scroll",()=>{ prog=Math.min(scrollY/innerHeight,1.2); },{passive:true});
+
+  /* render helper */
+  function renderFrame(){
+    renderer.clear();
+    renderer.render(bgScene,bgCam);
+    renderer.clearDepth();
+    renderer.render(scene,camera);
+  }
+
+  let start=0; const INTRO_MS=1500;
+  const clock=new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    const dt=clock.getDelta(), now=performance.now();
+    uniforms.uTime.value+=dt; bgMat.uniforms.uTime.value+=dt;
+    let it=Math.min((now-start)/INTRO_MS,1); it=1-Math.pow(1-it,3);
+    uniforms.uIntro.value=it;
+    cx+=(tx-cx)*0.05; cy+=(ty-cy)*0.05;
+    uniforms.uMorph.value=Math.min(prog,1.0);
+    uniforms.uFade.value=Math.max(0,1-Math.max(0,(prog-0.35))/0.55);
+    group.position.y=prog*2.4;
+    group.scale.setScalar(BASE*(1-prog*0.18)*(0.4+0.6*it));
+    const spin=(1-it)*2.2;
+    group.rotation.y+=dt*(0.22+spin);
+    group.rotation.x=cy*0.5+0.15;
+    group.rotation.z=cx*0.35;
+    if(prog<1.08) renderFrame();
+  }
+
+  if(reduce){
+    uniforms.uIntro.value=1; uniforms.uMorph.value=0; uniforms.uFade.value=1;
+    group.rotation.x=0.15; group.rotation.y=0.6;
+    renderFrame(); finishIntro();
+    addEventListener("resize",()=>{resize();renderFrame();});
+  } else {
+    start=performance.now();
+    setTimeout(finishIntro,1700);
+    animate();
+  }
+})();
+</script>
+</body>
+</html>
