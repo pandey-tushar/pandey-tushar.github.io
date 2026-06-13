@@ -81,6 +81,12 @@
   .btn:hover{border-color:transparent;background:var(--surface-2)}
   .btn.primary{background:var(--grad);color:#0a0e1a;border-color:transparent;font-weight:500}
   .btn.primary:hover{filter:brightness(1.08)}
+  @media (pointer:fine){
+    .hero{cursor:grab}
+    .hero a,.hero .btn,.hero button{cursor:pointer}
+    .hero.grabbing{cursor:grabbing}
+  }
+  @media (prefers-reduced-motion:reduce){.hero{cursor:auto}}
   .scroll-cue{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;animation:bob 2.4s ease-in-out infinite}
   .scroll-cue::after{content:"";width:1px;height:34px;background:linear-gradient(var(--text-3),transparent)}
   @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
@@ -720,10 +726,25 @@ if(!reduce && matchMedia("(pointer:fine)").matches){
   }
   resize(); addEventListener("resize",resize);
 
-  /* pointer parallax */
+  /* pointer parallax + drag-to-rotate (mouse only) */
   let tx=0,ty=0,cx=0,cy=0;
-  if(matchMedia("(pointer:fine)").matches){
-    addEventListener("pointermove",e=>{ tx=(e.clientX/innerWidth-0.5); ty=(e.clientY/innerHeight-0.5); });
+  let dragging=false,lastX=0,lastY=0,yaw=0,pitch=0,velYaw=0,velPitch=0;
+  const DRAG_K=0.009, hero=document.getElementById("top");
+  if(!reduce && matchMedia("(pointer:fine)").matches){
+    addEventListener("pointermove",e=>{
+      tx=(e.clientX/innerWidth-0.5); ty=(e.clientY/innerHeight-0.5);
+      if(!dragging) return;
+      const dx=e.clientX-lastX, dy=e.clientY-lastY; lastX=e.clientX; lastY=e.clientY;
+      yaw+=dx*DRAG_K; pitch=Math.max(-1.2,Math.min(1.2,pitch+dy*DRAG_K));
+      velYaw=dx*DRAG_K; velPitch=dy*DRAG_K; e.preventDefault();
+    },{passive:false});
+    hero.addEventListener("pointerdown",e=>{
+      if(e.target.closest("a,button")) return;   // don't hijack links/buttons
+      dragging=true; lastX=e.clientX; lastY=e.clientY; velYaw=velPitch=0;
+      hero.classList.add("grabbing");
+    });
+    const endDrag=()=>{ dragging=false; hero.classList.remove("grabbing"); };
+    addEventListener("pointerup",endDrag); addEventListener("pointercancel",endDrag);
   }
 
   /* scroll choreography */
@@ -752,10 +773,15 @@ if(!reduce && matchMedia("(pointer:fine)").matches){
     group.position.y=prog*2.4;
     group.scale.setScalar(BASE*(1-prog*0.18)*(0.4+0.6*it));
     const spin=(1-it)*2.2;
-    group.rotation.y+=dt*(0.22+spin);
-    group.rotation.x=cy*0.5+0.15;
-    group.rotation.z=cx*0.35;
-    if(prog<1.08) renderFrame();
+    if(!dragging){
+      yaw+=velYaw; pitch=Math.max(-1.2,Math.min(1.2,pitch+velPitch));
+      velYaw*=0.95; velPitch*=0.95;        // inertia decays after release
+      yaw+=dt*(0.22+spin);                  // gentle idle spin (+ intro spin)
+    }
+    group.rotation.y=yaw;
+    group.rotation.x=0.15+pitch+(dragging?0:cy*0.3);
+    group.rotation.z=dragging?0:cx*0.3;
+    if(prog<1.08||dragging||Math.abs(velYaw)>0.0002) renderFrame();
   }
 
   if(reduce){
