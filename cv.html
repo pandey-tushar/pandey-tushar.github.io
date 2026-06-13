@@ -95,8 +95,6 @@
   .oneline{font-size:14px;color:var(--text-2);line-height:1.6}
   .oneline a{color:var(--text);border-bottom:1px solid var(--line-strong)}
 
-  .foot{margin-top:40px;padding-top:22px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--text-3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-
   @media (max-width:620px){
     .row,.skill{grid-template-columns:1fr;gap:5px}
     .when{color:var(--text-3)}
@@ -130,7 +128,6 @@
     .tag{color:#333!important;border-color:#bbb}.tag b{color:#111!important}
     .more,.more a{color:#555!important}
     .hl,.row,.pub,.skill{break-inside:avoid}
-    .foot{color:#666!important;border-color:#ccc}
     .row{grid-template-columns:128px 1fr;gap:18px;padding:8px 0}
   }
 </style>
@@ -165,11 +162,6 @@
   <section id="education"><h2>Education</h2><div id="cv-edu"></div></section>
   <section id="leadership"><h2>Leadership &amp; Service</h2><p class="oneline" id="cv-lead"></p></section>
   <section id="skills"><h2>Range &amp; Skills</h2><div id="cv-skills"></div></section>
-
-  <div class="foot">
-    <span id="cv-updated"></span>
-    <span>Full publication list &amp; talks: Google Scholar / personal site</span>
-  </div>
 
 </div>
 
@@ -230,7 +222,7 @@ document.getElementById("cv-exp").innerHTML = experience.map(e=>
 document.getElementById("cv-pubs").innerHTML = research.map(p=>{
   let lk = p.link?' &nbsp;<a class="lk" href="'+p.link+'" target="_blank" rel="noopener">'+safe(p.id)+' &#8599;</a>':'';
   return '<div class="pub"><span class="ttl">'+esc(p.t)+'</span><span class="meta">'+esc(p.m)+lk+'</span></div>';
-}).join("")+'<p class="more">Full list of 13+ publications across quantum topology, error correction, and quantum machine learning on <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener">Google Scholar</a>.</p>';
+}).join("")+'<p class="more">Selected from 13+ publications and preprints across quantum topology, quantum error correction, and quantum machine learning.</p>';
 
 document.getElementById("cv-rec").innerHTML = recognition.map(r=>
   '<span class="tag"><b>'+esc(r.b)+'</b> &nbsp;'+esc(r.r)+'</span>').join("");
@@ -244,12 +236,6 @@ document.getElementById("cv-lead").innerHTML = safe(leadership);
 
 document.getElementById("cv-skills").innerHTML = Object.entries(skills).map(([k,v])=>
   '<div class="skill"><span class="k">'+esc(k)+'</span><span class="v">'+esc(v)+'</span></div>').join("");
-
-(function(){
-  const months=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  const d=new Date();
-  document.getElementById("cv-updated").textContent="Updated "+months[d.getMonth()]+" "+d.getFullYear();
-})();
 
 document.getElementById("printBtn").addEventListener("click",()=>window.print());
 </script>
