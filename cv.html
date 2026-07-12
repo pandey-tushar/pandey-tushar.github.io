@@ -136,7 +136,11 @@
 
 <div class="bar">
   <a href="index.html" aria-label="Back to site">&larr; Back to site</a>
-  <button class="print" id="printBtn" aria-label="Print or save as PDF">&#x2913; Print / Save PDF</button>
+  <span style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="Tushar_Pandey_Resume_Quantum.pdf" download title="One-page ATS-friendly resume, quantum focus">R&eacute;sum&eacute; &middot; Quantum</a>
+    <a href="Tushar_Pandey_Resume_AI.pdf" download title="One-page ATS-friendly resume, AI focus">R&eacute;sum&eacute; &middot; AI</a>
+    <button class="print" id="printBtn" aria-label="Print or save as PDF">&#x2913; Print / Save PDF</button>
+  </span>
 </div>
 
 <div class="page">
@@ -152,7 +156,7 @@
       <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
     </div>
 
-    <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: designing fault-tolerant error correction at Oak Ridge, inventing a test-time reasoning framework now cited across the field, and building production machine-learning infrastructure at scale, while winning the discipline&rsquo;s hardest challenges along the way.</p>
+    <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: designing fault-tolerant error correction at Oak Ridge, inventing a test-time reasoning framework cited nineteen times in its first year, and building production machine-learning infrastructure at scale, while winning the discipline&rsquo;s hardest challenges along the way.</p>
   </header>
 
   <section id="highlights"><h2>Selected Highlights</h2><div id="cv-hl"></div></section>
@@ -167,7 +171,7 @@
 
 <script>
 const highlights = [
-  {b:"Invented Adaptive Graph of Thoughts (AGoT)", r:", a test-time reasoning framework unifying chain, tree, and graph structures — cited across the field and shipped to production.", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
+  {b:"Invented Adaptive Graph of Thoughts (AGoT)", r:", a test-time reasoning framework unifying chain, tree, and graph structures; nineteen citations in its first year, shipped to production.", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
   {b:"Sole-authored a proof of the Bonahon–Wong–Yang volume conjecture", r:" for the four-puncture sphere — independent results at the frontier of quantum topology.", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
   {b:"Built production multi-tenant LLM inference at scale", r:" at DataRobot, cutting model-deployment latency 30–40% and lifting throughput 300%."},
   {b:"Cut LLM fine-tuning cost by 99%", r:" at Agnostiq with a CPU-first, federated architecture that matched quality at a fraction of the spend."},
@@ -181,7 +185,7 @@ const experience = [
   {y:"Summers 2021 & 2022", r:"Summer Researcher (NSF-MSGI)", o:"Oak Ridge National Laboratory", n:"Fault-tolerant quantum error correction for the doubled Semion model; topological phases of matter (APL Quantum, 2025)."},
 ];
 const research = [
-  {t:"Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures", m:"First author · test-time reasoning, cited across the field", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
+  {t:"Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures", m:"First author · test-time reasoning · 19 citations in year one", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
   {t:"Topological Phases of Matter, Quantum Error Correction, and Topological Twists", m:"APL Quantum 2(3):031501 (2025) · lead author", link:"https://doi.org/10.1063/5.0255351", id:"DOI"},
   {t:"Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes", m:"qLDPC codes · quantum-advantage threshold assessment", link:"https://arxiv.org/pdf/2603.19062", id:"arXiv:2603.19062"},
   {t:"Fixed-Reservoir vs. Variational Quantum Architectures for Chaotic Dynamics", m:"Sole author · quantum machine learning", link:"https://arxiv.org/pdf/2604.23743", id:"arXiv:2604.23743"},
