@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Tushar Pandey — Knots, Qubits &amp; Graphs</title>
-<meta name="description" content="Dr. Tushar Pandey — quantum topology, quantum error correction, and machine intelligence. Knots are theorems. Errors are geometry. Reasoning is a graph." />
+<title>Tushar Pandey — Quantum × AI</title>
+<meta name="description" content="Dr. Tushar Pandey. Quantum error correction, machine intelligence, and systems that ship. Trained on proofs; builds the improbable." />
 <meta property="og:title" content="Tushar Pandey" />
-<meta property="og:description" content="Knots are theorems. Errors are geometry. Reasoning is a graph." />
+<meta property="og:description" content="Error, corrected. Reasoning that grows. Let's build the improbable." />
 <meta property="og:type" content="website" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -38,7 +38,6 @@
   }
   @media (prefers-reduced-motion:reduce){body{cursor:auto}}
 
-  /* ---------- nav ---------- */
   header{position:sticky;top:0;z-index:40;backdrop-filter:blur(12px);background:rgba(7,10,20,.5);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
   header.scrolled{border-bottom:1px solid var(--line);background:rgba(7,10,20,.8)}
   nav{max-width:1160px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
@@ -49,7 +48,6 @@
   .navlinks a:hover{color:var(--text);background:rgba(18,24,41,.85)}
   .menu-btn{display:none;background:none;border:1px solid var(--line-strong);color:var(--text);border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:12px;cursor:pointer}
 
-  /* ---------- intro overlay ---------- */
   #intro{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .8s ease,transform .9s cubic-bezier(.7,0,.2,1)}
   #intro.done{opacity:0;transform:translateY(-100%);pointer-events:none}
   .intro-name{font-family:var(--serif);font-weight:500;font-size:clamp(30px,6vw,64px);letter-spacing:-.02em;display:flex;gap:.28em}
@@ -61,16 +59,17 @@
   .intro-sub{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--text-3);opacity:0;animation:fadein .6s ease 1s forwards}
   @keyframes fadein{to{opacity:1}}
 
-  /* ---------- hero ---------- */
   .hero{position:relative;min-height:100vh;display:flex;align-items:center;z-index:2;padding:120px 0 90px}
   .wrap{max-width:1160px;margin:0 auto;padding:0 28px;width:100%}
   .hero-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin:0 0 26px}
   .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(48px,9vw,112px);line-height:.94;letter-spacing:-.025em;margin:0;text-shadow:0 2px 40px rgba(7,10,20,.9)}
   .hero h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .lede{font-family:var(--serif);font-style:italic;font-size:clamp(19px,2.6vw,26px);color:var(--text-2);max-width:30ch;margin:28px 0 0;line-height:1.4;text-shadow:0 1px 24px rgba(7,10,20,.9)}
-  .meta-row{display:flex;flex-wrap:wrap;gap:10px 22px;margin:32px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--text-3);letter-spacing:.04em}
+  .hero-whisper{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--text-3);margin:18px 0 0}
+  .hero-whisper b{color:var(--text-2);font-weight:500}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px 22px;margin:28px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--text-3);letter-spacing:.04em;text-shadow:0 1px 14px rgba(7,10,20,.95),0 0 3px rgba(7,10,20,.9)}
   .meta-row b{color:var(--text-2);font-weight:500}
-  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:40px 0 0}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:38px 0 0}
   .btn{font-family:var(--mono);font-size:13px;letter-spacing:.03em;padding:12px 20px;border-radius:9px;border:1px solid var(--line-strong);color:var(--text);transition:transform .22s,background .22s,border-color .22s;display:inline-flex;align-items:center;gap:9px;background:rgba(7,10,20,.45)}
   .btn:hover{border-color:transparent;background:var(--surface-2)}
   .btn.primary{background:var(--grad);color:#0a0e1a;border-color:transparent;font-weight:500}
@@ -85,15 +84,14 @@
   @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
   @media (prefers-reduced-motion:reduce){.scroll-cue,.hint::before{animation:none}}
 
-  /* ---------- chapters ---------- */
   .chapter{position:relative;min-height:100vh;display:flex;align-items:center;z-index:2;padding:60px 0}
   .box{position:relative;width:min(560px,92vw);padding:36px 34px 30px;border:1px solid var(--line);border-radius:18px;
     background:linear-gradient(165deg,rgba(12,16,32,.82),rgba(7,10,20,.72));backdrop-filter:blur(6px)}
   .box.right{margin-left:auto}
   .ghost{position:absolute;top:-84px;left:-10px;font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(110px,16vw,180px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(150,170,210,.16);pointer-events:none;user-select:none}
   .box.right .ghost{left:auto;right:-10px}
-  .ch-eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-3);margin:0 0 18px;display:flex;align-items:center;gap:12px}
-  .ch-eyebrow::before{content:"";width:24px;height:1px;background:var(--grad)}
+  .ch-eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:none;color:var(--cyan);margin:0 0 16px;display:flex;align-items:center;gap:12px;line-height:1.5}
+  .ch-eyebrow::before{content:"";width:24px;height:1px;background:var(--grad);flex:0 0 auto;margin-top:2px}
   .chapter h2{font-family:var(--serif);font-weight:500;font-size:clamp(32px,5vw,52px);line-height:1.02;letter-spacing:-.015em;margin:0 0 16px}
   .chapter h2 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .ch-lede{color:var(--text-2);font-size:16.5px;margin:0 0 6px;line-height:1.72}
@@ -101,21 +99,22 @@
   .ch-more{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:var(--mono);font-size:12.5px;color:var(--text-2);border-bottom:1px solid var(--line-strong);padding-bottom:2px;transition:color .2s,border-color .2s}
   .ch-more:hover{color:var(--text);border-color:var(--cyan)}
 
-  /* ---------- act indicator (cinematic HUD) ---------- */
-  #act{position:fixed;left:28px;bottom:26px;z-index:3;font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--text-2);display:flex;align-items:center;gap:11px;opacity:0;transition:opacity .6s ease;pointer-events:none}
+  #act{position:fixed;left:28px;bottom:26px;z-index:3;font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:none;color:var(--text-2);display:flex;align-items:center;gap:11px;opacity:0;transition:opacity .6s ease;pointer-events:none}
   #act::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--grad)}
   @media (max-width:640px){#act{display:none}}
 
-  /* ---------- names whisper-line ---------- */
   .names{position:relative;z-index:2;padding:52px 0 16px}
   .names .wrap{display:flex;flex-wrap:wrap;gap:14px 34px;justify-content:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-3)}
   .names span{opacity:.85}
 
-  /* ---------- contact ---------- */
-  .contact{position:relative;z-index:2;min-height:72vh;display:flex;align-items:center;padding:80px 0}
+  .contact{position:relative;z-index:2;min-height:78vh;display:flex;align-items:center;padding:80px 0}
   .contact .inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:44px;align-items:flex-end;width:100%}
-  .contact h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,64px);line-height:1.02;letter-spacing:-.02em;margin:0;max-width:14ch}
+  .contact .pitch{max-width:30ch}
+  .contact .ch-eyebrow{margin-bottom:18px}
+  .contact h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,64px);line-height:1.02;letter-spacing:-.02em;margin:0}
   .contact h2 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .contact .receipt{font-family:var(--mono);font-size:12.5px;color:var(--text-3);margin:22px 0 0;line-height:1.7;max-width:44ch}
+  .contact .receipt b{color:var(--text-2);font-weight:500}
   .contact-links{display:flex;flex-direction:column;gap:14px;font-family:var(--mono);font-size:14px}
   .contact-links a{color:var(--text-2);display:inline-flex;align-items:center;gap:12px;transition:color .2s;width:fit-content}
   .contact-links a:hover{color:var(--text)}
@@ -141,7 +140,6 @@
     .wrap{padding:0 20px}
     nav{padding:12px 20px}
     .box{padding:28px 22px 24px}
-    .r .lk{display:none}
   }
 </style>
 </head>
@@ -156,7 +154,7 @@
     <span class="g" style="animation-delay:.34s">P</span><span class="g" style="animation-delay:.38s">a</span><span class="g" style="animation-delay:.42s">n</span><span class="g" style="animation-delay:.46s">d</span><span class="g" style="animation-delay:.5s">e</span><span class="g" style="animation-delay:.54s">y</span>
   </div>
   <div class="intro-bar"></div>
-  <div class="intro-sub">Knots · Qubits · Graphs</div>
+  <div class="intro-sub">Quantum · Intelligence · Systems</div>
 </div>
 
 <header id="hdr">
@@ -164,9 +162,9 @@
     <a class="brand" href="#top">Tushar <span>Pandey</span></a>
     <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">menu</button>
     <div class="navlinks" id="navlinks">
-      <a href="#topology">Topology</a>
       <a href="#quantum">Quantum</a>
       <a href="#ai">AI</a>
+      <a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">Research</a>
       <a href="cv.html">CV</a>
       <a href="#contact">Contact</a>
     </div>
@@ -178,6 +176,7 @@
     <p class="hero-eyebrow">Ph.D. Mathematics · Quantum × AI</p>
     <h1>Tushar<br><em>Pandey</em></h1>
     <p class="lede">I turn theorems into systems that ship.</p>
+    <p class="hero-whisper">Trained on proofs: <b>one conjecture, solved alone, 2023.</b></p>
     <div class="meta-row">
       <span><b>Now</b> &nbsp;Senior Software Engineer @ DataRobot</span>
       <span><b>Based in</b> &nbsp;Dallas, TX</span>
@@ -192,37 +191,25 @@
   <div class="scroll-cue">scroll</div>
 </section>
 
-<section class="chapter" id="topology">
+<section class="chapter" id="quantum">
   <div class="wrap">
     <div class="box right reveal">
       <div class="ghost">01</div>
-      <p class="ch-eyebrow">Quantum Topology</p>
-      <h2>Knots are <em>theorems.</em></h2>
-      <p class="ch-lede">Five years inside the geometry of knots: quantum invariants, hyperbolic volumes, and the conjectures that bind them. It ended with <b>a conjecture proved alone</b>. The proofs have traveled: Yale, Brown, Madrid, Trieste.</p>
-      <a class="ch-more" href="cv.html">the mathematics →</a>
-    </div>
-  </div>
-</section>
-
-<section class="chapter" id="quantum">
-  <div class="wrap">
-    <div class="box reveal">
-      <div class="ghost">02</div>
-      <p class="ch-eyebrow">Error Correction</p>
-      <h2>Errors are <em>geometry.</em></h2>
-      <p class="ch-lede">Quantum computers fail constantly. I design <b>the codes that catch them</b>: topological phases, decoders, thresholds. Two summers at a national laboratory; results where physicists read them.</p>
-      <a class="ch-more" href="cv.html">the research →</a>
+      <p class="ch-eyebrow">Can you compute with broken parts?</p>
+      <h2>Error, <em>corrected.</em></h2>
+      <p class="ch-lede">Two summers at Oak Ridge building <b>fault tolerance for a non-abelian code</b>; lead author, APL Quantum, 2025. The newest work reaches the qLDPC frontier.</p>
+      <a class="ch-more" href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">the record →</a>
     </div>
   </div>
 </section>
 
 <section class="chapter" id="ai">
   <div class="wrap">
-    <div class="box right reveal">
-      <div class="ghost">03</div>
-      <p class="ch-eyebrow">Machine Intelligence</p>
-      <h2>Reasoning is <em>a graph.</em></h2>
-      <p class="ch-lede">I taught language models to <b>grow their own reasoning structures</b>, then shipped the machinery into production at enterprise scale. Nineteen citations in its first year.</p>
+    <div class="box reveal">
+      <div class="ghost">02</div>
+      <p class="ch-eyebrow">Can a machine think harder, mid-thought?</p>
+      <h2>Reasoning that <em>grows.</em></h2>
+      <p class="ch-lede"><b>AGoT</b> grows chains, trees and graphs as it runs: 19 citations in year one, running in production.</p>
       <a class="ch-more" href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">the code, open source →</a>
     </div>
   </div>
@@ -242,7 +229,11 @@
 <section class="contact" id="contact">
   <div class="wrap">
     <div class="inner">
-      <h2 class="reveal">Let&rsquo;s build the <em>improbable.</em></h2>
+      <div class="pitch">
+        <p class="ch-eyebrow reveal">What&rsquo;s left to prove?</p>
+        <h2 class="reveal">Let&rsquo;s build the <em>improbable.</em></h2>
+        <p class="receipt reveal">Multi-tenant LLM inference at DataRobot: deploys <b>30 to 40 percent faster</b>, throughput <b>tripled</b>. Three first-place titles since 2024.</p>
+      </div>
       <div class="contact-links reveal">
         <a href="mailto:tusharp@tamu.edu"><span class="lbl">Email</span> tusharp [at] tamu [dot] edu</a>
         <a href="https://www.linkedin.com/in/tpmath/" target="_blank" rel="noopener"><span class="lbl">LinkedIn</span> linkedin.com/in/tpmath</a>
@@ -265,7 +256,6 @@
 <script>
 document.getElementById("yr").textContent = new Date().getFullYear();
 
-/* ---------- nav ---------- */
 const hdr=document.getElementById("hdr");
 addEventListener("scroll",()=>hdr.classList.toggle("scrolled",scrollY>20),{passive:true});
 const menuBtn=document.getElementById("menuBtn"), navlinks=document.getElementById("navlinks");
@@ -274,7 +264,7 @@ navlinks.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>navlink
 const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target);}}),{rootMargin:"0px 0px -10% 0px"});
 document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
 
-/* ============ WEBGL : KNOT → LATTICE → GRAPH ============ */
+/* ============ WEBGL : OBJECT OF TENSION → LATTICE → GRAPH → IGNITION ============ */
 (function(){
   const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const canvas=document.getElementById("scene");
@@ -292,7 +282,6 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
   renderer.setPixelRatio(DPR);
   const MOBILE=innerWidth<640;
 
-  /* ---- background turbulence with stage-shifting palette ---- */
   const bgScene=new THREE.Scene();
   const bgCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
   const bgMat=new THREE.ShaderMaterial({
@@ -320,7 +309,6 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
   });
   bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),bgMat));
 
-  /* ---- main scene ---- */
   const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(42,1,0.1,100);
   camera.position.set(0,0,9);
@@ -331,7 +319,6 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
   const trefFn=t=>[Math.sin(t)+2*Math.sin(2*t),Math.cos(t)-2*Math.cos(2*t),-Math.sin(3*t)];
   const tref=curve(trefFn);
 
-  /* --- tube knot (hero) --- */
   const TUB=MOBILE?260:440, RAD=16;
   const g1=new THREE.TubeGeometry(fig8,TUB,0.30,RAD,true);
   const g2=new THREE.TubeGeometry(tref,TUB,0.30,RAD,true);
@@ -368,11 +355,9 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
   const knot=new THREE.Mesh(g1,matMain); group.add(knot);
   const halo=new THREE.Mesh(g1,matHalo); halo.scale.setScalar(1.06); group.add(halo);
 
-  /* --- particle cloud: trefoil -> lattice -> graph --- */
   const SIDE=MOBILE?10:14, N=SIDE*SIDE*SIDE;
   const knotPts=new Float32Array(N*3), lattPts=new Float32Array(N*3), graphPts=new Float32Array(N*3);
   const seeds=new Float32Array(N), delays=new Float32Array(N);
-  // knot: fuzzy shell around trefoil
   for(let i=0;i<N;i++){
     const t=(i/N)*Math.PI*2, p=trefFn(t);
     const a=Math.random()*Math.PI*2, r=0.30+ (Math.random()-0.5)*0.10;
@@ -381,7 +366,6 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
     knotPts[i*3+2]=p[2]+(Math.random()-0.5)*0.24;
     seeds[i]=Math.random(); delays[i]=Math.random();
   }
-  // lattice: centered cube grid
   const SP=MOBILE?0.46:0.40, HALF=(SIDE-1)*SP/2;
   let idx=0;
   for(let x=0;x<SIDE;x++)for(let y=0;y<SIDE;y++)for(let z=0;z<SIDE;z++){
@@ -390,7 +374,6 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
     lattPts[idx*3+2]=z*SP-HALF;
     idx++;
   }
-  // graph: clustered hubs on a fibonacci sphere
   const HUBS=MOBILE?18:26, hubs=[];
   for(let h=0;h<HUBS;h++){
     const th=Math.acos(1-2*(h+0.5)/HUBS), ph=Math.PI*(1+Math.sqrt(5))*h;
@@ -408,34 +391,38 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
   pGeo.setAttribute("aSeed",new THREE.BufferAttribute(seeds,1));
   pGeo.setAttribute("aDelay",new THREE.BufferAttribute(delays,1));
 
-  const ptsU={uTime:{value:0},uT1:{value:0},uT2:{value:0},uAlpha:{value:0},uClickT:{value:-10},uDPR:{value:DPR}};
+  const ptsU={uTime:{value:0},uT1:{value:0},uT2:{value:0},uConv:{value:0},uAlpha:{value:0},uClickT:{value:-10},uDPR:{value:DPR}};
   const ptsMat=new THREE.ShaderMaterial({
     uniforms:ptsU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
     vertexShader:[
       "attribute vec3 aLatt;attribute vec3 aGraph;attribute float aSeed;attribute float aDelay;",
-      "uniform float uTime,uT1,uT2,uClickT,uDPR;",
+      "uniform float uTime,uT1,uT2,uConv,uClickT,uDPR;",
       "varying vec3 vCol;varying float vGlow;",
       "float ss(float a,float b,float x){return smoothstep(a,b,x);}",
       "void main(){",
       "float t1=ss(0.,1.,clamp((uT1-aDelay*0.35)/0.65,0.,1.));",
       "float t2=ss(0.,1.,clamp((uT2-aDelay*0.35)/0.65,0.,1.));",
+      "float gate2=t1*(1.0-t2);",
       "vec3 p=mix(position,aLatt,t1); p=mix(p,aGraph,t2);",
-      "p+=0.035*vec3(sin(uTime*0.7+aSeed*17.0),cos(uTime*0.9+aSeed*23.0),sin(uTime*0.8+aSeed*31.0));",
-      // click shockwave from core
+      // ignition: converge toward a tight luminous core-shell
+      "float cv=ss(0.,1.,clamp((uConv-aDelay*0.25)/0.75,0.,1.));",
+      "vec3 dir=normalize(p+vec3(1e-4));",
+      "vec3 core=dir*(0.55+0.5*fract(aSeed*7.31));",
+      "p=mix(p,core,cv);",
+      "p+=0.035*(1.0-cv*0.6)*(1.0-0.55*gate2)*vec3(sin(uTime*0.7+aSeed*17.0),cos(uTime*0.9+aSeed*23.0),sin(uTime*0.8+aSeed*31.0));",
       "float age=uTime-uClickT;",
       "float w=(age>0.0&&age<2.5)?exp(-3.0*abs(length(p)-age*3.2))*exp(-age*1.4):0.0;",
       "p+=normalize(p+vec3(1e-4))*w*0.4;",
-      // syndrome flicker on the lattice
       "float gate=t1*(1.0-t2);",
       "float flick=step(0.982,fract(aSeed*91.7+floor(uTime*2.0)*0.618))*gate;",
-      // colors
       "vec3 c0=vec3(0.322,0.839,0.902),c1=vec3(0.608,0.482,1.0),c2=vec3(0.941,0.416,0.690);",
       "vec3 cg=mix(c2,c1,fract(aSeed*3.17));",
       "vCol=mix(c0,c1,t1); vCol=mix(vCol,cg,t2);",
       "vCol=mix(vCol,vec3(1.0,0.5,0.75),flick*0.9);",
-      "vGlow=w*1.6+flick*0.9;",
+      "vCol=mix(vCol,vec3(1.0,0.85,0.95),cv*0.45);",
+      "vGlow=w*1.6+flick*0.9+cv*0.8;",
       "vec4 mv=modelViewMatrix*vec4(p,1.0);",
-      "gl_PointSize=(2.4+1.6*aSeed+3.5*w+2.2*flick)*uDPR*(9.0/max(1.0,-mv.z));",
+      "gl_PointSize=(2.4+1.6*aSeed+3.5*w+2.2*flick+1.4*cv)*uDPR*(9.0/max(1.0,-mv.z));",
       "gl_Position=projectionMatrix*mv;}"
     ].join("\n"),
     fragmentShader:[
@@ -450,7 +437,6 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
   });
   const cloud=new THREE.Points(pGeo,ptsMat); group.add(cloud);
 
-  /* --- graph edges between hubs --- */
   const edgeSet=new Set(), epos=[], emix=[], ephase=[];
   for(let a=0;a<HUBS;a++){
     const ds=hubs.map((h,b)=>[b,Math.hypot(h[0]-hubs[a][0],h[1]-hubs[a][1],h[2]-hubs[a][2])]).sort((x,y)=>x[1]-y[1]);
@@ -485,7 +471,6 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
 
   const BASE=MOBILE?0.8:0.95; group.scale.setScalar(BASE);
 
-  /* ---- sizing ---- */
   function resize(){
     const w=innerWidth,h=innerHeight;
     renderer.setSize(w,h,false);
@@ -494,7 +479,6 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
   }
   resize(); addEventListener("resize",resize);
 
-  /* ---- interaction: parallax + drag + click pulse ---- */
   let tx=0,ty=0,cx=0,cy=0;
   let dragging=false,moved=0,lastX=0,lastY=0,yaw=0,pitch=0,velYaw=0,velPitch=0;
   const DRAG_K=0.009;
@@ -513,15 +497,13 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
       document.body.classList.add("grabbing");
     });
     const endDrag=e=>{
-      if(dragging && moved<6){ ptsU.uClickT.value=ptsU.uTime.value; }  // click = pulse
+      if(dragging && moved<6){ ptsU.uClickT.value=ptsU.uTime.value; }
       dragging=false; document.body.classList.remove("grabbing");
     };
     addEventListener("pointerup",endDrag); addEventListener("pointercancel",()=>{dragging=false;document.body.classList.remove("grabbing");});
   }
 
-  /* ---- scroll choreography (section-driven) ---- */
-  const secTopo=document.getElementById("topology"),
-        secQ=document.getElementById("quantum"),
+  const secQ=document.getElementById("quantum"),
         secAI=document.getElementById("ai"),
         secC=document.getElementById("contact"),
         actEl=document.getElementById("act");
@@ -544,41 +526,38 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
     tubeU.uIntro.value=it;
     cx+=(tx-cx)*0.05; cy+=(ty-cy)*0.05;
 
-    const s1=sp(secTopo), s2=sp(secQ), s3=sp(secAI), s4=sp(secC);
-    // act narration
+    const sQ=sp(secQ), sAI=sp(secAI), sC=sp(secC);
     let label="";
-    if(s4>0.55) label="";
-    else if(s3>0.45) label="Act III · the graph thinks";
-    else if(s2>0.45) label="Act II · the knot becomes a code";
-    else if(s1>0.45) label="Act I · topology";
+    if(sC>0.55) label="and decides to build";
+    else if(sAI>0.45) label="then it learns to think";
+    else if(sQ>0.3) label="some questions don't have edges";
     if(actEl.textContent!==label){ actEl.textContent=label; }
     actEl.style.opacity=label?0.9:0;
-    // tube: morph fig8->trefoil during ch1, dissolve into points during ch2 entry
-    tubeU.uMorph.value=s1;
-    tubeU.uFade.value=Math.max(0,1-s2*2.2);
-    // points: appear as tube dissolves, then morph
-    ptsU.uAlpha.value=Math.min(1,s2*2.6)*(0.92-0.25*s4);
-    ptsU.uT1.value=s2;
-    ptsU.uT2.value=s3;
-    edgeU.uOn.value=Math.max(0,s3*1.2-0.2)*(1-0.4*s4);
-    bgMat.uniforms.uStage.value=s2+s3;
 
-    // group placement: hero right -> ch1 left -> ch2 right -> ch3 left -> contact center
+    tubeU.uMorph.value=Math.min(1,sQ*1.6);
+    tubeU.uFade.value=Math.max(0,1-Math.max(0,sQ-0.3)*2.6);
+    ptsU.uAlpha.value=Math.min(1,Math.max(0,sQ-0.22)*3.0)*(0.92-0.15*sC);
+    ptsU.uT1.value=sQ;
+    ptsU.uT2.value=sAI;
+    ptsU.uConv.value=sC;
+    edgeU.uOn.value=Math.max(0,sAI*1.2-0.2)*(1-sC*0.85);
+    bgMat.uniforms.uStage.value=sQ+sAI;
+
     const isMob=innerWidth<900;
     let xT=0;
     if(!isMob){
-      xT=2.2; xT+=(-2.0-xT)*s1; xT+=(2.0-xT)*s2; xT+=(-2.0-xT)*s3; xT+=(0-xT)*s4;
+      xT=2.2; xT+=(-2.0-xT)*sQ; xT+=(2.0-xT)*sAI; xT+=(0-xT)*sC;
     }
     group.position.x+=(xT-group.position.x)*0.06;
-    group.position.y+=(Math.sin((s1+s2+s3)*3.14)*0.3-group.position.y)*0.05;
-    const scT=BASE*(1-0.06*s2+0.02*s3-0.12*s4)*(0.4+0.6*it);
+    group.position.y+=(Math.sin((sQ+sAI)*3.14)*0.3-group.position.y)*0.05;
+    const scT=BASE*(1-0.06*sQ+0.02*sAI-0.10*sC)*(0.4+0.6*it);
     group.scale.setScalar(scT);
 
     if(!dragging){
       yaw+=velYaw; pitch=Math.max(-1.2,Math.min(1.2,pitch+velPitch));
       velYaw*=0.95; velPitch*=0.95;
       const spin=(1-it)*2.2;
-      yaw+=dt*(0.16+spin+0.08*s3);
+      yaw+=dt*(0.16+spin+0.08*sAI+0.22*sC);
     }
     group.rotation.y=yaw;
     group.rotation.x=0.15+pitch+(dragging?0:cy*0.3);
@@ -593,11 +572,12 @@ document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
     renderFrame(); finishIntro();
     addEventListener("resize",()=>{resize();renderFrame();});
     addEventListener("scroll",()=>{
-      const s2=sp(secQ),s3=sp(secAI);
-      tubeU.uFade.value=Math.max(0,1-s2*2.2);
-      ptsU.uAlpha.value=Math.min(1,s2*2.6);
-      ptsU.uT1.value=s2; ptsU.uT2.value=s3; edgeU.uOn.value=s3;
-      bgMat.uniforms.uStage.value=s2+s3;
+      const sQ=sp(secQ),sAI=sp(secAI),sC=sp(secC);
+      tubeU.uMorph.value=Math.min(1,sQ*1.6);
+      tubeU.uFade.value=Math.max(0,1-Math.max(0,sQ-0.3)*2.6);
+      ptsU.uAlpha.value=Math.min(1,Math.max(0,sQ-0.22)*3.0);
+      ptsU.uT1.value=sQ; ptsU.uT2.value=sAI; ptsU.uConv.value=sC; edgeU.uOn.value=sAI;
+      bgMat.uniforms.uStage.value=sQ+sAI;
       renderFrame();
     },{passive:true});
   } else {
