@@ -198,10 +198,12 @@ section.canto.acc{min-height:0;padding:0}
 }
 
 /* ---------- theme toggle control ---------- */
-.theme-toggle{display:inline-block;margin:.9em 0 0;padding:.5em 1.15em;background:rgba(244,213,141,.06);
+.theme-toggle{position:fixed;top:18px;right:22px;z-index:80;padding:.55em 1.15em;
+  background:rgba(5,6,15,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   border:1px solid var(--line);border-radius:999px;
   font-family:var(--mono);font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--gold);opacity:.8;cursor:pointer;transition:opacity .3s,text-shadow .3s,border-color .3s}
+  color:var(--gold);opacity:.85;cursor:pointer;transition:opacity .3s,text-shadow .3s,border-color .3s}
+@media(max-width:640px){.theme-toggle{top:12px;right:12px;padding:.5em .85em;font-size:.58rem;letter-spacing:.18em}}
 .theme-toggle::before{content:"☀";letter-spacing:0;margin-right:.7em;opacity:.9}
 html[data-theme="light"] .theme-toggle::before{content:"☾"}
 .theme-toggle:hover,.theme-toggle:focus-visible{opacity:1;border-color:rgba(244,213,141,.55);
@@ -216,7 +218,7 @@ html[data-theme="light"]{
 /* theme fade (respects reduced motion) */
 html{transition:background-color .4s ease,color .4s ease}
 @media(prefers-reduced-motion:reduce){html{transition:none}}
-html[data-theme="light"] .theme-toggle{text-shadow:none;background:rgba(148,98,19,.07)}
+html[data-theme="light"] .theme-toggle{text-shadow:none;background:rgba(245,239,226,.72)}
 html[data-theme="light"] .theme-toggle:hover,
 html[data-theme="light"] .theme-toggle:focus-visible{border-color:rgba(148,98,19,.5);text-shadow:0 0 12px rgba(148,98,19,.5)}
 
@@ -231,7 +233,13 @@ html[data-theme="light"] .scene button.mini{color:#7fe6f7;background:rgba(0,0,0,
 html[data-theme="light"] .scene button.mini.active{background:rgba(94,244,255,.22);border-color:#5ef4ff;color:#fff}
 html[data-theme="light"] .scene .hint,html[data-theme="light"] .scene .rl{color:#9a97c0}
 html[data-theme="light"] .scene input[type=range]{accent-color:#b07bff}
-html[data-theme="light"] #cover3d{background:#0a0c1c;border-radius:16px}
+/* cover stays night in light mode: a dark dust jacket on a paper book */
+html[data-theme="light"] #cover{background:#05060f;width:100vw;margin-left:calc(50% - 50vw)}
+html[data-theme="light"] #cover .sub,html[data-theme="light"] #cover .scrollcue,
+html[data-theme="light"] #cover .cover-copy{color:#8a88b8}
+html[data-theme="light"] #cover h1{background:linear-gradient(120deg,#5ef4ff,#b07bff 55%,#f4d58d);
+  -webkit-background-clip:text;background-clip:text}
+html[data-theme="light"] #cover .om{color:#f4d58d}
 
 /* recolor dark-only literals so nothing is illegible on paper */
 html[data-theme="light"] .science{background:linear-gradient(180deg,rgba(13,110,134,.08),rgba(109,40,217,.06));
@@ -252,6 +260,7 @@ html[data-theme="light"] #mala .bead::after{background:rgba(245,239,226,.95);col
 <div id="prog"></div>
 <canvas id="starfield"></canvas>
 <div class="vignette"></div>
+<button type="button" id="theme-toggle" class="theme-toggle" title="Switch theme" aria-label="Toggle light or dark theme">Let there be light.</button>
 <nav id="mala"></nav>
 
 <div id="book">
@@ -269,7 +278,6 @@ html[data-theme="light"] #mala .bead::after{background:rgba(245,239,226,.95);col
   <section class="canto" id="invocation">
     <div class="canto-num">Invocation</div>
     <h2 class="canto-title">Before the First Question</h2>
-    <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle light or dark theme">Let there be light.</button>
     <div class="epigraph">A machine was built that could hold a question open, refusing to close it into an answer, and the people who built it began to wonder what else they had assumed could not be held.
       <span class="attr">OPENING OF THE QUBIT DIALOGUES</span></div>
     <div class="dlg"><p>There is an old form for hard conversations. One person stands at the edge of a thing they cannot do, and another, who sees more, does not tell them to be brave. Instead the two of them talk, and by the end the edge has moved.</p>
