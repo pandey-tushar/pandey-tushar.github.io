@@ -198,10 +198,14 @@ section.canto.acc{min-height:0;padding:0}
 }
 
 /* ---------- theme toggle control ---------- */
-.theme-toggle{display:inline-block;margin:.4em 0 0;padding:0;background:none;border:none;
+.theme-toggle{display:inline-block;margin:.9em 0 0;padding:.5em 1.15em;background:rgba(244,213,141,.06);
+  border:1px solid var(--line);border-radius:999px;
   font-family:var(--mono);font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--gold);opacity:.6;cursor:pointer;transition:opacity .3s,text-shadow .3s}
-.theme-toggle:hover,.theme-toggle:focus-visible{opacity:1;text-shadow:0 0 12px rgba(244,213,141,.6);outline:none}
+  color:var(--gold);opacity:.8;cursor:pointer;transition:opacity .3s,text-shadow .3s,border-color .3s}
+.theme-toggle::before{content:"☀";letter-spacing:0;margin-right:.7em;opacity:.9}
+html[data-theme="light"] .theme-toggle::before{content:"☾"}
+.theme-toggle:hover,.theme-toggle:focus-visible{opacity:1;border-color:rgba(244,213,141,.55);
+  text-shadow:0 0 12px rgba(244,213,141,.6);outline:none}
 
 /* ---------- light theme ---------- */
 html[data-theme="light"]{
@@ -212,11 +216,11 @@ html[data-theme="light"]{
 /* theme fade (respects reduced motion) */
 html{transition:background-color .4s ease,color .4s ease}
 @media(prefers-reduced-motion:reduce){html{transition:none}}
-html[data-theme="light"] .theme-toggle{text-shadow:none}
+html[data-theme="light"] .theme-toggle{text-shadow:none;background:rgba(148,98,19,.07)}
 html[data-theme="light"] .theme-toggle:hover,
-html[data-theme="light"] .theme-toggle:focus-visible{text-shadow:0 0 12px rgba(148,98,19,.5)}
+html[data-theme="light"] .theme-toggle:focus-visible{border-color:rgba(148,98,19,.5);text-shadow:0 0 12px rgba(148,98,19,.5)}
 
-/* WebGL/background: paper can't hold additive blending — fade starfield, drop vignette */
+/* WebGL/background: paper can't hold additive blending, so fade starfield, drop vignette */
 #starfield{transition:opacity .5s ease}
 html[data-theme="light"] #starfield{opacity:0}
 html[data-theme="light"] .vignette{display:none}
