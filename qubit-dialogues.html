@@ -859,7 +859,7 @@ window.SCENES={mount(root){
 
     const bead=document.createElement('div');
     bead.className='bead'; bead.dataset.t=c.n+'. '+c.title;
-    bead.onclick=()=>expand(sec,{scroll:true});
+    bead.onclick=()=>openExplicit(sec,{scroll:true});
     bead.dataset.n=c.n; mala.appendChild(bead);
   });
 
@@ -927,8 +927,14 @@ window.SCENES={mount(root){
     if(opts.scroll) sec.scrollIntoView();
   }
 
+  /* an explicit open outranks the settle heuristic for a moment. without this,
+     the compensation scroll above re-arms the settle timer, pickCanto re-picks
+     by geometry, and clicking canto 5 lands the reader on canto 4. */
+  let suppressUntil=0;
+  function openExplicit(sec,opts){ suppressUntil=performance.now()+1200; expand(sec,opts); }
+
   accs.forEach(sec=>{
-    sec.querySelector('.canto-head').addEventListener('click',()=>expand(sec));
+    sec.querySelector('.canto-head').addEventListener('click',()=>openExplicit(sec));
   });
 
   /* auto-expand on scroll settle: when scrolling pauses, open the canto the
@@ -936,6 +942,8 @@ window.SCENES={mount(root){
      converges after compensation: the re-pick lands on the same canto. */
   let srf=0,settle=0;
   function pickCanto(){
+    /* one settle is skipped after an explicit open, then scrolling is free */
+    if(performance.now()<suppressUntil){ suppressUntil=0; return; }
     const line=scrollY+innerHeight/2;
     let best=null;
     for(const s of accs){
