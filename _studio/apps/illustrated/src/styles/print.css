@@ -1,0 +1,303 @@
+/* The illustrated edition on paper.
+
+   The screen edition is a scroll instrument: plates pinned to the viewport,
+   text beats lit as they pass, a rail down the right edge. None of that is a
+   book. On paper the same material becomes an ordinary illustrated volume:
+   each canto opens on a fresh page, the plate is a contained figure with its
+   legend as a caption underneath, and the beats are simply the paragraphs of
+   the canto in order.
+
+   The plates keep their night ground. Inverting them is possible and it does
+   read as an engraving, but it also turns the Oracle's gold into blue and the
+   Seeker's cyan into red, and those hues carry meaning from canto to canto.
+   The edition's own rule, stated at the top of illustrated.css and again in
+   the reader's scene styles, is that the artwork is an astronomical plate in
+   any theme. A dark plate boxed on a white page is how plates are printed in
+   art books; a recoloured one is a different picture. So: page white, ink
+   near-black, plates as they were drawn.
+
+   This sheet is self-sufficient. It does not assume the reduced-motion path is
+   active, so a reader who hits Ctrl+P gets the same book the PDF pipeline
+   does. !important is used freely because it has to beat both the mobile block
+   (an A4 text column is under 720px, so those rules are live on paper) and the
+   html[data-motion="reduce"] block, which outranks it on specificity. */
+
+@media print {
+  @page { margin: 14mm }
+
+  /* Paper ground and near-black ink whatever theme the reader left behind.
+     html:root[data-theme] outranks tokens.css's html[data-theme="dark"] on
+     specificity, so this cannot lose a cascade-order argument later. */
+  html:root,
+  html:root[data-theme],
+  html:root[data-theme="dark"] {
+    --void: #fff;
+    --void2: #fff;
+    --ink: #111;
+    --cyan: #0b5566;
+    --violet: #4b2ca0;
+    --gold: #6b4a12;
+    --rose: #9a2350;
+    --dim: #3f3a33;
+    --line: rgba(0, 0, 0, .28);
+    color-scheme: light;
+  }
+
+  html, body {
+    background: #fff !important;
+    color: #111 !important;
+    font-size: 11pt;
+    line-height: 1.5;
+    overflow: visible !important;
+    scroll-behavior: auto;
+  }
+
+  /* ---------- everything that only makes sense with a pointer ---------- */
+
+  .skip,
+  .rail,
+  .cue,
+  .foot .quiet,
+  .stage-inner .live,
+  .stage::after,
+  canvas,
+  button,
+  input,
+  select,
+  textarea,
+  video,
+  audio,
+  iframe { display: none !important }
+
+  /* the dark bloom that lifts text off the plate has no plate to sit on */
+  .column::before { display: none !important }
+
+  /* ---------- unpin the scroll machinery ---------- */
+
+  /* On screen the legend is the last thing in the canto, because the plate is
+     pinned behind the whole canto and the caption belongs at the end of the
+     pass. On paper the plate is a figure at the top of the leaf and its
+     caption has to sit under it, so the track is dissolved into the article
+     and the four parts are put in reading order. */
+  .front,
+  article.canto {
+    display: flex !important;
+    flex-direction: column;
+  }
+  .track { display: contents !important }
+  .movement-rule { order: 0 }
+  .stage { order: 1 }
+  .front > .legend,
+  article.canto > .legend { order: 2 }
+  .front-type,
+  .beats { order: 3 }
+  .apparatus { order: 4 }
+  .stage {
+    position: static !important;
+    height: auto !important;
+    z-index: auto !important;
+    margin: 0 0 .6em !important;
+  }
+  .beats,
+  .front-type { margin-top: 0 !important }
+  .beat {
+    display: block !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+  }
+  .column {
+    opacity: 1 !important;
+    transform: none !important;
+    max-width: 34em !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    transition: none !important;
+  }
+
+  /* ---------- the plate as a figure ---------- */
+
+  /* A poster is 1600 by 1000, so an 8:5 box is an exact fit and `contain`
+     never letterboxes. The box is capped in vertical units as well, or a
+     wide-margin page hands the plate half the leaf and pushes the canto's
+     first beat off the bottom. */
+  .stage-inner {
+    position: relative !important;
+    aspect-ratio: 8 / 5;
+    width: 100% !important;
+    max-width: 34em;
+    height: auto !important;
+    max-height: 46vh;
+    margin: 0 auto !important;
+    border: 1px solid #999;
+    background: #05060f;
+    overflow: hidden;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .stage-inner .poster {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  /* the legend is the plate's caption and must not be orphaned from it */
+  .legend {
+    max-width: 34em;
+    margin: 0 auto !important;
+    padding: .5em 0 1.4em !important;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 9pt;
+    letter-spacing: 0;
+    color: #444;
+    text-align: center;
+    break-before: avoid;
+    page-break-before: avoid;
+    break-inside: avoid;
+  }
+
+  /* ---------- title page ---------- */
+
+  .front {
+    display: block;
+    break-after: page;
+    page-break-after: always;
+  }
+  .front-track { min-height: 0 !important }
+  .front-type {
+    min-height: 0 !important;
+    padding: 1.6em 0 0 !important;
+    z-index: auto !important;
+  }
+  .front-type h1 {
+    font-size: 34pt;
+    color: #1a1a2e !important;
+    margin: .35em 0 0;
+  }
+  .front-type .kicker { color: #6b4a12 !important; font-size: 8pt }
+  .front-type .sub { color: #333 !important; margin-top: .8em }
+
+  /* ---------- one canto, one opening page ---------- */
+
+  article.canto {
+    break-before: page;
+    page-break-before: always;
+  }
+  /* a movement is a part title, and a part title gets the leaf to itself */
+  .movement-rule {
+    padding: 2.5em 0 0 !important;
+    border-top: none !important;
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+  }
+  .movement-rule .label { color: #6b4a12 !important; font-size: 9pt }
+  .movement-rule .title { color: #222 !important; font-size: 22pt }
+
+  .canto-head {
+    margin-bottom: 1.1em !important;
+    break-after: avoid;
+    page-break-after: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .canto-head .numeral { color: #6b4a12 !important; font-size: 8.5pt }
+  .canto-head h2 {
+    font-size: 20pt;
+    color: #1a1a2e !important;
+    margin-top: .25em;
+  }
+
+  /* ---------- prose ---------- */
+
+  .column p,
+  .narr,
+  .turn p { orphans: 2; widows: 2 }
+  .column p { margin: 0 0 .75em }
+
+  .beat + .beat { margin-top: .2em }
+  .turn {
+    margin: 0 0 1em !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .turn .who {
+    font-size: 8pt;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .turn.seeker .who { color: #0b5566 !important }
+  .turn.oracle .who { color: #6b4a12 !important }
+  .turn.oracle p:not(.who),
+  .turn.seeker p:not(.who),
+  .narr { color: #111 !important }
+
+  .epigraph {
+    border-left-color: #6b4a12 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .epigraph p { color: #3a2a5a !important }
+  .epigraph cite { color: #6b4a12 !important; font-size: 8pt }
+
+  .assume,
+  .reflect,
+  .science,
+  .pred,
+  .note {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .assume {
+    background: #f6f6f2 !important;
+    border-color: #bbb !important;
+  }
+  .assume .claim { color: #7a1d40 !important }
+  .assume .counter { color: #333 !important }
+  .reflect {
+    border-top-color: #999 !important;
+    color: #6b4a12 !important;
+  }
+
+  /* ---------- apparatus ---------- */
+
+  .apparatus {
+    max-width: 34em;
+    padding: 2em 0 0 !important;
+    color: #222 !important;
+    font-size: 10pt;
+    break-before: avoid;
+    page-break-before: avoid;
+  }
+  .apparatus h3 {
+    color: #6b4a12 !important;
+    font-size: 8pt;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .science,
+  .pred,
+  .note {
+    background: #f6f6f2 !important;
+    border-color: #bbb !important;
+    padding: .9em 1em !important;
+  }
+  .pred .tag { color: #0b5566 !important; font-size: 8pt }
+  .pred .tag.likely { color: #6b4a12 !important }
+  .pred .tag.contested,
+  .pred .tag.unlikely { color: #9a2350 !important }
+
+  /* ---------- colophon ---------- */
+
+  .foot {
+    max-width: 34em;
+    padding: 2.4em 0 0 !important;
+    border-top: 1px solid #999 !important;
+    color: #333 !important;
+    font-size: 9pt;
+    break-before: page;
+    page-break-before: always;
+    break-inside: avoid;
+  }
+}

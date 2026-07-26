@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tushar Pandey</title>
+<meta name="description" content="Tushar Pandey. Ph.D. mathematics, quantum and AI. I turn ideas into systems that ship.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#faf9f5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2016%2016'%3E%3Crect%20x='3.5'%20y='3.5'%20width='9'%20height='9'%20fill='%231a1814'/%3E%3C/svg%3E">
+<style>
+/* ---------------------------------------------------------------
+   THE PROOF. One family, four registers, no graphics.
+   Georgia leads the stack for two reasons: it ships on essentially
+   every Windows and macOS machine, and its default figures are
+   old style, which is what sets "2023" correctly in running text.
+   --------------------------------------------------------------- */
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;text-size-adjust:100%}
+body,h1,h2,p,ol,ul,li{margin:0;padding:0}
+ol,ul{list-style:none}
+
+:root{
+  --paper:#faf9f5;
+  --ink:#1a1814;
+  --ink-84:rgba(26,24,20,.84);
+  --ink-62:rgba(26,24,20,.62);
+  --rule:rgba(26,24,20,.17);
+  --rule-soft:rgba(26,24,20,.11);
+
+  --serif:Georgia,"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Charter,"Charis SIL","Liberation Serif","Times New Roman",Times,serif;
+
+  /* the apparatus column and its gutter */
+  --app:0rem;
+  --gut:0rem;
+  --measure:100%;
+
+  /* scale: a large leap to display, then a major third down through
+     statement, claim, body, apparatus.
+     the vw ceiling only binds on narrow viewports, and only when the
+     reader has enlarged their default font: it keeps the name on one
+     line instead of letting it break or overrun */
+  --t-display:min(clamp(2.8rem,1.05rem + 5.6vw,5.9rem),12.6vw);
+  --t-statement:clamp(1.42rem,.95rem + 1.45vw,2.05rem);
+  --t-claim:clamp(1.14rem,1rem + .5vw,1.4rem);
+  --t-body:1rem;
+  --t-small:.86rem;
+  --t-app:.7rem;
+
+  --leading:1.6;
+  --step:clamp(1.55rem,.85rem + 2vw,2.9rem);
+}
+
+html{font-size:100%}
+@media (min-width:40em){html{font-size:106.25%}}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:var(--t-body);
+  line-height:var(--leading);
+  font-kerning:normal;
+  font-variant-ligatures:common-ligatures contextual;
+  hanging-punctuation:first last;
+}
+
+::selection{background:rgba(26,24,20,.13)}
+
+a{
+  color:inherit;
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:.2em;
+  text-decoration-color:rgba(26,24,20,.3);
+  transition:text-decoration-color 170ms ease;
+}
+a:hover{text-decoration-color:currentColor}
+a:focus-visible{
+  outline:1px solid var(--ink);
+  outline-offset:.3em;
+  text-decoration-color:currentColor;
+}
+
+/* ---------- apparatus: tracked caps, the only "second voice" ---------- */
+.lbl{
+  font-size:var(--t-app);
+  line-height:1.2;
+  letter-spacing:.185em;
+  text-transform:uppercase;
+  color:var(--ink-62);
+  white-space:nowrap;
+}
+
+/* ---------- page frame ---------- */
+.page{
+  min-height:100vh;
+  min-height:100svh;
+  max-width:78rem;
+  margin-inline:auto;
+  padding:clamp(1.65rem,.9rem + 2.2vw,3rem) clamp(1.375rem,.3rem + 3.6vw,4.5rem);
+  display:flex;
+  flex-direction:column;
+}
+
+.masthead{
+  padding-bottom:clamp(.85rem,.5rem + 1vw,1.25rem);
+  border-bottom:1px solid var(--rule);
+}
+/* tracked caps leave a trailing sidebearing; pull it back so the
+   line begins on the true left margin */
+.eyebrow{margin-left:-.02em;white-space:normal}
+
+/* asymmetric: the block sits above the geometric centre, where the
+   eye reads centre to be */
+.main{
+  flex:1 1 auto;
+  padding-block:clamp(2.4rem,1rem + 3.6vw,4.4rem) clamp(2.4rem,1rem + 5.4vw,7.6rem);
+}
+
+.argument{max-width:calc(var(--app) + var(--gut) + var(--measure))}
+
+.row{display:grid;grid-template-columns:minmax(0,1fr)}
+.row + .row{margin-top:var(--step)}
+/* the title takes more air beneath it than the sections take between
+   themselves, and its descender eats some of what it is given */
+.row:first-child + .row{margin-top:calc(var(--step) * 1.4)}
+
+/* ---------- the title ---------- */
+.name{
+  font-size:var(--t-display);
+  font-weight:400;
+  line-height:.98;
+  letter-spacing:-.024em;
+  /* optical alignment: the T carries a left sidebearing, so the
+     stem sits inboard of the margin unless it is pulled out */
+  margin-left:-.038em;
+  text-wrap:balance;
+}
+
+/* ---------- the statement ---------- */
+/* theorem statements are set italic; the proof that follows is roman */
+.statement{
+  font-style:italic;
+  font-size:var(--t-statement);
+  line-height:1.3;
+  letter-spacing:-.006em;
+  text-wrap:pretty;
+}
+
+/* ---------- the proof ---------- */
+.lemma{display:flex;flex-wrap:wrap;align-items:baseline}
+.lemma + .lemma{margin-top:.6em}
+.num{
+  flex:0 0 2.05rem;
+  font-size:.78rem;
+  letter-spacing:.14em;
+  color:var(--ink-62);
+}
+/* narrow screens: the claim takes the rest of its line, so the gloss
+   and the tombstone always fall together on the next one. Both lemmas
+   then break identically instead of one wrapping and one not. */
+.claim{font-size:var(--t-claim);line-height:1.36;flex:1 1 calc(100% - 2.05rem)}
+.gloss{
+  font-style:italic;
+  font-size:var(--t-small);
+  color:var(--ink-62);
+  margin-left:2.05rem;
+}
+
+/* the tombstone. It is drawn, not typed, so it never depends on a
+   glyph Georgia does not have. Its bottom edge sits on the baseline.
+   It trails the last line rather than sitting flush to the measure:
+   the measure has no visible right edge here, so a flush mark reads
+   as a stray dot instead of a terminator. */
+.qed{
+  align-self:baseline;
+  margin-left:auto;
+  width:.66rem;
+  height:.66rem;
+  background:var(--ink);
+  /* the only thing on this page that moves, and it moves once */
+  opacity:0;
+  animation:qed 1000ms ease 1600ms forwards;
+}
+@keyframes qed{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .qed{opacity:1;animation:none}
+  a{transition:none}
+}
+
+/* ---------- the remark ---------- */
+.remark{
+  color:var(--ink-84);
+  line-height:1.62;
+  max-width:33rem;
+  text-wrap:pretty;
+}
+
+/* ---------- contents ---------- */
+.contents{margin-top:clamp(2.2rem,1.2rem + 2.6vw,3.2rem)}
+.toc{
+  margin-top:.95rem;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.42rem 1.5rem;
+  max-width:26rem;
+}
+.toc a{
+  display:grid;
+  grid-template-columns:1.85rem minmax(0,1fr);
+  align-items:baseline;
+  font-size:var(--t-small);
+  text-decoration-color:transparent;
+}
+.toc a:hover,.toc a:focus-visible{text-decoration-color:currentColor}
+.rn{
+  font-size:var(--t-app);
+  letter-spacing:.12em;
+  color:var(--ink-62);
+  text-align:right;
+  padding-right:.7rem;
+}
+
+/* ---------- foot ---------- */
+.foot{
+  padding-top:clamp(.85rem,.5rem + 1vw,1.3rem);
+  border-top:1px solid var(--rule);
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:.9rem 2.5rem;
+}
+.actions{display:flex;flex-wrap:wrap;align-items:baseline;font-size:var(--t-small)}
+.actions li + li::before{content:"\00b7";color:var(--ink-62);margin:0 .75em}
+.colophon{font-size:var(--t-small);color:var(--ink-84);line-height:1.55}
+/* stacked on narrow screens the two labels differ in width, so give
+   them a common measure and the values start on one axis */
+.colophon .lbl{display:inline-block;min-width:5.3rem;margin-right:.5em}
+
+/* ---------------------------------------------------------------
+   Short phones. The page is one composed screen, so on a viewport
+   too short to hold it the spacing tightens rather than the argument
+   spilling over the fold. Height-scoped, so 375x812 is untouched.
+   --------------------------------------------------------------- */
+@media (max-width:47.99em) and (max-height:47.5em){
+  :root{
+    --step:1.15rem;
+    --t-display:min(clamp(2.45rem,1rem + 4.6vw,3.4rem),12.6vw);
+    --t-statement:1.3rem;
+  }
+  .page{padding-block:1.15rem}
+  .masthead{padding-bottom:.7rem}
+  .main{padding-block:1.5rem}
+  .lemma + .lemma{margin-top:.45em}
+  .contents{margin-top:1.5rem}
+  .toc{margin-top:.7rem;gap:.3rem 1.5rem}
+  .foot{padding-top:.7rem;gap:.6rem 2.5rem}
+}
+
+/* ---------------------------------------------------------------
+   >= 48em: the apparatus swings out into the margin and the labels
+   align to the first baseline of the block they annotate.
+   --------------------------------------------------------------- */
+@media (min-width:48em){
+  :root{--app:6.75rem;--gut:1.65rem;--measure:40rem}
+
+  .argument{position:relative}
+  /* the margin rule: one hairline, and it establishes the axis
+     that every line of the argument sits on */
+  .argument::before{
+    content:"";
+    position:absolute;
+    left:calc(var(--app) + var(--gut)/2);
+    top:.35rem;bottom:.35rem;
+    width:1px;
+    background:var(--rule-soft);
+  }
+
+  .row{
+    grid-template-columns:var(--app) minmax(0,var(--measure));
+    column-gap:var(--gut);
+    align-items:baseline;
+  }
+  .row > .lbl{
+    grid-column:1;
+    justify-self:end;
+    text-align:right;
+    /* strip the trailing letterspace so the caps rag flush to the gutter */
+    margin-right:-.185em;
+  }
+  .row > :not(.lbl){grid-column:2}
+
+  /* wide enough for the whole lemma on one line: claim, gloss, then
+     the mark trailing it. The measure has no visible right edge, so a
+     flush mark would read as a stray dot rather than a terminator. */
+  .claim{flex:0 1 auto}
+  .gloss{margin-left:1.1em}
+  .qed{margin-left:1.9em}
+
+  /* still stacked under the argument at this width, so it is set as
+     one more row of it: label in the margin, entries on the axis */
+  .contents{
+    display:grid;
+    grid-template-columns:var(--app) minmax(0,var(--measure));
+    column-gap:var(--gut);
+    align-items:baseline;
+  }
+  .contents > .lbl{justify-self:end;text-align:right;margin-right:-.185em}
+  .toc{margin-top:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem 2rem;max-width:26rem}
+
+  .colophon{text-align:right}
+  .colophon .lbl{display:inline;min-width:0}
+}
+
+/* ---------------------------------------------------------------
+   >= 64em: the contents becomes a true margin column.
+   --------------------------------------------------------------- */
+@media (min-width:64em){
+  .main{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:clamp(2.5rem,.5rem + 4vw,6rem);
+    align-content:center;
+  }
+  /* no min-width: the column hugs its longest line, so the contents
+     rags flush to the same right axis as the two rules and the
+     colophon */
+  .contents{display:block;align-self:start;margin-top:0;padding-top:.7rem}
+  /* the label aligns with the entry names; the numerals hang left of
+     it, the way a set table of contents hangs its folios */
+  .contents > .lbl{justify-self:auto;text-align:left;margin-right:0;padding-left:1.85rem}
+  .toc{margin-top:.95rem;grid-template-columns:minmax(0,1fr);gap:.5rem;max-width:none}
+}
+
+/* ---------------------------------------------------------------
+   Print. Fixed point sizes, because vw is meaningless on paper.
+   --------------------------------------------------------------- */
+@media print{
+  @page{margin:18mm 20mm}
+  html{font-size:11pt}
+  body{background:#fff;color:#000;line-height:1.5}
+  .page{min-height:0;max-width:none;margin:0;padding:0;display:block}
+
+  /* paper is a fixed measure, so the print layout is restated in full
+     rather than inherited from whichever breakpoint the page box
+     happens to match */
+  :root{--app:20mm;--gut:6mm;--measure:100%}
+  .main{display:block;padding-block:11mm 9mm}
+  .argument{max-width:none;position:relative}
+  /* declared in full, not just overridden: a Letter page box is
+     narrower than the 48em breakpoint that otherwise creates it */
+  .argument::before{
+    content:"";
+    position:absolute;
+    left:calc(var(--app) + var(--gut)/2);
+    top:2mm;bottom:2mm;
+    width:0;
+    background:none;
+    border-left:.5pt solid #000;
+  }
+  .row{
+    display:grid;
+    grid-template-columns:var(--app) minmax(0,1fr);
+    column-gap:var(--gut);
+    align-items:baseline;
+  }
+  .row > .lbl{grid-column:1;justify-self:end;text-align:right;margin-right:-.185em}
+  .row > :not(.lbl){grid-column:2}
+  .row + .row{margin-top:8mm}
+  .row:first-child + .row{margin-top:10mm}
+
+  .masthead{border-bottom:.4pt solid #000;padding-bottom:3mm}
+  .foot{display:block;border-top:.4pt solid #000;padding-top:3mm}
+
+  .lbl,.num,.rn{color:#000}
+  .lbl{font-size:7.5pt}
+  .name{font-size:40pt}
+  .statement{font-size:16pt}
+  .claim{font-size:13pt;flex:0 1 auto}
+  .gloss{font-size:9.5pt;color:#000;margin-left:1.1em}
+  .remark{color:#000;font-size:11pt}
+
+  /* the contents falls below the argument and keeps the text-column axis */
+  .contents{display:block;margin-top:10mm;padding-left:calc(var(--app) + var(--gut));padding-top:0}
+  .contents > .lbl{justify-self:auto;text-align:left;margin-right:0;padding-left:0}
+  .toc{
+    margin-top:3mm;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:1.6mm 10mm;
+    max-width:105mm;
+  }
+  .toc a{font-size:10pt}
+
+  .actions{font-size:9pt}
+  .colophon{font-size:9pt;color:#000;text-align:left;margin-top:3.5mm}
+  .colophon .lbl{display:inline-block;min-width:18mm}
+
+  /* backgrounds are unreliable on paper, so the tombstone is set
+     hollow: the other conventional form of the mark */
+  .qed{
+    opacity:1;animation:none;
+    background:none;border:.75pt solid #000;
+    width:8pt;height:8pt;margin-left:1.9em;
+  }
+
+  a{text-decoration:none}
+  .actions a::after{content:" (" attr(data-url) ")";color:#000;font-size:8.5pt;letter-spacing:.01em}
+  .row,.lemma,.colophon p{break-inside:avoid}
+  p{orphans:2;widows:2}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <p class="lbl eyebrow">PH.D. MATHEMATICS &#183; QUANTUM &#215; AI</p>
+  </header>
+
+  <main class="main">
+
+    <div class="argument">
+
+      <div class="row">
+        <h1 class="name">Tushar Pandey</h1>
+      </div>
+
+      <div class="row">
+        <p class="lbl">Theorem</p>
+        <p class="statement">I turn ideas into systems that ship.</p>
+      </div>
+
+      <div class="row">
+        <p class="lbl">Proof</p>
+        <ol class="proof">
+          <li class="lemma">
+            <span class="num" aria-hidden="true">I</span>
+            <span class="claim">Error, corrected.</span>
+            <span class="gloss">quantum error correction</span>
+          </li>
+          <li class="lemma">
+            <span class="num" aria-hidden="true">II</span>
+            <span class="claim">Reasoning that grows.</span>
+            <span class="gloss">LLM reasoning</span>
+            <span class="qed" role="img" aria-label="Q.E.D."></span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="row">
+        <p class="lbl">Remark</p>
+        <p class="remark">Trained on proofs: one conjecture, solved alone, 2023.</p>
+      </div>
+
+    </div>
+
+    <nav class="contents" aria-label="Sections">
+      <h2 class="lbl">Contents</h2>
+      <ol class="toc">
+        <li><a href="#quantum"><span class="rn" aria-hidden="true">I</span><span>Quantum</span></a></li>
+        <li><a href="#ai"><span class="rn" aria-hidden="true">II</span><span>AI</span></a></li>
+        <li><a href="#research"><span class="rn" aria-hidden="true">III</span><span>Research</span></a></li>
+        <li><a href="#book"><span class="rn" aria-hidden="true">IV</span><span>Book</span></a></li>
+        <li><a href="#cv"><span class="rn" aria-hidden="true">V</span><span>CV</span></a></li>
+        <li><a href="#contact"><span class="rn" aria-hidden="true">VI</span><span>Contact</span></a></li>
+      </ol>
+    </nav>
+
+  </main>
+
+  <footer class="foot">
+    <ul class="actions">
+      <li><a href="/cv.pdf" data-url="pandey-tushar.github.io/cv.pdf">Curriculum Vitae</a></li>
+      <li><a href="https://github.com/pandey-tushar" data-url="github.com/pandey-tushar">GitHub</a></li>
+      <li><a href="mailto:thetushar4u@gmail.com" data-url="thetushar4u@gmail.com">Email</a></li>
+    </ul>
+    <div class="colophon">
+      <p><span class="lbl">Now</span>Senior Software Engineer @ DataRobot</p>
+      <p><span class="lbl">Based in</span>Dallas, TX</p>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

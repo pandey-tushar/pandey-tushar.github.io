@@ -1,8 +1,26 @@
 .DS_Store
 Thumbs.db
+
+# PDFs: only the three the books hub links to, plus the two resumes, are tracked
 *.pdf
 !Tushar_Pandey_Resume_Quantum.pdf
 !Tushar_Pandey_Resume_AI.pdf
 !qubit-dialogues.pdf
 !an-unpolarized-life.pdf
 !illustrated.pdf
+
+# _studio holds the source. Jekyll never copies an underscore folder into the
+# built site, so none of it is reachable by URL. Only regenerable output and
+# working scratch is ignored here; the source itself is tracked.
+_studio/node_modules/
+_studio/**/dist/
+_studio/**/test-results/
+_studio/**/playwright-report/
+_studio/**/.vite/
+
+# generated artwork: the plates are deterministic from their seeds, so the PNG
+# masters are rebuilt with tools/posters.mjs rather than stored
+_studio/apps/illustrated/posters/*.png
+
+# screenshots taken during verification
+_studio/prototypes/**/*.png

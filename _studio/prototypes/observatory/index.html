@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tushar Pandey</title>
+<meta name="description" content="Ph.D. Mathematics. Quantum and AI. I turn ideas into systems that ship.">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:,">
+<style>
+:root{
+  --void:#05060f; --void2:#0a0c1c;
+  --ink:#e8e6ff; --gold:#f4d58d; --cyan:#5ef4ff; --violet:#b07bff; --dim:#8a88b8;
+  --g08:rgba(244,213,141,.08); --g14:rgba(244,213,141,.14); --g22:rgba(244,213,141,.22);
+  --g40:rgba(244,213,141,.40); --g70:rgba(244,213,141,.70);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","Hoefler Text",Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
+  --gut:clamp(20px,4.4vw,58px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--void); color:var(--ink);
+  font-family:var(--serif);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+/* the page ground: one low wash, no image, no request */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 82% 2%, rgba(176,123,255,.065), transparent 58%),
+    radial-gradient(90% 70% at 4% 98%, rgba(244,213,141,.05), transparent 58%),
+    linear-gradient(180deg,#070818 0%,var(--void) 45%,#04050c 100%);
+}
+a{color:inherit;text-decoration:none}
+.skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:#05060f;padding:8px 14px;z-index:9;font-family:var(--mono);font-size:12px}
+.skip:focus{left:8px;top:8px}
+:focus-visible{outline:1px solid var(--gold);outline-offset:3px}
+
+.shell{min-height:100svh;display:flex;flex-direction:column}
+
+/* ---------- rule bar ---------- */
+.bar{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:16px var(--gut) 14px;
+  border-bottom:1px solid var(--g14);
+}
+.mark{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.mark svg{display:block;overflow:visible}
+.mark span{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(232,230,255,.78);white-space:nowrap;
+}
+.nav{display:flex;gap:clamp(12px,1.8vw,26px);flex-wrap:nowrap}
+.nav a{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);padding-bottom:2px;border-bottom:1px solid transparent;transition:color .18s,border-color .18s;
+}
+.nav a:hover{color:var(--gold);border-bottom-color:var(--g40)}
+
+/* ---------- hero ---------- */
+.hero{
+  flex:1 1 auto;min-height:0;
+  display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+  gap:clamp(24px,4vw,64px);
+  padding:clamp(26px,4.2vh,54px) var(--gut) clamp(18px,2.6vh,30px);
+  align-items:center;
+}
+.col{min-width:0;max-width:34em}
+
+.eyebrow{
+  margin:0 0 clamp(18px,2.8vh,30px);
+  font-family:var(--mono);font-size:clamp(9.5px,1vw,11px);letter-spacing:.3em;text-transform:uppercase;
+  color:var(--g70);display:flex;align-items:center;gap:12px;
+}
+.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--g22),transparent)}
+
+h1{
+  margin:0;font-weight:400;
+  font-size:clamp(2.75rem,6.6vw,5.1rem);
+  line-height:.94;letter-spacing:-.018em;
+  color:#f2f0ff;
+}
+h1 .sur{display:block;color:#cfcbf0}
+
+.rule{margin:clamp(18px,2.6vh,26px) 0 clamp(16px,2.2vh,22px);height:1px;background:linear-gradient(90deg,var(--g40),var(--g08) 46%,transparent)}
+
+.lede{
+  margin:0;font-size:clamp(1.08rem,1.62vw,1.42rem);line-height:1.45;
+  color:rgba(232,230,255,.9);font-style:italic;letter-spacing:.004em;
+}
+.whisper{
+  margin:clamp(14px,2vh,20px) 0 0;
+  display:flex;gap:10px;align-items:baseline;
+  font-family:var(--mono);font-size:clamp(10px,1.02vw,11.5px);line-height:1.6;
+  letter-spacing:.055em;color:var(--dim);
+}
+.whisper i{color:var(--gold);font-style:normal;flex:0 0 auto;opacity:.85}
+
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(24px,3.4vh,36px)}
+.btn{
+  position:relative;display:inline-block;padding:11px 17px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
+  color:rgba(232,230,255,.82);border:1px solid rgba(244,213,141,.17);
+  background:rgba(244,213,141,.012);
+  transition:color .18s,border-color .18s,background-color .18s;
+}
+.btn::before,.btn::after{content:"";position:absolute;width:6px;height:6px;border:1px solid var(--g40);transition:border-color .18s}
+.btn::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.btn::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.btn:hover{color:var(--gold);border-color:var(--g22);background:rgba(244,213,141,.045)}
+.btn:hover::before,.btn:hover::after{border-color:var(--g70)}
+
+/* ---------- the plate ---------- */
+.plate{margin:0;display:flex;flex-direction:column;min-width:0;height:100%;max-height:min(74vh,720px)}
+.figbox{position:relative;flex:1 1 auto;min-height:0}
+#plate{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .5s ease-out}
+#plate.on{opacity:1}
+figcaption{
+  display:flex;justify-content:space-between;gap:14px;
+  margin-top:11px;padding:0 2px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(138,136,184,.72);
+}
+figcaption b{font-weight:400;color:var(--g70)}
+
+/* ---------- status ---------- */
+.status{
+  display:flex;flex-wrap:wrap;gap:8px clamp(28px,5vw,64px);
+  padding:14px var(--gut) 18px;
+  border-top:1px solid var(--g14);
+}
+.status div{display:flex;align-items:baseline;gap:11px;min-width:0}
+.status .k{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--g70);
+  flex:0 0 auto;
+}
+.status .v{font-size:clamp(.86rem,1.1vw,.98rem);color:rgba(232,230,255,.86);letter-spacing:.005em}
+
+/* ---------- below the fold, a hint only ---------- */
+.next{
+  display:flex;align-items:baseline;gap:clamp(16px,2.4vw,30px);
+  padding:clamp(56px,11vh,120px) var(--gut) clamp(56px,11vh,120px);
+  border-top:1px solid transparent;
+}
+.next .num{font-family:var(--mono);font-size:10px;letter-spacing:.26em;color:var(--g40);flex:0 0 auto;padding-top:.6em}
+.next h2{margin:0;font-weight:400;font-size:clamp(1.7rem,4vw,2.9rem);letter-spacing:-.012em;color:rgba(232,230,255,.5)}
+
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr;grid-template-rows:auto minmax(196px,1fr);align-items:stretch;
+        gap:clamp(20px,2.8vh,28px);padding-top:clamp(22px,3.4vh,34px)}
+  .col{max-width:none;order:1}
+  .plate{order:2;max-height:none;height:auto;min-height:0}
+  .actions{margin-top:clamp(18px,2.6vh,26px)}
+  .nav{gap:clamp(9px,2.6vw,18px)}
+  .nav a{letter-spacing:.12em;font-size:9.5px}
+  .mark span{display:none}
+  .bar{gap:12px}
+}
+@media (max-width:400px){
+  .nav a{letter-spacing:.06em;font-size:9px}
+  .btn{padding:10px 12px;letter-spacing:.12em;font-size:10px}
+  /* keeps the marginal note on one line at 375 */
+  .whisper{letter-spacing:.012em;font-size:9.6px;gap:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  #plate{opacity:1}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="shell">
+  <header class="bar">
+    <a class="mark" href="#main" aria-label="Tushar Pandey, home">
+      <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true">
+        <g fill="none" stroke="#f4d58d" stroke-width="1.05" opacity=".85">
+          <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+        </g>
+      </svg>
+      <span>Tushar Pandey</span>
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#quantum">Quantum</a><a href="#ai">AI</a><a href="#research">Research</a>
+      <a href="#book">Book</a><a href="#cv">CV</a><a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main class="hero" id="main">
+    <section class="col">
+      <p class="eyebrow">Ph.D. Mathematics&nbsp;· Quantum × AI</p>
+      <h1>Tushar<span class="sur">Pandey</span></h1>
+      <div class="rule"></div>
+      <p class="lede">I turn ideas into systems that ship.</p>
+      <p class="whisper"><i>&#10022;</i><span>Trained on proofs: one conjecture, solved alone, 2023.</span></p>
+      <div class="actions">
+        <a class="btn" href="#cv">Curriculum Vitae</a>
+        <a class="btn" href="https://github.com/pandey-tushar" rel="noopener">GitHub</a>
+        <a class="btn" href="mailto:wtatushar@gmail.com">Email</a>
+      </div>
+    </section>
+
+    <figure class="plate">
+      <div class="figbox">
+        <canvas id="plate" role="img"
+          aria-label="Engraved astronomical plate: a trefoil knot drawn in gold line, ringed by a graduated scale over a star field."></canvas>
+      </div>
+      <figcaption><span>Plate I&nbsp;· Trefoil, 3<sub>1</sub></span><span>Seed <b id="sd">&nbsp;</b></span></figcaption>
+    </figure>
+  </main>
+
+  <div class="status">
+    <div><span class="k">Now</span><span class="v">Senior Software Engineer @ DataRobot</span></div>
+    <div><span class="k">Based in</span><span class="v">Dallas, TX</span></div>
+  </div>
+</div>
+
+<section class="next"><span class="num">I</span><h2>Error, corrected.</h2></section>
+
+<script>
+(function(){
+"use strict";
+
+/* ------------------------------------------------------------------
+   Ported from packages/motifs/src: rng.ts (mulberry32 + xmur3),
+   surface.ts (alpha/mix), plate.ts (ground + frame), forms.ts (tickRing).
+   Seeded and deterministic: same seed, same size, same pixels.
+   ------------------------------------------------------------------ */
+
+var TAU = Math.PI * 2;
+var SEED = "observatory/tushar-pandey";
+
+function hashSeed(s){
+  var h = 1779033703 ^ s.length;
+  for (var i=0;i<s.length;i++){
+    h = Math.imul(h ^ s.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  h = Math.imul(h ^ (h >>> 16), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  return (h ^ (h >>> 16)) >>> 0;
+}
+function rng(seed){
+  var a = hashSeed(String(seed));
+  function next(){
+    a = (a + 0x6d2b79f5) | 0;
+    var t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  next.range = function(lo,hi){ return lo + (hi-lo)*next(); };
+  return next;
+}
+
+var P = { v:"#05060f", v2:"#0a0c1c", ink:"#e8e6ff", cyan:"#5ef4ff",
+          violet:"#b07bff", gold:"#f4d58d", rose:"#ff6ea9", dim:"#8a88b8" };
+
+var pcache = {};
+function parse(c){
+  var hit = pcache[c]; if (hit) return hit;
+  var f = c.slice(1);
+  var out = [parseInt(f.slice(0,2),16), parseInt(f.slice(2,4),16), parseInt(f.slice(4,6),16)];
+  pcache[c] = out; return out;
+}
+function A(c,a){
+  var p = parse(c);
+  return "rgba(" + p[0] + "," + p[1] + "," + p[2] + "," + (a<0?0:a>1?1:a).toFixed(3) + ")";
+}
+/* returns hex, because A() below only reads hex and every tone in the
+   engraving is a mix fed straight back into A() */
+function hx(n){ n = n<0?0:n>255?255:Math.round(n); return (n<16?"0":"") + n.toString(16); }
+function mix(a,b,t){
+  var X = parse(a), Y = parse(b), k = t<0?0:t>1?1:t;
+  return "#" + hx(X[0]+(Y[0]-X[0])*k) + hx(X[1]+(Y[1]-X[1])*k) + hx(X[2]+(Y[2]-X[2])*k);
+}
+
+/* ---------- the ground: painted once per size, then blitted ---------- */
+
+var ground = null, groundKey = "";
+
+function buildGround(w,h,dpr){
+  var key = w + "|" + h + "|" + dpr;
+  if (groundKey === key && ground) return ground;
+  var off = ground || document.createElement("canvas");
+  off.width = Math.round(w*dpr); off.height = Math.round(h*dpr);
+  var c = off.getContext("2d", { alpha:false });
+  c.setTransform(dpr,0,0,dpr,0,0);
+  paintGround(c,w,h);
+  ground = off; groundKey = key;
+  return off;
+}
+
+function paintGround(c,w,h){
+  var r = rng(SEED + "/plate");
+  var g = c.createLinearGradient(0,h,0,0);
+  g.addColorStop(0, mix(P.v2,P.v,.15));
+  g.addColorStop(.55, P.v);
+  g.addColorStop(1, mix(P.v,P.v2,.5));
+  c.fillStyle = g; c.fillRect(0,0,w,h);
+
+  /* one wash of hue, placed by seed */
+  var wx = w*r.range(.3,.7), wy = h*r.range(.2,.55), wr = Math.hypot(w,h)*r.range(.5,.72);
+  var wg = c.createRadialGradient(wx,wy,0,wx,wy,wr);
+  wg.addColorStop(0, A(P.violet,.10));
+  wg.addColorStop(.5, A(P.violet,.035));
+  wg.addColorStop(1, A(P.violet,0));
+  c.fillStyle = wg; c.fillRect(0,0,w,h);
+
+  /* stars, scaled to area so a phone gets no denser a sky than a laptop */
+  var n = Math.round(210 * ((w*h)/(1000*700)));
+  for (var i=0;i<n;i++){
+    var sx = r()*w, sy = r()*h, mag = r(), rad = .35 + mag*mag*1.5;
+    var hue = mag > .94 ? P.cyan : mag > .86 ? P.gold : P.ink;
+    c.fillStyle = A(hue, .12 + (Math.round(mag*8)/8)*.5);
+    c.beginPath(); c.arc(sx,sy,rad,0,TAU); c.fill();
+    if (mag > .985){
+      var fl = rad*7;
+      c.strokeStyle = A(hue,.3); c.lineWidth = .6;
+      c.beginPath();
+      c.moveTo(sx-fl,sy); c.lineTo(sx+fl,sy);
+      c.moveTo(sx,sy-fl); c.lineTo(sx,sy+fl);
+      c.stroke();
+    }
+  }
+
+  /* grain, banded into six opacities: six colour strings instead of thousands */
+  var gn = Math.round(1300 * ((w*h)/(1000*700))), bands = 6, per = Math.round(gn/bands);
+  for (var b=0;b<bands;b++){
+    c.fillStyle = A(P.ink, .006 + (b/bands)*.04);
+    for (var j=0;j<per;j++) c.fillRect(r()*w, r()*h, 1, 1);
+  }
+
+  var vg = c.createRadialGradient(w/2,h/2,Math.min(w,h)*.25, w/2,h/2,Math.hypot(w,h)*.62);
+  vg.addColorStop(0, A(P.v,0));
+  vg.addColorStop(1, A(P.v,.8));
+  c.fillStyle = vg; c.fillRect(0,0,w,h);
+
+  frame(c,w,h);
+}
+
+/* double rule with corner ornaments: the manuscript half of the stance */
+function frame(c,w,h){
+  var m = Math.max(13, Math.min(w,h)*.032);
+  c.strokeStyle = A(P.gold,.22); c.lineWidth = 1;
+  c.strokeRect(m+.5, m+.5, w-m*2-1, h-m*2-1);
+  c.strokeStyle = A(P.gold,.1);
+  c.strokeRect(m+5.5, m+5.5, w-m*2-11, h-m*2-11);
+
+  var t = Math.max(8, m*.5);
+  var corners = [[m,m,1,1],[w-m,m,-1,1],[m,h-m,1,-1],[w-m,h-m,-1,-1]];
+  c.lineWidth = 1.2;
+  for (var i=0;i<4;i++){
+    var q = corners[i], cx = q[0], cy = q[1], sx = q[2], sy = q[3];
+    c.strokeStyle = A(P.gold,.4);
+    c.beginPath();
+    c.moveTo(cx + sx*t, cy); c.lineTo(cx, cy); c.lineTo(cx, cy + sy*t);
+    c.stroke();
+    c.fillStyle = A(P.gold,.5);
+    c.beginPath();
+    c.moveTo(cx + sx*t*.62, cy + sy*t*.62);
+    c.lineTo(cx + sx*t*.82, cy + sy*t*.42);
+    c.lineTo(cx + sx*t*1.02, cy + sy*t*.62);
+    c.lineTo(cx + sx*t*.82, cy + sy*t*.82);
+    c.closePath(); c.fill();
+  }
+}
+
+/* ---------- graduation ring, ported from forms.ts ---------- */
+function tickRing(c,cx,cy,rr,count,len,color,al,major){
+  c.lineWidth = 1; c.lineCap = "butt";
+  for (var i=0;i<count;i++){
+    var a = (i/count)*TAU - Math.PI/2;
+    var big = i % major === 0;
+    var l = big ? len : len*.5;
+    c.strokeStyle = A(color, al*(big ? 1 : .5));
+    c.beginPath();
+    c.moveTo(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr);
+    c.lineTo(cx+Math.cos(a)*(rr+l), cy+Math.sin(a)*(rr+l));
+    c.stroke();
+  }
+}
+
+/* ---------- the subject: a trefoil, engraved ----------
+   Classic parametrisation. Rendered as a ribbon with cross ticks whose
+   length is set by a fixed light, the way a plate engraver shades a tube.
+   Depth sorted in arcs so the three crossings resolve over and under. */
+
+var NS = 660, ARCS = 60;
+var XS = new Float64Array(NS+1), YS = new Float64Array(NS+1), ZS = new Float64Array(NS+1);
+(function seedCurve(){
+  var roll = Math.PI/3; /* one lobe straight up */
+  var cr = Math.cos(roll), sr = Math.sin(roll);
+  for (var i=0;i<=NS;i++){
+    var t = (i/NS)*TAU;
+    var x = Math.sin(t) + 2*Math.sin(2*t);
+    var y = Math.cos(t) - 2*Math.cos(2*t);
+    XS[i] = x*cr - y*sr;
+    YS[i] = x*sr + y*cr;
+    ZS[i] = -Math.sin(3*t);
+  }
+})();
+
+var SX = new Float64Array(NS+1), SY = new Float64Array(NS+1), SD = new Float64Array(NS+1);
+var NX = new Float64Array(NS+1), NY = new Float64Array(NS+1);
+
+/* the burin is held by a hand: every tick is a few percent off its neighbour,
+   drawn once from the seed so the plate is the same plate on every load */
+var JT = new Float32Array(NS+1);
+(function jitter(){
+  var r = rng(SEED + "/burin");
+  for (var i=0;i<=NS;i++) JT[i] = 0.87 + r()*0.2;
+})();
+
+function drawKnot(c,w,h,yaw,pitch){
+  var cx = w/2, cy = h/2, unit = Math.min(w,h);
+  var S = unit*0.107;
+  var R = S*3;
+  var tw = unit*0.027;
+
+  var cyw = Math.cos(yaw), syw = Math.sin(yaw);
+  var cp = Math.cos(pitch), sp = Math.sin(pitch);
+
+  var i, x, y, z, x1, z1, y2, z2;
+  for (i=0;i<=NS;i++){
+    x = XS[i]; y = YS[i]; z = ZS[i];
+    x1 =  x*cyw + z*syw;
+    z1 = -x*syw + z*cyw;
+    y2 =  y*cp - z1*sp;
+    z2 =  y*sp + z1*cp;
+    SX[i] = cx + x1*S;
+    SY[i] = cy - y2*S;
+    SD[i] = z2;
+  }
+  /* screen space normals from the tangent */
+  for (i=0;i<=NS;i++){
+    var a = i===0 ? NS-1 : i-1, b = i===NS ? 1 : i+1;
+    var dx = SX[b]-SX[a], dy = SY[b]-SY[a];
+    var L = Math.hypot(dx,dy) || 1;
+    NX[i] = -dy/L; NY[i] = dx/L;
+  }
+
+  /* --- instrument furniture, behind the subject --- */
+  c.save();
+
+  /* the core circle of the torus the knot lives on, drawn in the equatorial
+     plane so the tilt of the whole plate is legible from one ellipse */
+  c.beginPath();
+  for (var k=0;k<=72;k++){
+    var ang = (k/72)*TAU;
+    var gx = Math.cos(ang), gy = Math.sin(ang);
+    var gx1 = gx*cyw, gz1 = -gx*syw;
+    var gy2 = gy*cp - gz1*sp;
+    var px = cx + gx1*S*2, py = cy - gy2*S*2;
+    if (k===0) c.moveTo(px,py); else c.lineTo(px,py);
+  }
+  c.closePath();
+  c.strokeStyle = A(P.dim,.085); c.lineWidth = 1; c.stroke();
+
+  /* three axes of the three fold symmetry, held to the outer annulus so they
+     do not cut across the subject */
+  c.strokeStyle = A(P.gold,.13); c.lineWidth = 1;
+  for (var s3=0;s3<3;s3++){
+    var aa = -Math.PI/2 + (s3/3)*TAU;
+    c.beginPath();
+    c.moveTo(cx + Math.cos(aa)*R*1.09, cy + Math.sin(aa)*R*1.09);
+    c.lineTo(cx + Math.cos(aa)*R*1.4, cy + Math.sin(aa)*R*1.4);
+    c.stroke();
+  }
+
+  /* graduated scale */
+  c.strokeStyle = A(P.gold,.18); c.lineWidth = 1;
+  c.beginPath(); c.arc(cx,cy,R*1.24,0,TAU); c.stroke();
+  c.strokeStyle = A(P.gold,.09);
+  c.beginPath(); c.arc(cx,cy,R*1.36,0,TAU); c.stroke();
+  tickRing(c,cx,cy,R*1.24,72,unit*.016,P.gold,.36,6);
+
+  /* a lozenge on each axis of symmetry, the same ornament as the frame corner */
+  c.fillStyle = A(P.gold,.5);
+  for (var lz=0; lz<3; lz++){
+    var la = -Math.PI/2 + (lz/3)*TAU;
+    var lx = cx + Math.cos(la)*R*1.24, ly = cy + Math.sin(la)*R*1.24;
+    var lr = unit*.0105;
+    c.beginPath();
+    c.moveTo(lx, ly-lr); c.lineTo(lx+lr, ly); c.lineTo(lx, ly+lr); c.lineTo(lx-lr, ly);
+    c.closePath(); c.fill();
+  }
+  c.restore();
+
+  /* --- the subject, painted far arcs first --- */
+  var order = [];
+  var per = Math.ceil(NS/ARCS);
+  for (var q=0;q<ARCS;q++){
+    var i0 = q*per, i1 = Math.min(NS, i0+per+1);
+    if (i0 >= NS) break;
+    var d = 0;
+    for (var m=i0;m<=i1;m++) d += SD[m];
+    order.push([i0,i1,d/(i1-i0+1)]);
+  }
+  order.sort(function(a,b){ return a[2]-b[2]; });
+
+  var LX = -0.5547, LY = -0.8321; /* light, upper left */
+  var HIGH = mix(P.gold, P.ink, .34);
+  var step = unit*0.0125;
+
+  c.save();
+  c.lineJoin = "round"; c.lineCap = "butt";
+
+  for (var oi=0; oi<order.length; oi++){
+    var seg = order[oi], a0 = seg[0], a1 = seg[1];
+    var near = .5 + .5*seg[2];              /* 0 far, 1 near */
+    var wpx = tw*(.92 + .14*near);
+    var tone = mix(P.gold, P.violet, (1-near)*.3);
+
+    /* the body, opaque, so a strand behind is truly hidden. One flat tone for
+       every arc: a per arc tone bands visibly at the seams. */
+    c.beginPath();
+    for (i=a0;i<=a1;i++){
+      var ax = SX[i]+NX[i]*wpx, ay = SY[i]+NY[i]*wpx;
+      if (i===a0) c.moveTo(ax,ay); else c.lineTo(ax,ay);
+    }
+    for (i=a1;i>=a0;i--) c.lineTo(SX[i]-NX[i]*wpx, SY[i]-NY[i]*wpx);
+    c.closePath();
+    c.fillStyle = "#0c0e20";
+    c.fill();
+
+    /* the cross ticks: even spacing along the arc, length set by a fixed
+       light. This is the whole of the shading, the way a plate engraver
+       does a tube. Spacing is measured, not counted, so a tight inner
+       curve does not turn into a solid block. */
+    c.lineWidth = 1;
+    c.strokeStyle = A(tone, .3 + .32*near);
+    c.beginPath();
+    var run = 0;
+    for (i=a0;i<a1;i++){
+      run += Math.hypot(SX[i+1]-SX[i], SY[i+1]-SY[i]);
+      if (run < step*JT[i]) continue;
+      run = 0;
+      /* Gold on a night ground inverts the engraver's convention: line is
+         light, blank is shadow. So the hatch hangs off the lit rail and
+         stops at the terminator. How far it reaches is how squarely the
+         tube is cross lit; a tube running along the light is lit end on
+         and carries line nearly all the way across. */
+      var lit = NX[i]*LX + NY[i]*LY;
+      var lu = lit >= 0 ? 1 : -1;
+      var f = (.38 + .4*(1 - (lit<0?-lit:lit))) * JT[i];
+      c.moveTo(SX[i]+NX[i]*wpx*lu, SY[i]+NY[i]*wpx*lu);
+      c.lineTo(SX[i]+NX[i]*wpx*lu*(1-2*f), SY[i]+NY[i]*wpx*lu*(1-2*f));
+    }
+    c.stroke();
+
+    /* the two rails. The lit one is the burin's finish line. */
+    for (var side=0; side<2; side++){
+      var sg = side ? -1 : 1;
+      var mid = (a0+a1)>>1;
+      var litr = (NX[mid]*LX + NY[mid]*LY)*sg;
+      c.beginPath();
+      for (i=a0;i<=a1;i++) {
+        var rx = SX[i]+NX[i]*wpx*sg, ry = SY[i]+NY[i]*wpx*sg;
+        if (i===a0) c.moveTo(rx,ry); else c.lineTo(rx,ry);
+      }
+      if (litr > 0){
+        c.lineWidth = 1.35;
+        c.strokeStyle = A(mix(tone, HIGH, near), .52 + .4*near);
+      } else {
+        c.lineWidth = 1;
+        c.strokeStyle = A(tone, .34 + .26*near);
+      }
+      c.stroke();
+    }
+  }
+  c.restore();
+
+  /* --- crossings, marked the way a plate annotates a point --- */
+  c.save();
+  var found = [];
+  for (i=0;i<NS;i+=7){
+    for (var j=i+60;j<NS;j+=7){
+      var ddx = SX[i]-SX[j], ddy = SY[i]-SY[j];
+      if (ddx*ddx + ddy*ddy < tw*tw*.8){
+        var mx = (SX[i]+SX[j])/2, my = (SY[i]+SY[j])/2, ok = 1;
+        for (var f2=0; f2<found.length; f2++){
+          if (Math.hypot(found[f2][0]-mx, found[f2][1]-my) < R*.4){ ok = 0; break; }
+        }
+        if (ok) found.push([mx,my]);
+      }
+    }
+  }
+  for (var fi=0; fi<found.length && fi<4; fi++){
+    var mkx = found[fi][0], mky = found[fi][1], mr = unit*.0135;
+    c.strokeStyle = A(P.gold,.55); c.lineWidth = 1.1;
+    c.beginPath(); c.arc(mkx,mky,mr,0,TAU); c.stroke();
+    c.strokeStyle = A(P.cyan,.45); c.lineWidth = 1;
+    c.beginPath();
+    c.moveTo(mkx-mr*2.1,mky); c.lineTo(mkx-mr*1.35,mky);
+    c.moveTo(mkx+mr*1.35,mky); c.lineTo(mkx+mr*2.1,mky);
+    c.stroke();
+    c.fillStyle = A(P.cyan,.5);
+    c.beginPath(); c.arc(mkx,mky,1.5,0,TAU); c.fill();
+  }
+  c.restore();
+}
+
+/* ---------- driver ---------- */
+
+var cv = document.getElementById("plate");
+var ctx = cv.getContext("2d", { alpha:false });
+var box = cv.parentNode;
+var W = 0, H = 0, DPR = 1;
+var reduce = matchMedia("(prefers-reduced-motion: reduce)");
+var visible = true, raf = 0, last = 0, t0 = 0;
+var pxT = 0, pyT = 0, pxC = 0, pyC = 0;
+
+function size(){
+  var r = box.getBoundingClientRect();
+  var w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+  var d = Math.min(window.devicePixelRatio || 1, 2);
+  if (w === W && h === H && d === DPR) return false;
+  W = w; H = h; DPR = d;
+  cv.width = Math.round(w*d); cv.height = Math.round(h*d);
+  ctx.setTransform(d,0,0,d,0,0);
+  return true;
+}
+
+function render(yaw,pitch){
+  ctx.drawImage(buildGround(W,H,DPR), 0, 0, W, H);
+  drawKnot(ctx, W, H, yaw, pitch);
+}
+
+var YAW0 = -0.13, PITCH0 = 0.17;
+
+function still(){
+  size();
+  render(YAW0, PITCH0);
+  cv.classList.add("on");
+}
+
+function loop(now){
+  raf = 0;
+  if (!visible) return;
+  if (now - last < 32){ raf = requestAnimationFrame(loop); return; }
+  last = now;
+  if (!t0) t0 = now;
+  var e = (now - t0)/1000;
+  pxC += (pxT - pxC)*.06; pyC += (pyT - pyC)*.06;
+  size();
+  render(
+    YAW0 + Math.sin(e*0.2244)*0.062 + pxC*0.075,
+    PITCH0 + Math.sin(e*0.1571 + 1.1)*0.034 + pyC*0.055
+  );
+  cv.classList.add("on");
+  raf = requestAnimationFrame(loop);
+}
+
+function start(){
+  if (reduce.matches){ still(); return; }
+  if (!raf) raf = requestAnimationFrame(loop);
+}
+function stop(){
+  if (raf){ cancelAnimationFrame(raf); raf = 0; }
+}
+
+/* The type paints first. The plate is cut on the next frame and fades up, so
+   the engraving never sits in front of first contentful paint. */
+size();
+document.getElementById("sd").textContent =
+  hashSeed(SEED).toString(16).toUpperCase().slice(0,6);
+requestAnimationFrame(function(){
+  render(YAW0, PITCH0);
+  cv.classList.add("on");
+});
+
+if (!reduce.matches){
+  if ("IntersectionObserver" in window){
+    new IntersectionObserver(function(en){
+      visible = en[0].isIntersecting;
+      if (visible) { t0 = 0; start(); } else stop();
+    }, { threshold:0 }).observe(cv);
+  } else start();
+
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) stop(); else { t0 = 0; start(); }
+  });
+
+  if (matchMedia("(pointer:fine)").matches){
+    window.addEventListener("pointermove", function(ev){
+      pxT = (ev.clientX / window.innerWidth) * 2 - 1;
+      pyT = (ev.clientY / window.innerHeight) * 2 - 1;
+    }, { passive:true });
+  }
+}
+
+var rt = 0;
+window.addEventListener("resize", function(){
+  clearTimeout(rt);
+  rt = setTimeout(function(){
+    if (size()) { groundKey = ""; render(YAW0, PITCH0); }
+  }, 120);
+}, { passive:true });
+
+reduce.addEventListener && reduce.addEventListener("change", function(){
+  if (reduce.matches) { stop(); still(); } else start();
+});
+})();
+</script>
+</body>
+</html>

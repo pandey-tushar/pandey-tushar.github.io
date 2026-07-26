@@ -1,0 +1,27 @@
+{
+  "name": "@qubit/content",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./hi": "./hi.ts",
+    "./unpolarized": "./unpolarized.ts",
+    "./en.json": "./en.json",
+    "./front.en.json": "./front.en.json",
+    "./hi.json": "./hi.json",
+    "./front.hi.json": "./front.hi.json",
+    "./unpolarized.json": "./unpolarized.json",
+    "./front.unpolarized.json": "./front.unpolarized.json",
+    "./glossary-hi.json": "./glossary-hi.json",
+    "./schema": "./schema.ts"
+  },
+  "scripts": {
+    "validate": "tsx validate.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}

@@ -1,0 +1,73 @@
+/* Qubit design tokens.
+   Light is the :root default; dark is the html[data-theme="dark"] override.
+   Values are lifted from the shipped book (qubit-dialogues.html) and site
+   (index.html); do not invent new hues here without recomputing contrast.
+
+   The book palette uses the short names the reader stylesheet expects
+   (--void, --ink, --cyan ...). Site-only tokens are namespaced --site-*. */
+
+:root {
+  /* ---- book palette, light (paper) ---- */
+  --void: #f5efe2;
+  --void2: #ece3d1;
+  --ink: #241f18;
+  --cyan: #0d6e86;
+  --violet: #6d28d9;
+  --gold: #946213;
+  --rose: #b32a5e;
+  --dim: #6b6153;
+  --line: rgba(148, 98, 19, .30);
+
+  /* ---- type stacks ---- */
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --mono: "SF Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
+  --site-serif: "Fraunces", Georgia, serif;
+  --site-sans: "Inter", system-ui, sans-serif;
+  --site-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* ---- spacing scale (rem) and measure ---- */
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1.1rem;
+  --space-5: 1.8rem;
+  --space-6: 2.4rem;
+  --space-7: 3.6rem;
+  --measure: 820px;
+  --gutter: 22px;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* ---- site palette (the site ships dark only) ---- */
+  --site-ink: #070a14;
+  --site-ink-2: #0c1020;
+  --site-surface: #121829;
+  --site-surface-2: #171e33;
+  --site-line: rgba(150, 170, 210, .14);
+  --site-line-strong: rgba(150, 170, 210, .28);
+  --site-text: #e8ecf6;
+  --site-text-2: #9aa4c0;
+  /* 5.75:1 on --site-ink and 5.14:1 on --site-surface. The former value
+     #69728e measured 4.14:1, under AA for the 11px to 12.5px labels this
+     token carries, and every consumer had to lift it locally. */
+  --site-text-3: #828aa3;
+  --site-cyan: #52d6e6;
+  --site-violet: #9b7bff;
+  --site-magenta: #f06ab0;
+  --site-grad: linear-gradient(100deg, var(--site-cyan), var(--site-violet) 58%, var(--site-magenta));
+}
+
+/* ---- book palette, dark (night) ---- */
+html[data-theme="dark"] {
+  --void: #05060f;
+  --void2: #0a0c1c;
+  --ink: #e8e6ff;
+  --cyan: #5ef4ff;
+  --violet: #b07bff;
+  --gold: #f4d58d;
+  --rose: #ff6ea9;
+  --dim: #8a88b8;
+  --line: rgba(244, 213, 141, .22);
+}

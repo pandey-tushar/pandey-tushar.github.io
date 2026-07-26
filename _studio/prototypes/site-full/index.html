@@ -1,0 +1,1725 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tushar Pandey &#183; Quantum &#215; AI</title>
+<meta name="description" content="Dr. Tushar Pandey. Quantum error correction, machine intelligence, and systems that ship. Trained on proofs; builds the improbable.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#05060f">
+<link rel="canonical" href="https://pandey-tushar.com/">
+<meta property="og:title" content="Tushar Pandey">
+<meta property="og:description" content="Error, corrected. Reasoning that grows. Let's build the improbable.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pandey-tushar.com/">
+<meta property="og:image" content="https://pandey-tushar.com/og-home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-home.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%2305060f'/%3E%3Cg%20fill='none'%20stroke='%23f4d58d'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+/* =================================================================
+   OBSERVATORY IMAGE, PROOF TYPOGRAPHY.
+   The hero is a seeded engraved plate. Everything below it is set
+   as a proof: one family, four registers, marginal labels on a
+   baseline, a single shared right axis, old style figures, and
+   hierarchy from size, case and tracking rather than weight.
+   ================================================================= */
+
+:root{
+  --void:#05060f; --void2:#0a0c1c; --bar:#070818;
+  --ink:#e8e6ff; --gold:#f4d58d; --cyan:#5ef4ff; --violet:#b07bff; --dim:#8a88b8;
+  --g08:rgba(244,213,141,.08); --g14:rgba(244,213,141,.14); --g22:rgba(244,213,141,.22);
+  --g40:rgba(244,213,141,.40); --g70:rgba(244,213,141,.70);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","Hoefler Text",Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
+
+  --gut:clamp(20px,4.4vw,58px);
+  --barh:52px;
+
+  /* the apparatus column, its gutter, and the measure it annotates */
+  --app:0rem; --agut:0rem; --measure:100%;
+
+  /* one leap to display, then a major third down through statement,
+     claim, body, apparatus */
+  --t-display:clamp(1.95rem,1.1rem + 3.4vw,3.05rem);
+  --t-ask:clamp(1.24rem,.95rem + 1.05vw,1.66rem);
+  --t-body:1rem;
+  --t-small:.88rem;
+  --t-app:.7rem;
+  --step:clamp(3.1rem,7.2vh,5.6rem);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body,h1,h2,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
+ol,ul{list-style:none}
+html{
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+  font-size:100%;
+  overflow-x:clip;
+  scroll-behavior:smooth;
+}
+@media (min-width:40em){html{font-size:106.25%}}
+
+body{
+  background:var(--void); color:var(--ink);
+  font-family:var(--serif);
+  font-size:var(--t-body);
+  line-height:1.6;
+  font-kerning:normal;
+  font-variant-numeric:oldstyle-nums proportional-nums;
+  font-variant-ligatures:common-ligatures contextual;
+  hanging-punctuation:first last;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:clip;
+}
+/* the page ground: one low wash, no image, no request */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 82% 2%, rgba(176,123,255,.065), transparent 58%),
+    radial-gradient(90% 70% at 4% 98%, rgba(244,213,141,.05), transparent 58%),
+    linear-gradient(180deg,#070818 0%,var(--void) 45%,#04050c 100%);
+}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(244,213,141,.22)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:#05060f;padding:8px 14px;z-index:99;font-family:var(--mono);font-size:12px}
+.skip:focus{left:8px;top:8px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* ---------- apparatus: tracked caps, the only second voice ---------- */
+.lbl{
+  font-size:var(--t-app);
+  font-weight:400;
+  line-height:1.25;
+  letter-spacing:.185em;
+  text-transform:uppercase;
+  color:var(--g70);
+  white-space:nowrap;
+}
+
+/* ---------- rule bar ---------- */
+.bar{
+  position:sticky; top:0; z-index:30;
+  height:var(--barh);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 var(--gut);
+  background:var(--bar);
+  border-bottom:1px solid var(--g14);
+}
+.mark{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.mark svg{display:block;overflow:visible}
+.mark span{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(232,230,255,.82);white-space:nowrap;
+}
+.nav{display:flex;gap:clamp(12px,1.8vw,26px);flex-wrap:nowrap}
+.nav a{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);padding-bottom:2px;border-bottom:1px solid transparent;transition:color .18s,border-color .18s;
+}
+.nav a:hover,.nav a:focus-visible{color:var(--gold);border-bottom-color:var(--g40)}
+
+/* ---------- first screen ---------- */
+.fold{min-height:calc(100svh - var(--barh));display:flex;flex-direction:column}
+
+.hero{
+  flex:1 1 auto;min-height:0;
+  display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+  gap:clamp(24px,4vw,64px);
+  padding:clamp(26px,4.2vh,54px) var(--gut) clamp(18px,2.6vh,30px);
+  align-items:center;
+}
+.col{min-width:0;max-width:34em}
+
+.eyebrow{
+  margin:0 0 clamp(18px,2.8vh,30px);
+  font-family:var(--mono);font-size:clamp(9.5px,1vw,11px);letter-spacing:.3em;text-transform:uppercase;
+  color:var(--g70);display:flex;align-items:center;gap:12px;
+}
+.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--g22),transparent)}
+
+h1{
+  margin:0;font-weight:400;
+  font-size:clamp(2.75rem,6.6vw,5.1rem);
+  line-height:.94;letter-spacing:-.018em;
+  color:#f2f0ff;
+}
+h1 .sur{display:block;color:#cfcbf0}
+
+.rule{margin:clamp(18px,2.6vh,26px) 0 clamp(16px,2.2vh,22px);height:1px;background:linear-gradient(90deg,var(--g40),var(--g08) 46%,transparent)}
+
+.lede{
+  margin:0;font-size:clamp(1.08rem,1.62vw,1.42rem);line-height:1.45;
+  color:rgba(232,230,255,.92);font-style:italic;letter-spacing:.004em;
+}
+.whisper{
+  margin:clamp(14px,2vh,20px) 0 0;
+  display:flex;gap:10px;align-items:baseline;
+  font-family:var(--mono);font-size:clamp(10px,1.02vw,11.5px);line-height:1.6;
+  letter-spacing:.055em;color:var(--dim);
+}
+.whisper i{color:var(--gold);font-style:normal;flex:0 0 auto;opacity:.85}
+
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(24px,3.4vh,36px)}
+.btn{
+  position:relative;display:inline-block;padding:11px 17px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
+  color:rgba(232,230,255,.86);border:1px solid rgba(244,213,141,.17);
+  background:rgba(244,213,141,.012);
+  transition:color .18s,border-color .18s,background-color .18s;
+}
+.btn::before,.btn::after{content:"";position:absolute;width:6px;height:6px;border:1px solid var(--g40);transition:border-color .18s}
+.btn::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.btn::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.btn:hover,.btn:focus-visible{color:var(--gold);border-color:var(--g22);background:rgba(244,213,141,.045)}
+.btn:hover::before,.btn:hover::after,.btn:focus-visible::before,.btn:focus-visible::after{border-color:var(--g70)}
+
+/* ---------- the plate ----------
+   One instrument, re-set four times. The figure is lifted out of the flow and
+   driven by scroll, so it can stay legible beside the sections it illustrates.
+   .slot holds its place in the hero and is the only source of its size: the
+   plate never invents a box the layout did not already give it. */
+.slot{min-width:0;height:100%;max-height:min(74vh,720px)}
+.plate{
+  position:fixed;left:0;top:0;width:0;height:0;z-index:4;
+  margin:0;display:flex;flex-direction:column;min-width:0;
+  /* pinned over running text, so the caption sits on ground of its own */
+  background:var(--void);
+  transform:translate3d(0,-9999px,0);
+  opacity:0;transition:opacity .45s ease-out;
+  contain:layout;
+}
+/* pinned across the column rather than out in the margin, the plate needs
+   ground under the whole column and not only under itself */
+.plate::before{
+  content:"";position:absolute;top:0;bottom:0;left:-50vw;right:-50vw;
+  background:var(--void);z-index:-1;opacity:0;
+}
+/* the ground arrives ahead of the pin, so it is never a fraction short of
+   opaque with running text still faintly under it */
+.plate.band::before{opacity:calc(var(--pin,0) * 1.8)}
+.plate.on{opacity:1}
+/* in the margin the plate is narrow, so its apparatus is set one step down
+   rather than allowed to turn over onto a second line */
+.plate.rail figcaption{font-size:8.5px;letter-spacing:.13em;gap:2px 10px}
+.figbox{position:relative;flex:1 1 auto;min-height:0}
+/* The plate is on a spindle now, so it takes a grab. pan-y hands a vertical
+   swipe straight back to the document, so a thumb landing on the engraving
+   can still read on; a sideways pull is the plate's own. */
+#plate{position:absolute;inset:0;width:100%;height:100%;display:block;
+  touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none}
+.plate.grabbing #plate{cursor:grabbing}
+/* the marginal instruction, inside the engraved rule, struck on first touch */
+.hint{
+  position:absolute;left:calc(3.3% + 14px);bottom:calc(3.3% + 15px);pointer-events:none;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--dim);opacity:.62;transition:opacity .5s ease;
+}
+.hint.off{opacity:0}
+figcaption{
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:2px 14px;
+  margin-top:11px;padding:0 2px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--dim);
+}
+figcaption b{font-weight:400;color:var(--g70)}
+
+/* ---------- status ---------- */
+.status{
+  display:flex;flex-wrap:wrap;gap:8px clamp(28px,5vw,64px);
+  padding:14px var(--gut) 18px;
+  border-top:1px solid var(--g14);
+}
+.status div{display:flex;align-items:baseline;gap:11px;min-width:0}
+.status .k{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--g70);
+  flex:0 0 auto;
+}
+.status .v{font-size:clamp(.86rem,1.1vw,.98rem);color:rgba(232,230,255,.9);letter-spacing:.005em}
+
+/* =================================================================
+   THE QUIRE. Everything below the fold is one composed argument.
+   ================================================================= */
+.quire{position:relative;padding-inline:var(--gut)}
+
+/* the graduated rule: the plate's tick ring, unrolled. One hairline,
+   minor ticks, and a longer tick every sixth, exactly as the scale
+   around the knot is cut. */
+.grad{
+  border:0;margin:0;height:9px;
+  background-image:
+    linear-gradient(var(--g22),var(--g22)),
+    repeating-linear-gradient(90deg,var(--g40) 0 1px,transparent 1px 14px),
+    repeating-linear-gradient(90deg,var(--g70) 0 1px,transparent 1px 84px);
+  background-repeat:no-repeat;
+  background-size:100% 1px,100% 5px,100% 9px;
+  background-position:0 0,0 1px,0 1px;
+}
+
+.quire section{padding-block:var(--step);scroll-margin-top:calc(var(--barh) + 14px)}
+
+/* one apparatus row: label in the margin, block on the axis */
+.act{max-width:calc(var(--app) + var(--agut) + var(--measure))}
+.act + .act{margin-top:clamp(2rem,4.4vh,3.2rem)}
+
+.ask{
+  font-style:italic;
+  font-size:var(--t-ask);
+  line-height:1.32;
+  letter-spacing:-.004em;
+  color:rgba(232,230,255,.9);
+  text-wrap:pretty;
+}
+.quire h2:not(.lbl){
+  margin-top:.42em;
+  font-weight:400;
+  font-size:var(--t-display);
+  line-height:1.02;
+  letter-spacing:-.016em;
+  color:#f2f0ff;
+  text-wrap:balance;
+}
+.quire h2 em{font-style:italic;color:var(--gold)}
+.say{
+  margin-top:clamp(.95rem,2vh,1.35rem);
+  color:rgba(232,230,255,.86);
+  line-height:1.68;
+  text-wrap:pretty;
+}
+.say b{font-weight:400;color:var(--gold)}
+
+.more{margin-top:clamp(1.05rem,2.2vh,1.5rem);display:flex;align-items:baseline;flex-wrap:wrap}
+.more a{
+  font-size:var(--t-app);letter-spacing:.185em;text-transform:uppercase;
+  color:var(--g70);border-bottom:1px solid var(--g22);padding-bottom:3px;
+  transition:color .18s,border-color .18s;
+}
+.more a:hover,.more a:focus-visible{color:var(--gold);border-bottom-color:var(--g70)}
+
+/* the tombstone. Drawn, not typed, so it never depends on a glyph the
+   stack does not carry. Its bottom edge sits on the baseline. */
+.qed{
+  align-self:baseline;
+  width:.62rem;height:.62rem;
+  background:var(--gold);
+  margin-left:1.9em;
+  flex:0 0 auto;
+  opacity:0;animation:qed 900ms ease 400ms forwards;
+}
+@keyframes qed{to{opacity:1}}
+
+/* the record */
+.names{line-height:2.05;color:rgba(232,230,255,.9);letter-spacing:.006em}
+/* each name travels with the lozenge that follows it, so a wrapped line
+   opens on a name rather than on an orphaned ornament, and no institution
+   ever breaks across two lines */
+.names li{display:inline-block;white-space:nowrap}
+.names li:not(:last-child)::after{
+  content:"";display:inline-block;
+  width:.32em;height:.32em;background:var(--g70);
+  transform:rotate(45deg);
+  margin:0 .95em .1em;
+}
+
+/* correspondence: the same axis, one row per line */
+.corr{margin-top:clamp(1.8rem,4vh,2.8rem)}
+.corr li + li{margin-top:.62rem}
+.corr .val{font-size:var(--t-small);color:rgba(232,230,255,.88)}
+.corr .val a{
+  border-bottom:1px solid var(--g14);padding-bottom:2px;
+  transition:color .18s,border-color .18s;
+}
+.corr .val a:hover,.corr .val a:focus-visible{color:var(--gold);border-bottom-color:var(--g70)}
+.corr .sep{color:var(--dim);margin:0 .55em}
+
+/* ---------- foot ---------- */
+footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
+.foot{
+  padding-top:clamp(.9rem,2vh,1.3rem);
+  border-top:1px solid var(--g14);
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;
+  gap:.9rem 2.5rem;
+}
+.foot-links{display:flex;flex-wrap:wrap;align-items:baseline;font-size:var(--t-small);color:rgba(232,230,255,.86)}
+.foot-links li + li::before{content:"\00b7";color:var(--dim);margin:0 .75em}
+.foot-links a{border-bottom:1px solid transparent;transition:color .18s,border-color .18s}
+.foot-links a:hover,.foot-links a:focus-visible{color:var(--gold);border-bottom-color:var(--g40)}
+.colophon{font-size:var(--t-small);color:var(--dim);line-height:1.6}
+
+/* =================================================================
+   >= 48em: the apparatus swings out into the margin, labels align to
+   the first baseline of the block they annotate, and one hairline
+   holds the axis every line of the argument sits on.
+   ================================================================= */
+@media (min-width:48em){
+  :root{--app:7rem;--agut:1.65rem;--measure:40rem}
+
+  .quire::before{
+    content:"";position:absolute;
+    left:calc(var(--gut) + var(--app) + var(--agut)/2);
+    top:var(--step);bottom:var(--step);
+    width:1px;background:rgba(244,213,141,.1);
+  }
+  .act{
+    display:grid;
+    grid-template-columns:var(--app) minmax(0,var(--measure));
+    column-gap:var(--agut);
+    align-items:baseline;
+  }
+  .act > .lbl{
+    grid-column:1;justify-self:end;text-align:right;
+    /* strip the trailing letterspace so the caps rag flush to the gutter */
+    margin-right:-.185em;
+  }
+  .act > :not(.lbl){grid-column:2}
+
+  .corr li{
+    display:grid;
+    grid-template-columns:var(--app) minmax(0,var(--measure));
+    column-gap:var(--agut);
+    align-items:baseline;
+  }
+  .corr .lbl{justify-self:end;text-align:right;margin-right:-.185em}
+
+  .colophon{text-align:right}
+}
+
+/* =================================================================
+   Narrow. The label stacks over the block it annotates; the
+   correspondence keeps two columns because seven stacked pairs is a
+   list, not a table.
+   ================================================================= */
+@media (max-width:47.99em){
+  .act > .lbl{display:block;margin-bottom:.8rem}
+  .corr li{
+    display:grid;grid-template-columns:4.7rem minmax(0,1fr);
+    column-gap:.85rem;align-items:baseline;
+  }
+  .corr .lbl{font-size:.64rem;letter-spacing:.14em}
+  .corr .val{font-size:.86rem}
+}
+
+/* Under the width that affords a margin beside the measure, the plate pins as
+   a band across the column, so the fold hands it that shape to begin with. */
+@media (max-width:78.125em){
+  .hero{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(196px,1fr);
+        align-items:stretch;gap:clamp(20px,3vh,30px)}
+  .col{order:1}
+  /* the plate pins at the size the hero gives it, so the hero is only ever
+     asked for a box the top of the screen can afford to hold */
+  .slot{order:2;height:min(290px,33svh);max-height:none;min-height:0;
+        align-self:center;justify-self:center;width:min(100%,480px)}
+}
+
+@media (max-width:960px){
+  :root{--barh:48px}
+  .hero{gap:clamp(20px,2.8vh,28px);padding-top:clamp(22px,3.4vh,34px)}
+  .col{max-width:none}
+  .slot{height:min(250px,34svh);width:100%}
+  .actions{margin-top:clamp(18px,2.6vh,26px)}
+  .nav{gap:clamp(9px,2.6vw,18px)}
+  .nav a{letter-spacing:.12em;font-size:9.5px}
+  .mark span{display:none}
+  .bar{gap:12px}
+}
+@media (max-width:400px){
+  .nav a{letter-spacing:.05em;font-size:9px}
+  .btn{padding:10px 12px;letter-spacing:.12em;font-size:10px}
+  /* keeps the marginal note on one line at 375 */
+  .whisper{letter-spacing:.012em;font-size:9.6px;gap:8px}
+  /* the plate's reference and its seed hold one line down to 320 */
+  figcaption{font-size:8.5px;letter-spacing:.13em;gap:2px 8px}
+  .names li:not(:last-child)::after{margin:0 .7em .1em}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+  .plate{opacity:1}
+  .qed{opacity:1;animation:none}
+}
+
+/* =================================================================
+   Print. Fixed point sizes, because vw is meaningless on paper, and
+   the argument restated in full rather than inherited from whichever
+   breakpoint the page box happens to match. The plate is a night
+   engraving; on white paper it is a black rectangle, so it is left
+   behind and its caption carries the reference instead.
+   ================================================================= */
+@media print{
+  @page{margin:16mm 18mm}
+  html{font-size:11pt;scroll-behavior:auto}
+  body{background:#fff;color:#000;line-height:1.5;overflow:visible}
+  body::before{display:none}
+  /* the plate is a night engraving; on white paper it is a black
+     rectangle, so the figure is left behind entirely */
+  .skip,.bar,.plate,.slot,.grad,.quire::before,.btn,.whisper i{display:none!important}
+
+  :root{--app:22mm;--agut:5mm;--measure:100%;--gut:0}
+
+  .fold{min-height:0;display:block}
+  .hero{display:block;padding:0}
+  .col{max-width:none}
+  .eyebrow{font-family:inherit;font-size:8pt;color:#000;display:block;margin-bottom:6mm}
+  .eyebrow::after{display:none}
+  h1{font-size:36pt;color:#000}
+  h1 .sur{color:#000}
+  .rule{background:none;border-top:.4pt solid #000;height:0;margin:5mm 0 4mm}
+  .lede{font-size:15pt;color:#000}
+  .whisper{font-family:inherit;font-size:10pt;color:#000;letter-spacing:0;margin-top:3mm}
+  .actions{display:none}
+  .status{border-top:.4pt solid #000;padding:3mm 0 0;margin-top:5mm;gap:2mm 12mm}
+  .status .k,.status .v{font-family:inherit;color:#000;letter-spacing:.1em;font-size:9pt}
+  .status .v{letter-spacing:0;font-size:10.5pt}
+
+  .quire{padding:0}
+  .quire section{padding-block:8mm 0;break-inside:auto}
+  .act{
+    display:grid;grid-template-columns:var(--app) minmax(0,1fr);
+    column-gap:var(--agut);align-items:baseline;max-width:none;
+  }
+  .act > .lbl{grid-column:1;justify-self:end;text-align:right;margin-right:-.185em}
+  .act > :not(.lbl){grid-column:2}
+  .act + .act{margin-top:6mm}
+  .lbl{color:#000;font-size:7.5pt}
+  .ask{font-size:14pt;color:#000}
+  .quire h2:not(.lbl){font-size:22pt;color:#000;margin-top:2mm}
+  .quire h2 em{color:#000}
+  .say{color:#000;font-size:11pt;margin-top:3mm}
+  .say b{color:#000;font-weight:700}
+  .names{color:#000;line-height:1.8}
+  .names li:not(:last-child)::after{background:#000}
+  .more{margin-top:3mm}
+  .more a{color:#000;border:0;font-size:8.5pt}
+  .corr{margin-top:6mm}
+  .corr li{
+    display:grid;grid-template-columns:var(--app) minmax(0,1fr);
+    column-gap:var(--agut);align-items:baseline;
+  }
+  .corr .lbl{justify-self:end;text-align:right;margin-right:-.185em}
+  .corr .val,.corr .val a{color:#000;border:0;font-size:10pt}
+
+  /* backgrounds are unreliable on paper, so the tombstone is set
+     hollow: the other conventional form of the mark */
+  .qed{opacity:1;animation:none;background:none;border:.75pt solid #000;width:8pt;height:8pt}
+
+  footer{padding:0}
+  .foot{border-top:.4pt solid #000;display:block;padding-top:3mm;margin-top:8mm}
+  .foot-links{font-size:9pt;color:#000}
+  .foot-links a{color:#000}
+  .colophon{color:#000;font-size:9pt;text-align:left;margin-top:2mm}
+  a[data-url]::after{content:" (" attr(data-url) ")";font-size:8.5pt;letter-spacing:.01em;text-transform:none}
+  .act,.corr li,.colophon p{break-inside:avoid}
+  p{orphans:2;widows:2}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <a class="mark" href="#main" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true">
+      <g fill="none" stroke="#f4d58d" stroke-width="1.05" opacity=".85">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#quantum">Quantum</a>
+    <a href="#ai">AI</a>
+    <a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">Research</a>
+    <a href="books.html">Books</a>
+    <a href="cv.html">CV</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <div class="fold">
+    <section class="hero" aria-label="Introduction">
+      <div class="col">
+        <p class="eyebrow">Ph.D. Mathematics&nbsp;&#183; Quantum &#215; AI</p>
+        <h1>Tushar <span class="sur">Pandey</span></h1>
+        <div class="rule"></div>
+        <p class="lede">I turn ideas into systems that ship.</p>
+        <p class="whisper"><i>&#10022;</i><span>Trained on proofs: one conjecture, solved alone, 2023.</span></p>
+        <div class="actions">
+          <a class="btn" href="cv.html">Curriculum Vitae</a>
+          <a class="btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="mailto:wtatushar@gmail.com">Email</a>
+        </div>
+      </div>
+
+      <div class="slot" aria-hidden="true"></div>
+      <figure class="plate">
+        <div class="figbox">
+          <canvas id="plate" role="img" tabindex="0"
+            aria-label="Engraved astronomical plate: a trefoil knot drawn in gold line, ringed by a graduated scale over a star field."></canvas>
+          <p class="hint" aria-hidden="true">Drag to spin</p>
+        </div>
+        <figcaption><span id="cap">Plate I&nbsp;&#183; Trefoil, 3<sub>1</sub></span><span>Seed <b id="sd">&nbsp;</b></span></figcaption>
+      </figure>
+    </section>
+
+    <div class="status">
+      <div><span class="k">Now</span><span class="v">Senior Software Engineer @ DataRobot</span></div>
+      <div><span class="k">Based in</span><span class="v">Dallas, TX</span></div>
+    </div>
+  </div>
+
+  <div class="quire">
+
+    <hr class="grad">
+    <section id="quantum" aria-labelledby="h-quantum">
+      <div class="act">
+        <p class="lbl">Lemma&nbsp;I</p>
+        <div>
+          <p class="ask">Can you compute with broken parts?</p>
+          <h2 id="h-quantum">Error, <em>corrected.</em></h2>
+          <p class="say">Two summers at Oak Ridge building <b>fault tolerance for a non-abelian code</b>; lead author, APL Quantum, 2025. The newest work reaches the qLDPC frontier.</p>
+          <p class="more"><a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener" data-url="sites.google.com/view/tusharpandey">the record<span aria-hidden="true"> &#8594;</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="grad">
+    <section id="ai" aria-labelledby="h-ai">
+      <div class="act">
+        <p class="lbl">Lemma&nbsp;II</p>
+        <div>
+          <p class="ask">Can a machine think harder, mid-thought?</p>
+          <h2 id="h-ai">Reasoning that <em>grows.</em></h2>
+          <p class="say"><b>AGoT</b> grows chains, trees and graphs as it runs: 19 citations in year one, running in production.</p>
+          <p class="more"><a href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener" data-url="github.com/AgnostiqHQ/multi-agent-llm">the code, open source<span aria-hidden="true"> &#8594;</span></a><span class="qed" role="img" aria-label="Q.E.D."></span></p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="grad">
+    <section id="record" aria-labelledby="h-record">
+      <div class="act">
+        <h2 class="lbl" id="h-record">Record</h2>
+        <ul class="names"><li>Oak Ridge National Laboratory</li><li>APL Quantum</li><li>IBM Quantum</li><li>MIT</li><li>Texas A&amp;M</li><li>IIT Kanpur</li></ul>
+      </div>
+      <div class="act">
+        <p class="lbl">Receipts</p>
+        <p class="say">Multi-tenant LLM inference at DataRobot: deploys <b>30 to 40 percent faster</b>, throughput <b>tripled</b>. Three first-place titles since 2024.</p>
+      </div>
+    </section>
+
+    <hr class="grad">
+    <section id="contact" aria-labelledby="h-contact">
+      <div class="act">
+        <p class="lbl">Corollary</p>
+        <div>
+          <p class="ask">What&rsquo;s left to prove?</p>
+          <h2 id="h-contact">Let&rsquo;s build the <em>improbable.</em></h2>
+        </div>
+      </div>
+
+      <ul class="corr">
+        <li>
+          <span class="lbl">Email</span>
+          <span class="val"><a href="mailto:wtatushar@gmail.com" data-url="wtatushar@gmail.com">wtatushar [at] gmail [dot] com</a></span>
+        </li>
+        <li>
+          <span class="lbl">LinkedIn</span>
+          <span class="val"><a href="https://www.linkedin.com/in/tpmath/" target="_blank" rel="noopener">linkedin.com/in/tpmath</a></span>
+        </li>
+        <li>
+          <span class="lbl">GitHub</span>
+          <span class="val"><a href="https://github.com/pandey-tushar" target="_blank" rel="noopener">github.com/pandey-tushar</a></span>
+        </li>
+        <li>
+          <span class="lbl">Scholar</span>
+          <span class="val"><a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener" data-url="scholar.google.com">Google Scholar &#8594;</a></span>
+        </li>
+        <li>
+          <span class="lbl">CV</span>
+          <span class="val"><a href="cv.html" data-url="pandey-tushar.com/cv.html">Curriculum Vitae &#8594;</a></span>
+        </li>
+        <li>
+          <span class="lbl">R&eacute;sum&eacute;</span>
+          <span class="val"><a href="Tushar_Pandey_Resume_AI.pdf" aria-label="R&eacute;sum&eacute;, AI track, PDF" data-url="Tushar_Pandey_Resume_AI.pdf">AI</a><span class="sep" aria-hidden="true">&#183;</span><a href="Tushar_Pandey_Resume_Quantum.pdf" aria-label="R&eacute;sum&eacute;, quantum track, PDF" data-url="Tushar_Pandey_Resume_Quantum.pdf">Quantum</a></span>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="foot">
+    <ul class="foot-links">
+      <li><a href="cv.html" data-url="pandey-tushar.com/cv.html">Curriculum Vitae</a></li>
+      <li><a href="books.html" data-url="pandey-tushar.com/books.html">Books</a></li>
+      <li><a href="https://github.com/pandey-tushar" target="_blank" rel="noopener" data-url="github.com/pandey-tushar">GitHub</a></li>
+      <li><a href="mailto:wtatushar@gmail.com" data-url="wtatushar@gmail.com">Email</a></li>
+    </ul>
+    <div class="colophon">
+      <p>&copy; <span id="yr">2026</span> Tushar Pandey</p>
+      <p>One canvas &#183; four plates &#183; zero page builders.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ------------------------------------------------------------------
+   Ported from packages/motifs/src: rng.ts (mulberry32 + xmur3),
+   surface.ts (alpha/mix), plate.ts (ground + frame), forms.ts (tickRing).
+   Seeded and deterministic: same seed, same size, same pixels.
+   ------------------------------------------------------------------ */
+
+var TAU = Math.PI * 2;
+var SEED = "observatory/tushar-pandey";
+
+function hashSeed(s){
+  var h = 1779033703 ^ s.length;
+  for (var i=0;i<s.length;i++){
+    h = Math.imul(h ^ s.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  h = Math.imul(h ^ (h >>> 16), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  return (h ^ (h >>> 16)) >>> 0;
+}
+function rng(seed){
+  var a = hashSeed(String(seed));
+  function next(){
+    a = (a + 0x6d2b79f5) | 0;
+    var t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+  next.range = function(lo,hi){ return lo + (hi-lo)*next(); };
+  return next;
+}
+
+var P = { v:"#05060f", v2:"#0a0c1c", ink:"#e8e6ff", cyan:"#5ef4ff",
+          violet:"#b07bff", gold:"#f4d58d", rose:"#ff6ea9", dim:"#8a88b8" };
+
+var pcache = {};
+function parse(c){
+  var hit = pcache[c]; if (hit) return hit;
+  var f = c.slice(1);
+  var out = [parseInt(f.slice(0,2),16), parseInt(f.slice(2,4),16), parseInt(f.slice(4,6),16)];
+  pcache[c] = out; return out;
+}
+function A(c,a){
+  var p = parse(c);
+  return "rgba(" + p[0] + "," + p[1] + "," + p[2] + "," + (a<0?0:a>1?1:a).toFixed(3) + ")";
+}
+/* returns hex, because A() only reads hex and every tone in the
+   engraving is a mix fed straight back into A() */
+function hx(n){ n = n<0?0:n>255?255:Math.round(n); return (n<16?"0":"") + n.toString(16); }
+function mix(a,b,t){
+  var X = parse(a), Y = parse(b), k = t<0?0:t>1?1:t;
+  return "#" + hx(X[0]+(Y[0]-X[0])*k) + hx(X[1]+(Y[1]-X[1])*k) + hx(X[2]+(Y[2]-X[2])*k);
+}
+
+/* ---------- the ground: painted once per size, then blitted ---------- */
+
+var ground = null, groundKey = "";
+
+function buildGround(w,h,dpr){
+  var key = w + "|" + h + "|" + dpr;
+  if (groundKey === key && ground) return ground;
+  var off = ground || document.createElement("canvas");
+  off.width = Math.round(w*dpr); off.height = Math.round(h*dpr);
+  var c = off.getContext("2d", { alpha:false });
+  c.setTransform(dpr,0,0,dpr,0,0);
+  paintGround(c,w,h);
+  ground = off; groundKey = key;
+  return off;
+}
+
+function paintGround(c,w,h){
+  var r = rng(SEED + "/plate");
+  var g = c.createLinearGradient(0,h,0,0);
+  g.addColorStop(0, mix(P.v2,P.v,.15));
+  g.addColorStop(.55, P.v);
+  g.addColorStop(1, mix(P.v,P.v2,.5));
+  c.fillStyle = g; c.fillRect(0,0,w,h);
+
+  /* one wash of hue, placed by seed */
+  var wx = w*r.range(.3,.7), wy = h*r.range(.2,.55), wr = Math.hypot(w,h)*r.range(.5,.72);
+  var wg = c.createRadialGradient(wx,wy,0,wx,wy,wr);
+  wg.addColorStop(0, A(P.violet,.10));
+  wg.addColorStop(.5, A(P.violet,.035));
+  wg.addColorStop(1, A(P.violet,0));
+  c.fillStyle = wg; c.fillRect(0,0,w,h);
+
+  /* stars, scaled to area so a phone gets no denser a sky than a laptop */
+  var n = Math.round(210 * ((w*h)/(1000*700)));
+  for (var i=0;i<n;i++){
+    var sx = r()*w, sy = r()*h, mag = r(), rad = .35 + mag*mag*1.5;
+    var hue = mag > .94 ? P.cyan : mag > .86 ? P.gold : P.ink;
+    c.fillStyle = A(hue, .12 + (Math.round(mag*8)/8)*.5);
+    c.beginPath(); c.arc(sx,sy,rad,0,TAU); c.fill();
+    if (mag > .985){
+      var fl = rad*7;
+      c.strokeStyle = A(hue,.3); c.lineWidth = .6;
+      c.beginPath();
+      c.moveTo(sx-fl,sy); c.lineTo(sx+fl,sy);
+      c.moveTo(sx,sy-fl); c.lineTo(sx,sy+fl);
+      c.stroke();
+    }
+  }
+
+  /* grain, banded into six opacities: six colour strings instead of thousands */
+  var gn = Math.round(1300 * ((w*h)/(1000*700))), bands = 6, per = Math.round(gn/bands);
+  for (var b=0;b<bands;b++){
+    c.fillStyle = A(P.ink, .006 + (b/bands)*.04);
+    for (var j=0;j<per;j++) c.fillRect(r()*w, r()*h, 1, 1);
+  }
+
+  var vg = c.createRadialGradient(w/2,h/2,Math.min(w,h)*.25, w/2,h/2,Math.hypot(w,h)*.62);
+  vg.addColorStop(0, A(P.v,0));
+  vg.addColorStop(1, A(P.v,.8));
+  c.fillStyle = vg; c.fillRect(0,0,w,h);
+
+  frame(c,w,h);
+}
+
+/* double rule with corner ornaments: the manuscript half of the stance */
+function frame(c,w,h){
+  var m = Math.max(13, Math.min(w,h)*.032);
+  c.strokeStyle = A(P.gold,.22); c.lineWidth = 1;
+  c.strokeRect(m+.5, m+.5, w-m*2-1, h-m*2-1);
+  c.strokeStyle = A(P.gold,.1);
+  c.strokeRect(m+5.5, m+5.5, w-m*2-11, h-m*2-11);
+
+  var t = Math.max(8, m*.5);
+  var corners = [[m,m,1,1],[w-m,m,-1,1],[m,h-m,1,-1],[w-m,h-m,-1,-1]];
+  c.lineWidth = 1.2;
+  for (var i=0;i<4;i++){
+    var q = corners[i], cx = q[0], cy = q[1], sx = q[2], sy = q[3];
+    c.strokeStyle = A(P.gold,.4);
+    c.beginPath();
+    c.moveTo(cx + sx*t, cy); c.lineTo(cx, cy); c.lineTo(cx, cy + sy*t);
+    c.stroke();
+    c.fillStyle = A(P.gold,.5);
+    c.beginPath();
+    c.moveTo(cx + sx*t*.62, cy + sy*t*.62);
+    c.lineTo(cx + sx*t*.82, cy + sy*t*.42);
+    c.lineTo(cx + sx*t*1.02, cy + sy*t*.62);
+    c.lineTo(cx + sx*t*.82, cy + sy*t*.82);
+    c.closePath(); c.fill();
+  }
+}
+
+/* ---------- graduation ring, ported from forms.ts ---------- */
+function tickRing(c,cx,cy,rr,count,len,color,al,major){
+  c.lineWidth = 1; c.lineCap = "butt";
+  for (var i=0;i<count;i++){
+    var a = (i/count)*TAU - Math.PI/2;
+    var big = i % major === 0;
+    var l = big ? len : len*.5;
+    c.strokeStyle = A(color, al*(big ? 1 : .5));
+    c.beginPath();
+    c.moveTo(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr);
+    c.lineTo(cx+Math.cos(a)*(rr+l), cy+Math.sin(a)*(rr+l));
+    c.stroke();
+  }
+}
+
+/* ---------- the four subjects ----------
+   One closed strand, cut four ways. Plate I is the trefoil, rendered as a
+   ribbon with cross ticks whose length is set by a fixed light, the way a
+   plate engraver shades a tube, depth sorted so the crossings resolve over
+   and under. Plate II is a cycle on a surface code lattice, which is what a
+   knot becomes laid on a code: topological correction is the statement that a
+   closed loop is correctable and an open chain is not. Plate III is the depth
+   first walk of a reasoning tree, which takes every branch out and back and
+   so closes on its root like the other two. Plate IV is the unknot: the same
+   strand with every crossing let go, closed as one round circle. The trefoil
+   is the first knot that is not a circle, so the sequence counts the crossings
+   down, 3 to 0, and ends on the one loop that has nothing left to resolve.
+
+   All four are the same closed strand resampled onto the same 660 stations,
+   so the scroll interpolates one curve. Nothing here cross fades two pictures;
+   only the furniture around the subject, which is annotation, may. */
+
+var NS = 660, ARCS = 60;
+var XS = new Float64Array(NS+1), YS = new Float64Array(NS+1), ZS = new Float64Array(NS+1);
+var RAD = 0;
+(function seedCurve(){
+  var roll = Math.PI/3; /* one lobe straight up */
+  var cr = Math.cos(roll), sr = Math.sin(roll);
+  for (var i=0;i<=NS;i++){
+    var t = (i/NS)*TAU;
+    var x = Math.sin(t) + 2*Math.sin(2*t);
+    var y = Math.cos(t) - 2*Math.cos(2*t);
+    XS[i] = x*cr - y*sr;
+    YS[i] = x*sr + y*cr;
+    ZS[i] = -Math.sin(3*t);
+    var m = Math.abs(XS[i]) > Math.abs(YS[i]) ? Math.abs(XS[i]) : Math.abs(YS[i]);
+    if (m > RAD) RAD = m;
+  }
+})();
+
+function cl1(v){ return v<0?0:v>1?1:v; }
+function ease(t){ t = cl1(t); return t*t*(3-2*t); }
+function span(v,lo,hi){ return hi===lo ? (v<lo?0:1) : cl1((v-lo)/(hi-lo)); }
+
+/* even stations along a closed polyline */
+function resample(pts,n){
+  var m = pts.length, seg = new Float64Array(m), tot = 0, i;
+  for (i=0;i<m;i++){
+    var a = pts[i], b = pts[(i+1)%m];
+    seg[i] = Math.hypot(b[0]-a[0], b[1]-a[1]); tot += seg[i];
+  }
+  var X = new Float64Array(n+1), Y = new Float64Array(n+1), k = 0, acc = 0;
+  for (var j=0;j<n;j++){
+    var d = (j/n)*tot;
+    while (k < m-1 && acc + seg[k] < d){ acc += seg[k]; k++; }
+    var f = seg[k] > 1e-9 ? (d-acc)/seg[k] : 0;
+    var p0 = pts[k], p1 = pts[(k+1)%m];
+    X[j] = p0[0] + (p1[0]-p0[0])*f;
+    Y[j] = p0[1] + (p1[1]-p0[1])*f;
+  }
+  X[n] = X[0]; Y[n] = Y[0];
+  return { x:X, y:Y };
+}
+
+/* a few passes of a three tap mean. The tree walk reverses exactly on itself
+   at every leaf; without this the ribbon folds back through its own edge. */
+function relax(f,n,passes){
+  for (var p=0;p<passes;p++){
+    var X = f.x.slice(0), Y = f.y.slice(0);
+    for (var i=0;i<n;i++){
+      var a = (i+n-1)%n, b = (i+1)%n;
+      f.x[i] = X[i]*.5 + (X[a]+X[b])*.25;
+      f.y[i] = Y[i]*.5 + (Y[a]+Y[b])*.25;
+    }
+    f.x[n] = f.x[0]; f.y[n] = f.y[0];
+  }
+  return f;
+}
+
+/* Rotate the target, reversing it if that is shorter, so every station travels
+   the least it can. Without this the strand spins on its way across and the
+   transition reads as a tumble instead of a re-setting. */
+function align(rx,ry,f,n){
+  var best = 0, dir = 0, score = Infinity, o, r, i;
+  var stepO = Math.max(1, Math.round(n/48));
+  for (r=0;r<2;r++){
+    for (o=0;o<n;o+=stepO){
+      var d = 0;
+      for (i=0;i<n;i+=12){
+        var j = r ? (n + o - i) % n : (i + o) % n;
+        var dx = rx[i]-f.x[j], dy = ry[i]-f.y[j];
+        d += dx*dx + dy*dy;
+      }
+      if (d < score){ score = d; best = o; dir = r; }
+    }
+  }
+  var X = new Float64Array(n+1), Y = new Float64Array(n+1);
+  for (i=0;i<=n;i++){
+    var jj = dir ? (n + best - i) % n : (i + best) % n;
+    X[i] = f.x[jj]; Y[i] = f.y[jj];
+  }
+  return { x:X, y:Y };
+}
+
+/* --- plate II: a distance five patch, and one cycle on it --- */
+var LK = 5, LR = RAD*.97, LG = (LR*2)/LK;
+function lp(i,j){ return [-LR + i*LG, -LR + j*LG]; }
+/* a rectilinear cycle with two inward jogs: a loop that goes the long way
+   round the flagged pair rather than through it */
+var LOOP = [[0,1],[5,1],[5,2],[3,2],[3,3],[5,3],[5,4],[0,4],[0,3],[2,3],[2,2],[0,2]];
+var SYN = Math.floor(rng(SEED + "/code")()*3); /* which pair of checks fired */
+var FB = align(XS, YS, relax(resample(LOOP.map(function(q){ return lp(q[0],q[1]); }), NS), NS, 1), NS);
+
+/* --- plate III: a reasoning tree, and the walk that traces it --- */
+var TN = [], TE = [], TD = 3;
+(function seedTree(){
+  var r = rng(SEED + "/graph"), dy = (RAD*2)/TD;
+  (function grow(x,y,d,sp,par){
+    var id = TN.length; TN.push([x,y,d]);
+    if (par >= 0) TE.push([par,id]);
+    if (d >= TD) return;
+    var k = d === 0 ? 3 : (r() < .42 ? 3 : 2);
+    for (var i=0;i<k;i++){
+      grow(x + (i/(k-1) - .5)*2*sp + r.range(-.12,.12)*sp, y - dy, d+1, sp*.46, id);
+    }
+  })(0, RAD, 0, RAD*.84, -1);
+})();
+var FC = (function(){
+  var kids = [], i;
+  for (i=0;i<TN.length;i++) kids.push([]);
+  for (i=0;i<TE.length;i++) kids[TE[i][0]].push(TE[i][1]);
+  var w = [];
+  (function walk(id){
+    w.push([TN[id][0], TN[id][1]]);
+    var c = kids[id];
+    for (var j=0;j<c.length;j++){ walk(c[j]); w.push([TN[id][0], TN[id][1]]); }
+  })(0);
+  return align(FB.x, FB.y, relax(resample(w, NS), NS, 5), NS);
+})();
+
+/* --- plate IV: the unknot, 0 1. Radius is the trefoil's own reach, less a
+   little, so the strand gives up its crossings without giving up its ground.
+   It is a circle in a plane tilted off the page, not a ring drawn on it: plate
+   I is a tube in space and this is the same tube, so the close has to stand in
+   the same room. Held on that plane, z is just y leaning by the tilt. --- */
+var PHI = .70, CPH = Math.cos(PHI), TPH = Math.tan(PHI), URAD = RAD*.93;
+var FD = (function(){
+  var X = new Float64Array(NS+1), Y = new Float64Array(NS+1), rr = URAD, i;
+  for (i=0;i<=NS;i++){ var a = (i/NS)*TAU; X[i] = Math.cos(a)*rr; Y[i] = Math.sin(a)*rr*CPH; }
+  return align(FC.x, FC.y, { x:X, y:Y }, NS);
+})();
+
+var BX = new Float64Array(NS+1), BY = new Float64Array(NS+1), BZ = new Float64Array(NS+1);
+var SX = new Float64Array(NS+1), SY = new Float64Array(NS+1), SD = new Float64Array(NS+1);
+var NX = new Float64Array(NS+1), NY = new Float64Array(NS+1);
+var GX = new Float64Array((LK+1)*(LK+1)), GY = new Float64Array((LK+1)*(LK+1));
+
+/* the strand at scroll position p in [0,3] */
+function strand(p){
+  var i, e;
+  if (p <= 1){
+    e = ease(p);
+    for (i=0;i<=NS;i++){
+      BX[i] = XS[i] + (FB.x[i]-XS[i])*e;
+      BY[i] = YS[i] + (FB.y[i]-YS[i])*e;
+      BZ[i] = ZS[i]*(1-e);
+    }
+  } else if (p <= 2){
+    e = ease(p-1);
+    for (i=0;i<=NS;i++){
+      BX[i] = FB.x[i] + (FC.x[i]-FB.x[i])*e;
+      BY[i] = FB.y[i] + (FC.y[i]-FB.y[i])*e;
+      BZ[i] = 0;
+    }
+  } else {
+    e = ease(p-2);
+    for (i=0;i<=NS;i++){
+      BX[i] = FC.x[i] + (FD.x[i]-FC.x[i])*e;
+      BY[i] = FC.y[i] + (FD.y[i]-FC.y[i])*e;
+      BZ[i] = FD.y[i]*TPH*e;
+    }
+  }
+}
+
+/* the burin is held by a hand: every tick is a few percent off its neighbour,
+   drawn once from the seed so the plate is the same plate on every load */
+var JT = new Float32Array(NS+1);
+(function jitter(){
+  var r = rng(SEED + "/burin");
+  for (var i=0;i<=NS;i++) JT[i] = 0.87 + r()*0.2;
+})();
+
+function drawKnot(c,w,h,yaw,pitch,p){
+  var cx = w/2, cy = h/2, unit = Math.min(w,h);
+  var S = unit*0.107;
+  var R = S*3;
+
+  /* how much of each plate is on the copper right now */
+  var wA = cl1(1-p), wB = cl1(1-(p<1?1-p:p-1));
+  var wC = cl1(1-(p<2?2-p:p-2)), wD = cl1(p-2);
+  var tw = unit*(0.027*wA + 0.019*wB + 0.016*wC + 0.021*wD);
+
+  var cyw = Math.cos(yaw), syw = Math.sin(yaw);
+  var cp = Math.cos(pitch), sp = Math.sin(pitch);
+
+  /* the plate's one projection, shared by subject and furniture */
+  var pjx = 0, pjy = 0;
+  function pj(px,py,pz){
+    var a1 = px*cyw + pz*syw, b1 = -px*syw + pz*cyw;
+    pjx = cx + a1*S; pjy = cy - (py*cp - b1*sp)*S;
+  }
+
+  var i, x, y, z, x1, z1, y2, z2;
+  for (i=0;i<=NS;i++){
+    x = BX[i]; y = BY[i]; z = BZ[i];
+    x1 =  x*cyw + z*syw;
+    z1 = -x*syw + z*cyw;
+    y2 =  y*cp - z1*sp;
+    z2 =  y*sp + z1*cp;
+    SX[i] = cx + x1*S;
+    SY[i] = cy - y2*S;
+    SD[i] = z2;
+  }
+  /* screen space normals from the tangent */
+  for (i=0;i<=NS;i++){
+    var a = i===0 ? NS-1 : i-1, b = i===NS ? 1 : i+1;
+    var dx = SX[b]-SX[a], dy = SY[b]-SY[a];
+    var L = Math.hypot(dx,dy) || 1;
+    NX[i] = -dy/L; NY[i] = dx/L;
+  }
+
+  /* --- instrument furniture, behind the subject --- */
+  c.save();
+
+  /* the core circle of the torus the knot lives on, drawn in the equatorial
+     plane so the tilt of the whole plate is legible from one ellipse */
+  c.beginPath();
+  for (var k=0;k<=72;k++){
+    var ang = (k/72)*TAU;
+    var gx = Math.cos(ang), gy = Math.sin(ang);
+    var gx1 = gx*cyw, gz1 = -gx*syw;
+    var gy2 = gy*cp - gz1*sp;
+    var px = cx + gx1*S*2, py = cy - gy2*S*2;
+    if (k===0) c.moveTo(px,py); else c.lineTo(px,py);
+  }
+  c.closePath();
+  c.strokeStyle = A(P.dim,.085*wA); c.lineWidth = 1; c.stroke();
+
+  /* --- plate II furniture: the patch the cycle is laid on. A checkerboard of
+     plaquettes, the two kinds of stabiliser, and the vertices that carry the
+     data qubits. --- */
+  if (wB > .012){
+    var gi, gj, gk;
+    for (gj=0; gj<=LK; gj++) for (gi=0; gi<=LK; gi++){
+      pj(-LR+gi*LG, -LR+gj*LG, 0);
+      gk = gj*(LK+1)+gi; GX[gk] = pjx; GY[gk] = pjy;
+    }
+    for (gj=0; gj<LK; gj++) for (gi=0; gi<LK; gi++){
+      var v0 = gj*(LK+1)+gi, v1 = v0+1, v2 = v0+LK+2, v3 = v0+LK+1;
+      c.fillStyle = A((gi+gj)&1 ? P.cyan : P.gold, .085*wB);
+      c.beginPath();
+      c.moveTo(GX[v0],GY[v0]); c.lineTo(GX[v1],GY[v1]);
+      c.lineTo(GX[v2],GY[v2]); c.lineTo(GX[v3],GY[v3]);
+      c.closePath(); c.fill();
+    }
+    c.strokeStyle = A(P.gold,.3*wB); c.lineWidth = 1;
+    c.beginPath();
+    for (gj=0; gj<=LK; gj++){
+      for (gi=0; gi<=LK; gi++){ gk = gj*(LK+1)+gi; if (gi) c.lineTo(GX[gk],GY[gk]); else c.moveTo(GX[gk],GY[gk]); }
+    }
+    for (gi=0; gi<=LK; gi++){
+      for (gj=0; gj<=LK; gj++){ gk = gj*(LK+1)+gi; if (gj) c.lineTo(GX[gk],GY[gk]); else c.moveTo(GX[gk],GY[gk]); }
+    }
+    c.stroke();
+    c.fillStyle = A(P.gold,.55*wB);
+    for (gk=0; gk<GX.length; gk++){ c.beginPath(); c.arc(GX[gk],GY[gk],unit*.0038,0,TAU); c.fill(); }
+  }
+
+  /* --- plate III furniture: the levels the reasoning grows through, and a
+     station at every node it opened. --- */
+  if (wC > .012){
+    var td, tn;
+    c.strokeStyle = A(P.gold,.1*wC); c.lineWidth = 1;
+    c.beginPath();
+    for (td=0; td<=TD; td++){
+      var ly = RAD - (RAD*2/TD)*td;
+      pj(-RAD*1.02, ly, 0); c.moveTo(pjx,pjy);
+      pj(RAD*1.02, ly, 0);  c.lineTo(pjx,pjy);
+    }
+    c.stroke();
+    for (tn=0; tn<TN.length; tn++){
+      var nd = TN[tn];
+      pj(nd[0], nd[1], 0);
+      var nr = unit*(nd[2] === 0 ? .0105 : .0058 - nd[2]*.0008);
+      c.fillStyle = A(nd[2] === 0 ? P.gold : P.cyan, (nd[2] === 0 ? .85 : .5)*wC);
+      c.beginPath(); c.arc(pjx,pjy,nr,0,TAU); c.fill();
+      if (nd[2] === 0){
+        c.strokeStyle = A(P.gold,.5*wC); c.lineWidth = 1;
+        c.beginPath(); c.arc(pjx,pjy,nr*2.6,0,TAU); c.stroke();
+      }
+    }
+  }
+
+  /* --- plate IV furniture: with no crossing left to resolve the plate stops
+     holding the subject in. Six lead lines leave the ring for the scale, each
+     closed by a station: bearings taken, none of them travelled yet. --- */
+  if (wD > .012){
+    var ea = S*URAD, eb = ea*CPH, dk;
+    c.lineWidth = 1;
+    for (dk=0; dk<6; dk++){
+      var da = -Math.PI/2 + (dk/6)*TAU, dx6 = Math.cos(da), dy6 = Math.sin(da);
+      var ox = cx + dx6*R*1.4, oy = cy + dy6*R*1.4;
+      /* the ring is an ellipse on the page, so each line leaves the rim it is
+         actually pointed at rather than a radius the subject does not keep */
+      var dr = ea*eb/Math.hypot(eb*dx6, ea*dy6)*1.2;
+      c.strokeStyle = A(P.gold,.17*wD);
+      c.beginPath();
+      c.moveTo(cx + dx6*dr, cy + dy6*dr); c.lineTo(ox,oy);
+      c.stroke();
+      c.fillStyle = A(P.cyan,.42*wD);
+      c.beginPath(); c.arc(ox,oy,unit*.0046,0,TAU); c.fill();
+    }
+  }
+
+  /* three axes of the three fold symmetry, held to the outer annulus so they
+     do not cut across the subject */
+  c.strokeStyle = A(P.gold,.13); c.lineWidth = 1;
+  for (var s3=0;s3<3;s3++){
+    var aa = -Math.PI/2 + (s3/3)*TAU;
+    c.beginPath();
+    c.moveTo(cx + Math.cos(aa)*R*1.09, cy + Math.sin(aa)*R*1.09);
+    c.lineTo(cx + Math.cos(aa)*R*1.4, cy + Math.sin(aa)*R*1.4);
+    c.stroke();
+  }
+
+  /* graduated scale */
+  c.strokeStyle = A(P.gold,.18); c.lineWidth = 1;
+  c.beginPath(); c.arc(cx,cy,R*1.24,0,TAU); c.stroke();
+  c.strokeStyle = A(P.gold,.09);
+  c.beginPath(); c.arc(cx,cy,R*1.36,0,TAU); c.stroke();
+  tickRing(c,cx,cy,R*1.24,72,unit*.016,P.gold,.36,6);
+
+  /* a lozenge on each axis of symmetry, the same ornament as the frame corner */
+  c.fillStyle = A(P.gold,.5);
+  for (var lz=0; lz<3; lz++){
+    var la = -Math.PI/2 + (lz/3)*TAU;
+    var lx = cx + Math.cos(la)*R*1.24, ly = cy + Math.sin(la)*R*1.24;
+    var lr = unit*.0105;
+    c.beginPath();
+    c.moveTo(lx, ly-lr); c.lineTo(lx+lr, ly); c.lineTo(lx, ly+lr); c.lineTo(lx-lr, ly);
+    c.closePath(); c.fill();
+  }
+  c.restore();
+
+  /* --- the subject, painted far arcs first --- */
+  var order = [];
+  var per = Math.ceil(NS/ARCS);
+  for (var q=0;q<ARCS;q++){
+    var i0 = q*per, i1 = Math.min(NS, i0+per+1);
+    if (i0 >= NS) break;
+    var d = 0;
+    for (var m=i0;m<=i1;m++) d += SD[m];
+    order.push([i0,i1,d/(i1-i0+1)]);
+  }
+  order.sort(function(a,b){ return a[2]-b[2]; });
+
+  var LX = -0.5547, LY = -0.8321; /* light, upper left */
+  var HIGH = mix(P.gold, P.ink, .34);
+  var step = unit*0.0125;
+
+  c.save();
+  c.lineJoin = "round"; c.lineCap = "butt";
+
+  for (var oi=0; oi<order.length; oi++){
+    var seg = order[oi], a0 = seg[0], a1 = seg[1];
+    var near = .5 + .5*seg[2];              /* 0 far, 1 near */
+    var wpx = tw*(.92 + .14*near);
+    var tone = mix(P.gold, P.violet, (1-near)*.3);
+
+    /* the body, opaque, so a strand behind is truly hidden. One flat tone for
+       every arc: a per arc tone bands visibly at the seams. */
+    c.beginPath();
+    for (i=a0;i<=a1;i++){
+      var ax = SX[i]+NX[i]*wpx, ay = SY[i]+NY[i]*wpx;
+      if (i===a0) c.moveTo(ax,ay); else c.lineTo(ax,ay);
+    }
+    for (i=a1;i>=a0;i--) c.lineTo(SX[i]-NX[i]*wpx, SY[i]-NY[i]*wpx);
+    c.closePath();
+    c.fillStyle = "#0c0e20";
+    c.fill();
+
+    /* the cross ticks: even spacing along the arc, length set by a fixed
+       light. This is the whole of the shading, the way a plate engraver
+       does a tube. Spacing is measured, not counted, so a tight inner
+       curve does not turn into a solid block. */
+    c.lineWidth = 1;
+    c.strokeStyle = A(tone, .3 + .32*near);
+    c.beginPath();
+    var run = 0;
+    for (i=a0;i<a1;i++){
+      run += Math.hypot(SX[i+1]-SX[i], SY[i+1]-SY[i]);
+      if (run < step*JT[i]) continue;
+      run = 0;
+      /* Gold on a night ground inverts the engraver's convention: line is
+         light, blank is shadow. So the hatch hangs off the lit rail and
+         stops at the terminator. How far it reaches is how squarely the
+         tube is cross lit; a tube running along the light is lit end on
+         and carries line nearly all the way across. */
+      var lit = NX[i]*LX + NY[i]*LY;
+      var lu = lit >= 0 ? 1 : -1;
+      var f = (.38 + .4*(1 - (lit<0?-lit:lit))) * JT[i];
+      c.moveTo(SX[i]+NX[i]*wpx*lu, SY[i]+NY[i]*wpx*lu);
+      c.lineTo(SX[i]+NX[i]*wpx*lu*(1-2*f), SY[i]+NY[i]*wpx*lu*(1-2*f));
+    }
+    c.stroke();
+
+    /* the two rails. The lit one is the burin's finish line. */
+    for (var side=0; side<2; side++){
+      var sg = side ? -1 : 1;
+      var mid = (a0+a1)>>1;
+      var litr = (NX[mid]*LX + NY[mid]*LY)*sg;
+      c.beginPath();
+      for (i=a0;i<=a1;i++) {
+        var rx = SX[i]+NX[i]*wpx*sg, ry = SY[i]+NY[i]*wpx*sg;
+        if (i===a0) c.moveTo(rx,ry); else c.lineTo(rx,ry);
+      }
+      if (litr > 0){
+        c.lineWidth = 1.35;
+        c.strokeStyle = A(mix(tone, HIGH, near), .52 + .4*near);
+      } else {
+        c.lineWidth = 1;
+        c.strokeStyle = A(tone, .34 + .26*near);
+      }
+      c.stroke();
+    }
+  }
+  c.restore();
+
+  /* --- what the code found, annotated over the subject: two checks that
+     fired, and the chain of corrections laid between them. --- */
+  if (wB > .012){
+    var ci, ch = [], mr = unit*.0135;
+    for (ci=0; ci<3; ci++){
+      pj(-LR+(SYN+ci+.5)*LG, -LR+2.5*LG, 0); ch.push(pjx, pjy);
+    }
+    c.strokeStyle = A(P.gold,.7*wB); c.lineWidth = 1.6;
+    c.beginPath(); c.moveTo(ch[0],ch[1]);
+    c.lineTo(ch[2],ch[3]); c.lineTo(ch[4],ch[5]);
+    c.stroke();
+    for (ci=0; ci<6; ci+=4){
+      var ex = ch[ci], ey = ch[ci+1];
+      c.strokeStyle = A(P.rose,.85*wB); c.lineWidth = 1.3;
+      c.beginPath(); c.arc(ex,ey,mr,0,TAU); c.stroke();
+      c.beginPath();
+      c.moveTo(ex-mr*.55,ey-mr*.55); c.lineTo(ex+mr*.55,ey+mr*.55);
+      c.moveTo(ex+mr*.55,ey-mr*.55); c.lineTo(ex-mr*.55,ey+mr*.55);
+      c.stroke();
+    }
+  }
+
+  /* --- crossings, marked the way a plate annotates a point. Only plate I has
+     any: a curve lying flat has no over and under to resolve. --- */
+  if (wA <= .35) return;
+  c.save();
+  var found = [];
+  for (i=0;i<NS;i+=7){
+    for (var j=i+60;j<NS;j+=7){
+      var ddx = SX[i]-SX[j], ddy = SY[i]-SY[j];
+      if (ddx*ddx + ddy*ddy < tw*tw*.8){
+        var mx = (SX[i]+SX[j])/2, my = (SY[i]+SY[j])/2, ok = 1;
+        for (var f2=0; f2<found.length; f2++){
+          if (Math.hypot(found[f2][0]-mx, found[f2][1]-my) < R*.4){ ok = 0; break; }
+        }
+        if (ok) found.push([mx,my]);
+      }
+    }
+  }
+  var ma = span(wA,.35,.7);
+  for (var fi=0; fi<found.length && fi<4; fi++){
+    var mkx = found[fi][0], mky = found[fi][1], mkr = unit*.0135;
+    c.strokeStyle = A(P.gold,.55*ma); c.lineWidth = 1.1;
+    c.beginPath(); c.arc(mkx,mky,mkr,0,TAU); c.stroke();
+    c.strokeStyle = A(P.cyan,.45*ma); c.lineWidth = 1;
+    c.beginPath();
+    c.moveTo(mkx-mkr*2.1,mky); c.lineTo(mkx-mkr*1.35,mky);
+    c.moveTo(mkx+mkr*1.35,mky); c.lineTo(mkx+mkr*2.1,mky);
+    c.stroke();
+    c.fillStyle = A(P.cyan,.5*ma);
+    c.beginPath(); c.arc(mkx,mky,1.5,0,TAU); c.fill();
+  }
+  c.restore();
+}
+
+/* ---------- driver ----------
+   The box is taken from .slot when the layout changes and from nothing at all
+   in between: scroll writes a transform and two lengths. The backing store is
+   cut once at the size the hero gives it and never re-cut, so a plate that has
+   receded to the margin is the same engraving downsampled, and stays sharp. */
+
+var cv = document.getElementById("plate");
+var ctx = cv.getContext("2d", { alpha:false });
+var fig = document.querySelector(".plate");
+var slot = document.querySelector(".slot");
+var cap = fig.querySelector("figcaption");
+var capL = document.getElementById("cap");
+var capS = document.getElementById("sd");
+var secQ = document.getElementById("quantum");
+var secA = document.getElementById("ai");
+var secC = document.getElementById("contact");
+var secF = document.querySelector("footer");
+
+var PLATES = [
+  ["Plate I&nbsp;&#183; Trefoil, 3<sub>1</sub>", "",
+   "Engraved astronomical plate: a trefoil knot drawn in gold line, ringed by a graduated scale over a star field."],
+  ["Plate II&nbsp;&#183; Code patch, d&nbsp;5", "/code",
+   "Engraved plate: a five by five stabiliser lattice, two checks that fired and the chain of corrections joining them, with one closed cycle laid over the code."],
+  ["Plate III&nbsp;&#183; Graph, depth 3", "/graph",
+   "Engraved plate: a reasoning tree branching from one root through three levels, traced as a single continuous stroke."],
+  ["Plate IV&nbsp;&#183; Unknot, 0<sub>1</sub>", "/open",
+   "Engraved plate: the same strand with every crossing let go, closed as one round circle, the unknot, with six lead lines running out to the graduated scale."]
+];
+
+var W = 0, H = 0, DPR = 1;
+var reduce = matchMedia("(prefers-reduced-motion: reduce)");
+var raf = 0, last = 0, t0 = 0, lastP = -1, capI = -1, dark = 0;
+var pxT = 0, pyT = 0, pxC = 0, pyC = 0;
+var LW = 0, LH = 0, LXD = 0, LYD = 0, CAPH = 24;
+var RW = 0, RH = 0, RX = 0, RY = 0, RAIL = 0;
+var T1 = 0, T2 = 0, T3 = 0, TR = 0, D1 = 1, D2 = 1, D3 = 1;
+
+var YAW0 = -0.13, PITCH0 = 0.17;
+
+/* ---------- the spindle ----------
+   The morph owns which form is on the copper; the hand owns the angle it is
+   read from. Being independent they compose without argument, and a plate
+   transition never takes the reader's angle away. The offset persists; breath
+   and parallax drop the moment a hand arrives and ease back in around
+   wherever the plate was left. */
+var uYaw = 0, uPit = 0, vYaw = 0, vPit = 0;
+var grab = 0, lock = 0, gid = -1, gx = 0, gy = 0;
+var idleG = 1, quietAt = 0, live = 0, ptv = 0;
+var TLO = -0.62, THI = 0.26;       /* short of edge on: plate IV lies at .70 */
+var YPX = 0.0080, TPX = 0.0035;    /* radians per pixel */
+var FREE = 0.020, STOP = 0.00035;  /* radians per frame */
+var AHINT = " Interactive: drag, or use the arrow keys, to turn it.";
+
+/* Velocity comes from a window of pointer samples, not per frame: events and
+   frames do not line up, so a per frame delta reads zero on any frame the
+   pointer stood still, and that kills the throw. */
+var smp = [];
+function sample(){
+  var t = performance.now();
+  smp.push(t, uYaw, uPit);
+  while (smp.length > 6 && t - smp[0] > 140) smp.splice(0,3);
+}
+function clv(v,m){ return v < -m ? -m : v > m ? m : v; }
+function toss(){
+  vYaw = 0; vPit = 0;
+  if (smp.length < 6) return;
+  var n = smp.length, dur = smp[n-3] - smp[0];
+  /* held still before letting go means settle here, not fly */
+  if (performance.now() - smp[n-3] > 90 || dur < 8) return;
+  var k = 16.667/dur;
+  vYaw = clv((smp[n-2]-smp[1])*k, .10);
+  vPit = clv((smp[n-1]-smp[2])*k, .05);
+}
+
+/* One law for both axes. Above the free threshold it is on its bearings, the
+   friction is light and a flick runs a couple of seconds; below it the damping
+   goes heavy and it stops rather than creeping. No detent to spring to, so a
+   slow drag stays where it was let go. */
+function decay(v,st){
+  var w = 1 - (v<0?-v:v)/FREE; w = w<0?0:w>1?1:w;
+  v *= Math.pow(.986 - .053*w, st);
+  return (v > -STOP && v < STOP) ? 0 : v;
+}
+function spin(now, st){
+  if (!grab){
+    vYaw = decay(vYaw, st); vPit = decay(vPit, st);
+    uYaw += vYaw*st; uPit += vPit*st;
+    if (uPit < TLO){ uPit = TLO; vPit = 0; }
+    else if (uPit > THI){ uPit = THI; vPit = 0; }
+    if (uYaw > TAU) uYaw -= TAU; else if (uYaw < -TAU) uYaw += TAU;
+  }
+  var busy = grab || vYaw !== 0 || vPit !== 0;
+  if (busy) quietAt = now;
+  /* dropped at once, back over several seconds, slower than its own swing, so
+     a resume never reads as a drift off the angle the reader chose */
+  var want = now - quietAt > 820 ? 1 : 0;
+  idleG += (want - idleG) * (want ? .008 : .24) * st;
+  live = busy;
+}
+
+var hintEl = fig.querySelector(".hint");
+function hush(){ hintEl.className = "hint off"; }
+
+cv.addEventListener("pointerdown", function(ev){
+  if (ev.button > 0) return;
+  grab = 1; gid = ev.pointerId;
+  lock = ev.pointerType === "mouse" ? 1 : 0;
+  try { cv.setPointerCapture(gid); } catch(e1){}
+  fig.classList.add("grabbing");
+  vYaw = 0; vPit = 0;
+  gx = ev.clientX; gy = ev.clientY;
+  smp.length = 0; sample();
+  quietAt = performance.now();
+  hush();
+});
+cv.addEventListener("pointermove", function(ev){
+  if (!grab) return;
+  var dx = ev.clientX - gx, dy = ev.clientY - gy;
+  /* pan-y gives the document every upright swipe, so a touch is the plate's
+     only once it is plainly sideways, and handed back unturned otherwise */
+  if (!lock){
+    var ax = dx<0?-dx:dx, ay = dy<0?-dy:dy;
+    if (ax + ay < 7) return;
+    if (ay > ax){ letgo(); return; }
+    lock = 1; gx = ev.clientX; gy = ev.clientY; smp.length = 0; sample(); return;
+  }
+  uYaw += dx*YPX;
+  uPit += dy*TPX;
+  if (uPit < TLO) uPit = TLO; else if (uPit > THI) uPit = THI;
+  gx = ev.clientX; gy = ev.clientY;
+  sample();
+  quietAt = performance.now();
+  if (reduce.matches) paint();
+});
+function letgo(){
+  if (!grab) return;
+  grab = 0;
+  fig.classList.remove("grabbing");
+  if (reduce.matches){ vYaw = 0; vPit = 0; } else toss();   /* no momentum there */
+  try { cv.releasePointerCapture(gid); } catch(e2){}
+}
+cv.addEventListener("pointerup", letgo);
+cv.addEventListener("pointercancel", letgo);
+cv.addEventListener("lostpointercapture", letgo);
+
+cv.addEventListener("keydown", function(ev){
+  var k = ev.key, s = .105;
+  if (k === "ArrowLeft") uYaw -= s;
+  else if (k === "ArrowRight") uYaw += s;
+  else if (k === "ArrowUp") uPit -= s*.62;
+  else if (k === "ArrowDown") uPit += s*.62;
+  else if (k === "Home"){ uYaw = 0; uPit = 0; }
+  else return;
+  if (uPit < TLO) uPit = TLO; else if (uPit > THI) uPit = THI;
+  vYaw = 0; vPit = 0;   /* a screw, not a throw: one step, then still */
+  quietAt = performance.now();
+  hush(); ev.preventDefault();
+  if (reduce.matches) paint();
+});
+
+function measure(){
+  var barh = document.querySelector(".bar").offsetHeight || 52;
+  var gut = parseFloat(getComputedStyle(document.querySelector(".quire")).paddingLeft) || 24;
+  var r = slot.getBoundingClientRect();
+  LW = Math.max(1, Math.round(r.width));
+  LH = Math.max(1, Math.round(r.height));
+  LXD = r.left + window.pageXOffset;
+  LYD = r.top + window.pageYOffset;
+  fig.style.width = LW + "px"; fig.style.height = LH + "px";
+  CAPH = Math.round(cap.getBoundingClientRect().height) + 11;
+  var fh = Math.max(1, LH - CAPH);
+  var vw = window.innerWidth, vh = window.innerHeight;
+  /* Wide enough for a margin beside the measure, and the plate keeps to it,
+     taking the margin the argument is not using and no pixel of the one it is.
+     Narrower, and it pins as a band over the column; the hero has stacked. */
+  RAIL = vw > 1250 ? 1 : 0;
+  fig.classList.toggle("rail", !!RAIL);
+  fig.classList.toggle("band", !RAIL);
+  if (RAIL){
+    var edge = secQ.querySelector(".act").getBoundingClientRect().right;
+    RW = Math.min(440, Math.max(260, vw - gut - edge - 34));
+    RX = vw - gut - RW;
+    RY = barh + 20;
+  } else {
+    RW = LW;
+    RX = LXD - window.pageXOffset;
+    RY = barh;
+  }
+  RH = fh*(RW/LW) + CAPH;
+  /* Each plate is fully cut when its lemma is centred and holds there while it
+     is read. The ramps are sized from the gap between those two positions, so
+     neither starts before the other finishes, and the first is held off the
+     top of the document, so the fold is only ever plate I. */
+  var qr = secQ.getBoundingClientRect(), ar = secA.getBoundingClientRect();
+  var cr = secC.getBoundingClientRect(), fr = secF.getBoundingClientRect();
+  var yo = window.pageYOffset;
+  T1 = qr.top + yo + qr.height/2 - vh/2;
+  T2 = ar.top + yo + ar.height/2 - vh/2;
+  /* The plate is let go where it would otherwise crowd the close. Out in the
+     margin that is the moment the foot rises to meet it, and no sooner, since
+     nothing else is out there. Pinned across the column it is wherever the
+     document still has the run to carry it off the screen, so the last rows
+     are never left under a band. */
+  TR = RAIL ? fr.top + yo - (RY + RH + 24)
+            : Math.min(cr.bottom + yo - vh*0.42,
+                       document.documentElement.scrollHeight - vh - (RY + RH + 46));
+  /* Plate IV is cut by the time the close is on the screen to be read, not
+     when it is centred: the corollary is the last thing on a short page and
+     may never reach the middle of a tall window. */
+  T3 = Math.min(cr.top + yo - vh*0.55, TR - 150);
+  /* On a window taller than the argument every anchor collapses toward zero,
+     which would open the page on plate IV. Held apart and off the top, the
+     degenerate case is only a quick run through, never a wrong first plate. */
+  T1 = Math.max(T1, 60);
+  T2 = Math.max(T2, T1 + 140);
+  T3 = Math.max(T3, T2 + 140);
+  TR = Math.max(TR, T3 + 90);
+  var gap = Math.max(160, T2 - T1)*0.55;
+  D1 = Math.max(90, Math.min(340, gap, T1));
+  D2 = Math.max(90, Math.min(340, gap));
+  D3 = Math.max(90, Math.min(340, Math.max(160, T3 - T2)*0.55));
+  document.documentElement.style.scrollPaddingTop =
+    (RAIL ? barh + 14 : RY + RH + 14) + "px";
+}
+
+function prog(){
+  var y = window.pageYOffset;
+  return span(y, T1-D1, T1) + span(y, T2-D2, T2) + span(y, T3-D3, T3);
+}
+
+/* one transform and two lengths: the ribbon is never re-rasterised to move */
+function place(q, rel){
+  var vx = LXD - window.pageXOffset, vy = LYD - window.pageYOffset;
+  fig.style.width  = (LW + (RW-LW)*q).toFixed(1) + "px";
+  fig.style.height = (LH + (RH-LH)*q).toFixed(1) + "px";
+  fig.style.transform = "translate3d(" +
+    (vx + (RX-vx)*q).toFixed(1) + "px," +
+    (vy + (RY-vy)*q - rel).toFixed(1) + "px,0)";
+  if (!RAIL) fig.style.setProperty("--pin", q.toFixed(3));
+}
+
+function caption(p){
+  var i = p < .5 ? 0 : p < 1.5 ? 1 : p < 2.5 ? 2 : 3;
+  var f = p <= 1 ? p : p <= 2 ? p - 1 : p - 2;
+  cap.style.opacity = (.32 + .68*Math.abs(2*f-1)).toFixed(2);
+  if (i === capI) return;
+  capI = i;
+  capL.innerHTML = PLATES[i][0];
+  capS.textContent = hashSeed(SEED + PLATES[i][1]).toString(16).toUpperCase().slice(0,6);
+  cv.setAttribute("aria-label", PLATES[i][2] + AHINT);
+}
+
+function size(){
+  var w = LW, h = Math.max(1, LH - CAPH);
+  var d = Math.min(window.devicePixelRatio || 1, 2);
+  if (w === W && h === H && d === DPR) return false;
+  W = w; H = h; DPR = d;
+  cv.width = Math.round(w*d); cv.height = Math.round(h*d);
+  ctx.setTransform(d,0,0,d,0,0);
+  return true;
+}
+
+function render(yaw,pitch,p){
+  ctx.drawImage(buildGround(W,H,DPR), 0, 0, W, H);
+  strand(p);
+  drawKnot(ctx, W, H, yaw, pitch, p);
+}
+
+/* reduced motion: no interpolation. The plate that belongs to the section in
+   view, switched on the instant the section takes over, caption with it. */
+function snap(){
+  var p = prog();
+  return p < .5 ? 0 : p < 1.5 ? 1 : p < 2.5 ? 2 : 3;
+}
+function still(){
+  var p = snap(), rel = Math.max(0, window.pageYOffset - TR);
+  place(cl1(p), rel);
+  if (p !== lastP){ lastP = p; caption(p); size(); render(YAW0 + uYaw, PITCH0 + uPit, p); }
+  fig.classList.add("on");
+}
+/* reduced motion has no loop: one frame per move, nothing of its own */
+var pq = 0;
+function paint(){
+  if (pq) return; pq = 1;
+  requestAnimationFrame(function(){
+    pq = 0; size();
+    render(YAW0 + uYaw, PITCH0 + uPit, snap());
+  });
+}
+
+function loop(now){
+  raf = 0;
+  var p = prog(), rel = Math.max(0, window.pageYOffset - TR);
+  if (rel > RY + RH + 40){
+    if (!dark){ dark = 1; fig.style.visibility = "hidden"; letgo(); }
+    raf = requestAnimationFrame(loop); return;
+  }
+  if (dark){ dark = 0; fig.style.visibility = ""; }
+  place(cl1(p), rel);
+  var st = ptv ? Math.min((now - ptv)/16.667, 3) : 1;
+  ptv = now;
+  spin(now, st);
+  var moving = Math.abs(p - lastP) > .0004;
+  /* a hand or a throw gets every frame; the breath is content with half */
+  if (!moving && !live && now - last < 32){ raf = requestAnimationFrame(loop); return; }
+  last = now; lastP = p;
+  if (!t0) t0 = now;
+  var e = (now - t0)/1000;
+  pxC += (pxT - pxC)*.06; pyC += (pyT - pyC)*.06;
+  /* the hand steadies as the instrument goes to the margin, and lets go of
+     it entirely while the reader has hold of it */
+  var idle = (1 - cl1(p)*.7)*idleG;
+  caption(p);
+  size();
+  render(
+    YAW0 + uYaw + (Math.sin(e*0.2244)*0.062 + pxC*0.075)*idle,
+    PITCH0 + uPit + (Math.sin(e*0.1571 + 1.1)*0.034 + pyC*0.055)*idle,
+    p
+  );
+  fig.classList.add("on");
+  raf = requestAnimationFrame(loop);
+}
+
+function start(){
+  if (reduce.matches){ still(); return; }
+  if (!raf) raf = requestAnimationFrame(loop);
+}
+function stop(){
+  if (raf){ cancelAnimationFrame(raf); raf = 0; }
+}
+
+/* The type paints first. The plate is cut on the next frame and fades up, so
+   the engraving never sits in front of first contentful paint. */
+document.getElementById("yr").textContent = new Date().getFullYear();
+measure();
+size();
+
+requestAnimationFrame(function(){
+  measure();
+  var p = reduce.matches ? snap() : prog();
+  lastP = p;
+  place(cl1(p), Math.max(0, window.pageYOffset - TR));
+  caption(p);
+  render(YAW0, PITCH0, p);
+  fig.classList.add("on");
+  if (!reduce.matches) start();
+});
+
+if (reduce.matches){
+  var pend = 0;
+  window.addEventListener("scroll", function(){
+    if (pend) return; pend = 1;
+    requestAnimationFrame(function(){ pend = 0; still(); });
+  }, { passive:true });
+} else {
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden){ letgo(); stop(); } else { t0 = 0; ptv = 0; start(); }
+  });
+  if (matchMedia("(pointer:fine)").matches){
+    window.addEventListener("pointermove", function(ev){
+      if (grab) return;   /* a hand on the plate is not a hand passing it */
+      pxT = (ev.clientX / window.innerWidth) * 2 - 1;
+      pyT = (ev.clientY / window.innerHeight) * 2 - 1;
+    }, { passive:true });
+  }
+}
+
+var rt = 0;
+function relayout(){
+  measure();
+  if (size()) groundKey = "";
+  lastP = -1;
+  if (reduce.matches) still();
+}
+window.addEventListener("resize", function(){
+  clearTimeout(rt);
+  rt = setTimeout(relayout, 120);
+}, { passive:true });
+window.addEventListener("load", relayout);
+
+reduce.addEventListener && reduce.addEventListener("change", function(){
+  lastP = -1;
+  if (reduce.matches) { vYaw = 0; vPit = 0; stop(); still(); } else { ptv = 0; start(); }
+});
+
+/* ---------- analytics, after the page is done painting ----------
+   GA4 is the only request this document makes, and it is not made
+   until load has fired, so it can never sit in front of first paint. */
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+window.gtag = gtag;
+gtag("js", new Date());
+gtag("config", "G-DVPGC1C44Z");
+window.addEventListener("load", function(){
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z";
+  document.head.appendChild(s);
+});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "@qubit/illustrated",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "posters": "node tools/posters.mjs",
+    "determinism": "node tools/determinism.mjs",
+    "perf": "node tools/perf.mjs",
+    "static": "node tools/static.mjs",
+    "overflow": "node tools/overflow.mjs"
+  },
+  "dependencies": {
+    "@qubit/content": "*",
+    "@qubit/motifs": "*",
+    "@qubit/tokens": "*",
+    "katex": "^0.16.11"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.2",
+    "vite": "^8.1.5"
+  }
+}

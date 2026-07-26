@@ -1,0 +1,20 @@
+{
+  "name": "@qubit/unpolarized",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "jargon": "node scripts/jargon-check.mjs"
+  },
+  "dependencies": {
+    "@qubit/content": "*",
+    "@qubit/reader": "*",
+    "@qubit/tokens": "*"
+  },
+  "devDependencies": {
+    "vite": "^8.1.5"
+  }
+}

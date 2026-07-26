@@ -1,0 +1,143 @@
+/* Print / PDF. The page is paper and the ink is near-black whatever theme the
+   reader left behind, every canto opens, all screen chrome drops, and
+   gradient-clipped titles get a solid fill so they appear at all.
+
+   Loaded by the reader itself, so the text editions (book, hindi,
+   unpolarized) all get it. The illustrated edition sets its own styles and
+   carries its own sheet. */
+
+@media print {
+  @page { margin: 14mm }
+
+  /* Paper, unconditionally. html:root[data-theme] outranks tokens.css's
+     html[data-theme="dark"] on specificity, so this holds even if a later
+     sheet re-asserts the night palette. */
+  :root,
+  html:root,
+  html:root[data-theme],
+  html:root[data-theme="dark"] {
+    --void: #fff; --void2: #fff; --ink: #111;
+    --cyan: #0b5566; --violet: #4b2ca0; --gold: #6b4a12; --rose: #9a2350;
+    --dim: #444; --line: rgba(0, 0, 0, .28);
+    color-scheme: light;
+  }
+
+  html, body {
+    background: #fff !important; color: #111 !important;
+    font-family: var(--serif); font-size: 11pt; line-height: 1.5;
+    overflow: visible !important; scroll-behavior: auto;
+    print-color-adjust: exact; -webkit-print-color-adjust: exact;
+    orphans: 2; widows: 2;
+  }
+  /* A4 less the page margin is 182mm, which at 11pt is close to a hundred
+     characters a line: readable on a screen, tiring in a book. The text block
+     is set to a book measure instead and centred on the leaf. */
+  #book { max-width: 38em; margin: 0 auto; padding: 0 }
+  a { color: #1a1a2e !important }
+
+  /* drop all screen chrome and animated surfaces */
+  #starfield, .vignette, .theme-toggle, #mala, #mala .bead, #prog, #loader,
+  #cover3d, .scrollcue, .caret, .skip, canvas,
+  input, select, textarea, video, audio, iframe { display: none !important }
+
+  /* force every canto open and revealed regardless of JS state */
+  section.canto {
+    opacity: 1 !important; transform: none !important;
+    min-height: 0 !important; padding: 0 !important;
+    transition: none !important; animation: none !important;
+    break-before: page; page-break-before: always;
+  }
+  section.canto.acc { min-height: 0 !important; padding: 0 !important }
+  .canto-wrap, .canto.expanded > .canto-wrap {
+    display: block !important; grid-template-rows: 1fr !important;
+    overflow: visible !important; transition: none !important;
+  }
+  .canto-body, .canto.expanded > .canto-wrap > .canto-body {
+    min-height: 0 !important; overflow: visible !important; padding-bottom: 0 !important;
+  }
+  .canto-head {
+    padding: 0 0 .5em !important;
+    break-after: avoid; page-break-after: avoid; break-inside: avoid; page-break-inside: avoid;
+  }
+  .canto-head::after { display: none }
+
+  /* gradient-clipped titles need a solid fill to appear on paper */
+  .canto-title, .canto-head .canto-title {
+    font-size: 19pt; background: none !important;
+    color: #1a1a2e !important; -webkit-text-fill-color: #1a1a2e !important;
+    break-after: avoid; page-break-after: avoid;
+  }
+  .canto-num { color: #6b4a12 !important; font-size: 8pt; break-after: avoid }
+
+  /* a movement is a part title, and a part title gets the leaf to itself */
+  .movement {
+    padding: 1.2em 0 !important;
+    break-inside: avoid; page-break-inside: avoid;
+    break-after: page; page-break-after: always;
+  }
+  .movement .mtitle { color: #222 !important }
+  .movement .mlabel { color: #6b4a12 !important }
+
+  /* cover becomes a plain title page */
+  #cover {
+    height: auto !important; min-height: 0 !important; padding: 1em 0 2.4em !important;
+    background: #fff !important; width: auto !important; margin: 0 !important;
+  }
+  #cover h1 {
+    font-size: 30pt; background: none !important; color: #1a1a2e !important;
+    -webkit-text-fill-color: #1a1a2e !important; filter: none !important;
+  }
+  #cover .om { color: #6b4a12 !important; filter: none !important }
+  #cover .sub, #cover .cover-copy { color: #333 !important }
+
+  /* prose and dialogue in near-black, tightened to a print-comfortable density */
+  .dlg, .dlg p { color: #111 !important }
+  .dlg { font-size: 11pt !important; line-height: 1.5 !important }
+  .dlg p { orphans: 2; widows: 2 }
+  .speaker { break-after: avoid; page-break-after: avoid }
+  /* the speaker rules are night literals, and pastel pink and cyan on paper
+     read as a printing fault rather than a voice */
+  .seeker { border-left-color: rgba(154, 35, 80, .5) !important }
+  .oracle { border-left-color: rgba(11, 85, 102, .5) !important }
+  .science, .epigraph, .assume .a-body { line-height: 1.5 !important }
+  .dlg, .epigraph, .assume { break-inside: avoid; page-break-inside: avoid }
+  .epigraph { color: #3a2a5a !important }
+  .assume .a-head { break-after: avoid; page-break-after: avoid }
+  .assume .claim { color: #7a1d40 !important }
+  .assume .counter { color: #0b4a5a !important }
+
+  /* asides stay legible and unbroken */
+  .science, .pred, .reflect, .foot-note { break-inside: avoid; page-break-inside: avoid }
+  .science, .pred { background: #f6f6f2 !important; border-color: #bbb !important }
+  .science h4, .pred .p-title { color: #0b4a5a !important; break-after: avoid; page-break-after: avoid }
+  .science .eq { background: #eee !important; color: #333 !important }
+  .reflect { color: #3a2a5a !important }
+  .tag { color: #333 !important; border-color: #999 !important }
+  .foot-note, .cite, footer { color: #333 !important }
+  footer { padding: 1.5em 0 !important; break-inside: avoid; page-break-inside: avoid }
+  .closeq { color: #6b4a12 !important }
+
+  /* KaTeX math prints black on white and never splits across a leaf */
+  .katex, .katex *, .eqblock .katex, .eqi .katex { color: #000 !important }
+  .eqblock { break-inside: avoid; page-break-inside: avoid }
+
+  /* An interactive scene is a control, not content: the canvas, its buttons,
+     its sliders and its pointer hint all go. What replaces them is a figure
+     note, because the prose around a scene refers to it ("below, the code is
+     drawn as a torus"), and a reference to nothing is worse than a caption. */
+  .scene {
+    height: auto !important; min-height: 0 !important;
+    background: none !important; border: none !important;
+    padding: .4em 0 !important; text-align: center;
+    break-inside: avoid; page-break-inside: avoid;
+  }
+  .scene > * { display: none !important }
+  .scene::before {
+    content: "Interactive figure. The online edition at pandey-tushar.com/qubit-dialogues.html draws this scene.";
+    display: block; font-style: italic; color: #555;
+    font-family: var(--serif); font-size: 9.5pt;
+  }
+  html[lang="hi"] .scene::before {
+    content: "संवादात्मक दृश्य। इसे ऑनलाइन संस्करण में देखें: pandey-tushar.com/qubit-dialogues.html";
+  }
+}

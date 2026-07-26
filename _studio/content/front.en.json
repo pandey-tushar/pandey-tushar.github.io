@@ -1,0 +1,49 @@
+{
+  "loader": { "glyph": "|ψ⟩", "label": "ENTANGLING…" },
+  "cover": {
+    "glyph": "|ψ⟩",
+    "title": "The Qubit Dialogues",
+    "sub": "A BOOK OF POSSIBILITIES",
+    "scrollcue": "SCROLL TO DESCEND ▾",
+    "copy": "© 2026 TUSHAR PANDEY"
+  },
+  "invocation": {
+    "label": "Invocation",
+    "title": "Before the First Question",
+    "epigraph": {
+      "text": "A machine was built that could hold a question open, refusing to close it into an answer, and the people who built it began to wonder what else they had assumed could not be held.",
+      "attr": "OPENING OF THE QUBIT DIALOGUES"
+    },
+    "paras": [
+      "There is an old form for hard conversations. One person stands at the edge of a thing they cannot do, and another, who sees more, does not tell them to be brave. Instead the two of them talk, and by the end the edge has moved.",
+      "This book borrows that form. A Seeker stands before the quantum machine, a builder of the present day, full of the reasonable doubts that any careful person would carry. Across from the Seeker sits the Oracle, a voice from a few decades ahead, patient with the doubts and unwilling to dismiss them. The Oracle does not promise miracles. What it does is smaller and harder. It takes each thing the Seeker has been told is impossible and looks for the assumption folded inside it, the place where a true statement about one machine was heard as a law about all machines.",
+      "Everything here is grounded in work that real people have published. When the science is settled, it is marked so. When it is only a hope, or a wild idea that has just been written down, that is marked too. Each canto closes with a prediction and an honest measure of how much to trust it, and with a question turned back toward you, because a book about holding two things at once should ask you to do the same.",
+      "Read slowly. Drag the spheres, break the lattice, take the lock apart. The future in these pages is a superposition. It stays open until we act, together, to measure it."
+    ],
+    "reflect": {
+      "label": "Before You Begin",
+      "text": "What have you been told is impossible that you have never once tested for yourself?"
+    }
+  },
+  "appendix": {
+    "label": "Appendix",
+    "title": "Sources and References",
+    "intro": "Each canto closes with its own note; this appendix gathers all of them in one place. Citations name the authors, venue and year as published. Where a claim is contested or speculative, the canto says so in the open."
+  },
+  "footer": {
+    "mark": "✧",
+    "lines": [
+      "THE QUBIT DIALOGUES · A BOOK OF POSSIBILITIES",
+      "Composed as a dialogue between the Seeker and the Oracle",
+      "Every prediction herein is labelled by confidence. The future is a superposition until measured."
+    ],
+    "cite": [
+      "Technically grounded, honestly speculative",
+      "© 2026 Tushar Pandey · All rights reserved"
+    ]
+  },
+  "theme": {
+    "toLight": "Let there be light.",
+    "toDark": "Welcome to the dark side."
+  }
+}

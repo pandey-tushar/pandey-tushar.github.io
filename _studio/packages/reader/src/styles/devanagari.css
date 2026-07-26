@@ -1,0 +1,237 @@
+/* Devanagari typography for the Hindi edition.
+
+   Everything here is scoped to html[lang="hi"], so importing this file into a
+   Latin-script app is a no-op. reader.css is untouched.
+
+   What Devanagari needs that the Latin sheet does not give it:
+   1. Leading. Matras sit above the shirorekha and below the baseline, so the
+      1.6 to 1.7 that suits Palatino collides. Body prose goes to 1.88.
+   2. Tracking near zero. reader.css tracks its mono labels out to .5em. On
+      Devanagari that visually severs the shirorekha and pushes matras off
+      their consonants, which reads as broken rendering rather than as style.
+   3. Larger labels. reader.css runs them down to .6rem; at 10 or 11px a
+      stacked conjunct is a smudge.
+   4. No synthetic bold and no hyphenation. Faux bold smears conjuncts
+      (क्ष, त्र, ज्ञ, द्ध); hyphenation has no business inside a cluster.
+      Because synthesis is off, <em> has to mark emphasis some other way.
+
+   FONT. Spec 03 asks for Noto Serif Devanagari or Mukta, self-hosted and
+   subset. Both faces come from Fontsource as versioned npm packages rather
+   than as loose binaries checked into the tree: the licence, the version and
+   the subsetting are all auditable, and `npm install` is what fetches them.
+   The imports below pull the Devanagari subset only (unicode-range U+0900 to
+   U+097F and the joiners), weights 400 and 600, which is every weight this
+   sheet asks for: 400 for prose and 600 for the emphasis rule further down.
+   The Latin weights in the same packages are deliberately not imported; the
+   Latin in this edition is set in the book's own serif.
+
+   The serif carries the body, the sans carries the labels, matching the two
+   stacks below. Before these were self-hosted, both fell through to whatever
+   the reader's system provided, on Windows Nirmala UI, whose danda (U+0964)
+   carries a wide left side bearing and left a visible gap before every
+   sentence end.
+
+   Font order matters and the two stacks disagree on purpose. Browsers resolve
+   families per glyph. The BODY stack leads with the Latin serif, so technical
+   terms, years and citation strings keep the book's Palatino colour while
+   Devanagari falls through behind them and mixed-script runs do not jump. The
+   LABEL stack leads with Devanagari instead, for the reason given at --mono-hi.
+*/
+
+@import '@fontsource/noto-serif-devanagari/devanagari-400.css';
+@import '@fontsource/noto-serif-devanagari/devanagari-600.css';
+@import '@fontsource/noto-sans-devanagari/devanagari-400.css';
+@import '@fontsource/noto-sans-devanagari/devanagari-600.css';
+
+html[lang="hi"] {
+  /* body: Latin serif first, Devanagari serif behind it */
+  --serif-hi:
+    "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    "Noto Serif Devanagari", "Mukta", "Sanskrit Text", "Utsaah", "Nirmala UI", "Mangal",
+    serif;
+  /* Labels. Unlike the body stack this puts Devanagari FIRST, and the reason
+     is the space character. With a monospace face in front, U+0020 resolves to
+     the mono advance, which is more than twice the Devanagari space, and every
+     multi-word label ("मान्यता पर प्रश्न") drifts apart. A label set wants one
+     typeface; the few Latin figures that land here (80%, © 2026) are happier
+     matching the Devanagari than the body's mono. */
+  --mono-hi:
+    "Noto Sans Devanagari", "Nirmala UI", "Mukta", "Mangal",
+    "SF Mono", ui-monospace, "Cascadia Code", Menlo,
+    sans-serif;
+  /* Tracking. reader.css runs its labels out to .5em, which is right for
+     wide-set Latin small caps and wrong for Devanagari: the shirorekha runs
+     across a whole word, and pulling the aksharas apart reads as broken
+     rendering rather than as style. Devanagari does not take tracking, so
+     these are near zero and the labels stay label-like on size and colour
+     alone. The wider value is only for rows that are mostly digits. */
+  --track-hi: 0em;
+  --track-hi-wide: .02em;
+}
+
+/* ---------- base ---------- */
+html[lang="hi"],
+html[lang="hi"] body {
+  font-family: var(--serif-hi);
+  /* never let the browser fake a weight it does not have */
+  font-synthesis: none;
+  -webkit-font-synthesis: none;
+  font-kerning: normal;
+  font-variant-ligatures: normal;
+}
+
+html[lang="hi"] body,
+html[lang="hi"] .dlg,
+html[lang="hi"] .science,
+html[lang="hi"] .assume,
+html[lang="hi"] .pred,
+html[lang="hi"] .reflect,
+html[lang="hi"] .epigraph,
+html[lang="hi"] .foot-note {
+  hyphens: none;
+  -webkit-hyphens: none;
+  /* no text-align here: reader.css centres .reflect on purpose and never
+     justifies anything, so there is nothing to defend against */
+  /* a Devanagari word must never be split between two consonant clusters */
+  overflow-wrap: normal;
+  word-break: normal;
+  line-break: normal;
+}
+
+/* ---------- emphasis ----------
+   Devanagari has no italic, and font-synthesis is off, so an <em> would
+   render identically to its neighbours and the emphasis would simply
+   disappear. Hindi typography marks emphasis with weight, so that is what
+   an <em> gets. Whole-block italics (.epigraph, .claim, .mtitle) are left
+   alone: they are tone, not emphasis, and upright is correct for them. */
+html[lang="hi"] em,
+html[lang="hi"] i {
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ---------- leading ---------- */
+html[lang="hi"] .dlg { line-height: 1.88 }
+html[lang="hi"] .dlg p { margin: 1em 0 }
+html[lang="hi"] .science { line-height: 1.86 }
+html[lang="hi"] .assume .a-body { line-height: 1.86 }
+html[lang="hi"] .pred .p-text { line-height: 1.8 }
+html[lang="hi"] .epigraph { line-height: 1.85 }
+html[lang="hi"] .reflect { line-height: 1.85 }
+html[lang="hi"] .foot-note { line-height: 1.85 }
+html[lang="hi"] footer { line-height: 2.1 }
+html[lang="hi"] footer .cite { line-height: 1.95 }
+
+/* ---------- headings clipped by background-clip:text ----------
+   The gradient titles paint into the glyph box. Devanagari matras and the
+   ikar/ukar tails overshoot a Latin-sized box, so the box is grown rather
+   than the text shrunk. */
+html[lang="hi"] #cover h1 {
+  line-height: 1.42;
+  padding: .06em 0 .16em;
+  letter-spacing: 0;
+}
+html[lang="hi"] .canto-title {
+  line-height: 1.42;
+  padding-bottom: .14em;
+}
+html[lang="hi"] .movement .mtitle {
+  line-height: 1.4;
+  padding-bottom: .1em;
+}
+html[lang="hi"] #cover .sub {
+  letter-spacing: var(--track-hi-wide);
+  line-height: 1.7;
+}
+
+/* ---------- mono labels that now carry Devanagari ---------- */
+html[lang="hi"] .canto-num,
+html[lang="hi"] .speaker,
+html[lang="hi"] .science h4,
+html[lang="hi"] .assume .a-head,
+html[lang="hi"] .pred .p-title,
+html[lang="hi"] .pred .tag,
+html[lang="hi"] .conf,
+html[lang="hi"] .reflect .r-label,
+html[lang="hi"] .epigraph .attr,
+html[lang="hi"] .movement .mlabel,
+html[lang="hi"] #loader .lt,
+html[lang="hi"] #cover .scrollcue,
+html[lang="hi"] #cover .cover-copy,
+html[lang="hi"] footer,
+html[lang="hi"] .theme-toggle,
+html[lang="hi"] .scene .rl,
+html[lang="hi"] .scene .hint,
+html[lang="hi"] .scene button.mini,
+html[lang="hi"] .foot-note,
+html[lang="hi"] .bead::after {
+  font-family: var(--mono-hi);
+  letter-spacing: var(--track-hi);
+}
+
+/* the widest-tracked labels get a little more air back, but nowhere near .5em */
+html[lang="hi"] .canto-num,
+html[lang="hi"] .movement .mlabel,
+html[lang="hi"] .epigraph .attr,
+html[lang="hi"] .reflect .r-label {
+  letter-spacing: var(--track-hi-wide);
+}
+
+/* Optical size. reader.css sets its labels between .6rem and .75rem, which is
+   fine for wide-tracked Latin capitals and too small for Devanagari: at 11px
+   a stacked conjunct like ष्टा in द्रष्टा collapses into a smudge. Each label
+   gets roughly 15 percent back. The values track reader.css line for line, so
+   a change there is easy to mirror. */
+html[lang="hi"] .canto-num { font-size: .86rem }
+html[lang="hi"] .speaker { font-size: .82rem }
+html[lang="hi"] .science h4 { font-size: .84rem }
+html[lang="hi"] .assume .a-head { font-size: .82rem }
+html[lang="hi"] .pred .p-title { font-size: .82rem }
+html[lang="hi"] .pred .tag { font-size: .72rem }
+html[lang="hi"] .conf { font-size: .82rem }
+html[lang="hi"] .reflect .r-label { font-size: .78rem }
+html[lang="hi"] .epigraph .attr { font-size: .82rem }
+html[lang="hi"] .movement .mlabel { font-size: .9rem }
+html[lang="hi"] #loader .lt { font-size: .8rem }
+html[lang="hi"] #cover .scrollcue { font-size: .82rem }
+html[lang="hi"] #cover .cover-copy { font-size: .72rem }
+html[lang="hi"] footer { font-size: .8rem }
+html[lang="hi"] footer .cite { font-size: .74rem }
+html[lang="hi"] .theme-toggle { font-size: .78rem }
+html[lang="hi"] .scene .rl { font-size: .72rem }
+html[lang="hi"] .scene .hint { font-size: .74rem }
+html[lang="hi"] .scene button.mini { font-size: .72rem }
+html[lang="hi"] .bead::after { font-size: .72rem }
+/* the source notes are mono .64rem, which is 10px: unreadable in Devanagari */
+html[lang="hi"] .foot-note { font-size: .76rem }
+
+/* labels sit on one line in Latin and wrap in Devanagari; give them room */
+html[lang="hi"] .speaker { margin-bottom: .3em; line-height: 1.6 }
+html[lang="hi"] .science h4 { line-height: 1.6; margin-bottom: .65em }
+html[lang="hi"] .assume .a-head { line-height: 1.7 }
+html[lang="hi"] .pred .p-title { line-height: 1.7 }
+html[lang="hi"] .reflect .r-label { line-height: 1.7; margin-bottom: 1em }
+html[lang="hi"] .epigraph .attr { line-height: 1.7 }
+
+/* the tag chip is a pill: uppercase and heavy tracking would burst it */
+html[lang="hi"] .pred .tag {
+  text-transform: none;
+  letter-spacing: .06em;
+  padding: .3em .75em;
+}
+
+/* ---------- KaTeX keeps its own Latin metrics ---------- */
+html[lang="hi"] .katex,
+html[lang="hi"] .eqi,
+html[lang="hi"] .eqblock {
+  font-family: KaTeX_Main, "Times New Roman", serif;
+  letter-spacing: normal;
+  line-height: 1.2;
+}
+
+/* ---------- print ---------- */
+@media print {
+  html[lang="hi"] .dlg,
+  html[lang="hi"] .science,
+  html[lang="hi"] .assume .a-body { line-height: 1.8 }
+}

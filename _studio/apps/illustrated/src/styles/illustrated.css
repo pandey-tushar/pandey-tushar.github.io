@@ -1,0 +1,529 @@
+/* The illustrated edition.
+
+   Art-led does not mean type-poor. In work like this the amateur is exposed by
+   the text, so the measure is held near sixty five characters, the hierarchy is
+   real, and nothing is set over art without a ground behind it. Colours come
+   from @qubit/tokens; this file adds no hues of its own.
+
+   The edition is night only. It is an astronomical plate in any theme, which is
+   the same rule the reader's scenes already follow. */
+
+:root {
+  --plate: 100svh;
+  --pad: clamp(1.1rem, 4vw, 3.4rem);
+  --col: 34rem;
+  --rule: 1px solid var(--line);
+}
+
+* { box-sizing: border-box; }
+
+html {
+  background: var(--void);
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(1rem, .55vw + .88rem, 1.12rem);
+  line-height: 1.72;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+.sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.skip {
+  position: fixed;
+  top: -4rem; left: 1rem;
+  z-index: 60;
+  padding: .6rem 1rem;
+  background: var(--void2);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: top .18s ease;
+}
+.skip:focus { top: 1rem; }
+
+:where(a):focus-visible,
+:where(button):focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* ---------- the pinned plate ---------- */
+
+.track {
+  position: relative;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: var(--plate);
+  z-index: 0;
+}
+
+.stage-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--void);
+}
+
+.stage-inner .poster,
+.stage-inner .live {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.stage-inner .live {
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.stage-inner .live.is-up { opacity: 1; }
+
+.beats {
+  position: relative;
+  z-index: 1;
+  margin-top: calc(var(--plate) * -1);
+}
+
+.beat {
+  min-height: var(--plate);
+  display: grid;
+  align-content: center;
+  padding: 10svh var(--pad);
+}
+
+.beat:nth-child(odd) { justify-items: start; }
+.beat:nth-child(even) { justify-items: end; }
+
+/* The ground under the text is a bloom, not a panel. It is painted by a child
+   larger than the column so the gradient reaches full transparency outside the
+   text box; put the gradient on the box itself and the box edge cuts it at
+   half opacity, which reads as a grey rectangle laid over the plate. */
+.column {
+  position: relative;
+  max-width: var(--col);
+  padding: clamp(1.3rem, 3vw, 2.4rem);
+  opacity: .18;
+  transform: translateY(1.1rem);
+  transition: opacity .55s ease, transform .55s ease;
+}
+
+.column::before {
+  content: '';
+  position: absolute;
+  inset: -12% -9%;
+  z-index: -1;
+  background:
+    radial-gradient(58% 54% at 50% 50%,
+      rgba(5, 6, 15, .95) 0%,
+      rgba(5, 6, 15, .92) 46%,
+      rgba(5, 6, 15, .62) 74%,
+      rgba(5, 6, 15, 0) 100%);
+}
+
+.column > * { position: relative; }
+
+.beat.is-lit .column {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- frontispiece ---------- */
+
+.front-track { min-height: var(--plate); }
+
+.front-type {
+  position: relative;
+  z-index: 1;
+  margin-top: calc(var(--plate) * -1);
+  min-height: var(--plate);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  padding: 0 var(--pad);
+}
+
+.front-type .kicker,
+.canto-head .movement,
+.turn .who,
+.rail .mark,
+.cue {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.front-type h1 {
+  margin: .6rem 0 0;
+  font-size: clamp(2.6rem, 8vw, 5.4rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+
+.front-type .sub {
+  margin: 1.1rem 0 0;
+  max-width: 30rem;
+  color: var(--dim);
+  font-style: italic;
+}
+
+.front-type .cue { margin-top: 3rem; color: var(--gold); }
+
+/* ---------- canto furniture ---------- */
+
+.canto { position: relative; }
+
+.movement-rule {
+  display: grid;
+  justify-items: center;
+  gap: .4rem;
+  padding: 7rem var(--pad) 3rem;
+  border-top: var(--rule);
+}
+.movement-rule .label {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.movement-rule .title {
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  font-style: italic;
+  color: var(--dim);
+}
+
+.canto-head { margin-bottom: 1.8rem; }
+
+.canto-head .numeral {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .34em;
+  color: var(--gold);
+}
+
+.canto-head h2 {
+  margin: .4rem 0 0;
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -.005em;
+}
+
+.epigraph {
+  margin: 1.4rem 0 0;
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--gold);
+}
+.epigraph p { margin: 0; font-style: italic; color: var(--dim); }
+.epigraph cite {
+  display: block;
+  margin-top: .5rem;
+  font-family: var(--mono);
+  font-size: .64rem;
+  font-style: normal;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.legend {
+  margin: 0;
+  padding: 1.4rem var(--pad) 0;
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  color: var(--dim);
+  text-align: center;
+}
+
+/* ---------- prose ---------- */
+
+.column p { margin: 0 0 1.05rem; }
+.column p:last-child { margin-bottom: 0; }
+
+.narr { color: var(--ink); }
+
+.turn { margin: 0 0 1.6rem; }
+.turn:last-child { margin-bottom: 0; }
+.turn .who { margin: 0 0 .35rem; }
+.turn.seeker .who { color: var(--cyan); }
+.turn.oracle .who { color: var(--gold); }
+.turn.oracle p:not(.who) { color: var(--ink); }
+.turn.seeker p:not(.who) { color: var(--dim); }
+
+.assume {
+  margin: 1.4rem 0;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(10, 12, 28, .5);
+}
+.assume .claim {
+  margin: 0 0 .6rem;
+  font-style: italic;
+  color: var(--rose);
+}
+.assume .counter { font-size: .94rem; color: var(--dim); }
+.assume .counter p { margin: 0 0 .7rem; }
+
+.reflect {
+  margin: 1.6rem 0 0;
+  padding: 1.1rem 0 0;
+  border-top: var(--rule);
+  font-style: italic;
+  font-size: 1.06em;
+  color: var(--gold);
+}
+
+/* ---------- apparatus ---------- */
+
+.apparatus {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 3.5rem var(--pad) 6rem;
+  display: grid;
+  gap: 1.6rem;
+  color: var(--dim);
+  font-size: .95rem;
+}
+
+.apparatus h3 {
+  margin: 0 0 .6rem;
+  font-family: var(--mono);
+  font-size: .66rem;
+  font-weight: 400;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.science,
+.pred,
+.note {
+  padding: 1.2rem 1.3rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(10, 12, 28, .42);
+}
+
+.science p { margin: 0 0 .8rem; }
+.science p:last-child { margin-bottom: 0; }
+
+.pred .tag {
+  margin: 0 0 .6rem;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: .66rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.pred .tag.likely { color: var(--gold); }
+.pred .tag.contested,
+.pred .tag.unlikely { color: var(--rose); }
+.pred .body { margin-top: .8rem; }
+.pred .body p { margin: 0 0 .7rem; }
+
+.note { font-size: .88rem; }
+
+.eqblock { display: block; margin: .9rem 0; overflow-x: auto; }
+.eqi { white-space: nowrap; }
+.katex { font-size: 1em; }
+
+/* ---------- rail ---------- */
+
+.rail {
+  position: fixed;
+  right: max(.7rem, env(safe-area-inset-right));
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: grid;
+  gap: 7px;
+}
+
+.rail .mark {
+  display: block;
+  width: 14px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--line);
+  transition: background .2s ease, width .2s ease;
+}
+.rail .mark.is-composed { background: rgba(244, 213, 141, .45); }
+.rail .mark.is-here { background: var(--gold); width: 22px; }
+
+/* ---------- footer ---------- */
+
+.foot {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 4rem var(--pad) 6rem;
+  border-top: var(--rule);
+  color: var(--dim);
+  font-size: .86rem;
+  text-align: center;
+}
+.foot .quiet { color: var(--line); font-family: var(--mono); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; }
+
+/* ---------- unstyled cantos ---------- */
+
+.canto[data-unstyled] .beats { margin-top: 0; }
+.canto[data-unstyled] .beat { min-height: 0; padding: 2.4rem var(--pad); }
+.canto[data-unstyled] .beat:nth-child(even) { justify-items: start; }
+.canto[data-unstyled] .column {
+  background: none;
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 1;
+  transform: none;
+  max-width: 38rem;
+}
+.canto[data-unstyled] .track { max-width: 44rem; margin: 0 auto; }
+
+/* ---------- mobile ---------- */
+
+/* ---------- mobile ----------
+
+   Text over art is a desktop idea. At 375 pixels a paragraph of this measure
+   fills the screen, the scrim goes opaque edge to edge, and the plate is gone:
+   the art is paying its whole cost and delivering nothing. So the phone gets a
+   different composition rather than a squeezed one. The plate becomes a band
+   pinned to the top of the viewport and the text reads in a normal column
+   underneath it. Same scene, same scroll progress, same choreography; the
+   artwork stays visible for the whole canto instead of being covered by it. */
+
+@media (max-width: 720px) {
+  :root { --col: 100%; }
+
+  .stage {
+    height: 44svh;
+    z-index: 2;
+  }
+  .stage-inner {
+    border-bottom: 1px solid var(--line);
+  }
+  /* text passes under the pinned band, so it has to fade rather than be
+     guillotined by the band's edge */
+  .stage::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 2.6rem;
+    pointer-events: none;
+    background: linear-gradient(180deg, var(--void) 0%, rgba(5, 6, 15, 0) 100%);
+  }
+  .beats {
+    margin-top: 0;
+  }
+  .beat {
+    min-height: 56svh;
+    padding: 3svh var(--pad) 5svh;
+    justify-items: stretch !important;
+    align-content: start;
+  }
+  .column {
+    max-width: none;
+    padding: 0;
+  }
+  .column::before { display: none; }
+
+  .front-track { min-height: 100svh; }
+  /* the frontispiece is the one place text over art is still wanted, so it
+     keeps the overlay the beats give up. The band above is raised to z-index 2
+     so canto text passes under it, which would bury the title as well unless
+     the cover type is lifted over the band in turn. */
+  .front-type { margin-top: -44svh; min-height: 44svh; z-index: 3; }
+
+  .rail { display: none; }
+  .apparatus { padding-bottom: 4rem; }
+  .science, .pred, .note { padding: 1rem; }
+  .legend { padding-top: 1rem; }
+}
+
+/* ---------- the still edition ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .stage { position: static; height: auto; }
+  .stage-inner { aspect-ratio: 8 / 5; height: auto; }
+  .stage-inner .poster { object-fit: contain; }
+  .stage-inner .live { display: none; }
+  .beats, .front-type { margin-top: 0; }
+  .front-type { min-height: 0; padding-top: 3rem; padding-bottom: 3rem; }
+  .front-track { min-height: 0; }
+  .beat {
+    min-height: 0;
+    padding: 1.8rem var(--pad);
+    justify-items: stretch;
+  }
+  .column {
+    background: none;
+    max-width: 38rem;
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+    opacity: 1;
+    transform: none;
+  }
+  .track { max-width: 62rem; margin: 0 auto; }
+}
+
+html[data-motion="reduce"] .stage { position: static; height: auto; }
+html[data-motion="reduce"] .stage-inner { aspect-ratio: 8 / 5; height: auto; }
+html[data-motion="reduce"] .stage-inner .poster { object-fit: contain; }
+html[data-motion="reduce"] .beats,
+html[data-motion="reduce"] .front-type { margin-top: 0; }
+html[data-motion="reduce"] .front-type,
+html[data-motion="reduce"] .front-track { min-height: 0; }
+html[data-motion="reduce"] .front-type { padding: 3rem var(--pad); }
+html[data-motion="reduce"] .beat {
+  min-height: 0;
+  padding: 1.8rem var(--pad);
+  justify-items: stretch;
+}
+html[data-motion="reduce"] .column {
+  background: none;
+  max-width: 38rem;
+  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
+  opacity: 1;
+  transform: none;
+}
+html[data-motion="reduce"] .track { max-width: 62rem; margin: 0 auto; }

@@ -1,0 +1,11 @@
+/* Reader overrides of KaTeX. Loaded by @qubit/reader/math immediately after
+   katex.min.css, so the pair keeps the order it had when the reader imported
+   both. Editions with no equations import neither and ship none of the sixty
+   KaTeX font files. Layout of .eqblock/.eqi/.eqtrail themselves stays in
+   reader.css, since those are the reader's own wrappers and exist whether or
+   not KaTeX is present. */
+.eqblock .katex-display { margin: .3em 0 }
+.eqblock .katex { color: var(--gold); font-size: 1.15em }
+.eqi .katex { color: var(--gold) }
+.assume .eqi .katex, .pred .eqi .katex { color: var(--gold) }
+.katex { line-height: 1.2 }

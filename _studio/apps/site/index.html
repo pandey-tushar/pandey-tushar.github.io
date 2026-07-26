@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>/* theme before first paint, and drop no-js so nothing stays hidden */
+try{var t=localStorage.getItem('qd-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){}
+document.documentElement.classList.remove('no-js');</script>
+<!-- Google Analytics (GA4). Same property, same config call. gtag.js is 470KB
+     and the queue in dataLayer is what the tag replays, so the library waits
+     until the page has painted and the main thread is idle. -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DVPGC1C44Z');
+  addEventListener('load', function () {
+    var load = function () {
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z';
+      document.head.appendChild(s);
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 3000 });
+    else setTimeout(load, 1200);
+  });
+</script>
+<!--head-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23070a14'/%3E%3Ccircle cx='50' cy='50' r='26' fill='none' stroke='%2352d6e6' stroke-width='7'/%3E%3Ccircle cx='50' cy='50' r='26' fill='none' stroke='%239b7bff' stroke-width='7' stroke-dasharray='34 130' stroke-dashoffset='-10'/%3E%3C/svg%3E" />
+<link rel="alternate" type="application/rss+xml" title="Tushar Pandey · Notes" href="/feed.xml" />
+<link rel="preload" as="image" href="/hero-poster.svg" media="(min-width: 900px)" fetchpriority="high" />
+<link rel="preload" as="image" href="/hero-poster-narrow.svg" media="(max-width: 899px)" fetchpriority="high" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- the font sheet already asks for display=swap, so it does not need to block
+     the first paint as well; the poster and the copy land before it arrives -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" /></noscript>
+</head>
+<body>
+<!--sections-->
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

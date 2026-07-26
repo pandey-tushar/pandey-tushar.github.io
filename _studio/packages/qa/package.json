@@ -1,0 +1,20 @@
+{
+  "name": "@qubit/qa",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:report": "playwright show-report",
+    "census": "tsx src/census.ts",
+    "census:check": "tsx src/census.ts --check",
+    "census:bless": "tsx src/census.ts --bless",
+    "parity": "tsx src/parity.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.48.2",
+    "axe-core": "^4.10.2",
+    "tsx": "^4.19.2"
+  }
+}

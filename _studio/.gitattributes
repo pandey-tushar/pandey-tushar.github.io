@@ -1,0 +1,16 @@
+# Store text as LF and check it out as LF on every platform. Without this,
+# a Windows clone rewrites every file to CRLF and the content gates, which
+# compare prose byte for byte against the shipped edition, see a diff that is
+# not there.
+* text=auto eol=lf
+
+# Binary, never touched
+*.webp binary
+*.png binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.pdf binary
+
+# The lockfile is generated; keep it out of diff noise
+package-lock.json -diff

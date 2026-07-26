@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    /* apps/site imports its own Vite plugin modules with the .ts extension */
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "types": ["vite/client", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@qubit/tokens": ["packages/tokens/src/index.ts"],
+      "@qubit/tokens/*": ["packages/tokens/*"],
+      "@qubit/reader": ["packages/reader/src/index.ts"],
+      "@qubit/reader/scenes": ["packages/reader/src/scenes/index.ts"],
+      "@qubit/reader/math": ["packages/reader/src/math.ts"],
+      "@qubit/reader/*": ["packages/reader/*"],
+      "@qubit/motifs": ["packages/motifs/src/index.ts"],
+      "@qubit/motifs/*": ["packages/motifs/*"],
+      "@qubit/content": ["content/index.ts"],
+      "@qubit/content/*": ["content/*"]
+    }
+  },
+  "include": [
+    "packages/tokens/src",
+    "packages/reader/src",
+    "packages/motifs/src",
+    "packages/qa/src",
+    "packages/qa/tests",
+    "packages/qa/playwright.config.ts",
+    "content",
+    "apps/book/src",
+    "apps/book/vite.config.ts",
+    "apps/site/src",
+    "apps/site/vite",
+    "apps/site/tests",
+    "apps/site/vite.config.ts",
+    "apps/site/playwright.config.ts",
+    "apps/illustrated/src",
+    "apps/illustrated/vite.config.ts",
+    "apps/hindi/src",
+    "apps/hindi/vite.config.ts",
+    "apps/unpolarized/src",
+    "apps/unpolarized/vite.config.ts"
+  ],
+  "exclude": ["**/node_modules", "**/dist", "**/test-results"]
+}

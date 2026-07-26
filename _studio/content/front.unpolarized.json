@@ -1,0 +1,59 @@
+{
+  "loader": {
+    "glyph": "◫",
+    "label": "TURNING THE GLASS"
+  },
+  "cover": {
+    "glyph": "◫",
+    "title": "An Unpolarized Life",
+    "sub": "A BOOK OF QUESTIONS",
+    "scrollcue": "SCROLL TO BEGIN ▾",
+    "copy": "© 2026 TUSHAR PANDEY"
+  },
+  "invocation": {
+    "label": "Before",
+    "title": "Before Anything Is Asked",
+    "epigraph": {
+      "text": "A filter does not lie to you. It shows you everything that got through, and nothing whatever about what did not.",
+      "attr": "FROM THE LONG WATCH"
+    },
+    "paras": [
+      "There is an old shape for a hard conversation. One person arrives at the end of what they can work out alone. Another sits with them and does not tell them to be brave. They talk for a long time. By morning the problem has not moved an inch, and the person can stand next to it.",
+      "This book borrows that shape. A Seeker drives to a house at the end of a road, carrying a question they have to answer by Friday. Across the table sits the Oracle, who has watched people for a long time and has stopped being surprised by them. The Oracle does not comfort cheaply and does not pretend the week is longer than it is.",
+      "One object sits between them. A polarizing filter is a square of dark glass that admits light of a single orientation and turns away the rest. What comes through looks whole. It looks like all the light there ever was, and that is the entire trouble with it. Every chapter here is a question held up to that glass.",
+      "A caution, stated once so nobody has to keep restating it. Nothing in these pages claims that physics runs a human life. The filter is a picture. Held up to a decision you have been avoiding, it is a way of looking and it goes no further than that. Where the picture gets strong enough to be mistaken for a mechanism, the Oracle says so out loud, in the chapter, at the time."
+    ],
+    "reflect": {
+      "label": "Before You Begin",
+      "text": "What question are you being asked to close this week, and who set the date?"
+    }
+  },
+  "appendix": {
+    "label": "Afterword",
+    "title": "On the Pictures in This Book",
+    "intro": "Every image in this book is an image. A filter admits one orientation of light and turns away the rest; that is ordinary optics, and you can buy the glass for the price of a sandwich. Nothing here argues that the physics of very small things is at work inside a human decision. Where a picture came close to being read as a mechanism, the Oracle marks the edge inside the chapter rather than down here in a note. There are no citations, because there are no claims that need them."
+  },
+  "footer": {
+    "mark": "◫",
+    "lines": [
+      "AN UNPOLARIZED LIFE · A BOOK OF QUESTIONS",
+      "A conversation between the Seeker and the Oracle, over one night",
+      "The filter is a picture. Nothing in this book runs on physics."
+    ],
+    "cite": [
+      "Readable in a sitting. Answerable in your own time.",
+      "© 2026 Tushar Pandey · All rights reserved"
+    ]
+  },
+  "theme": {
+    "toLight": "More light, then.",
+    "toDark": "Turn it down."
+  },
+  "labels": {
+    "canto": "Chapter {n} of {total}",
+    "appendixCanto": "CHAPTER {n} · {title}",
+    "bead": "Chapter {n}: {title}",
+    "rail": "Chapters",
+    "reflect": "A Question For You"
+  }
+}

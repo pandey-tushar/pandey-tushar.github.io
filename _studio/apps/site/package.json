@@ -1,0 +1,29 @@
+{
+  "name": "@qubit/site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "poster": "tsx scripts/poster.mjs",
+    "dev": "npm run poster && vite",
+    "build": "npm run poster && vite build && tsx scripts/og.mjs",
+    "preview": "vite preview",
+    "serve": "node scripts/serve.mjs",
+    "parity": "node scripts/parity.mjs",
+    "lighthouse": "node scripts/lighthouse.mjs",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "@qubit/tokens": "*",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.62.0",
+    "@types/three": "^0.169.0",
+    "axe-core": "^4.10.2",
+    "lighthouse": "^12.8.2",
+    "tsx": "^4.19.2",
+    "vite": "^8.1.5"
+  }
+}
