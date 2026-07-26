@@ -15,7 +15,7 @@ const EDITIONS = {
   unpolarized: { dir: 'apps/unpolarized/dist', file: 'an-unpolarized-life.pdf', port: 4311 },
   /* the Hindi edition is not published, so its PDF stays inside _studio,
      which Jekyll never copies into the built site */
-  hindi:       { dir: 'apps/hindi/dist', file: '_studio/qubit-dialogues-hindi.pdf', port: 4312 },
+  hindi:       { dir: 'apps/hindi-unpolarized/dist', file: '_studio/aadha-ujala-hindi.pdf', port: 4312 },
   illustrated: { dir: 'apps/illustrated/dist', file: 'illustrated.pdf', port: 4313 },
   book:        { dir: 'apps/book/dist',        file: 'qubit-dialogues.pdf', port: 4314 },
 };
@@ -41,11 +41,6 @@ const PRINT_TEXT = [
     in: ['book'],
     find: 'Read slowly. Drag the spheres, break the lattice, take the lock apart.',
     replace: 'Read slowly.',
-  },
-  {
-    in: ['hindi'],
-    find: 'धीरे पढ़िए। गोलों को खींचिए, जालक को तोड़िए, ताले को खोलकर देखिए।',
-    replace: 'धीरे पढ़िए।',
   },
   {
     /* The sentences on either side describe what each kind of error does to
