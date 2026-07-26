@@ -207,17 +207,13 @@ h1 .sur{display:block;color:#cfcbf0}
 .figbox{position:relative;flex:1 1 auto;min-height:0}
 /* The plate is on a spindle now, so it takes a grab. pan-y hands a vertical
    swipe straight back to the document, so a thumb landing on the engraving
-   can still read on; a sideways pull is the plate's own and the page never
-   moves under it. */
-#plate{
-  position:absolute;inset:0;width:100%;height:100%;display:block;
-  touch-action:pan-y;cursor:grab;
-  -webkit-user-select:none;user-select:none;
-}
-.figbox.grabbing #plate{cursor:grabbing}
-/* the marginal instruction, struck the first time a hand arrives */
+   can still read on; a sideways pull is the plate's own. */
+#plate{position:absolute;inset:0;width:100%;height:100%;display:block;
+  touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none}
+.plate.grabbing #plate{cursor:grabbing}
+/* the marginal instruction, inside the engraved rule, struck on first touch */
 .hint{
-  position:absolute;left:20px;bottom:13px;z-index:1;pointer-events:none;
+  position:absolute;left:calc(3.3% + 14px);bottom:calc(3.3% + 15px);pointer-events:none;
   font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;
   color:var(--dim);opacity:.62;transition:opacity .5s ease;
 }
@@ -1364,32 +1360,29 @@ var T1 = 0, T2 = 0, T3 = 0, TR = 0, D1 = 1, D2 = 1, D3 = 1;
 var YAW0 = -0.13, PITCH0 = 0.17;
 
 /* ---------- the spindle ----------
-   The morph owns which form is on the copper; the hand owns where the reader
-   stands to look at it. The two are independent, so they compose without
-   argument: scroll picks the curve, the drag picks the angle, and a plate
-   transition never takes the reader's angle away from them. The offset
-   persists. The idle breath and the pointer parallax are dropped the moment
-   a hand arrives and eased back in around wherever the plate was left. */
+   The morph owns which form is on the copper; the hand owns the angle it is
+   read from. Being independent they compose without argument, and a plate
+   transition never takes the reader's angle away. The offset persists; breath
+   and parallax drop the moment a hand arrives and ease back in around
+   wherever the plate was left. */
 var uYaw = 0, uPit = 0, vYaw = 0, vPit = 0;
-var grab = 0, gid = -1, gx = 0, gy = 0;
-var idleG = 1, quietAt = 0, live = 0, held = 0, ptv = 0;
-/* bounded short of edge on: plate IV is a circle already lying at 0.70 off
-   the page, and it has to stay an ellipse rather than a line */
-var TLO = -0.62, THI = 0.26;
-var YPX = 0.0080, TPX = 0.0035;    /* radians per pixel of drag */
+var grab = 0, lock = 0, gid = -1, gx = 0, gy = 0;
+var idleG = 1, quietAt = 0, live = 0, ptv = 0;
+var TLO = -0.62, THI = 0.26;       /* short of edge on: plate IV lies at .70 */
+var YPX = 0.0080, TPX = 0.0035;    /* radians per pixel */
 var FREE = 0.020, STOP = 0.00035;  /* radians per frame */
-var AHINT = " Interactive: drag it, or press the arrow keys, to turn the plate.";
+var AHINT = " Interactive: drag, or use the arrow keys, to turn it.";
 
-/* Velocity is read over a window of pointer samples, not per frame. Pointer
-   events and frames do not line up, so a per frame delta reads zero on any
-   frame the pointer happened not to move, and that kills every throw. */
+/* Velocity comes from a window of pointer samples, not per frame: events and
+   frames do not line up, so a per frame delta reads zero on any frame the
+   pointer stood still, and that kills the throw. */
 var smp = [];
 function sample(){
   var t = performance.now();
   smp.push(t, uYaw, uPit);
   while (smp.length > 6 && t - smp[0] > 140) smp.splice(0,3);
 }
-function cap(v,m){ return v < -m ? -m : v > m ? m : v; }
+function clv(v,m){ return v < -m ? -m : v > m ? m : v; }
 function toss(){
   vYaw = 0; vPit = 0;
   if (smp.length < 6) return;
@@ -1397,20 +1390,17 @@ function toss(){
   /* held still before letting go means settle here, not fly */
   if (performance.now() - smp[n-3] > 90 || dur < 8) return;
   var k = 16.667/dur;
-  /* ceiling set so the hardest flick carries about one turn, never a blur */
-  vYaw = cap((smp[n-2]-smp[1])*k, .10);
-  vPit = cap((smp[n-1]-smp[2])*k, .05);
+  vYaw = clv((smp[n-2]-smp[1])*k, .10);
+  vPit = clv((smp[n-1]-smp[2])*k, .05);
 }
 
-/* One law for both axes. Above the free threshold the plate is on its
-   bearings and the friction is light, so a hard flick runs a couple of
-   seconds; below it the damping goes heavy and the plate arrives and stops
-   rather than creeping. There is no detent to spring to, so a slow drag stays
-   exactly where it was let go, which is most of what makes it read as an
-   instrument and not as a control that snaps back. */
+/* One law for both axes. Above the free threshold it is on its bearings, the
+   friction is light and a flick runs a couple of seconds; below it the damping
+   goes heavy and it stops rather than creeping. No detent to spring to, so a
+   slow drag stays where it was let go. */
 function decay(v,st){
   var w = 1 - (v<0?-v:v)/FREE; w = w<0?0:w>1?1:w;
-  v *= Math.pow(.988 - .055*w, st);
+  v *= Math.pow(.986 - .053*w, st);
   return (v > -STOP && v < STOP) ? 0 : v;
 }
 function spin(now, st){
@@ -1419,25 +1409,26 @@ function spin(now, st){
     uYaw += vYaw*st; uPit += vPit*st;
     if (uPit < TLO){ uPit = TLO; vPit = 0; }
     else if (uPit > THI){ uPit = THI; vPit = 0; }
-    /* it is an angle, so it never needs to grow without bound */
     if (uYaw > TAU) uYaw -= TAU; else if (uYaw < -TAU) uYaw += TAU;
   }
   var busy = grab || vYaw !== 0 || vPit !== 0;
   if (busy) quietAt = now;
+  /* dropped at once, back over several seconds, slower than its own swing, so
+     a resume never reads as a drift off the angle the reader chose */
   var want = now - quietAt > 820 ? 1 : 0;
-  idleG += (want - idleG) * (want ? .030 : .24) * st;
-  live = busy || idleG - want > .003 || want - idleG > .003;
+  idleG += (want - idleG) * (want ? .008 : .24) * st;
+  live = busy;
 }
 
-var figbox = fig.querySelector(".figbox");
 var hintEl = fig.querySelector(".hint");
-function hush(){ if (!held){ held = 1; hintEl.className = "hint off"; } }
+function hush(){ hintEl.className = "hint off"; }
 
 cv.addEventListener("pointerdown", function(ev){
   if (ev.button > 0) return;
   grab = 1; gid = ev.pointerId;
+  lock = ev.pointerType === "mouse" ? 1 : 0;
   try { cv.setPointerCapture(gid); } catch(e1){}
-  figbox.classList.add("grabbing");
+  fig.classList.add("grabbing");
   vYaw = 0; vPit = 0;
   gx = ev.clientX; gy = ev.clientY;
   smp.length = 0; sample();
@@ -1446,8 +1437,17 @@ cv.addEventListener("pointerdown", function(ev){
 });
 cv.addEventListener("pointermove", function(ev){
   if (!grab) return;
-  uYaw += (ev.clientX - gx)*YPX;
-  uPit += (ev.clientY - gy)*TPX;
+  var dx = ev.clientX - gx, dy = ev.clientY - gy;
+  /* pan-y gives the document every upright swipe, so a touch is the plate's
+     only once it is plainly sideways, and handed back unturned otherwise */
+  if (!lock){
+    var ax = dx<0?-dx:dx, ay = dy<0?-dy:dy;
+    if (ax + ay < 7) return;
+    if (ay > ax){ letgo(); return; }
+    lock = 1; gx = ev.clientX; gy = ev.clientY; smp.length = 0; sample(); return;
+  }
+  uYaw += dx*YPX;
+  uPit += dy*TPX;
   if (uPit < TLO) uPit = TLO; else if (uPit > THI) uPit = THI;
   gx = ev.clientX; gy = ev.clientY;
   sample();
@@ -1457,9 +1457,8 @@ cv.addEventListener("pointermove", function(ev){
 function letgo(){
   if (!grab) return;
   grab = 0;
-  figbox.classList.remove("grabbing");
-  /* reduced motion gets no momentum: it stops dead where the hand left it */
-  if (reduce.matches){ vYaw = 0; vPit = 0; } else toss();
+  fig.classList.remove("grabbing");
+  if (reduce.matches){ vYaw = 0; vPit = 0; } else toss();   /* no momentum there */
   try { cv.releasePointerCapture(gid); } catch(e2){}
 }
 cv.addEventListener("pointerup", letgo);
@@ -1475,8 +1474,7 @@ cv.addEventListener("keydown", function(ev){
   else if (k === "Home"){ uYaw = 0; uPit = 0; }
   else return;
   if (uPit < TLO) uPit = TLO; else if (uPit > THI) uPit = THI;
-  /* the keys are a graduated screw, not a throw: one step, then still */
-  vYaw = 0; vPit = 0;
+  vYaw = 0; vPit = 0;   /* a screw, not a throw: one step, then still */
   quietAt = performance.now();
   hush(); ev.preventDefault();
   if (reduce.matches) paint();
@@ -1602,8 +1600,7 @@ function still(){
   if (p !== lastP){ lastP = p; caption(p); size(); render(YAW0 + uYaw, PITCH0 + uPit, p); }
   fig.classList.add("on");
 }
-/* Reduced motion has no loop to draw on, so a hand on the plate is given one
-   frame per move, and nothing at all moves on its own. */
+/* reduced motion has no loop: one frame per move, nothing of its own */
 var pq = 0;
 function paint(){
   if (pq) return; pq = 1;
@@ -1626,8 +1623,7 @@ function loop(now){
   ptv = now;
   spin(now, st);
   var moving = Math.abs(p - lastP) > .0004;
-  /* a hand on the plate, or a throw still running, gets every frame; the
-     breathing alone is content with half */
+  /* a hand or a throw gets every frame; the breath is content with half */
   if (!moving && !live && now - last < 32){ raf = requestAnimationFrame(loop); return; }
   last = now; lastP = p;
   if (!t0) t0 = now;
@@ -1684,6 +1680,7 @@ if (reduce.matches){
   });
   if (matchMedia("(pointer:fine)").matches){
     window.addEventListener("pointermove", function(ev){
+      if (grab) return;   /* a hand on the plate is not a hand passing it */
       pxT = (ev.clientX / window.innerWidth) * 2 - 1;
       pyT = (ev.clientY / window.innerHeight) * 2 - 1;
     }, { passive:true });
