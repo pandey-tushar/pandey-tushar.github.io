@@ -49,7 +49,9 @@
     "apps/hindi/src",
     "apps/hindi/vite.config.ts",
     "apps/unpolarized/src",
-    "apps/unpolarized/vite.config.ts"
+    "apps/unpolarized/vite.config.ts",
+    "apps/hindi-unpolarized/src",
+    "apps/hindi-unpolarized/vite.config.ts"
   ],
   "exclude": ["**/node_modules", "**/dist", "**/test-results"]
 }

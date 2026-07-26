@@ -12,7 +12,7 @@ under test.
 | Website | `@qubit/site` | 5174 | 4174 |
 | Illustrated edition | `@qubit/illustrated` | 5175 | 4175 |
 | An Unpolarized Life | `@qubit/unpolarized` | 5176 | 4176 |
-| Hindi edition | `@qubit/hindi` | 5177 | 4177 |
+| आधा उजाला (Hindi, An Unpolarized Life) | `@qubit/hindi-unpolarized` | 5178 | 4178 |
 
 Test servers, which are separate processes started by a test runner and must
 not collide with a preview server a person left running:
@@ -21,7 +21,7 @@ not collide with a preview server a person left running:
 |---|---|---|
 | `packages/qa` book suite | 4173 | `packages/qa/playwright.config.ts` |
 | `packages/qa` unpolarized suite | 4176 | `packages/qa/playwright.config.ts` |
-| `packages/qa` hindi suite | 4177 | `packages/qa/playwright.config.ts` |
+| `packages/qa` hindi-unpolarized suite | 4178 | not yet written; reserved |
 | `apps/site` Playwright suite | 4319 | `apps/site/playwright.config.ts`, override with `SITE_TEST_PORT` |
 | `apps/site` Lighthouse | 4320 | `apps/site/scripts/lighthouse.mjs` |
 | `apps/illustrated` gate runners | ephemeral | `apps/illustrated/tools/serve.mjs` picks a free port |
@@ -30,4 +30,4 @@ The QA harness builds each app before it previews it, and every `webServer`
 entry sets `reuseExistingServer: false` and `--strictPort`, so a run either
 tests the build it just made or fails loudly.
 
-Adding an app: take the next free pair (5178/4178) and add a row here.
+Adding an app: take the next free pair (5179/4179) and add a row here.

@@ -1,5 +1,5 @@
 {
-  "name": "@qubit/hindi",
+  "name": "@qubit/hindi-unpolarized",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -8,9 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "glossary": "node scripts/glossary-check.mjs",
     "parity": "node scripts/parity-check.mjs",
-    "check": "node scripts/glossary-check.mjs && node scripts/parity-check.mjs"
+    "check": "node scripts/parity-check.mjs"
   },
   "dependencies": {
     "@qubit/content": "*",

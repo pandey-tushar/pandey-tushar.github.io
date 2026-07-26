@@ -5,8 +5,9 @@ import { validateBook, validateFront, SchemaError, BLOCK_TYPES } from './schema.
 
 const here = import.meta.dirname;
 const SKIP = new Set(['package.json', 'package-lock.json', 'tsconfig.json']);
-const editions = readdirSync(here).filter((f) => /^[a-z]+\.json$/.test(f) && !SKIP.has(f));
-const fronts = readdirSync(here).filter((f) => /^front\.[a-z]+\.json$/.test(f));
+/* hyphens are allowed so that a two-word edition id (hi-unpolarized) is found */
+const editions = readdirSync(here).filter((f) => /^[a-z][a-z-]*\.json$/.test(f) && !SKIP.has(f));
+const fronts = readdirSync(here).filter((f) => /^front\.[a-z][a-z-]*\.json$/.test(f));
 
 let failed = false;
 

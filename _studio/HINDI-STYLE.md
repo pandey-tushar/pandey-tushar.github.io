@@ -252,3 +252,186 @@ Spec 03 names these and they still stand, owner Tushar:
 - one native reader who has not seen the English
 
 Places to look first are listed in the report accompanying this pass.
+
+---
+
+# आधा उजाला: the Hindi edition of An Unpolarized Life
+
+Everything above was settled for **क्वांटम संवाद**, the Hindi edition of The
+Qubit Dialogues. This section covers the second Hindi edition,
+`apps/hindi-unpolarized`, and records only what differs. Where it is silent, the
+rules above apply.
+
+The register decisions carry over intact and are not re-argued: modern literary
+Hindi reaching for tatsam at moments of weight, जिज्ञासु and द्रष्टा, both
+speakers saying तुम while the reader is addressed as आप, Latin digits for
+figures and Devanagari digits for chapter numbers only.
+
+**What does not carry over is the method.** The first edition was rejected by a
+native reader with the words *too literal a translation, it loses the meaning*.
+This edition was composed forward from what each passage means and does, and the
+English was consulted afterwards to confirm nothing had gone missing, never to
+shape a sentence. Any line here that can be back-mapped clause for clause onto
+the English is a defect, not a success.
+
+## 13. Title
+
+**आधा उजाला**, with the sub प्रश्नों की एक पुस्तक.
+
+The English title does two things at once. *Unpolarized* carries the optical
+thesis, and it also carries the ordinary sense of not being forced into one of
+two camps, which is exactly chapter one: yes or no, by Friday. A Hindi title
+should carry both. Weighed:
+
+- **अध्रुवित जीवन** is the literal term, the one NCERT optics uses
+  (अध्रुवित प्रकाश). It is a physics word on a cover, which is the mistake
+  क्यूबिट संवाद was rejected for. It also drags ध्रुवीकरण behind it, which in
+  Hindi means communal and political polarisation and very little else, so the
+  cover would promise a different book.
+- The ordinary-sense route is a trap in Hindi in a way it is not in English.
+  The ready-made words for an unpolarised person are निष्पक्ष and तटस्थ, both
+  meaning *neutral*, and chapter one spends a paragraph destroying exactly that
+  pose: *यह खेत में खड़ा वह आदमी है जो अपने खुले दिमाग़ को निहार रहा है*. A title
+  the book argues against is not available.
+- **अनछना जीवन** (unsifted) has the right morphology, अन- on the participle of
+  the filtering verb, and छानना is the most domestic verb in the language. But
+  अनछना आटा is coarse flour, so the adjective reads as *unrefined*, which
+  inverts the title.
+- **बिना काँच के** (Without the Glass) keeps the negation and the object, and is
+  closest to spec 04's *Without a Polarizer*. काँच alone is ambiguous before
+  chapter one has been read.
+
+**आधा उजाला** is the committed choice. It is optically exact rather than
+approximate: a polarizer passes about half of unpolarised light, and the book
+states that twice in its own words. It asks no physics of the reader, and it has
+no political echo and no devotional echo. It is also seeded in the text, so it
+earns itself by the second chapter: *आधा उजाला जा चुका।*
+
+The cost, stated plainly so it can be overruled: it names the polarized life
+rather than the unpolarized one, so the *un-* of the English is gone. That is
+defensible for this book, whose closing position is that nobody gets a better
+filter, only the knowledge that they are holding one. But it is the owner's call.
+Fallbacks in order: बिना काँच के, जो काँच ने लौटा दिया, अध्रुवित जीवन.
+
+**Ratify before anything is published**, as with the other edition.
+
+## 14. काँच carries the whole metaphor
+
+The English alternates two words: *the glass* for the object on the table, and
+*a filter* for the category. Hindi has no neutral everyday noun for an optical
+filter. छन्नी is a tea strainer and makes the sentence comic; फ़िल्टर is a water
+purifier before it is anything else, and either would be the one imported term
+in a book whose premise is that it needs none.
+
+So the Hindi collapses both words into **काँच** and lets the object carry the
+metaphor throughout. *That is a filter* becomes **वह भी यही काँच है**, and *you
+have been handed a filter and asked to agree that it is a window* becomes
+**तुम्हारे हाथ में काँच थमाया गया है और कहा गया है कि इसे खिड़की मानो**, where
+काँच against खिड़की is a sharper native pair than glass against window.
+
+Two supporting terms, both chosen to stay out of the physics register:
+
+- **रुख़** for *orientation*. The everyday word for which way a thing faces
+  (हवा का रुख़). *This glass admits one orientation* becomes
+  **यह काँच एक ही रुख़ भीतर आने देता है**, which is speech, not optics.
+- **कोण** for *angle*, the school word, correct in both the geometric and the
+  ordinary sense, so the epigraphs about angle stay exact.
+
+**साबुत** is reserved the way कला is reserved in the other edition. It carries
+the book's central illusion, *it looks whole*, and appears only in that sense:
+साबुत दिखता है, साबुत लगेगा, वह साबुत लगी.
+
+## 15. Structure: पहर, not पर्व
+
+The other edition uses पर्व containing सर्ग, correct for a mahakavya-shaped book
+of twenty-two cantos. This one is twelve chapters over a single night, and that
+machinery would be pompous on it. Its parts are **अध्याय**, plainly, and its
+three movements are **पहर**, the watch of the night, which HINDI-STYLE already
+carries as the native unit for these hours.
+
+| English | Hindi |
+|---|---|
+| MOVEMENT I / The Turning | पहर एक / मोड़ |
+| MOVEMENT II / The Cost of Looking | पहर दो / देखने की क़ीमत |
+| MOVEMENT III / What Comes Through | पहर तीन / जो पार आता है |
+
+पहर does work the English movement numbers cannot. The chapters track real
+hours, from a sun still well up to first grey light, and the three watches put
+the reader inside them. मोड़ carries both the turning of the glass and the
+ordinary ज़िंदगी का मोड़.
+
+**FROM THE LONG WATCH**, the epigraph attribution on all twelve chapters,
+becomes **लंबे पहर से**, tying the invented source to the same unit.
+
+## 16. Substituted images
+
+Spec 04, and the owner's instruction during this pass: where a native image
+lands harder, use it and record it.
+
+| English | Hindi | Why |
+|---|---|---|
+| bread and a heel of cheese | रोटी और अचार | The scene needs food set down without ceremony. Cheese is not that in Hindi. रोटी और अचार is, and it suits a house above a valley. Chapter five's later *cut more bread* becomes और रोटी तोड़ी. |
+| for the price of a sandwich | समोसे के दाम में | The same move, in the afterword. The point is only that the glass is trivially cheap. |
+| No spreadsheet shifts | किसी बही में कुछ नहीं बदलता | बही is the native account book and older than the thing it stands for, which suits an Oracle who has watched a long time. |
+| A fact is lighter. A fact does not grow. | पक्की बात हल्की होती है। वह बढ़ती नहीं। | तथ्य is a written word. पक्की बात is what a person says at two in the morning, and it keeps the flatness of the English. |
+| A correlation is not contact. | एक जैसा निकल आना और बात हो जाना, ये दो चीज़ें हैं। | सहसंबंध would import exactly the jargon this book refuses. The Hindi states the distinction as two ordinary things instead of naming a technical one. |
+| a consolation prize | ढाढ़स | The Hindi noun for comfort offered in place of what was wanted. No prize needed. |
+| This is not a séance. | यह भूत बुलाने की बैठक नहीं है। | प्रेतसभा is archaic and would sound composed. This is what a person would actually say. |
+| Watch who is willing to be embarrassed. | देखते रहो कि भद्द पिटवाने को कौन तैयार है। | भद्द पिटना is public embarrassment with a bite that शर्मिंदगी does not have. |
+| one man with one bucket running between four fires | एक बाल्टी लेकर चार आग के बीच दौड़ता एक आदमी, और नाम दे रखा है दमकल | Verb-final image, then a flat tail. That is how the joke lands in Hindi. |
+| the residue | बचा-खुचा | Used at both places the English uses *residue*, so the chapter four and chapter eight echo survives. |
+| made out of some material that resists duplication | किसी और ही मिट्टी के बने होते | माल reads as merchandise. मिट्टी is what a person is made of in Hindi, and the chapter's flat reply, *तुम आम मिट्टी के बने हो*, lands where *the usual material* does not. |
+| wide question / narrow question | चौड़ा प्रश्न / सँकरा प्रश्न | Kept literal on purpose. The filter admits or turns away, and चौड़ा against सँकरा keeps the optical sense running under the human one. |
+
+Three terms are carried over from the other edition deliberately, so that the
+two Hindi books share vocabulary where they share an idea: **समाई** for capacity
+(chapter three), **ओट** for cover or shelter (chapter five), **कौशल** for skill
+(chapter seven).
+
+## 17. The framing rule in Hindi
+
+Spec 04's rule governs every page: the book never claims that quantum mechanics
+runs a human life. Three passages state the limit out loud, and each was written
+to be blunter in Hindi than in English, because a hedge reads as evasion in
+Hindi speech.
+
+- Chapter four: **पूरी मशीन बस यही फ़र्क़ है।** मशीन rather than तंत्र, so the
+  sentence cannot be read as naming a physical mechanism.
+- Chapter six refuses Landauer without naming him, and keeps भौतिक तंत्र at
+  arm's length: *उसे खींचकर तुम्हारे पिता की आवाज़ पर तान दूँ, तो मैं जितना हूँ
+  उससे ज़्यादा समझदार सुनाई दूँगा*.
+- Chapter nine, the hardest, keeps every clause of the English refusal including
+  *not one bit of information, not ever*, as **ज़रा-सी ख़बर भी नहीं, कभी नहीं**.
+  सूचना was rejected in favour of ख़बर: सूचना is the information-theoretic term
+  and would smuggle the technical claim back in through the vocabulary.
+
+Six physics words appear in the whole edition, all of them school vocabulary a
+general reader has met: भौतिकी, कण, परमाणु, ऊर्जा, प्रकाशिकी, and प्रमेय once in
+chapter eight. There is no glossary for this edition and
+`content/glossary-hi.json` is not read by its checker, because importing that
+book's vocabulary is precisely the failure mode.
+
+## 18. What is checked by machine
+
+    node apps/hindi-unpolarized/scripts/parity-check.mjs
+    npm run validate
+
+One script rather than two, because there is no glossary to enforce. It does the
+structural parity of `content/hi-unpolarized.json` against
+`content/unpolarized.json` (chapter count, block count and types in order,
+speaker and paragraph count on every dialogue turn, movement and epigraph
+presence, and every number as a per-block multiset) and the script hygiene that
+the other edition's `glossary-check` does (NFC, no mixed-script token, no Latin
+word in prose, no em-dash or en-dash, no Devanagari digit outside the `digits`
+table).
+
+`content/validate.ts` had to be widened to accept a hyphen in an edition
+filename, and `glossary-hi.json` had to be added to its skip list as a
+consequence, since it matches the edition pattern and is not an edition.
+
+## 19. What no machine can check
+
+The same list as section 12, the same owner. For this edition the passages to
+read first are named in the report accompanying this pass, where the chapters
+the writer would defend are listed separately from the ones the writer would
+not. That separation is the useful part of the report.

@@ -7,7 +7,8 @@ const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
    reuseExistingServer would let a preview server somebody left running be
    tested instead of the build under test, which has already cost one full red
    run in this repo. --strictPort makes a taken port a loud failure. */
-const PORTS = { book: 4173, unpolarized: 4176, hindi: 4177 } as const;
+const PORTS = { book: 4173, unpolarized: 4176 } as const;
+
 const url = (p: number): string => 'http://localhost:' + p;
 
 const server = (workspace: string, port: number) => ({
@@ -39,12 +40,9 @@ export default defineConfig({
     /* the two editions that reuse the reader: desktop and phone */
     { name: 'unpolarized-1440', testMatch: /unpolarized\.spec\.ts/, use: { ...chrome(1440, 900), baseURL: url(PORTS.unpolarized) } },
     { name: 'unpolarized-375', testMatch: /unpolarized\.spec\.ts/, use: { ...chrome(375, 812), baseURL: url(PORTS.unpolarized) } },
-    { name: 'hindi-1440', testMatch: /hindi\.spec\.ts/, use: { ...chrome(1440, 900), baseURL: url(PORTS.hindi) } },
-    { name: 'hindi-375', testMatch: /hindi\.spec\.ts/, use: { ...chrome(375, 812), baseURL: url(PORTS.hindi) } },
   ],
   webServer: [
     server('@qubit/book', PORTS.book),
     server('@qubit/unpolarized', PORTS.unpolarized),
-    server('@qubit/hindi', PORTS.hindi),
   ],
 });

@@ -7,15 +7,14 @@
   "types": "./index.ts",
   "exports": {
     ".": "./index.ts",
-    "./hi": "./hi.ts",
     "./unpolarized": "./unpolarized.ts",
+    "./hi-unpolarized": "./hi-unpolarized.ts",
     "./en.json": "./en.json",
     "./front.en.json": "./front.en.json",
-    "./hi.json": "./hi.json",
-    "./front.hi.json": "./front.hi.json",
     "./unpolarized.json": "./unpolarized.json",
     "./front.unpolarized.json": "./front.unpolarized.json",
-    "./glossary-hi.json": "./glossary-hi.json",
+    "./hi-unpolarized.json": "./hi-unpolarized.json",
+    "./front.hi-unpolarized.json": "./front.hi-unpolarized.json",
     "./schema": "./schema.ts"
   },
   "scripts": {

@@ -1,69 +1,69 @@
-# Spec 03: हिंदी संस्करण, The Hindi Edition
+# Spec 03: आधा उजाला, the Hindi edition
+
+## What changed, and why this spec was rewritten
+
+This spec originally described a Hindi edition of **The Qubit Dialogues**. Four cantos were written that way and the owner, a native reader, rejected them: *"it does not sound right. It's too literal translation which loses the meaning."* That work has been deleted.
+
+The Hindi edition is now a translation of **An Unpolarized Life** instead. That book suits Hindi far better: it is complete at twelve chapters, it is about living rather than about machines, and it carries almost no technical vocabulary, so the translation is a literary problem rather than a terminology one.
+
+Two lessons from the rejected attempt are now rules:
+
+1. **Literalness is the failure mode.** Sentence-by-sentence fidelity produces text that reads translated. Work from what a passage means and does, write it as if composing in Hindi, and consult the English afterwards only to confirm nothing was lost.
+2. **The register decisions were sound.** जिज्ञासु and द्रष्टा, both speakers on तुम, the reader on आप, Latin numerals for figures. Those carried over unchanged and are documented in `HINDI-STYLE.md`.
 
 ## Goal
 
-A Hindi edition that reads as though it was composed in Hindi. The book already imitates the samvad and sutra tradition; in Hindi that is not an imitation, it is the native form. Done well, the Hindi edition should feel more at home in its language than the English does in its.
+A Hindi edition of An Unpolarized Life that reads as though it was composed in Hindi. One night on a porch, two people talking, a question the Seeker must answer by Friday that the book never names and never answers. If a native reader can tell it was translated, it has failed.
 
 ## Non-goals
 
-- Not a translation artifact. If a reader can feel the English underneath, it failed.
-- Not Sanskritized display prose. Reaching for the most classical word available produces text that impresses and does not communicate.
-- Not a separate book. Same 22 cantos, same arc, same argument.
+- Not a Hindi edition of The Qubit Dialogues. That attempt was made and rejected.
+- Not a technical translation. Six physics words appear in the whole edition, all school vocabulary. There is no glossary and none is wanted.
+- Not Sanskritized display prose. The book is people talking.
 
-## Language decisions to make before writing
+## The title
 
-These are load-bearing and expensive to change once 22 cantos exist.
+**आधा उजाला** (*Half the Light*), subtitled **प्रश्नों की एक पुस्तक**.
 
-**1. Register.** Recommend modern literary Hindi (सरल साहित्यिक हिंदी) that reaches for tatsam vocabulary at moments of weight and stays conversational in dialogue. The Seeker's doubt should sound like a person talking. The Oracle can carry the older register.
+English gets two meanings from *unpolarized*: the optical thesis, and the ordinary sense of not being forced into one of two camps. Hindi cannot carry both in one word, and the obvious routes fail:
 
-**2. Character names.** The English Seeker/Oracle needs a Hindi pair that carries the same relationship. Candidates:
-- जिज्ञासु (Jigyasu, one who seeks to know) and द्रष्टा (Drashta, one who sees)
-- साधक (Sadhak) and सिद्ध (Siddha)
-- शिष्य and आचार्य, closer to guru-shishya but implies a formal hierarchy the book deliberately avoids
+- **अध्रुवित जीवन** is the correct textbook term but puts a physics word on a cover, and drags ध्रुवीकरण behind it, which in Hindi means communal and political polarisation. It would promise a completely different book.
+- **निष्पक्ष** and **तटस्थ** mean *neutral*, a pose chapter one spends a paragraph demolishing. A title the book argues against is not available.
+- **अनछना** has the right shape, but अनछना आटा is coarse flour, so it reads as *unrefined*.
 
-Recommend जिज्ञासु and द्रष्टा: it preserves the equality of the original, where the Oracle is ahead in time, not above in rank.
+आधा उजाला is optically exact rather than approximate, since a polarizer passes about half of unpolarised light and the text says so twice, and it earns itself in chapter two: *आधा उजाला जा चुका।*
 
-**3. Technical vocabulary policy.** Hindi scientific vocabulary is inconsistent in practice; educated Indian readers routinely use English technical terms in Devanagari script. Recommended rule, applied without exception:
-- **Transliterate** established technical terms: क्यूबिट, डिकोहेरेंस, एंटैंगलमेंट.
-- **Translate** conceptual and metaphorical language: superposition as अध्यारोपण where the physics is meant, but the metaphor rendered in natural Hindi imagery.
-- **Maintain a glossary** (`content/glossary-hi.json`) mapping every technical term to its single approved Hindi rendering. Enforced by script.
+**Its cost, recorded so it can be overruled:** it names the polarized life rather than its absence, so the *un-* is gone. Fallbacks in order: बिना काँच के, जो काँच ने लौटा दिया, अध्रुवित जीवन.
 
-**4. Epigraphs.** The English invents sutra-style epigraphs ("Sutra of the Unspent Coin"). In Hindi these can be genuinely beautiful rather than an English writer's gesture at Sanskrit. Highest-payoff writing in the whole edition. Spend real effort here.
+## Language decisions specific to this book
 
-**5. Numerals.** Latin numerals for years, percentages, and figures; Devanagari acceptable for canto numbers. Mixing inside a sentence looks careless.
+Full detail in `HINDI-STYLE.md` sections 13 to 19. In brief:
 
-## Typography
-
-Devanagari is not a font swap. Required:
-- Noto Serif Devanagari or Mukta as the body face, self-hosted, subset, with the Latin face retained for technical terms so mixed-script runs do not jump.
-- Line height increases: matras above and below need roughly 1.8 to 1.9 where Latin took 1.65.
-- Test conjunct rendering (क्ष, त्र, ज्ञ, द्ध) across Windows, macOS, Android, iOS. Broken conjuncts are the classic Devanagari web failure.
-- Verify the reader's justification and hyphenation settings do not shred Devanagari. Turn hyphenation off.
+- **काँच carries the whole metaphor.** English alternates *the glass* and *a filter*; Hindi has no neutral everyday word for an optical filter (छन्नी is a tea strainer, फ़िल्टर is a water purifier), so both become काँच. This produces a sharper pair than the English: *काँच थमाया गया है और कहा गया है कि इसे खिड़की मानो.*
+- **रुख़** for orientation, **कोण** for angle, **साबुत** reserved for the book's central illusion of wholeness.
+- **पहर, not पर्व.** Twelve chapters across one night, tracking the watches of the night. Epic machinery would be pompous here.
+- Images are substituted where a native one lands harder: रोटी और अचार, समोसे के दाम में, बही, भूत बुलाने की बैठक. All recorded rather than done silently.
 
 ## QA setup
 
-**Automated (blocking):**
-- Shared harness from `00-overview.md`.
-- **Glossary consistency**: every technical term appears only in its approved form. One script, run every build, catches the single most common failure in translated technical work.
-- **Script hygiene**: no stray Latin in prose except approved technical terms; no mixed-script words; no Unicode normalization mismatches (NFC enforced).
-- **Structural parity**: 22 cantos, same block counts, no dropped dialogue turns, every number and citation preserved exactly against `en.json`.
-- **Rendering check**: screenshot every canto at three viewports on at least two operating systems, checked for conjunct and matra breakage.
+**Automated (blocking):** schema validation, structural parity against `content/unpolarized.json` (chapter count, block counts and types in order, every number preserved), NFC normalisation, no mixed-script tokens, no stray Latin in prose, no dashes, build and typecheck clean, zero console errors.
 
-**Human, blocking (owner: Tushar):**
-- **Canto-by-canto read** against a simple rubric: does it sound composed or translated; is the Seeker's voice distinct from the Oracle's; would you read this aloud to someone.
-- **Back-translation spot check**: for a sample of passages, translate the Hindi back to English independently and compare meaning against the original. Catches semantic drift that fluency hides.
-- Recommended: one additional native reader who has not seen the English. If they can tell it was translated, iterate.
+**Rendering:** every named conjunct (क्ष, त्र, ज्ञ, द्ध, श्र) inspected at magnification in a real browser at 1440 and 375, plus matra clipping and horizontal overflow.
 
-## Points that decide whether this is merely good
+**Human, blocking (owner: Tushar):** read chapter by chapter. The test is whether the dialogue could be spoken aloud by a person on that porch. Every line should survive being read out.
 
-1. **Write forward, do not translate.** Work canto by canto from the *idea*, with the English as reference rather than source. Sentence-by-sentence conversion is what produces text that reads translated.
-2. **The dialogue must sound spoken.** Read every Seeker line aloud. Hindi tolerates formality in narration and punishes it in speech.
-3. **Let the metaphors move.** A coin spinning on its edge may not be the strongest image in Hindi. Where a native image lands harder, use it, and note the substitution.
-4. **The epigraphs are the signature.** They are where the Hindi edition can be plainly better than the English. Treat them as poems, not headers.
-5. **One glossary, enforced by machine.** Terminology drift across 25,000 words is invisible to a human reader and obvious to a script.
+## Status
+
+All twelve chapters translated. The translator's own honest grading:
+
+- **Would defend to a native reader:** 1, 2, 3, 7, 10, 12
+- **Merely correct:** 4, 6, 9, 11, where long argumentative paragraphs stayed essayistic
+- **Would redo:** 5 and 8, which lean on English abstractions (*legible*, *obliged*, *private*, *description*) that Hindi has no clean single word for
+
+Unpublished. `robots: noindex,nofollow`, no analytics, not linked from the books hub, and the deploy script fails loudly if it ever appears at the site root.
 
 ## Open questions
 
-- Devanagari title: "क्वांटम संवाद" is direct and strong. Alternatives worth weighing before committing, since it becomes the brand for this edition.
-- Does the Hindi edition get its own audio (ElevenLabs supports Hindi voices), or is that a later phase?
-- Should the science asides be Hindi, English, or bilingual? Technical readers may prefer English for those specific blocks.
+- Ratify or overrule the title.
+- Whether to redo chapters 5 and 8 before review, or review as is.
+- Whether this edition eventually publishes alongside the English, or stays private.

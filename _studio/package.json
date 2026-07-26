@@ -15,12 +15,12 @@
   "scripts": {
     "dev": "npm run dev -w @qubit/book",
     "preview": "npm run preview -w @qubit/book",
-    "build": "npm run build:book && npm run build:site && npm run build:illustrated && npm run build:hindi && npm run build:unpolarized",
+    "build": "npm run build:book && npm run build:site && npm run build:illustrated && npm run build:hindi && npm run build:unpolarized && npm run build:hindi-unpolarized",
     "build:book": "npm run build -w @qubit/book",
     "build:site": "npm run build -w @qubit/site",
     "build:illustrated": "npm run build -w @qubit/illustrated",
-    "build:hindi": "npm run build -w @qubit/hindi",
     "build:unpolarized": "npm run build -w @qubit/unpolarized",
+    "build:hindi-unpolarized": "npm run build -w @qubit/hindi-unpolarized",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "extract": "node tools/extract-content.mjs",
     "validate": "npm run validate -w @qubit/content",
@@ -29,11 +29,11 @@
     "census:bless": "npm run census:bless -w @qubit/qa",
     "parity": "npm run parity -w @qubit/qa",
     "test": "npm run test -w @qubit/qa",
-    "check:hindi": "npm run check -w @qubit/hindi",
     "check:unpolarized": "npm run jargon -w @qubit/unpolarized",
+    "check:hindi-unpolarized": "npm run check -w @qubit/hindi-unpolarized",
     "qa:site": "npm run build:site && npm run parity -w @qubit/site && npm run test -w @qubit/site",
     "qa:illustrated": "npm run posters -w @qubit/illustrated && npm run determinism -w @qubit/illustrated && npm run static -w @qubit/illustrated && npm run perf -w @qubit/illustrated",
-    "qa": "npm run build && npm run typecheck && npm run validate && npm run parity && npm run census:check && npm run check:hindi && npm run check:unpolarized && npm run test && npm run qa:site && npm run qa:illustrated"
+    "qa": "npm run build && npm run typecheck && npm run validate && npm run parity && npm run census:check && npm run check:hindi && npm run check:unpolarized && npm run check:hindi-unpolarized && npm run test && npm run qa:site && npm run qa:illustrated"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
