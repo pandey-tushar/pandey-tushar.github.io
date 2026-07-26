@@ -1,605 +1,1513 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<!-- Google Analytics (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-DVPGC1C44Z');
-</script>
-<title>Tushar Pandey · Quantum × AI</title>
-<meta name="description" content="Dr. Tushar Pandey. Quantum error correction, machine intelligence, and systems that ship. Trained on proofs; builds the improbable." />
-<meta property="og:title" content="Tushar Pandey" />
-<meta property="og:description" content="Error, corrected. Reasoning that grows. Let's build the improbable." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://pandey-tushar.com/" />
-<meta property="og:image" content="https://pandey-tushar.com/og-home.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://pandey-tushar.com/og-home.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tushar Pandey &#183; Quantum &#215; AI</title>
+<meta name="description" content="Dr. Tushar Pandey. Quantum error correction, machine intelligence, and systems that ship. Trained on proofs; builds the improbable.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#05060f">
+<link rel="canonical" href="https://pandey-tushar.com/">
+<meta property="og:title" content="Tushar Pandey">
+<meta property="og:description" content="Error, corrected. Reasoning that grows. Let's build the improbable.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pandey-tushar.com/">
+<meta property="og:image" content="https://pandey-tushar.com/og-home.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-home.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%2305060f'/%3E%3Cg%20fill='none'%20stroke='%23f4d58d'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
 <style>
-  :root{
-    --ink:#070a14;--ink-2:#0c1020;--surface:#121829;--surface-2:#171e33;
-    --line:rgba(150,170,210,.14);--line-strong:rgba(150,170,210,.28);
-    --text:#e8ecf6;--text-2:#9aa4c0;--text-3:#69728e;
-    --cyan:#52d6e6;--violet:#9b7bff;--magenta:#f06ab0;
-    --grad:linear-gradient(100deg,var(--cyan),var(--violet) 58%,var(--magenta));
-    --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+/* =================================================================
+   OBSERVATORY IMAGE, PROOF TYPOGRAPHY.
+   The hero is a seeded engraved plate. Everything below it is set
+   as a proof: one family, four registers, marginal labels on a
+   baseline, a single shared right axis, old style figures, and
+   hierarchy from size, case and tracking rather than weight.
+   ================================================================= */
+
+:root{
+  --void:#05060f; --void2:#0a0c1c; --bar:#070818;
+  --ink:#e8e6ff; --gold:#f4d58d; --cyan:#5ef4ff; --violet:#b07bff; --dim:#8a88b8;
+  --g08:rgba(244,213,141,.08); --g14:rgba(244,213,141,.14); --g22:rgba(244,213,141,.22);
+  --g40:rgba(244,213,141,.40); --g70:rgba(244,213,141,.70);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","Hoefler Text",Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
+
+  --gut:clamp(20px,4.4vw,58px);
+  --barh:52px;
+
+  /* the apparatus column, its gutter, and the measure it annotates */
+  --app:0rem; --agut:0rem; --measure:100%;
+
+  /* one leap to display, then a major third down through statement,
+     claim, body, apparatus */
+  --t-display:clamp(1.95rem,1.1rem + 3.4vw,3.05rem);
+  --t-ask:clamp(1.24rem,.95rem + 1.05vw,1.66rem);
+  --t-body:1rem;
+  --t-small:.88rem;
+  --t-app:.7rem;
+  --step:clamp(3.1rem,7.2vh,5.6rem);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body,h1,h2,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
+ol,ul{list-style:none}
+html{
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+  font-size:100%;
+  overflow-x:clip;
+  scroll-behavior:smooth;
+}
+@media (min-width:40em){html{font-size:106.25%}}
+
+body{
+  background:var(--void); color:var(--ink);
+  font-family:var(--serif);
+  font-size:var(--t-body);
+  line-height:1.6;
+  font-kerning:normal;
+  font-variant-numeric:oldstyle-nums proportional-nums;
+  font-variant-ligatures:common-ligatures contextual;
+  hanging-punctuation:first last;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:clip;
+}
+/* the page ground: one low wash, no image, no request */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 82% 2%, rgba(176,123,255,.065), transparent 58%),
+    radial-gradient(90% 70% at 4% 98%, rgba(244,213,141,.05), transparent 58%),
+    linear-gradient(180deg,#070818 0%,var(--void) 45%,#04050c 100%);
+}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(244,213,141,.22)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--gold);color:#05060f;padding:8px 14px;z-index:99;font-family:var(--mono);font-size:12px}
+.skip:focus{left:8px;top:8px}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+/* ---------- apparatus: tracked caps, the only second voice ---------- */
+.lbl{
+  font-size:var(--t-app);
+  font-weight:400;
+  line-height:1.25;
+  letter-spacing:.185em;
+  text-transform:uppercase;
+  color:var(--g70);
+  white-space:nowrap;
+}
+
+/* ---------- rule bar ---------- */
+.bar{
+  position:sticky; top:0; z-index:30;
+  height:var(--barh);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:0 var(--gut);
+  background:var(--bar);
+  border-bottom:1px solid var(--g14);
+}
+.mark{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.mark svg{display:block;overflow:visible}
+.mark span{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(232,230,255,.82);white-space:nowrap;
+}
+.nav{display:flex;gap:clamp(12px,1.8vw,26px);flex-wrap:nowrap}
+.nav a{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);padding-bottom:2px;border-bottom:1px solid transparent;transition:color .18s,border-color .18s;
+}
+.nav a:hover,.nav a:focus-visible{color:var(--gold);border-bottom-color:var(--g40)}
+
+/* ---------- first screen ---------- */
+.fold{min-height:calc(100svh - var(--barh));display:flex;flex-direction:column}
+
+.hero{
+  flex:1 1 auto;min-height:0;
+  display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);
+  gap:clamp(24px,4vw,64px);
+  padding:clamp(26px,4.2vh,54px) var(--gut) clamp(18px,2.6vh,30px);
+  align-items:center;
+}
+.col{min-width:0;max-width:34em}
+
+.eyebrow{
+  margin:0 0 clamp(18px,2.8vh,30px);
+  font-family:var(--mono);font-size:clamp(9.5px,1vw,11px);letter-spacing:.3em;text-transform:uppercase;
+  color:var(--g70);display:flex;align-items:center;gap:12px;
+}
+.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--g22),transparent)}
+
+h1{
+  margin:0;font-weight:400;
+  font-size:clamp(2.75rem,6.6vw,5.1rem);
+  line-height:.94;letter-spacing:-.018em;
+  color:#f2f0ff;
+}
+h1 .sur{display:block;color:#cfcbf0}
+
+.rule{margin:clamp(18px,2.6vh,26px) 0 clamp(16px,2.2vh,22px);height:1px;background:linear-gradient(90deg,var(--g40),var(--g08) 46%,transparent)}
+
+.lede{
+  margin:0;font-size:clamp(1.08rem,1.62vw,1.42rem);line-height:1.45;
+  color:rgba(232,230,255,.92);font-style:italic;letter-spacing:.004em;
+}
+.whisper{
+  margin:clamp(14px,2vh,20px) 0 0;
+  display:flex;gap:10px;align-items:baseline;
+  font-family:var(--mono);font-size:clamp(10px,1.02vw,11.5px);line-height:1.6;
+  letter-spacing:.055em;color:var(--dim);
+}
+.whisper i{color:var(--gold);font-style:normal;flex:0 0 auto;opacity:.85}
+
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(24px,3.4vh,36px)}
+.btn{
+  position:relative;display:inline-block;padding:11px 17px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
+  color:rgba(232,230,255,.86);border:1px solid rgba(244,213,141,.17);
+  background:rgba(244,213,141,.012);
+  transition:color .18s,border-color .18s,background-color .18s;
+}
+.btn::before,.btn::after{content:"";position:absolute;width:6px;height:6px;border:1px solid var(--g40);transition:border-color .18s}
+.btn::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.btn::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.btn:hover,.btn:focus-visible{color:var(--gold);border-color:var(--g22);background:rgba(244,213,141,.045)}
+.btn:hover::before,.btn:hover::after,.btn:focus-visible::before,.btn:focus-visible::after{border-color:var(--g70)}
+
+/* ---------- the plate ----------
+   One instrument, re-set three times. The figure is lifted out of the flow and
+   driven by scroll, so it can stay legible beside the two lemmas it illustrates.
+   .slot holds its place in the hero and is the only source of its size: the
+   plate never invents a box the layout did not already give it. */
+.slot{min-width:0;height:100%;max-height:min(74vh,720px)}
+.plate{
+  position:fixed;left:0;top:0;width:0;height:0;z-index:4;
+  margin:0;display:flex;flex-direction:column;min-width:0;
+  /* pinned over running text, so the caption sits on ground of its own */
+  background:var(--void);
+  transform:translate3d(0,-9999px,0);
+  opacity:0;transition:opacity .45s ease-out;
+  contain:layout;
+}
+/* pinned across the column rather than out in the margin, the plate needs
+   ground under the whole column and not only under itself */
+.plate::before{
+  content:"";position:absolute;top:0;bottom:0;left:-50vw;right:-50vw;
+  background:var(--void);z-index:-1;opacity:0;
+}
+/* the ground arrives ahead of the pin, so it is never a fraction short of
+   opaque with running text still faintly under it */
+.plate.band::before{opacity:calc(var(--pin,0) * 1.8)}
+.plate.on{opacity:1}
+/* in the margin the plate is narrow, so its apparatus is set one step down
+   rather than allowed to turn over onto a second line */
+.plate.rail figcaption{font-size:8.5px;letter-spacing:.13em;gap:2px 10px}
+.figbox{position:relative;flex:1 1 auto;min-height:0}
+#plate{position:absolute;inset:0;width:100%;height:100%;display:block}
+figcaption{
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:2px 14px;
+  margin-top:11px;padding:0 2px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--dim);
+}
+figcaption b{font-weight:400;color:var(--g70)}
+
+/* ---------- status ---------- */
+.status{
+  display:flex;flex-wrap:wrap;gap:8px clamp(28px,5vw,64px);
+  padding:14px var(--gut) 18px;
+  border-top:1px solid var(--g14);
+}
+.status div{display:flex;align-items:baseline;gap:11px;min-width:0}
+.status .k{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--g70);
+  flex:0 0 auto;
+}
+.status .v{font-size:clamp(.86rem,1.1vw,.98rem);color:rgba(232,230,255,.9);letter-spacing:.005em}
+
+/* =================================================================
+   THE QUIRE. Everything below the fold is one composed argument.
+   ================================================================= */
+.quire{position:relative;padding-inline:var(--gut)}
+
+/* the graduated rule: the plate's tick ring, unrolled. One hairline,
+   minor ticks, and a longer tick every sixth, exactly as the scale
+   around the knot is cut. */
+.grad{
+  border:0;margin:0;height:9px;
+  background-image:
+    linear-gradient(var(--g22),var(--g22)),
+    repeating-linear-gradient(90deg,var(--g40) 0 1px,transparent 1px 14px),
+    repeating-linear-gradient(90deg,var(--g70) 0 1px,transparent 1px 84px);
+  background-repeat:no-repeat;
+  background-size:100% 1px,100% 5px,100% 9px;
+  background-position:0 0,0 1px,0 1px;
+}
+
+.quire section{padding-block:var(--step);scroll-margin-top:calc(var(--barh) + 14px)}
+
+/* one apparatus row: label in the margin, block on the axis */
+.act{max-width:calc(var(--app) + var(--agut) + var(--measure))}
+.act + .act{margin-top:clamp(2rem,4.4vh,3.2rem)}
+
+.ask{
+  font-style:italic;
+  font-size:var(--t-ask);
+  line-height:1.32;
+  letter-spacing:-.004em;
+  color:rgba(232,230,255,.9);
+  text-wrap:pretty;
+}
+.quire h2:not(.lbl){
+  margin-top:.42em;
+  font-weight:400;
+  font-size:var(--t-display);
+  line-height:1.02;
+  letter-spacing:-.016em;
+  color:#f2f0ff;
+  text-wrap:balance;
+}
+.quire h2 em{font-style:italic;color:var(--gold)}
+.say{
+  margin-top:clamp(.95rem,2vh,1.35rem);
+  color:rgba(232,230,255,.86);
+  line-height:1.68;
+  text-wrap:pretty;
+}
+.say b{font-weight:400;color:var(--gold)}
+
+.more{margin-top:clamp(1.05rem,2.2vh,1.5rem);display:flex;align-items:baseline;flex-wrap:wrap}
+.more a{
+  font-size:var(--t-app);letter-spacing:.185em;text-transform:uppercase;
+  color:var(--g70);border-bottom:1px solid var(--g22);padding-bottom:3px;
+  transition:color .18s,border-color .18s;
+}
+.more a:hover,.more a:focus-visible{color:var(--gold);border-bottom-color:var(--g70)}
+
+/* the tombstone. Drawn, not typed, so it never depends on a glyph the
+   stack does not carry. Its bottom edge sits on the baseline. */
+.qed{
+  align-self:baseline;
+  width:.62rem;height:.62rem;
+  background:var(--gold);
+  margin-left:1.9em;
+  flex:0 0 auto;
+  opacity:0;animation:qed 900ms ease 400ms forwards;
+}
+@keyframes qed{to{opacity:1}}
+
+/* the record */
+.names{line-height:2.05;color:rgba(232,230,255,.9);letter-spacing:.006em}
+/* each name travels with the lozenge that follows it, so a wrapped line
+   opens on a name rather than on an orphaned ornament, and no institution
+   ever breaks across two lines */
+.names li{display:inline-block;white-space:nowrap}
+.names li:not(:last-child)::after{
+  content:"";display:inline-block;
+  width:.32em;height:.32em;background:var(--g70);
+  transform:rotate(45deg);
+  margin:0 .95em .1em;
+}
+
+/* correspondence: the same axis, one row per line */
+.corr{margin-top:clamp(1.8rem,4vh,2.8rem)}
+.corr li + li{margin-top:.62rem}
+.corr .val{font-size:var(--t-small);color:rgba(232,230,255,.88)}
+.corr .val a{
+  border-bottom:1px solid var(--g14);padding-bottom:2px;
+  transition:color .18s,border-color .18s;
+}
+.corr .val a:hover,.corr .val a:focus-visible{color:var(--gold);border-bottom-color:var(--g70)}
+.corr .sep{color:var(--dim);margin:0 .55em}
+
+/* ---------- foot ---------- */
+footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
+.foot{
+  padding-top:clamp(.9rem,2vh,1.3rem);
+  border-top:1px solid var(--g14);
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;
+  gap:.9rem 2.5rem;
+}
+.foot-links{display:flex;flex-wrap:wrap;align-items:baseline;font-size:var(--t-small);color:rgba(232,230,255,.86)}
+.foot-links li + li::before{content:"\00b7";color:var(--dim);margin:0 .75em}
+.foot-links a{border-bottom:1px solid transparent;transition:color .18s,border-color .18s}
+.foot-links a:hover,.foot-links a:focus-visible{color:var(--gold);border-bottom-color:var(--g40)}
+.colophon{font-size:var(--t-small);color:var(--dim);line-height:1.6}
+
+/* =================================================================
+   >= 48em: the apparatus swings out into the margin, labels align to
+   the first baseline of the block they annotate, and one hairline
+   holds the axis every line of the argument sits on.
+   ================================================================= */
+@media (min-width:48em){
+  :root{--app:7rem;--agut:1.65rem;--measure:40rem}
+
+  .quire::before{
+    content:"";position:absolute;
+    left:calc(var(--gut) + var(--app) + var(--agut)/2);
+    top:var(--step);bottom:var(--step);
+    width:1px;background:rgba(244,213,141,.1);
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  a{color:inherit;text-decoration:none}
-  ::selection{background:rgba(155,123,255,.32)}
-  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
-
-  #scene{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
-
-  @media (pointer:fine){
-    body{cursor:grab}
-    body.grabbing{cursor:grabbing}
-    a,button,.box,nav{cursor:auto}
-    a,button{cursor:pointer}
+  .act{
+    display:grid;
+    grid-template-columns:var(--app) minmax(0,var(--measure));
+    column-gap:var(--agut);
+    align-items:baseline;
   }
-  @media (prefers-reduced-motion:reduce){body{cursor:auto}}
-
-  header{position:sticky;top:0;z-index:40;backdrop-filter:blur(12px);background:rgba(7,10,20,.5);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
-  header.scrolled{border-bottom:1px solid var(--line);background:rgba(7,10,20,.8)}
-  nav{max-width:1160px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-  .brand{font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:-.01em}
-  .brand span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .navlinks{display:flex;gap:4px;flex-wrap:wrap}
-  .navlinks a{font-family:var(--mono);font-size:12.5px;color:var(--text-2);padding:7px 11px;border-radius:7px;transition:color .2s,background .2s}
-  .navlinks a:hover{color:var(--text);background:rgba(18,24,41,.85)}
-  .menu-btn{display:none;background:none;border:1px solid var(--line-strong);color:var(--text);border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:12px;cursor:pointer}
-
-  #intro{position:fixed;inset:0;z-index:100;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .8s ease,transform .9s cubic-bezier(.7,0,.2,1)}
-  #intro.done{opacity:0;transform:translateY(-100%);pointer-events:none}
-  .intro-name{font-family:var(--serif);font-weight:500;font-size:clamp(30px,6vw,64px);letter-spacing:-.02em;display:flex;gap:.28em}
-  .intro-name span{opacity:0;transform:translateY(110%);display:inline-block;animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
-  .intro-name .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  @keyframes rise{to{opacity:1;transform:none}}
-  .intro-bar{width:0;height:1px;background:var(--grad);animation:grow 1.1s ease .5s forwards;max-width:240px}
-  @keyframes grow{to{width:240px}}
-  .intro-sub{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--text-3);opacity:0;animation:fadein .6s ease 1s forwards}
-  @keyframes fadein{to{opacity:1}}
-
-  .hero{position:relative;min-height:100vh;display:flex;align-items:center;z-index:2;padding:120px 0 90px}
-  .wrap{max-width:1160px;margin:0 auto;padding:0 28px;width:100%}
-  .hero-eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin:0 0 26px}
-  .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(48px,9vw,112px);line-height:.94;letter-spacing:-.025em;margin:0;text-shadow:0 2px 40px rgba(7,10,20,.9)}
-  .hero h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .lede{font-family:var(--serif);font-style:italic;font-size:clamp(19px,2.6vw,26px);color:var(--text-2);max-width:30ch;margin:28px 0 0;line-height:1.4;text-shadow:0 1px 24px rgba(7,10,20,.9)}
-  .hero-whisper{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--text-3);margin:18px 0 0}
-  .hero-whisper b{color:var(--text-2);font-weight:500}
-  .meta-row{display:flex;flex-wrap:wrap;gap:10px 22px;margin:28px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--text-3);letter-spacing:.04em;text-shadow:0 1px 14px rgba(7,10,20,.95),0 0 3px rgba(7,10,20,.9)}
-  .meta-row b{color:var(--text-2);font-weight:500}
-  .cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:38px 0 0}
-  .btn{font-family:var(--mono);font-size:13px;letter-spacing:.03em;padding:12px 20px;border-radius:9px;border:1px solid var(--line-strong);color:var(--text);transition:transform .22s,background .22s,border-color .22s;display:inline-flex;align-items:center;gap:9px;background:rgba(7,10,20,.45)}
-  .btn:hover{border-color:transparent;background:var(--surface-2)}
-  .btn.primary{background:var(--grad);color:#0a0e1a;border-color:transparent;font-weight:500}
-  .btn.primary:hover{filter:brightness(1.08)}
-  .hint{position:absolute;right:6vw;bottom:12vh;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);display:flex;align-items:center;gap:10px;z-index:2}
-  .hint::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--grad);animation:pulse 2.2s ease-in-out infinite}
-  @keyframes pulse{0%,100%{opacity:.4;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
-  @media (pointer:coarse){.hint{display:none}}
-  @media (prefers-reduced-motion:reduce){.hint{display:none}}
-  .scroll-cue{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;animation:bob 2.4s ease-in-out infinite}
-  .scroll-cue::after{content:"";width:1px;height:34px;background:linear-gradient(var(--text-3),transparent)}
-  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
-  @media (prefers-reduced-motion:reduce){.scroll-cue,.hint::before{animation:none}}
-
-  .chapter{position:relative;min-height:100vh;display:flex;align-items:center;z-index:2;padding:60px 0}
-  .box{position:relative;width:min(560px,92vw);padding:36px 34px 30px;border:1px solid var(--line);border-radius:18px;
-    background:linear-gradient(165deg,rgba(12,16,32,.82),rgba(7,10,20,.72));backdrop-filter:blur(6px)}
-  .box.right{margin-left:auto}
-  .ghost{position:absolute;top:-84px;left:-10px;font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(110px,16vw,180px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(150,170,210,.16);pointer-events:none;user-select:none}
-  .box.right .ghost{left:auto;right:-10px}
-  .ch-eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:none;color:var(--cyan);margin:0 0 16px;display:flex;align-items:center;gap:12px;line-height:1.5}
-  .ch-eyebrow::before{content:"";width:24px;height:1px;background:var(--grad);flex:0 0 auto;margin-top:2px}
-  .chapter h2{font-family:var(--serif);font-weight:500;font-size:clamp(32px,5vw,52px);line-height:1.02;letter-spacing:-.015em;margin:0 0 16px}
-  .chapter h2 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .ch-lede{color:var(--text-2);font-size:16.5px;margin:0 0 6px;line-height:1.72}
-  .ch-lede b{color:var(--text);font-weight:600}
-  .ch-more{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:var(--mono);font-size:12.5px;color:var(--text-2);border-bottom:1px solid var(--line-strong);padding-bottom:2px;transition:color .2s,border-color .2s}
-  .ch-more:hover{color:var(--text);border-color:var(--cyan)}
-
-  #act{position:fixed;left:28px;bottom:26px;z-index:3;font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:none;color:var(--text-2);display:flex;align-items:center;gap:11px;opacity:0;transition:opacity .6s ease;pointer-events:none}
-  #act::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--grad)}
-  @media (max-width:640px){#act{display:none}}
-
-  .names{position:relative;z-index:2;padding:52px 0 16px}
-  .names .wrap{display:flex;flex-wrap:wrap;gap:14px 34px;justify-content:center;font-family:var(--mono);font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--text-3)}
-  .names span{opacity:.85}
-
-  .contact{position:relative;z-index:2;min-height:78vh;display:flex;align-items:center;padding:80px 0}
-  .contact .inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:44px;align-items:flex-end;width:100%}
-  .contact .pitch{max-width:30ch}
-  .contact .ch-eyebrow{margin-bottom:18px}
-  .contact h2{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,64px);line-height:1.02;letter-spacing:-.02em;margin:0}
-  .contact h2 em{font-style:italic;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .contact .receipt{font-family:var(--mono);font-size:12.5px;color:var(--text-3);margin:22px 0 0;line-height:1.7;max-width:44ch}
-  .contact .receipt b{color:var(--text-2);font-weight:500}
-  .contact-links{display:flex;flex-direction:column;gap:14px;font-family:var(--mono);font-size:14px}
-  .contact-links a{color:var(--text-2);display:inline-flex;align-items:center;gap:12px;transition:color .2s;width:fit-content}
-  .contact-links a:hover{color:var(--text)}
-  .contact-links .lbl{color:var(--text-3);font-size:11px;letter-spacing:.14em;text-transform:uppercase;width:64px}
-
-  footer{position:relative;z-index:2;padding:34px 0 48px;border-top:1px solid var(--line);color:var(--text-3);font-family:var(--mono);font-size:12px;background:linear-gradient(180deg,transparent,rgba(7,10,20,.9) 40%)}
-  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
-
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity .8s ease,transform .8s ease}
-  .reveal.in{opacity:1;transform:none}
-  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
-
-  @media (max-width:820px){
-    .navlinks{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;background:var(--ink-2);border-bottom:1px solid var(--line);padding:10px 18px 18px}
-    .navlinks.open{display:flex}
-    .navlinks a{padding:11px 8px}
-    .menu-btn{display:block}
-    nav{position:relative}
-    .box,.box.right{margin:0 auto}
-    .ghost{font-size:110px;top:-64px}
+  .act > .lbl{
+    grid-column:1;justify-self:end;text-align:right;
+    /* strip the trailing letterspace so the caps rag flush to the gutter */
+    margin-right:-.185em;
   }
-  @media (max-width:560px){
-    .wrap{padding:0 20px}
-    nav{padding:12px 20px}
-    .box{padding:28px 22px 24px}
+  .act > :not(.lbl){grid-column:2}
+
+  .corr li{
+    display:grid;
+    grid-template-columns:var(--app) minmax(0,var(--measure));
+    column-gap:var(--agut);
+    align-items:baseline;
   }
+  .corr .lbl{justify-self:end;text-align:right;margin-right:-.185em}
+
+  .colophon{text-align:right}
+}
+
+/* =================================================================
+   Narrow. The label stacks over the block it annotates; the
+   correspondence keeps two columns because seven stacked pairs is a
+   list, not a table.
+   ================================================================= */
+@media (max-width:47.99em){
+  .act > .lbl{display:block;margin-bottom:.8rem}
+  .corr li{
+    display:grid;grid-template-columns:4.7rem minmax(0,1fr);
+    column-gap:.85rem;align-items:baseline;
+  }
+  .corr .lbl{font-size:.64rem;letter-spacing:.14em}
+  .corr .val{font-size:.86rem}
+}
+
+/* Under the width that affords a margin beside the measure, the plate pins as
+   a band across the column, so the fold hands it that shape to begin with. */
+@media (max-width:78.125em){
+  .hero{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(196px,1fr);
+        align-items:stretch;gap:clamp(20px,3vh,30px)}
+  .col{order:1}
+  /* the plate pins at the size the hero gives it, so the hero is only ever
+     asked for a box the top of the screen can afford to hold */
+  .slot{order:2;height:min(290px,33svh);max-height:none;min-height:0;
+        align-self:center;justify-self:center;width:min(100%,480px)}
+}
+
+@media (max-width:960px){
+  :root{--barh:48px}
+  .hero{gap:clamp(20px,2.8vh,28px);padding-top:clamp(22px,3.4vh,34px)}
+  .col{max-width:none}
+  .slot{height:min(250px,34svh);width:100%}
+  .actions{margin-top:clamp(18px,2.6vh,26px)}
+  .nav{gap:clamp(9px,2.6vw,18px)}
+  .nav a{letter-spacing:.12em;font-size:9.5px}
+  .mark span{display:none}
+  .bar{gap:12px}
+}
+@media (max-width:400px){
+  .nav a{letter-spacing:.05em;font-size:9px}
+  .btn{padding:10px 12px;letter-spacing:.12em;font-size:10px}
+  /* keeps the marginal note on one line at 375 */
+  .whisper{letter-spacing:.012em;font-size:9.6px;gap:8px}
+  /* the plate's reference and its seed hold one line down to 320 */
+  figcaption{font-size:8.5px;letter-spacing:.13em;gap:2px 8px}
+  .names li:not(:last-child)::after{margin:0 .7em .1em}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+  .plate{opacity:1}
+  .qed{opacity:1;animation:none}
+}
+
+/* =================================================================
+   Print. Fixed point sizes, because vw is meaningless on paper, and
+   the argument restated in full rather than inherited from whichever
+   breakpoint the page box happens to match. The plate is a night
+   engraving; on white paper it is a black rectangle, so it is left
+   behind and its caption carries the reference instead.
+   ================================================================= */
+@media print{
+  @page{margin:16mm 18mm}
+  html{font-size:11pt;scroll-behavior:auto}
+  body{background:#fff;color:#000;line-height:1.5;overflow:visible}
+  body::before{display:none}
+  /* the plate is a night engraving; on white paper it is a black
+     rectangle, so the figure is left behind entirely */
+  .skip,.bar,.plate,.slot,.grad,.quire::before,.btn,.whisper i{display:none!important}
+
+  :root{--app:22mm;--agut:5mm;--measure:100%;--gut:0}
+
+  .fold{min-height:0;display:block}
+  .hero{display:block;padding:0}
+  .col{max-width:none}
+  .eyebrow{font-family:inherit;font-size:8pt;color:#000;display:block;margin-bottom:6mm}
+  .eyebrow::after{display:none}
+  h1{font-size:36pt;color:#000}
+  h1 .sur{color:#000}
+  .rule{background:none;border-top:.4pt solid #000;height:0;margin:5mm 0 4mm}
+  .lede{font-size:15pt;color:#000}
+  .whisper{font-family:inherit;font-size:10pt;color:#000;letter-spacing:0;margin-top:3mm}
+  .actions{display:none}
+  .status{border-top:.4pt solid #000;padding:3mm 0 0;margin-top:5mm;gap:2mm 12mm}
+  .status .k,.status .v{font-family:inherit;color:#000;letter-spacing:.1em;font-size:9pt}
+  .status .v{letter-spacing:0;font-size:10.5pt}
+
+  .quire{padding:0}
+  .quire section{padding-block:8mm 0;break-inside:auto}
+  .act{
+    display:grid;grid-template-columns:var(--app) minmax(0,1fr);
+    column-gap:var(--agut);align-items:baseline;max-width:none;
+  }
+  .act > .lbl{grid-column:1;justify-self:end;text-align:right;margin-right:-.185em}
+  .act > :not(.lbl){grid-column:2}
+  .act + .act{margin-top:6mm}
+  .lbl{color:#000;font-size:7.5pt}
+  .ask{font-size:14pt;color:#000}
+  .quire h2:not(.lbl){font-size:22pt;color:#000;margin-top:2mm}
+  .quire h2 em{color:#000}
+  .say{color:#000;font-size:11pt;margin-top:3mm}
+  .say b{color:#000;font-weight:700}
+  .names{color:#000;line-height:1.8}
+  .names li:not(:last-child)::after{background:#000}
+  .more{margin-top:3mm}
+  .more a{color:#000;border:0;font-size:8.5pt}
+  .corr{margin-top:6mm}
+  .corr li{
+    display:grid;grid-template-columns:var(--app) minmax(0,1fr);
+    column-gap:var(--agut);align-items:baseline;
+  }
+  .corr .lbl{justify-self:end;text-align:right;margin-right:-.185em}
+  .corr .val,.corr .val a{color:#000;border:0;font-size:10pt}
+
+  /* backgrounds are unreliable on paper, so the tombstone is set
+     hollow: the other conventional form of the mark */
+  .qed{opacity:1;animation:none;background:none;border:.75pt solid #000;width:8pt;height:8pt}
+
+  footer{padding:0}
+  .foot{border-top:.4pt solid #000;display:block;padding-top:3mm;margin-top:8mm}
+  .foot-links{font-size:9pt;color:#000}
+  .foot-links a{color:#000}
+  .colophon{color:#000;font-size:9pt;text-align:left;margin-top:2mm}
+  a[data-url]::after{content:" (" attr(data-url) ")";font-size:8.5pt;letter-spacing:.01em;text-transform:none}
+  .act,.corr li,.colophon p{break-inside:avoid}
+  p{orphans:2;widows:2}
+}
 </style>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
-<canvas id="scene" aria-hidden="true"></canvas>
-<div id="act" aria-hidden="true"></div>
-
-<div id="intro" aria-hidden="true">
-  <div class="intro-name">
-    <span style="animation-delay:.05s">T</span><span style="animation-delay:.09s">u</span><span style="animation-delay:.13s">s</span><span style="animation-delay:.17s">h</span><span style="animation-delay:.21s">a</span><span style="animation-delay:.25s">r</span>
-    <span class="g" style="animation-delay:.34s">P</span><span class="g" style="animation-delay:.38s">a</span><span class="g" style="animation-delay:.42s">n</span><span class="g" style="animation-delay:.46s">d</span><span class="g" style="animation-delay:.5s">e</span><span class="g" style="animation-delay:.54s">y</span>
-  </div>
-  <div class="intro-bar"></div>
-  <div class="intro-sub">Quantum · Intelligence · Systems</div>
-</div>
-
-<header id="hdr">
-  <nav>
-    <a class="brand" href="#top">Tushar <span>Pandey</span></a>
-    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">menu</button>
-    <div class="navlinks" id="navlinks">
-      <a href="#quantum">Quantum</a>
-      <a href="#ai">AI</a>
-      <a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">Research</a>
-      <a href="qubit-dialogues.html">Book</a>
-      <a href="cv.html">CV</a>
-      <a href="#contact">Contact</a>
-    </div>
+<header class="bar">
+  <a class="mark" href="#main" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true">
+      <g fill="none" stroke="#f4d58d" stroke-width="1.05" opacity=".85">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="nav" aria-label="Primary">
+    <a href="#quantum">Quantum</a>
+    <a href="#ai">AI</a>
+    <a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">Research</a>
+    <a href="books.html">Books</a>
+    <a href="cv.html">CV</a>
+    <a href="#contact">Contact</a>
   </nav>
 </header>
 
-<section class="hero" id="top">
-  <div class="wrap">
-    <p class="hero-eyebrow">Ph.D. Mathematics · Quantum × AI</p>
-    <h1>Tushar<br><em>Pandey</em></h1>
-    <p class="lede">I turn ideas into systems that ship.</p>
-    <p class="hero-whisper">Trained on proofs: <b>one conjecture, solved alone, 2023.</b></p>
-    <div class="meta-row">
-      <span><b>Now</b> &nbsp;Senior Software Engineer @ DataRobot</span>
-      <span><b>Based in</b> &nbsp;Dallas, TX</span>
-    </div>
-    <div class="cta-row">
-      <a class="btn primary" href="cv.html">Curriculum Vitae →</a>
-      <a class="btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn" href="mailto:wtatushar@gmail.com">Email</a>
-    </div>
-  </div>
-  <div class="hint">drag to spin · click to pulse</div>
-  <div class="scroll-cue">scroll</div>
-</section>
+<main id="main">
 
-<section class="chapter" id="quantum">
-  <div class="wrap">
-    <div class="box right reveal">
-      <div class="ghost">01</div>
-      <p class="ch-eyebrow">Can you compute with broken parts?</p>
-      <h2>Error, <em>corrected.</em></h2>
-      <p class="ch-lede">Two summers at Oak Ridge building <b>fault tolerance for a non-abelian code</b>; lead author, APL Quantum, 2025. The newest work reaches the qLDPC frontier.</p>
-      <a class="ch-more" href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">the record →</a>
-    </div>
-  </div>
-</section>
-
-<section class="chapter" id="ai">
-  <div class="wrap">
-    <div class="box reveal">
-      <div class="ghost">02</div>
-      <p class="ch-eyebrow">Can a machine think harder, mid-thought?</p>
-      <h2>Reasoning that <em>grows.</em></h2>
-      <p class="ch-lede"><b>AGoT</b> grows chains, trees and graphs as it runs: 19 citations in year one, running in production.</p>
-      <a class="ch-more" href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">the code, open source →</a>
-    </div>
-  </div>
-</section>
-
-<section class="names reveal" id="wins">
-  <div class="wrap">
-    <span>Oak Ridge National Laboratory</span>
-    <span>APL Quantum</span>
-    <span>IBM Quantum</span>
-    <span>MIT</span>
-    <span>Texas A&amp;M</span>
-    <span>IIT Kanpur</span>
-  </div>
-</section>
-
-<section class="contact" id="contact">
-  <div class="wrap">
-    <div class="inner">
-      <div class="pitch">
-        <p class="ch-eyebrow reveal">What&rsquo;s left to prove?</p>
-        <h2 class="reveal">Let&rsquo;s build the <em>improbable.</em></h2>
-        <p class="receipt reveal">Multi-tenant LLM inference at DataRobot: deploys <b>30 to 40 percent faster</b>, throughput <b>tripled</b>. Three first-place titles since 2024.</p>
+  <div class="fold">
+    <section class="hero" aria-label="Introduction">
+      <div class="col">
+        <p class="eyebrow">Ph.D. Mathematics&nbsp;&#183; Quantum &#215; AI</p>
+        <h1>Tushar <span class="sur">Pandey</span></h1>
+        <div class="rule"></div>
+        <p class="lede">I turn ideas into systems that ship.</p>
+        <p class="whisper"><i>&#10022;</i><span>Trained on proofs: one conjecture, solved alone, 2023.</span></p>
+        <div class="actions">
+          <a class="btn" href="cv.html">Curriculum Vitae</a>
+          <a class="btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn" href="mailto:wtatushar@gmail.com">Email</a>
+        </div>
       </div>
-      <div class="contact-links reveal">
-        <a href="mailto:wtatushar@gmail.com"><span class="lbl">Email</span> wtatushar [at] gmail [dot] com</a>
-        <a href="https://www.linkedin.com/in/tpmath/" target="_blank" rel="noopener"><span class="lbl">LinkedIn</span> linkedin.com/in/tpmath</a>
-        <a href="https://github.com/pandey-tushar" target="_blank" rel="noopener"><span class="lbl">GitHub</span> github.com/pandey-tushar</a>
-        <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener"><span class="lbl">Scholar</span> Google Scholar →</a>
-        <a href="cv.html"><span class="lbl">CV</span> Curriculum Vitae →</a>
-      </div>
+
+      <div class="slot" aria-hidden="true"></div>
+      <figure class="plate">
+        <div class="figbox">
+          <canvas id="plate" role="img"
+            aria-label="Engraved astronomical plate: a trefoil knot drawn in gold line, ringed by a graduated scale over a star field."></canvas>
+        </div>
+        <figcaption><span id="cap">Plate I&nbsp;&#183; Trefoil, 3<sub>1</sub></span><span>Seed <b id="sd">&nbsp;</b></span></figcaption>
+      </figure>
+    </section>
+
+    <div class="status">
+      <div><span class="k">Now</span><span class="v">Senior Software Engineer @ DataRobot</span></div>
+      <div><span class="k">Based in</span><span class="v">Dallas, TX</span></div>
     </div>
   </div>
-</section>
+
+  <div class="quire">
+
+    <hr class="grad">
+    <section id="quantum" aria-labelledby="h-quantum">
+      <div class="act">
+        <p class="lbl">Lemma&nbsp;I</p>
+        <div>
+          <p class="ask">Can you compute with broken parts?</p>
+          <h2 id="h-quantum">Error, <em>corrected.</em></h2>
+          <p class="say">Two summers at Oak Ridge building <b>fault tolerance for a non-abelian code</b>; lead author, APL Quantum, 2025. The newest work reaches the qLDPC frontier.</p>
+          <p class="more"><a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener" data-url="sites.google.com/view/tusharpandey">the record<span aria-hidden="true"> &#8594;</span></a></p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="grad">
+    <section id="ai" aria-labelledby="h-ai">
+      <div class="act">
+        <p class="lbl">Lemma&nbsp;II</p>
+        <div>
+          <p class="ask">Can a machine think harder, mid-thought?</p>
+          <h2 id="h-ai">Reasoning that <em>grows.</em></h2>
+          <p class="say"><b>AGoT</b> grows chains, trees and graphs as it runs: 19 citations in year one, running in production.</p>
+          <p class="more"><a href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener" data-url="github.com/AgnostiqHQ/multi-agent-llm">the code, open source<span aria-hidden="true"> &#8594;</span></a><span class="qed" role="img" aria-label="Q.E.D."></span></p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="grad">
+    <section id="record" aria-labelledby="h-record">
+      <div class="act">
+        <h2 class="lbl" id="h-record">Record</h2>
+        <ul class="names"><li>Oak Ridge National Laboratory</li><li>APL Quantum</li><li>IBM Quantum</li><li>MIT</li><li>Texas A&amp;M</li><li>IIT Kanpur</li></ul>
+      </div>
+      <div class="act">
+        <p class="lbl">Receipts</p>
+        <p class="say">Multi-tenant LLM inference at DataRobot: deploys <b>30 to 40 percent faster</b>, throughput <b>tripled</b>. Three first-place titles since 2024.</p>
+      </div>
+    </section>
+
+    <hr class="grad">
+    <section id="contact" aria-labelledby="h-contact">
+      <div class="act">
+        <p class="lbl">Corollary</p>
+        <div>
+          <p class="ask">What&rsquo;s left to prove?</p>
+          <h2 id="h-contact">Let&rsquo;s build the <em>improbable.</em></h2>
+        </div>
+      </div>
+
+      <ul class="corr">
+        <li>
+          <span class="lbl">Email</span>
+          <span class="val"><a href="mailto:wtatushar@gmail.com" data-url="wtatushar@gmail.com">wtatushar [at] gmail [dot] com</a></span>
+        </li>
+        <li>
+          <span class="lbl">LinkedIn</span>
+          <span class="val"><a href="https://www.linkedin.com/in/tpmath/" target="_blank" rel="noopener">linkedin.com/in/tpmath</a></span>
+        </li>
+        <li>
+          <span class="lbl">GitHub</span>
+          <span class="val"><a href="https://github.com/pandey-tushar" target="_blank" rel="noopener">github.com/pandey-tushar</a></span>
+        </li>
+        <li>
+          <span class="lbl">Scholar</span>
+          <span class="val"><a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener" data-url="scholar.google.com">Google Scholar &#8594;</a></span>
+        </li>
+        <li>
+          <span class="lbl">CV</span>
+          <span class="val"><a href="cv.html" data-url="pandey-tushar.com/cv.html">Curriculum Vitae &#8594;</a></span>
+        </li>
+        <li>
+          <span class="lbl">R&eacute;sum&eacute;</span>
+          <span class="val"><a href="Tushar_Pandey_Resume_AI.pdf" aria-label="R&eacute;sum&eacute;, AI track, PDF" data-url="Tushar_Pandey_Resume_AI.pdf">AI</a><span class="sep" aria-hidden="true">&#183;</span><a href="Tushar_Pandey_Resume_Quantum.pdf" aria-label="R&eacute;sum&eacute;, quantum track, PDF" data-url="Tushar_Pandey_Resume_Quantum.pdf">Quantum</a></span>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+</main>
 
 <footer>
-  <div class="wrap">
-    <span>© <span id="yr"></span> Tushar Pandey</span>
-    <span>One canvas · three thousand qubits · zero page builders.</span>
+  <div class="foot">
+    <ul class="foot-links">
+      <li><a href="cv.html" data-url="pandey-tushar.com/cv.html">Curriculum Vitae</a></li>
+      <li><a href="books.html" data-url="pandey-tushar.com/books.html">Books</a></li>
+      <li><a href="https://github.com/pandey-tushar" target="_blank" rel="noopener" data-url="github.com/pandey-tushar">GitHub</a></li>
+      <li><a href="mailto:wtatushar@gmail.com" data-url="wtatushar@gmail.com">Email</a></li>
+    </ul>
+    <div class="colophon">
+      <p>&copy; <span id="yr">2026</span> Tushar Pandey</p>
+      <p>One canvas &#183; three plates &#183; zero page builders.</p>
+    </div>
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-document.getElementById("yr").textContent = new Date().getFullYear();
-
-const hdr=document.getElementById("hdr");
-addEventListener("scroll",()=>hdr.classList.toggle("scrolled",scrollY>20),{passive:true});
-const menuBtn=document.getElementById("menuBtn"), navlinks=document.getElementById("navlinks");
-menuBtn.addEventListener("click",()=>navlinks.classList.toggle("open"));
-navlinks.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>navlinks.classList.remove("open")));
-const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");ro.unobserve(e.target);}}),{rootMargin:"0px 0px -10% 0px"});
-document.querySelectorAll(".reveal").forEach(el=>ro.observe(el));
-
-/* ============ WEBGL : OBJECT OF TENSION → LATTICE → GRAPH → IGNITION ============ */
 (function(){
-  const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
-  const canvas=document.getElementById("scene");
-  const intro=document.getElementById("intro");
-  const finishIntro=()=>intro.classList.add("done");
+"use strict";
 
-  if(typeof THREE==="undefined"){ canvas.style.background="radial-gradient(80% 60% at 20% 30%,#1a1340,#070a14)"; setTimeout(finishIntro,900); return; }
-  let renderer;
-  try{ renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false}); }
-  catch(e){ canvas.style.background="radial-gradient(80% 60% at 20% 30%,#1a1340,#070a14)"; setTimeout(finishIntro,900); return; }
+/* ------------------------------------------------------------------
+   Ported from packages/motifs/src: rng.ts (mulberry32 + xmur3),
+   surface.ts (alpha/mix), plate.ts (ground + frame), forms.ts (tickRing).
+   Seeded and deterministic: same seed, same size, same pixels.
+   ------------------------------------------------------------------ */
 
-  renderer.setClearColor(0x070a14,1);
-  renderer.autoClear=false;
-  const DPR=Math.min(devicePixelRatio||1,2);
-  renderer.setPixelRatio(DPR);
-  const MOBILE=innerWidth<640;
+var TAU = Math.PI * 2;
+var SEED = "observatory/tushar-pandey";
 
-  const bgScene=new THREE.Scene();
-  const bgCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
-  const bgMat=new THREE.ShaderMaterial({
-    uniforms:{uRes:{value:new THREE.Vector2(1,1)},uTime:{value:0},uStage:{value:0}},
-    vertexShader:"void main(){gl_Position=vec4(position,1.0);}",
-    fragmentShader:[
-      "precision highp float;","uniform vec2 uRes;uniform float uTime;uniform float uStage;",
-      "vec2 hash(vec2 p){p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));return -1.0+2.0*fract(sin(p)*43758.5453);}",
-      "float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.0-2.0*f);",
-      "return mix(mix(dot(hash(i),f),dot(hash(i+vec2(1,0)),f-vec2(1,0)),u.x),mix(dot(hash(i+vec2(0,1)),f-vec2(0,1)),dot(hash(i+vec2(1,1)),f-vec2(1,1)),u.x),u.y);}",
-      "float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.0;a*=0.5;}return v;}",
-      "void main(){vec2 uv=gl_FragCoord.xy/uRes.xy;vec2 p=(uv-0.5);p.x*=uRes.x/uRes.y;",
-      "float t=uTime*0.035;",
-      "vec2 q=vec2(fbm(p*1.4+t),fbm(p*1.4-t+5.2));",
-      "float f=fbm(p*1.7+q*1.6+t*0.4);",
-      "vec3 cyan=vec3(0.12,0.42,0.52),violet=vec3(0.26,0.17,0.5),magenta=vec3(0.45,0.12,0.32);",
-      "float s1=clamp(uStage,0.,1.), s2=clamp(uStage-1.,0.,1.);",
-      "vec3 a=mix(violet,vec3(0.16,0.2,0.55),s1); a=mix(a,vec3(0.4,0.14,0.4),s2);",
-      "vec3 b=mix(cyan,violet,s1*0.6); b=mix(b,magenta,s2*0.5);",
-      "vec3 col=mix(a,b,smoothstep(-0.25,0.3,f));col=mix(col,magenta,smoothstep(0.28,0.72,f)*(0.6+0.4*s2));",
-      "col*=0.55;col+=vec3(0.018,0.026,0.052);",
-      "float vig=smoothstep(1.15,0.25,length(uv-0.5));col*=mix(0.32,1.0,vig);",
-      "gl_FragColor=vec4(col,1.0);}"
-    ].join("\n")
-  });
-  bgScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),bgMat));
-
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(42,1,0.1,100);
-  camera.position.set(0,0,9);
-  const group=new THREE.Group(); scene.add(group);
-
-  function curve(fn){ const c=new THREE.Curve(); c.getPoint=(u,o)=>{const p=fn(u*Math.PI*2);return (o||new THREE.Vector3()).set(p[0],p[1],p[2]);}; return c; }
-  const fig8=curve(t=>[(2+Math.cos(2*t))*Math.cos(3*t),(2+Math.cos(2*t))*Math.sin(3*t),Math.sin(4*t)]);
-  const trefFn=t=>[Math.sin(t)+2*Math.sin(2*t),Math.cos(t)-2*Math.cos(2*t),-Math.sin(3*t)];
-  const tref=curve(trefFn);
-
-  const TUB=MOBILE?260:440, RAD=16;
-  const g1=new THREE.TubeGeometry(fig8,TUB,0.30,RAD,true);
-  const g2=new THREE.TubeGeometry(tref,TUB,0.30,RAD,true);
-  const NT=g1.attributes.position.count;
-  const aU=new Float32Array(NT);
-  for(let k=0;k<NT;k++){ aU[k]=Math.floor(k/(RAD+1))/TUB; }
-  g1.setAttribute("aPos2",new THREE.BufferAttribute(g2.attributes.position.array.slice(),3));
-  g1.setAttribute("aNrm2",new THREE.BufferAttribute(g2.attributes.normal.array.slice(),3));
-  g1.setAttribute("aU",new THREE.BufferAttribute(aU,1));
-  g2.dispose();
-
-  const tubeU={uTime:{value:0},uMorph:{value:0},uFade:{value:1},uIntro:{value:0}};
-  const tubeVert=[
-    "attribute vec3 aPos2;attribute vec3 aNrm2;attribute float aU;",
-    "uniform float uMorph;varying float vU;varying vec3 vN;varying vec3 vV;",
-    "void main(){vec3 p=mix(position,aPos2,uMorph);vec3 n=normalize(mix(normal,aNrm2,uMorph));",
-    "vU=aU;vec4 mv=modelViewMatrix*vec4(p,1.0);vV=mv.xyz;vN=normalize(normalMatrix*n);",
-    "gl_Position=projectionMatrix*mv;}"
-  ].join("\n");
-  function tubeFrag(boost){return [
-    "precision highp float;uniform float uTime;uniform float uFade;uniform float uIntro;",
-    "varying float vU;varying vec3 vN;varying vec3 vV;",
-    "vec3 pal(float t){vec3 c=vec3(0.322,0.839,0.902),v=vec3(0.608,0.482,1.0),m=vec3(0.941,0.416,0.690);",
-    "t=fract(t)*2.0;return t<1.0?mix(c,v,t):mix(v,m,t-1.0);}",
-    "void main(){vec3 N=normalize(vN);vec3 V=normalize(-vV);",
-    "float fr=pow(1.0-max(dot(N,V),0.0),2.2);",
-    "vec3 base=pal(vU+uTime*0.025);",
-    "vec3 col=base*0.30+base*fr*"+boost.toFixed(1)+"+vec3(fr)*0.22;",
-    "float a=("+(boost>2.0?"fr*0.6":"max(fr,0.22)")+")*uFade*uIntro;",
-    "gl_FragColor=vec4(col,a);}"
-  ].join("\n");}
-  const matMain=new THREE.ShaderMaterial({uniforms:tubeU,vertexShader:tubeVert,fragmentShader:tubeFrag(1.8),transparent:true,depthWrite:true});
-  const matHalo=new THREE.ShaderMaterial({uniforms:tubeU,vertexShader:tubeVert,fragmentShader:tubeFrag(2.6),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending});
-  const knot=new THREE.Mesh(g1,matMain); group.add(knot);
-  const halo=new THREE.Mesh(g1,matHalo); halo.scale.setScalar(1.06); group.add(halo);
-
-  const SIDE=MOBILE?10:14, N=SIDE*SIDE*SIDE;
-  const knotPts=new Float32Array(N*3), lattPts=new Float32Array(N*3), graphPts=new Float32Array(N*3);
-  const seeds=new Float32Array(N), delays=new Float32Array(N);
-  for(let i=0;i<N;i++){
-    const t=(i/N)*Math.PI*2, p=trefFn(t);
-    const a=Math.random()*Math.PI*2, r=0.30+ (Math.random()-0.5)*0.10;
-    knotPts[i*3]  =p[0]+Math.cos(a)*r;
-    knotPts[i*3+1]=p[1]+Math.sin(a)*r;
-    knotPts[i*3+2]=p[2]+(Math.random()-0.5)*0.24;
-    seeds[i]=Math.random(); delays[i]=Math.random();
+function hashSeed(s){
+  var h = 1779033703 ^ s.length;
+  for (var i=0;i<s.length;i++){
+    h = Math.imul(h ^ s.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
   }
-  const SP=MOBILE?0.46:0.40, HALF=(SIDE-1)*SP/2;
-  let idx=0;
-  for(let x=0;x<SIDE;x++)for(let y=0;y<SIDE;y++)for(let z=0;z<SIDE;z++){
-    lattPts[idx*3]  =x*SP-HALF;
-    lattPts[idx*3+1]=y*SP-HALF;
-    lattPts[idx*3+2]=z*SP-HALF;
-    idx++;
+  h = Math.imul(h ^ (h >>> 16), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  return (h ^ (h >>> 16)) >>> 0;
+}
+function rng(seed){
+  var a = hashSeed(String(seed));
+  function next(){
+    a = (a + 0x6d2b79f5) | 0;
+    var t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   }
-  const HUBS=MOBILE?18:26, hubs=[];
-  for(let h=0;h<HUBS;h++){
-    const th=Math.acos(1-2*(h+0.5)/HUBS), ph=Math.PI*(1+Math.sqrt(5))*h;
-    hubs.push([2.1*Math.sin(th)*Math.cos(ph),2.1*Math.cos(th)*0.82,2.1*Math.sin(th)*Math.sin(ph)]);
-  }
-  for(let i=0;i<N;i++){
-    const h=hubs[i%HUBS];
-    const g=()=> (Math.random()+Math.random()+Math.random()-1.5)*0.5;
-    graphPts[i*3]=h[0]+g()*0.72; graphPts[i*3+1]=h[1]+g()*0.72; graphPts[i*3+2]=h[2]+g()*0.72;
-  }
-  const pGeo=new THREE.BufferGeometry();
-  pGeo.setAttribute("position",new THREE.BufferAttribute(knotPts,3));
-  pGeo.setAttribute("aLatt",new THREE.BufferAttribute(lattPts,3));
-  pGeo.setAttribute("aGraph",new THREE.BufferAttribute(graphPts,3));
-  pGeo.setAttribute("aSeed",new THREE.BufferAttribute(seeds,1));
-  pGeo.setAttribute("aDelay",new THREE.BufferAttribute(delays,1));
+  next.range = function(lo,hi){ return lo + (hi-lo)*next(); };
+  return next;
+}
 
-  const ptsU={uTime:{value:0},uT1:{value:0},uT2:{value:0},uConv:{value:0},uAlpha:{value:0},uClickT:{value:-10},uDPR:{value:DPR}};
-  const ptsMat=new THREE.ShaderMaterial({
-    uniforms:ptsU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
-    vertexShader:[
-      "attribute vec3 aLatt;attribute vec3 aGraph;attribute float aSeed;attribute float aDelay;",
-      "uniform float uTime,uT1,uT2,uConv,uClickT,uDPR;",
-      "varying vec3 vCol;varying float vGlow;",
-      "float ss(float a,float b,float x){return smoothstep(a,b,x);}",
-      "void main(){",
-      "float t1=ss(0.,1.,clamp((uT1-aDelay*0.35)/0.65,0.,1.));",
-      "float t2=ss(0.,1.,clamp((uT2-aDelay*0.35)/0.65,0.,1.));",
-      "float gate2=t1*(1.0-t2);",
-      "vec3 p=mix(position,aLatt,t1); p=mix(p,aGraph,t2);",
-      // ignition: converge toward a tight luminous core-shell
-      "float cv=ss(0.,1.,clamp((uConv-aDelay*0.25)/0.75,0.,1.));",
-      "vec3 dir=normalize(p+vec3(1e-4));",
-      "vec3 core=dir*(0.55+0.5*fract(aSeed*7.31));",
-      "p=mix(p,core,cv);",
-      "p+=0.035*(1.0-cv*0.6)*(1.0-0.55*gate2)*vec3(sin(uTime*0.7+aSeed*17.0),cos(uTime*0.9+aSeed*23.0),sin(uTime*0.8+aSeed*31.0));",
-      "float age=uTime-uClickT;",
-      "float w=(age>0.0&&age<2.5)?exp(-3.0*abs(length(p)-age*3.2))*exp(-age*1.4):0.0;",
-      "p+=normalize(p+vec3(1e-4))*w*0.4;",
-      "float gate=t1*(1.0-t2);",
-      "float flick=step(0.982,fract(aSeed*91.7+floor(uTime*2.0)*0.618))*gate;",
-      "vec3 c0=vec3(0.322,0.839,0.902),c1=vec3(0.608,0.482,1.0),c2=vec3(0.941,0.416,0.690);",
-      "vec3 cg=mix(c2,c1,fract(aSeed*3.17));",
-      "vCol=mix(c0,c1,t1); vCol=mix(vCol,cg,t2);",
-      "vCol=mix(vCol,vec3(1.0,0.5,0.75),flick*0.9);",
-      "vCol=mix(vCol,vec3(1.0,0.85,0.95),cv*0.45);",
-      "vGlow=w*1.6+flick*0.9+cv*0.8;",
-      "vec4 mv=modelViewMatrix*vec4(p,1.0);",
-      "gl_PointSize=(2.4+1.6*aSeed+3.5*w+2.2*flick+1.4*cv)*uDPR*(9.0/max(1.0,-mv.z));",
-      "gl_Position=projectionMatrix*mv;}"
-    ].join("\n"),
-    fragmentShader:[
-      "precision highp float;uniform float uAlpha;",
-      "varying vec3 vCol;varying float vGlow;",
-      "void main(){",
-      "float d=length(gl_PointCoord-vec2(0.5));",
-      "float m=smoothstep(0.5,0.12,d);",
-      "vec3 col=vCol*(0.55+vGlow)+vec3(vGlow*0.35);",
-      "gl_FragColor=vec4(col,m*uAlpha);}"
-    ].join("\n")
-  });
-  const cloud=new THREE.Points(pGeo,ptsMat); group.add(cloud);
+var P = { v:"#05060f", v2:"#0a0c1c", ink:"#e8e6ff", cyan:"#5ef4ff",
+          violet:"#b07bff", gold:"#f4d58d", rose:"#ff6ea9", dim:"#8a88b8" };
 
-  const edgeSet=new Set(), epos=[], emix=[], ephase=[];
-  for(let a=0;a<HUBS;a++){
-    const ds=hubs.map((h,b)=>[b,Math.hypot(h[0]-hubs[a][0],h[1]-hubs[a][1],h[2]-hubs[a][2])]).sort((x,y)=>x[1]-y[1]);
-    for(let k=1;k<=3&&k<ds.length;k++){
-      const b=ds[k][0], key=a<b?a+"_"+b:b+"_"+a;
-      if(edgeSet.has(key))continue; edgeSet.add(key);
-      const ph=Math.random();
-      epos.push(...hubs[a],...hubs[b]); emix.push(0,1); ephase.push(ph,ph);
+var pcache = {};
+function parse(c){
+  var hit = pcache[c]; if (hit) return hit;
+  var f = c.slice(1);
+  var out = [parseInt(f.slice(0,2),16), parseInt(f.slice(2,4),16), parseInt(f.slice(4,6),16)];
+  pcache[c] = out; return out;
+}
+function A(c,a){
+  var p = parse(c);
+  return "rgba(" + p[0] + "," + p[1] + "," + p[2] + "," + (a<0?0:a>1?1:a).toFixed(3) + ")";
+}
+/* returns hex, because A() only reads hex and every tone in the
+   engraving is a mix fed straight back into A() */
+function hx(n){ n = n<0?0:n>255?255:Math.round(n); return (n<16?"0":"") + n.toString(16); }
+function mix(a,b,t){
+  var X = parse(a), Y = parse(b), k = t<0?0:t>1?1:t;
+  return "#" + hx(X[0]+(Y[0]-X[0])*k) + hx(X[1]+(Y[1]-X[1])*k) + hx(X[2]+(Y[2]-X[2])*k);
+}
+
+/* ---------- the ground: painted once per size, then blitted ---------- */
+
+var ground = null, groundKey = "";
+
+function buildGround(w,h,dpr){
+  var key = w + "|" + h + "|" + dpr;
+  if (groundKey === key && ground) return ground;
+  var off = ground || document.createElement("canvas");
+  off.width = Math.round(w*dpr); off.height = Math.round(h*dpr);
+  var c = off.getContext("2d", { alpha:false });
+  c.setTransform(dpr,0,0,dpr,0,0);
+  paintGround(c,w,h);
+  ground = off; groundKey = key;
+  return off;
+}
+
+function paintGround(c,w,h){
+  var r = rng(SEED + "/plate");
+  var g = c.createLinearGradient(0,h,0,0);
+  g.addColorStop(0, mix(P.v2,P.v,.15));
+  g.addColorStop(.55, P.v);
+  g.addColorStop(1, mix(P.v,P.v2,.5));
+  c.fillStyle = g; c.fillRect(0,0,w,h);
+
+  /* one wash of hue, placed by seed */
+  var wx = w*r.range(.3,.7), wy = h*r.range(.2,.55), wr = Math.hypot(w,h)*r.range(.5,.72);
+  var wg = c.createRadialGradient(wx,wy,0,wx,wy,wr);
+  wg.addColorStop(0, A(P.violet,.10));
+  wg.addColorStop(.5, A(P.violet,.035));
+  wg.addColorStop(1, A(P.violet,0));
+  c.fillStyle = wg; c.fillRect(0,0,w,h);
+
+  /* stars, scaled to area so a phone gets no denser a sky than a laptop */
+  var n = Math.round(210 * ((w*h)/(1000*700)));
+  for (var i=0;i<n;i++){
+    var sx = r()*w, sy = r()*h, mag = r(), rad = .35 + mag*mag*1.5;
+    var hue = mag > .94 ? P.cyan : mag > .86 ? P.gold : P.ink;
+    c.fillStyle = A(hue, .12 + (Math.round(mag*8)/8)*.5);
+    c.beginPath(); c.arc(sx,sy,rad,0,TAU); c.fill();
+    if (mag > .985){
+      var fl = rad*7;
+      c.strokeStyle = A(hue,.3); c.lineWidth = .6;
+      c.beginPath();
+      c.moveTo(sx-fl,sy); c.lineTo(sx+fl,sy);
+      c.moveTo(sx,sy-fl); c.lineTo(sx,sy+fl);
+      c.stroke();
     }
   }
-  const eGeo=new THREE.BufferGeometry();
-  eGeo.setAttribute("position",new THREE.BufferAttribute(new Float32Array(epos),3));
-  eGeo.setAttribute("aMix",new THREE.BufferAttribute(new Float32Array(emix),1));
-  eGeo.setAttribute("aPhase",new THREE.BufferAttribute(new Float32Array(ephase),1));
-  const edgeU={uTime:{value:0},uOn:{value:0}};
-  const eMat=new THREE.ShaderMaterial({
-    uniforms:edgeU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
-    vertexShader:[
-      "attribute float aMix;attribute float aPhase;",
-      "varying float vM;varying float vP;",
-      "void main(){vM=aMix;vP=aPhase;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}"
-    ].join("\n"),
-    fragmentShader:[
-      "precision highp float;uniform float uTime,uOn;varying float vM;varying float vP;",
-      "void main(){",
-      "vec3 c=mix(vec3(0.608,0.482,1.0),vec3(0.941,0.416,0.690),vM);",
-      "float pulse=0.55+0.45*sin(uTime*1.7+vP*6.2831);",
-      "gl_FragColor=vec4(c*0.8,uOn*0.34*pulse);}"
-    ].join("\n")
-  });
-  const edges=new THREE.LineSegments(eGeo,eMat); group.add(edges);
 
-  const BASE=MOBILE?0.8:0.95; group.scale.setScalar(BASE);
-
-  function resize(){
-    const w=innerWidth,h=innerHeight;
-    renderer.setSize(w,h,false);
-    camera.aspect=w/h; camera.updateProjectionMatrix();
-    bgMat.uniforms.uRes.value.set(w*DPR,h*DPR);
-  }
-  resize(); addEventListener("resize",resize);
-
-  let tx=0,ty=0,cx=0,cy=0;
-  let dragging=false,moved=0,lastX=0,lastY=0,yaw=0,pitch=0,velYaw=0,velPitch=0;
-  const DRAG_K=0.009;
-  if(!reduce && matchMedia("(pointer:fine)").matches){
-    addEventListener("pointermove",e=>{
-      tx=(e.clientX/innerWidth-0.5); ty=(e.clientY/innerHeight-0.5);
-      if(!dragging) return;
-      const dx=e.clientX-lastX, dy=e.clientY-lastY; lastX=e.clientX; lastY=e.clientY;
-      moved+=Math.abs(dx)+Math.abs(dy);
-      yaw+=dx*DRAG_K; pitch=Math.max(-1.2,Math.min(1.2,pitch+dy*DRAG_K));
-      velYaw=dx*DRAG_K; velPitch=dy*DRAG_K; e.preventDefault();
-    },{passive:false});
-    addEventListener("pointerdown",e=>{
-      if(e.target.closest("a,button,nav,.box")) return;
-      dragging=true; moved=0; lastX=e.clientX; lastY=e.clientY; velYaw=velPitch=0;
-      document.body.classList.add("grabbing");
-    });
-    const endDrag=e=>{
-      if(dragging && moved<6){ ptsU.uClickT.value=ptsU.uTime.value; }
-      dragging=false; document.body.classList.remove("grabbing");
-    };
-    addEventListener("pointerup",endDrag); addEventListener("pointercancel",()=>{dragging=false;document.body.classList.remove("grabbing");});
+  /* grain, banded into six opacities: six colour strings instead of thousands */
+  var gn = Math.round(1300 * ((w*h)/(1000*700))), bands = 6, per = Math.round(gn/bands);
+  for (var b=0;b<bands;b++){
+    c.fillStyle = A(P.ink, .006 + (b/bands)*.04);
+    for (var j=0;j<per;j++) c.fillRect(r()*w, r()*h, 1, 1);
   }
 
-  const secQ=document.getElementById("quantum"),
-        secAI=document.getElementById("ai"),
-        secC=document.getElementById("contact"),
-        actEl=document.getElementById("act");
-  function sp(el){ const r=el.getBoundingClientRect(); const vh=innerHeight; return Math.max(0,Math.min(1,(vh*0.7-r.top)/(vh*0.7))); }
+  var vg = c.createRadialGradient(w/2,h/2,Math.min(w,h)*.25, w/2,h/2,Math.hypot(w,h)*.62);
+  vg.addColorStop(0, A(P.v,0));
+  vg.addColorStop(1, A(P.v,.8));
+  c.fillStyle = vg; c.fillRect(0,0,w,h);
 
-  function renderFrame(){
-    renderer.clear();
-    renderer.render(bgScene,bgCam);
-    renderer.clearDepth();
-    renderer.render(scene,camera);
+  frame(c,w,h);
+}
+
+/* double rule with corner ornaments: the manuscript half of the stance */
+function frame(c,w,h){
+  var m = Math.max(13, Math.min(w,h)*.032);
+  c.strokeStyle = A(P.gold,.22); c.lineWidth = 1;
+  c.strokeRect(m+.5, m+.5, w-m*2-1, h-m*2-1);
+  c.strokeStyle = A(P.gold,.1);
+  c.strokeRect(m+5.5, m+5.5, w-m*2-11, h-m*2-11);
+
+  var t = Math.max(8, m*.5);
+  var corners = [[m,m,1,1],[w-m,m,-1,1],[m,h-m,1,-1],[w-m,h-m,-1,-1]];
+  c.lineWidth = 1.2;
+  for (var i=0;i<4;i++){
+    var q = corners[i], cx = q[0], cy = q[1], sx = q[2], sy = q[3];
+    c.strokeStyle = A(P.gold,.4);
+    c.beginPath();
+    c.moveTo(cx + sx*t, cy); c.lineTo(cx, cy); c.lineTo(cx, cy + sy*t);
+    c.stroke();
+    c.fillStyle = A(P.gold,.5);
+    c.beginPath();
+    c.moveTo(cx + sx*t*.62, cy + sy*t*.62);
+    c.lineTo(cx + sx*t*.82, cy + sy*t*.42);
+    c.lineTo(cx + sx*t*1.02, cy + sy*t*.62);
+    c.lineTo(cx + sx*t*.82, cy + sy*t*.82);
+    c.closePath(); c.fill();
   }
+}
 
-  let start=0; const INTRO_MS=1500;
-  const clock=new THREE.Clock();
-  function animate(){
-    requestAnimationFrame(animate);
-    const dt=clock.getDelta(), now=performance.now();
-    tubeU.uTime.value+=dt; bgMat.uniforms.uTime.value+=dt; ptsU.uTime.value+=dt; edgeU.uTime.value+=dt;
-    let it=Math.min((now-start)/INTRO_MS,1); it=1-Math.pow(1-it,3);
-    tubeU.uIntro.value=it;
-    cx+=(tx-cx)*0.05; cy+=(ty-cy)*0.05;
+/* ---------- graduation ring, ported from forms.ts ---------- */
+function tickRing(c,cx,cy,rr,count,len,color,al,major){
+  c.lineWidth = 1; c.lineCap = "butt";
+  for (var i=0;i<count;i++){
+    var a = (i/count)*TAU - Math.PI/2;
+    var big = i % major === 0;
+    var l = big ? len : len*.5;
+    c.strokeStyle = A(color, al*(big ? 1 : .5));
+    c.beginPath();
+    c.moveTo(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr);
+    c.lineTo(cx+Math.cos(a)*(rr+l), cy+Math.sin(a)*(rr+l));
+    c.stroke();
+  }
+}
 
-    const sQ=sp(secQ), sAI=sp(secAI), sC=sp(secC);
-    let label="";
-    if(sC>0.55) label="and decides to build";
-    else if(sAI>0.45) label="then it learns to think";
-    else if(sQ>0.3) label="some questions don't have edges";
-    if(actEl.textContent!==label){ actEl.textContent=label; }
-    actEl.style.opacity=label?0.9:0;
+/* ---------- the three subjects ----------
+   One closed strand, cut three ways. Plate I is the trefoil, rendered as a
+   ribbon with cross ticks whose length is set by a fixed light, the way a
+   plate engraver shades a tube, depth sorted so the crossings resolve over
+   and under. Plate II is a cycle on a surface code lattice, which is what a
+   knot becomes laid on a code: topological correction is the statement that a
+   closed loop is correctable and an open chain is not. Plate III is the depth
+   first walk of a reasoning tree, which takes every branch out and back and
+   so closes on its root like the other two.
 
-    tubeU.uMorph.value=Math.min(1,sQ*1.6);
-    tubeU.uFade.value=Math.max(0,1-Math.max(0,sQ-0.3)*2.6);
-    ptsU.uAlpha.value=Math.min(1,Math.max(0,sQ-0.22)*3.0)*(0.92-0.15*sC);
-    ptsU.uT1.value=sQ;
-    ptsU.uT2.value=sAI;
-    ptsU.uConv.value=sC;
-    edgeU.uOn.value=Math.max(0,sAI*1.2-0.2)*(1-sC*0.85);
-    bgMat.uniforms.uStage.value=sQ+sAI;
+   All three are the same closed strand resampled onto the same 660 stations,
+   so the scroll interpolates one curve. Nothing here cross fades two pictures;
+   only the furniture around the subject, which is annotation, may. */
 
-    const isMob=innerWidth<900;
-    let xT=0;
-    if(!isMob){
-      xT=2.2; xT+=(-2.0-xT)*sQ; xT+=(2.0-xT)*sAI; xT+=(0-xT)*sC;
+var NS = 660, ARCS = 60;
+var XS = new Float64Array(NS+1), YS = new Float64Array(NS+1), ZS = new Float64Array(NS+1);
+var RAD = 0;
+(function seedCurve(){
+  var roll = Math.PI/3; /* one lobe straight up */
+  var cr = Math.cos(roll), sr = Math.sin(roll);
+  for (var i=0;i<=NS;i++){
+    var t = (i/NS)*TAU;
+    var x = Math.sin(t) + 2*Math.sin(2*t);
+    var y = Math.cos(t) - 2*Math.cos(2*t);
+    XS[i] = x*cr - y*sr;
+    YS[i] = x*sr + y*cr;
+    ZS[i] = -Math.sin(3*t);
+    var m = Math.abs(XS[i]) > Math.abs(YS[i]) ? Math.abs(XS[i]) : Math.abs(YS[i]);
+    if (m > RAD) RAD = m;
+  }
+})();
+
+function cl1(v){ return v<0?0:v>1?1:v; }
+function ease(t){ t = cl1(t); return t*t*(3-2*t); }
+function span(v,lo,hi){ return hi===lo ? (v<lo?0:1) : cl1((v-lo)/(hi-lo)); }
+
+/* even stations along a closed polyline */
+function resample(pts,n){
+  var m = pts.length, seg = new Float64Array(m), tot = 0, i;
+  for (i=0;i<m;i++){
+    var a = pts[i], b = pts[(i+1)%m];
+    seg[i] = Math.hypot(b[0]-a[0], b[1]-a[1]); tot += seg[i];
+  }
+  var X = new Float64Array(n+1), Y = new Float64Array(n+1), k = 0, acc = 0;
+  for (var j=0;j<n;j++){
+    var d = (j/n)*tot;
+    while (k < m-1 && acc + seg[k] < d){ acc += seg[k]; k++; }
+    var f = seg[k] > 1e-9 ? (d-acc)/seg[k] : 0;
+    var p0 = pts[k], p1 = pts[(k+1)%m];
+    X[j] = p0[0] + (p1[0]-p0[0])*f;
+    Y[j] = p0[1] + (p1[1]-p0[1])*f;
+  }
+  X[n] = X[0]; Y[n] = Y[0];
+  return { x:X, y:Y };
+}
+
+/* a few passes of a three tap mean. The tree walk reverses exactly on itself
+   at every leaf; without this the ribbon folds back through its own edge. */
+function relax(f,n,passes){
+  for (var p=0;p<passes;p++){
+    var X = f.x.slice(0), Y = f.y.slice(0);
+    for (var i=0;i<n;i++){
+      var a = (i+n-1)%n, b = (i+1)%n;
+      f.x[i] = X[i]*.5 + (X[a]+X[b])*.25;
+      f.y[i] = Y[i]*.5 + (Y[a]+Y[b])*.25;
     }
-    group.position.x+=(xT-group.position.x)*0.06;
-    group.position.y+=(Math.sin((sQ+sAI)*3.14)*0.3-group.position.y)*0.05;
-    const scT=BASE*(1-0.06*sQ+0.02*sAI-0.10*sC)*(0.4+0.6*it);
-    group.scale.setScalar(scT);
-
-    if(!dragging){
-      yaw+=velYaw; pitch=Math.max(-1.2,Math.min(1.2,pitch+velPitch));
-      velYaw*=0.95; velPitch*=0.95;
-      const spin=(1-it)*2.2;
-      yaw+=dt*(0.16+spin+0.08*sAI+0.22*sC);
-    }
-    group.rotation.y=yaw;
-    group.rotation.x=0.15+pitch+(dragging?0:cy*0.3);
-    group.rotation.z=dragging?0:cx*0.3;
-
-    renderFrame();
+    f.x[n] = f.x[0]; f.y[n] = f.y[0];
   }
+  return f;
+}
 
-  if(reduce){
-    tubeU.uIntro.value=1; tubeU.uMorph.value=0; tubeU.uFade.value=1; ptsU.uAlpha.value=0;
-    group.rotation.x=0.15; group.rotation.y=0.6; group.position.x=innerWidth<900?0:2.2;
-    renderFrame(); finishIntro();
-    addEventListener("resize",()=>{resize();renderFrame();});
-    addEventListener("scroll",()=>{
-      const sQ=sp(secQ),sAI=sp(secAI),sC=sp(secC);
-      tubeU.uMorph.value=Math.min(1,sQ*1.6);
-      tubeU.uFade.value=Math.max(0,1-Math.max(0,sQ-0.3)*2.6);
-      ptsU.uAlpha.value=Math.min(1,Math.max(0,sQ-0.22)*3.0);
-      ptsU.uT1.value=sQ; ptsU.uT2.value=sAI; ptsU.uConv.value=sC; edgeU.uOn.value=sAI;
-      bgMat.uniforms.uStage.value=sQ+sAI;
-      renderFrame();
-    },{passive:true});
+/* Rotate the target, reversing it if that is shorter, so every station travels
+   the least it can. Without this the strand spins on its way across and the
+   transition reads as a tumble instead of a re-setting. */
+function align(rx,ry,f,n){
+  var best = 0, dir = 0, score = Infinity, o, r, i;
+  var stepO = Math.max(1, Math.round(n/48));
+  for (r=0;r<2;r++){
+    for (o=0;o<n;o+=stepO){
+      var d = 0;
+      for (i=0;i<n;i+=12){
+        var j = r ? (n + o - i) % n : (i + o) % n;
+        var dx = rx[i]-f.x[j], dy = ry[i]-f.y[j];
+        d += dx*dx + dy*dy;
+      }
+      if (d < score){ score = d; best = o; dir = r; }
+    }
+  }
+  var X = new Float64Array(n+1), Y = new Float64Array(n+1);
+  for (i=0;i<=n;i++){
+    var jj = dir ? (n + best - i) % n : (i + best) % n;
+    X[i] = f.x[jj]; Y[i] = f.y[jj];
+  }
+  return { x:X, y:Y };
+}
+
+/* --- plate II: a distance five patch, and one cycle on it --- */
+var LK = 5, LR = RAD*.97, LG = (LR*2)/LK;
+function lp(i,j){ return [-LR + i*LG, -LR + j*LG]; }
+/* a rectilinear cycle with two inward jogs: a loop that goes the long way
+   round the flagged pair rather than through it */
+var LOOP = [[0,1],[5,1],[5,2],[3,2],[3,3],[5,3],[5,4],[0,4],[0,3],[2,3],[2,2],[0,2]];
+var SYN = Math.floor(rng(SEED + "/code")()*3); /* which pair of checks fired */
+var FB = align(XS, YS, relax(resample(LOOP.map(function(q){ return lp(q[0],q[1]); }), NS), NS, 1), NS);
+
+/* --- plate III: a reasoning tree, and the walk that traces it --- */
+var TN = [], TE = [], TD = 3;
+(function seedTree(){
+  var r = rng(SEED + "/graph"), dy = (RAD*2)/TD;
+  (function grow(x,y,d,sp,par){
+    var id = TN.length; TN.push([x,y,d]);
+    if (par >= 0) TE.push([par,id]);
+    if (d >= TD) return;
+    var k = d === 0 ? 3 : (r() < .42 ? 3 : 2);
+    for (var i=0;i<k;i++){
+      grow(x + (i/(k-1) - .5)*2*sp + r.range(-.12,.12)*sp, y - dy, d+1, sp*.46, id);
+    }
+  })(0, RAD, 0, RAD*.84, -1);
+})();
+var FC = (function(){
+  var kids = [], i;
+  for (i=0;i<TN.length;i++) kids.push([]);
+  for (i=0;i<TE.length;i++) kids[TE[i][0]].push(TE[i][1]);
+  var w = [];
+  (function walk(id){
+    w.push([TN[id][0], TN[id][1]]);
+    var c = kids[id];
+    for (var j=0;j<c.length;j++){ walk(c[j]); w.push([TN[id][0], TN[id][1]]); }
+  })(0);
+  return align(FB.x, FB.y, relax(resample(w, NS), NS, 5), NS);
+})();
+
+var BX = new Float64Array(NS+1), BY = new Float64Array(NS+1), BZ = new Float64Array(NS+1);
+var SX = new Float64Array(NS+1), SY = new Float64Array(NS+1), SD = new Float64Array(NS+1);
+var NX = new Float64Array(NS+1), NY = new Float64Array(NS+1);
+var GX = new Float64Array((LK+1)*(LK+1)), GY = new Float64Array((LK+1)*(LK+1));
+
+/* the strand at scroll position p in [0,2] */
+function strand(p){
+  var i, e;
+  if (p <= 1){
+    e = ease(p);
+    for (i=0;i<=NS;i++){
+      BX[i] = XS[i] + (FB.x[i]-XS[i])*e;
+      BY[i] = YS[i] + (FB.y[i]-YS[i])*e;
+      BZ[i] = ZS[i]*(1-e);
+    }
   } else {
-    start=performance.now();
-    setTimeout(finishIntro,1700);
-    animate();
+    e = ease(p-1);
+    for (i=0;i<=NS;i++){
+      BX[i] = FB.x[i] + (FC.x[i]-FB.x[i])*e;
+      BY[i] = FB.y[i] + (FC.y[i]-FB.y[i])*e;
+      BZ[i] = 0;
+    }
   }
+}
+
+/* the burin is held by a hand: every tick is a few percent off its neighbour,
+   drawn once from the seed so the plate is the same plate on every load */
+var JT = new Float32Array(NS+1);
+(function jitter(){
+  var r = rng(SEED + "/burin");
+  for (var i=0;i<=NS;i++) JT[i] = 0.87 + r()*0.2;
+})();
+
+function drawKnot(c,w,h,yaw,pitch,p){
+  var cx = w/2, cy = h/2, unit = Math.min(w,h);
+  var S = unit*0.107;
+  var R = S*3;
+
+  /* how much of each plate is on the copper right now */
+  var wA = cl1(1-p), wB = cl1(1-(p<1?1-p:p-1)), wC = cl1(p-1);
+  var tw = unit*(0.027*wA + 0.019*wB + 0.016*wC);
+
+  var cyw = Math.cos(yaw), syw = Math.sin(yaw);
+  var cp = Math.cos(pitch), sp = Math.sin(pitch);
+
+  /* the plate's one projection, shared by subject and furniture */
+  var pjx = 0, pjy = 0;
+  function pj(px,py,pz){
+    var a1 = px*cyw + pz*syw, b1 = -px*syw + pz*cyw;
+    pjx = cx + a1*S; pjy = cy - (py*cp - b1*sp)*S;
+  }
+
+  var i, x, y, z, x1, z1, y2, z2;
+  for (i=0;i<=NS;i++){
+    x = BX[i]; y = BY[i]; z = BZ[i];
+    x1 =  x*cyw + z*syw;
+    z1 = -x*syw + z*cyw;
+    y2 =  y*cp - z1*sp;
+    z2 =  y*sp + z1*cp;
+    SX[i] = cx + x1*S;
+    SY[i] = cy - y2*S;
+    SD[i] = z2;
+  }
+  /* screen space normals from the tangent */
+  for (i=0;i<=NS;i++){
+    var a = i===0 ? NS-1 : i-1, b = i===NS ? 1 : i+1;
+    var dx = SX[b]-SX[a], dy = SY[b]-SY[a];
+    var L = Math.hypot(dx,dy) || 1;
+    NX[i] = -dy/L; NY[i] = dx/L;
+  }
+
+  /* --- instrument furniture, behind the subject --- */
+  c.save();
+
+  /* the core circle of the torus the knot lives on, drawn in the equatorial
+     plane so the tilt of the whole plate is legible from one ellipse */
+  c.beginPath();
+  for (var k=0;k<=72;k++){
+    var ang = (k/72)*TAU;
+    var gx = Math.cos(ang), gy = Math.sin(ang);
+    var gx1 = gx*cyw, gz1 = -gx*syw;
+    var gy2 = gy*cp - gz1*sp;
+    var px = cx + gx1*S*2, py = cy - gy2*S*2;
+    if (k===0) c.moveTo(px,py); else c.lineTo(px,py);
+  }
+  c.closePath();
+  c.strokeStyle = A(P.dim,.085*wA); c.lineWidth = 1; c.stroke();
+
+  /* --- plate II furniture: the patch the cycle is laid on. A checkerboard of
+     plaquettes, the two kinds of stabiliser, and the vertices that carry the
+     data qubits. --- */
+  if (wB > .012){
+    var gi, gj, gk;
+    for (gj=0; gj<=LK; gj++) for (gi=0; gi<=LK; gi++){
+      pj(-LR+gi*LG, -LR+gj*LG, 0);
+      gk = gj*(LK+1)+gi; GX[gk] = pjx; GY[gk] = pjy;
+    }
+    for (gj=0; gj<LK; gj++) for (gi=0; gi<LK; gi++){
+      var v0 = gj*(LK+1)+gi, v1 = v0+1, v2 = v0+LK+2, v3 = v0+LK+1;
+      c.fillStyle = A((gi+gj)&1 ? P.cyan : P.gold, .085*wB);
+      c.beginPath();
+      c.moveTo(GX[v0],GY[v0]); c.lineTo(GX[v1],GY[v1]);
+      c.lineTo(GX[v2],GY[v2]); c.lineTo(GX[v3],GY[v3]);
+      c.closePath(); c.fill();
+    }
+    c.strokeStyle = A(P.gold,.3*wB); c.lineWidth = 1;
+    c.beginPath();
+    for (gj=0; gj<=LK; gj++){
+      for (gi=0; gi<=LK; gi++){ gk = gj*(LK+1)+gi; if (gi) c.lineTo(GX[gk],GY[gk]); else c.moveTo(GX[gk],GY[gk]); }
+    }
+    for (gi=0; gi<=LK; gi++){
+      for (gj=0; gj<=LK; gj++){ gk = gj*(LK+1)+gi; if (gj) c.lineTo(GX[gk],GY[gk]); else c.moveTo(GX[gk],GY[gk]); }
+    }
+    c.stroke();
+    c.fillStyle = A(P.gold,.55*wB);
+    for (gk=0; gk<GX.length; gk++){ c.beginPath(); c.arc(GX[gk],GY[gk],unit*.0038,0,TAU); c.fill(); }
+  }
+
+  /* --- plate III furniture: the levels the reasoning grows through, and a
+     station at every node it opened. --- */
+  if (wC > .012){
+    var td, tn;
+    c.strokeStyle = A(P.gold,.1*wC); c.lineWidth = 1;
+    c.beginPath();
+    for (td=0; td<=TD; td++){
+      var ly = RAD - (RAD*2/TD)*td;
+      pj(-RAD*1.02, ly, 0); c.moveTo(pjx,pjy);
+      pj(RAD*1.02, ly, 0);  c.lineTo(pjx,pjy);
+    }
+    c.stroke();
+    for (tn=0; tn<TN.length; tn++){
+      var nd = TN[tn];
+      pj(nd[0], nd[1], 0);
+      var nr = unit*(nd[2] === 0 ? .0105 : .0058 - nd[2]*.0008);
+      c.fillStyle = A(nd[2] === 0 ? P.gold : P.cyan, (nd[2] === 0 ? .85 : .5)*wC);
+      c.beginPath(); c.arc(pjx,pjy,nr,0,TAU); c.fill();
+      if (nd[2] === 0){
+        c.strokeStyle = A(P.gold,.5*wC); c.lineWidth = 1;
+        c.beginPath(); c.arc(pjx,pjy,nr*2.6,0,TAU); c.stroke();
+      }
+    }
+  }
+
+  /* three axes of the three fold symmetry, held to the outer annulus so they
+     do not cut across the subject */
+  c.strokeStyle = A(P.gold,.13); c.lineWidth = 1;
+  for (var s3=0;s3<3;s3++){
+    var aa = -Math.PI/2 + (s3/3)*TAU;
+    c.beginPath();
+    c.moveTo(cx + Math.cos(aa)*R*1.09, cy + Math.sin(aa)*R*1.09);
+    c.lineTo(cx + Math.cos(aa)*R*1.4, cy + Math.sin(aa)*R*1.4);
+    c.stroke();
+  }
+
+  /* graduated scale */
+  c.strokeStyle = A(P.gold,.18); c.lineWidth = 1;
+  c.beginPath(); c.arc(cx,cy,R*1.24,0,TAU); c.stroke();
+  c.strokeStyle = A(P.gold,.09);
+  c.beginPath(); c.arc(cx,cy,R*1.36,0,TAU); c.stroke();
+  tickRing(c,cx,cy,R*1.24,72,unit*.016,P.gold,.36,6);
+
+  /* a lozenge on each axis of symmetry, the same ornament as the frame corner */
+  c.fillStyle = A(P.gold,.5);
+  for (var lz=0; lz<3; lz++){
+    var la = -Math.PI/2 + (lz/3)*TAU;
+    var lx = cx + Math.cos(la)*R*1.24, ly = cy + Math.sin(la)*R*1.24;
+    var lr = unit*.0105;
+    c.beginPath();
+    c.moveTo(lx, ly-lr); c.lineTo(lx+lr, ly); c.lineTo(lx, ly+lr); c.lineTo(lx-lr, ly);
+    c.closePath(); c.fill();
+  }
+  c.restore();
+
+  /* --- the subject, painted far arcs first --- */
+  var order = [];
+  var per = Math.ceil(NS/ARCS);
+  for (var q=0;q<ARCS;q++){
+    var i0 = q*per, i1 = Math.min(NS, i0+per+1);
+    if (i0 >= NS) break;
+    var d = 0;
+    for (var m=i0;m<=i1;m++) d += SD[m];
+    order.push([i0,i1,d/(i1-i0+1)]);
+  }
+  order.sort(function(a,b){ return a[2]-b[2]; });
+
+  var LX = -0.5547, LY = -0.8321; /* light, upper left */
+  var HIGH = mix(P.gold, P.ink, .34);
+  var step = unit*0.0125;
+
+  c.save();
+  c.lineJoin = "round"; c.lineCap = "butt";
+
+  for (var oi=0; oi<order.length; oi++){
+    var seg = order[oi], a0 = seg[0], a1 = seg[1];
+    var near = .5 + .5*seg[2];              /* 0 far, 1 near */
+    var wpx = tw*(.92 + .14*near);
+    var tone = mix(P.gold, P.violet, (1-near)*.3);
+
+    /* the body, opaque, so a strand behind is truly hidden. One flat tone for
+       every arc: a per arc tone bands visibly at the seams. */
+    c.beginPath();
+    for (i=a0;i<=a1;i++){
+      var ax = SX[i]+NX[i]*wpx, ay = SY[i]+NY[i]*wpx;
+      if (i===a0) c.moveTo(ax,ay); else c.lineTo(ax,ay);
+    }
+    for (i=a1;i>=a0;i--) c.lineTo(SX[i]-NX[i]*wpx, SY[i]-NY[i]*wpx);
+    c.closePath();
+    c.fillStyle = "#0c0e20";
+    c.fill();
+
+    /* the cross ticks: even spacing along the arc, length set by a fixed
+       light. This is the whole of the shading, the way a plate engraver
+       does a tube. Spacing is measured, not counted, so a tight inner
+       curve does not turn into a solid block. */
+    c.lineWidth = 1;
+    c.strokeStyle = A(tone, .3 + .32*near);
+    c.beginPath();
+    var run = 0;
+    for (i=a0;i<a1;i++){
+      run += Math.hypot(SX[i+1]-SX[i], SY[i+1]-SY[i]);
+      if (run < step*JT[i]) continue;
+      run = 0;
+      /* Gold on a night ground inverts the engraver's convention: line is
+         light, blank is shadow. So the hatch hangs off the lit rail and
+         stops at the terminator. How far it reaches is how squarely the
+         tube is cross lit; a tube running along the light is lit end on
+         and carries line nearly all the way across. */
+      var lit = NX[i]*LX + NY[i]*LY;
+      var lu = lit >= 0 ? 1 : -1;
+      var f = (.38 + .4*(1 - (lit<0?-lit:lit))) * JT[i];
+      c.moveTo(SX[i]+NX[i]*wpx*lu, SY[i]+NY[i]*wpx*lu);
+      c.lineTo(SX[i]+NX[i]*wpx*lu*(1-2*f), SY[i]+NY[i]*wpx*lu*(1-2*f));
+    }
+    c.stroke();
+
+    /* the two rails. The lit one is the burin's finish line. */
+    for (var side=0; side<2; side++){
+      var sg = side ? -1 : 1;
+      var mid = (a0+a1)>>1;
+      var litr = (NX[mid]*LX + NY[mid]*LY)*sg;
+      c.beginPath();
+      for (i=a0;i<=a1;i++) {
+        var rx = SX[i]+NX[i]*wpx*sg, ry = SY[i]+NY[i]*wpx*sg;
+        if (i===a0) c.moveTo(rx,ry); else c.lineTo(rx,ry);
+      }
+      if (litr > 0){
+        c.lineWidth = 1.35;
+        c.strokeStyle = A(mix(tone, HIGH, near), .52 + .4*near);
+      } else {
+        c.lineWidth = 1;
+        c.strokeStyle = A(tone, .34 + .26*near);
+      }
+      c.stroke();
+    }
+  }
+  c.restore();
+
+  /* --- what the code found, annotated over the subject: two checks that
+     fired, and the chain of corrections laid between them. --- */
+  if (wB > .012){
+    var ci, ch = [], mr = unit*.0135;
+    for (ci=0; ci<3; ci++){
+      pj(-LR+(SYN+ci+.5)*LG, -LR+2.5*LG, 0); ch.push(pjx, pjy);
+    }
+    c.strokeStyle = A(P.gold,.7*wB); c.lineWidth = 1.6;
+    c.beginPath(); c.moveTo(ch[0],ch[1]);
+    c.lineTo(ch[2],ch[3]); c.lineTo(ch[4],ch[5]);
+    c.stroke();
+    for (ci=0; ci<6; ci+=4){
+      var ex = ch[ci], ey = ch[ci+1];
+      c.strokeStyle = A(P.rose,.85*wB); c.lineWidth = 1.3;
+      c.beginPath(); c.arc(ex,ey,mr,0,TAU); c.stroke();
+      c.beginPath();
+      c.moveTo(ex-mr*.55,ey-mr*.55); c.lineTo(ex+mr*.55,ey+mr*.55);
+      c.moveTo(ex+mr*.55,ey-mr*.55); c.lineTo(ex-mr*.55,ey+mr*.55);
+      c.stroke();
+    }
+  }
+
+  /* --- crossings, marked the way a plate annotates a point. Only plate I has
+     any: a curve lying flat has no over and under to resolve. --- */
+  if (wA <= .35) return;
+  c.save();
+  var found = [];
+  for (i=0;i<NS;i+=7){
+    for (var j=i+60;j<NS;j+=7){
+      var ddx = SX[i]-SX[j], ddy = SY[i]-SY[j];
+      if (ddx*ddx + ddy*ddy < tw*tw*.8){
+        var mx = (SX[i]+SX[j])/2, my = (SY[i]+SY[j])/2, ok = 1;
+        for (var f2=0; f2<found.length; f2++){
+          if (Math.hypot(found[f2][0]-mx, found[f2][1]-my) < R*.4){ ok = 0; break; }
+        }
+        if (ok) found.push([mx,my]);
+      }
+    }
+  }
+  var ma = span(wA,.35,.7);
+  for (var fi=0; fi<found.length && fi<4; fi++){
+    var mkx = found[fi][0], mky = found[fi][1], mkr = unit*.0135;
+    c.strokeStyle = A(P.gold,.55*ma); c.lineWidth = 1.1;
+    c.beginPath(); c.arc(mkx,mky,mkr,0,TAU); c.stroke();
+    c.strokeStyle = A(P.cyan,.45*ma); c.lineWidth = 1;
+    c.beginPath();
+    c.moveTo(mkx-mkr*2.1,mky); c.lineTo(mkx-mkr*1.35,mky);
+    c.moveTo(mkx+mkr*1.35,mky); c.lineTo(mkx+mkr*2.1,mky);
+    c.stroke();
+    c.fillStyle = A(P.cyan,.5*ma);
+    c.beginPath(); c.arc(mkx,mky,1.5,0,TAU); c.fill();
+  }
+  c.restore();
+}
+
+/* ---------- driver ----------
+   The box is taken from .slot when the layout changes and from nothing at all
+   in between: scroll writes a transform and two lengths. The backing store is
+   cut once at the size the hero gives it and never re-cut, so a plate that has
+   receded to the margin is the same engraving downsampled, and stays sharp. */
+
+var cv = document.getElementById("plate");
+var ctx = cv.getContext("2d", { alpha:false });
+var fig = document.querySelector(".plate");
+var slot = document.querySelector(".slot");
+var cap = fig.querySelector("figcaption");
+var capL = document.getElementById("cap");
+var capS = document.getElementById("sd");
+var secQ = document.getElementById("quantum");
+var secA = document.getElementById("ai");
+
+var PLATES = [
+  ["Plate I&nbsp;&#183; Trefoil, 3<sub>1</sub>", "",
+   "Engraved astronomical plate: a trefoil knot drawn in gold line, ringed by a graduated scale over a star field."],
+  ["Plate II&nbsp;&#183; Code patch, d&nbsp;5", "/code",
+   "Engraved plate: a five by five stabiliser lattice, two checks that fired and the chain of corrections joining them, with one closed cycle laid over the code."],
+  ["Plate III&nbsp;&#183; Graph, depth 3", "/graph",
+   "Engraved plate: a reasoning tree branching from one root through three levels, traced as a single continuous stroke."]
+];
+
+var W = 0, H = 0, DPR = 1;
+var reduce = matchMedia("(prefers-reduced-motion: reduce)");
+var raf = 0, last = 0, t0 = 0, lastP = -1, capI = -1, dark = 0;
+var pxT = 0, pyT = 0, pxC = 0, pyC = 0;
+var LW = 0, LH = 0, LXD = 0, LYD = 0, CAPH = 24;
+var RW = 0, RH = 0, RX = 0, RY = 0, RAIL = 0;
+var T1 = 0, T2 = 0, T3 = 0, D1 = 1, D2 = 1;
+
+var YAW0 = -0.13, PITCH0 = 0.17;
+
+function measure(){
+  var barh = document.querySelector(".bar").offsetHeight || 52;
+  var gut = parseFloat(getComputedStyle(document.querySelector(".quire")).paddingLeft) || 24;
+  var r = slot.getBoundingClientRect();
+  LW = Math.max(1, Math.round(r.width));
+  LH = Math.max(1, Math.round(r.height));
+  LXD = r.left + window.pageXOffset;
+  LYD = r.top + window.pageYOffset;
+  fig.style.width = LW + "px"; fig.style.height = LH + "px";
+  CAPH = Math.round(cap.getBoundingClientRect().height) + 11;
+  var fh = Math.max(1, LH - CAPH);
+  var vw = window.innerWidth, vh = window.innerHeight;
+  /* Wide enough for a margin beside the measure, and the plate keeps to it,
+     taking the margin the argument is not using and no pixel of the one it is.
+     Narrower, and it pins as a band over the column; the hero has stacked. */
+  RAIL = vw > 1250 ? 1 : 0;
+  fig.classList.toggle("rail", !!RAIL);
+  fig.classList.toggle("band", !RAIL);
+  if (RAIL){
+    var edge = secQ.querySelector(".act").getBoundingClientRect().right;
+    RW = Math.min(440, Math.max(260, vw - gut - edge - 34));
+    RX = vw - gut - RW;
+    RY = barh + 20;
+  } else {
+    RW = LW;
+    RX = LXD - window.pageXOffset;
+    RY = barh;
+  }
+  RH = fh*(RW/LW) + CAPH;
+  /* Each plate is fully cut when its lemma is centred and holds there while it
+     is read. The ramps are sized from the gap between those two positions, so
+     neither starts before the other finishes, and the first is held off the
+     top of the document, so the fold is only ever plate I. */
+  var qr = secQ.getBoundingClientRect(), ar = secA.getBoundingClientRect();
+  var yo = window.pageYOffset;
+  T1 = qr.top + yo + qr.height/2 - vh/2;
+  T2 = ar.top + yo + ar.height/2 - vh/2;
+  T3 = ar.bottom + yo - vh*0.45;
+  /* On a window taller than the argument every anchor collapses toward zero,
+     which would open the page on plate III. Held apart and off the top, the
+     degenerate case is only a quick run through, never a wrong first plate. */
+  T1 = Math.max(T1, 60);
+  T2 = Math.max(T2, T1 + 140);
+  T3 = Math.max(T3, T2 + 140);
+  var gap = Math.max(160, T2 - T1)*0.55;
+  D1 = Math.max(90, Math.min(340, gap, T1));
+  D2 = Math.max(90, Math.min(340, gap));
+  document.documentElement.style.scrollPaddingTop =
+    (RAIL ? barh + 14 : RY + RH + 14) + "px";
+}
+
+function prog(){
+  var y = window.pageYOffset;
+  return span(y, T1-D1, T1) + span(y, T2-D2, T2);
+}
+
+/* one transform and two lengths: the ribbon is never re-rasterised to move */
+function place(q, rel){
+  var vx = LXD - window.pageXOffset, vy = LYD - window.pageYOffset;
+  fig.style.width  = (LW + (RW-LW)*q).toFixed(1) + "px";
+  fig.style.height = (LH + (RH-LH)*q).toFixed(1) + "px";
+  fig.style.transform = "translate3d(" +
+    (vx + (RX-vx)*q).toFixed(1) + "px," +
+    (vy + (RY-vy)*q - rel).toFixed(1) + "px,0)";
+  if (!RAIL) fig.style.setProperty("--pin", q.toFixed(3));
+}
+
+function caption(p){
+  var i = p < .5 ? 0 : p < 1.5 ? 1 : 2;
+  var f = p <= 1 ? p : p - 1;
+  cap.style.opacity = (.32 + .68*Math.abs(2*f-1)).toFixed(2);
+  if (i === capI) return;
+  capI = i;
+  capL.innerHTML = PLATES[i][0];
+  capS.textContent = hashSeed(SEED + PLATES[i][1]).toString(16).toUpperCase().slice(0,6);
+  cv.setAttribute("aria-label", PLATES[i][2]);
+}
+
+function size(){
+  var w = LW, h = Math.max(1, LH - CAPH);
+  var d = Math.min(window.devicePixelRatio || 1, 2);
+  if (w === W && h === H && d === DPR) return false;
+  W = w; H = h; DPR = d;
+  cv.width = Math.round(w*d); cv.height = Math.round(h*d);
+  ctx.setTransform(d,0,0,d,0,0);
+  return true;
+}
+
+function render(yaw,pitch,p){
+  ctx.drawImage(buildGround(W,H,DPR), 0, 0, W, H);
+  strand(p);
+  drawKnot(ctx, W, H, yaw, pitch, p);
+}
+
+/* reduced motion: no interpolation. The plate that belongs to the section in
+   view, switched on the instant the section takes over, caption with it. */
+function snap(){
+  var p = prog();
+  return p < .5 ? 0 : p < 1.5 ? 1 : 2;
+}
+function still(){
+  var p = snap(), rel = Math.max(0, window.pageYOffset - T3);
+  place(cl1(p), rel);
+  if (p !== lastP){ lastP = p; caption(p); size(); render(YAW0, PITCH0, p); }
+  fig.classList.add("on");
+}
+
+function loop(now){
+  raf = 0;
+  var p = prog(), rel = Math.max(0, window.pageYOffset - T3);
+  if (rel > RY + RH + 40){
+    if (!dark){ dark = 1; fig.style.visibility = "hidden"; }
+    raf = requestAnimationFrame(loop); return;
+  }
+  if (dark){ dark = 0; fig.style.visibility = ""; }
+  place(cl1(p), rel);
+  var moving = Math.abs(p - lastP) > .0004;
+  if (!moving && now - last < 32){ raf = requestAnimationFrame(loop); return; }
+  last = now; lastP = p;
+  if (!t0) t0 = now;
+  var e = (now - t0)/1000;
+  pxC += (pxT - pxC)*.06; pyC += (pyT - pyC)*.06;
+  /* the hand steadies as the instrument goes to the margin */
+  var idle = 1 - cl1(p)*.7;
+  caption(p);
+  size();
+  render(
+    YAW0 + (Math.sin(e*0.2244)*0.062 + pxC*0.075)*idle,
+    PITCH0 + (Math.sin(e*0.1571 + 1.1)*0.034 + pyC*0.055)*idle,
+    p
+  );
+  fig.classList.add("on");
+  raf = requestAnimationFrame(loop);
+}
+
+function start(){
+  if (reduce.matches){ still(); return; }
+  if (!raf) raf = requestAnimationFrame(loop);
+}
+function stop(){
+  if (raf){ cancelAnimationFrame(raf); raf = 0; }
+}
+
+/* The type paints first. The plate is cut on the next frame and fades up, so
+   the engraving never sits in front of first contentful paint. */
+document.getElementById("yr").textContent = new Date().getFullYear();
+measure();
+size();
+
+requestAnimationFrame(function(){
+  measure();
+  var p = reduce.matches ? snap() : prog();
+  lastP = p;
+  place(cl1(p), Math.max(0, window.pageYOffset - T3));
+  caption(p);
+  render(YAW0, PITCH0, p);
+  fig.classList.add("on");
+  if (!reduce.matches) start();
+});
+
+if (reduce.matches){
+  var pend = 0;
+  window.addEventListener("scroll", function(){
+    if (pend) return; pend = 1;
+    requestAnimationFrame(function(){ pend = 0; still(); });
+  }, { passive:true });
+} else {
+  document.addEventListener("visibilitychange", function(){
+    if (document.hidden) stop(); else { t0 = 0; start(); }
+  });
+  if (matchMedia("(pointer:fine)").matches){
+    window.addEventListener("pointermove", function(ev){
+      pxT = (ev.clientX / window.innerWidth) * 2 - 1;
+      pyT = (ev.clientY / window.innerHeight) * 2 - 1;
+    }, { passive:true });
+  }
+}
+
+var rt = 0;
+function relayout(){
+  measure();
+  if (size()) groundKey = "";
+  lastP = -1;
+  if (reduce.matches) still();
+}
+window.addEventListener("resize", function(){
+  clearTimeout(rt);
+  rt = setTimeout(relayout, 120);
+}, { passive:true });
+window.addEventListener("load", relayout);
+
+reduce.addEventListener && reduce.addEventListener("change", function(){
+  lastP = -1;
+  if (reduce.matches) { stop(); still(); } else start();
+});
+
+/* ---------- analytics, after the page is done painting ----------
+   GA4 is the only request this document makes, and it is not made
+   until load has fired, so it can never sit in front of first paint. */
+window.dataLayer = window.dataLayer || [];
+function gtag(){ dataLayer.push(arguments); }
+window.gtag = gtag;
+gtag("js", new Date());
+gtag("config", "G-DVPGC1C44Z");
+window.addEventListener("load", function(){
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z";
+  document.head.appendChild(s);
+});
 })();
 </script>
 </body>
