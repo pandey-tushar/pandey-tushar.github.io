@@ -177,8 +177,8 @@ h1 .sur{display:block;color:#cfcbf0}
 .btn:hover::before,.btn:hover::after,.btn:focus-visible::before,.btn:focus-visible::after{border-color:var(--g70)}
 
 /* ---------- the plate ----------
-   One instrument, re-set three times. The figure is lifted out of the flow and
-   driven by scroll, so it can stay legible beside the two lemmas it illustrates.
+   One instrument, re-set four times. The figure is lifted out of the flow and
+   driven by scroll, so it can stay legible beside the sections it illustrates.
    .slot holds its place in the hero and is the only source of its size: the
    plate never invents a box the layout did not already give it. */
 .slot{min-width:0;height:100%;max-height:min(74vh,720px)}
@@ -650,7 +650,7 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
     </ul>
     <div class="colophon">
       <p>&copy; <span id="yr">2026</span> Tushar Pandey</p>
-      <p>One canvas &#183; three plates &#183; zero page builders.</p>
+      <p>One canvas &#183; four plates &#183; zero page builders.</p>
     </div>
   </div>
 </footer>
@@ -819,17 +819,20 @@ function tickRing(c,cx,cy,rr,count,len,color,al,major){
   }
 }
 
-/* ---------- the three subjects ----------
-   One closed strand, cut three ways. Plate I is the trefoil, rendered as a
+/* ---------- the four subjects ----------
+   One closed strand, cut four ways. Plate I is the trefoil, rendered as a
    ribbon with cross ticks whose length is set by a fixed light, the way a
    plate engraver shades a tube, depth sorted so the crossings resolve over
    and under. Plate II is a cycle on a surface code lattice, which is what a
    knot becomes laid on a code: topological correction is the statement that a
    closed loop is correctable and an open chain is not. Plate III is the depth
    first walk of a reasoning tree, which takes every branch out and back and
-   so closes on its root like the other two.
+   so closes on its root like the other two. Plate IV is the unknot: the same
+   strand with every crossing let go, closed as one round circle. The trefoil
+   is the first knot that is not a circle, so the sequence counts the crossings
+   down, 3 to 0, and ends on the one loop that has nothing left to resolve.
 
-   All three are the same closed strand resampled onto the same 660 stations,
+   All four are the same closed strand resampled onto the same 660 stations,
    so the scroll interpolates one curve. Nothing here cross fades two pictures;
    only the furniture around the subject, which is annotation, may. */
 
@@ -951,12 +954,24 @@ var FC = (function(){
   return align(FB.x, FB.y, relax(resample(w, NS), NS, 5), NS);
 })();
 
+/* --- plate IV: the unknot, 0 1. Radius is the trefoil's own reach, less a
+   little, so the strand gives up its crossings without giving up its ground.
+   It is a circle in a plane tilted off the page, not a ring drawn on it: plate
+   I is a tube in space and this is the same tube, so the close has to stand in
+   the same room. Held on that plane, z is just y leaning by the tilt. --- */
+var PHI = .70, CPH = Math.cos(PHI), TPH = Math.tan(PHI), URAD = RAD*.93;
+var FD = (function(){
+  var X = new Float64Array(NS+1), Y = new Float64Array(NS+1), rr = URAD, i;
+  for (i=0;i<=NS;i++){ var a = (i/NS)*TAU; X[i] = Math.cos(a)*rr; Y[i] = Math.sin(a)*rr*CPH; }
+  return align(FC.x, FC.y, { x:X, y:Y }, NS);
+})();
+
 var BX = new Float64Array(NS+1), BY = new Float64Array(NS+1), BZ = new Float64Array(NS+1);
 var SX = new Float64Array(NS+1), SY = new Float64Array(NS+1), SD = new Float64Array(NS+1);
 var NX = new Float64Array(NS+1), NY = new Float64Array(NS+1);
 var GX = new Float64Array((LK+1)*(LK+1)), GY = new Float64Array((LK+1)*(LK+1));
 
-/* the strand at scroll position p in [0,2] */
+/* the strand at scroll position p in [0,3] */
 function strand(p){
   var i, e;
   if (p <= 1){
@@ -966,12 +981,19 @@ function strand(p){
       BY[i] = YS[i] + (FB.y[i]-YS[i])*e;
       BZ[i] = ZS[i]*(1-e);
     }
-  } else {
+  } else if (p <= 2){
     e = ease(p-1);
     for (i=0;i<=NS;i++){
       BX[i] = FB.x[i] + (FC.x[i]-FB.x[i])*e;
       BY[i] = FB.y[i] + (FC.y[i]-FB.y[i])*e;
       BZ[i] = 0;
+    }
+  } else {
+    e = ease(p-2);
+    for (i=0;i<=NS;i++){
+      BX[i] = FC.x[i] + (FD.x[i]-FC.x[i])*e;
+      BY[i] = FC.y[i] + (FD.y[i]-FC.y[i])*e;
+      BZ[i] = FD.y[i]*TPH*e;
     }
   }
 }
@@ -990,8 +1012,9 @@ function drawKnot(c,w,h,yaw,pitch,p){
   var R = S*3;
 
   /* how much of each plate is on the copper right now */
-  var wA = cl1(1-p), wB = cl1(1-(p<1?1-p:p-1)), wC = cl1(p-1);
-  var tw = unit*(0.027*wA + 0.019*wB + 0.016*wC);
+  var wA = cl1(1-p), wB = cl1(1-(p<1?1-p:p-1));
+  var wC = cl1(1-(p<2?2-p:p-2)), wD = cl1(p-2);
+  var tw = unit*(0.027*wA + 0.019*wB + 0.016*wC + 0.021*wD);
 
   var cyw = Math.cos(yaw), syw = Math.sin(yaw);
   var cp = Math.cos(pitch), sp = Math.sin(pitch);
@@ -1091,6 +1114,27 @@ function drawKnot(c,w,h,yaw,pitch,p){
         c.strokeStyle = A(P.gold,.5*wC); c.lineWidth = 1;
         c.beginPath(); c.arc(pjx,pjy,nr*2.6,0,TAU); c.stroke();
       }
+    }
+  }
+
+  /* --- plate IV furniture: with no crossing left to resolve the plate stops
+     holding the subject in. Six lead lines leave the ring for the scale, each
+     closed by a station: bearings taken, none of them travelled yet. --- */
+  if (wD > .012){
+    var ea = S*URAD, eb = ea*CPH, dk;
+    c.lineWidth = 1;
+    for (dk=0; dk<6; dk++){
+      var da = -Math.PI/2 + (dk/6)*TAU, dx6 = Math.cos(da), dy6 = Math.sin(da);
+      var ox = cx + dx6*R*1.4, oy = cy + dy6*R*1.4;
+      /* the ring is an ellipse on the page, so each line leaves the rim it is
+         actually pointed at rather than a radius the subject does not keep */
+      var dr = ea*eb/Math.hypot(eb*dx6, ea*dy6)*1.2;
+      c.strokeStyle = A(P.gold,.17*wD);
+      c.beginPath();
+      c.moveTo(cx + dx6*dr, cy + dy6*dr); c.lineTo(ox,oy);
+      c.stroke();
+      c.fillStyle = A(P.cyan,.42*wD);
+      c.beginPath(); c.arc(ox,oy,unit*.0046,0,TAU); c.fill();
     }
   }
 
@@ -1278,6 +1322,8 @@ var capL = document.getElementById("cap");
 var capS = document.getElementById("sd");
 var secQ = document.getElementById("quantum");
 var secA = document.getElementById("ai");
+var secC = document.getElementById("contact");
+var secF = document.querySelector("footer");
 
 var PLATES = [
   ["Plate I&nbsp;&#183; Trefoil, 3<sub>1</sub>", "",
@@ -1285,7 +1331,9 @@ var PLATES = [
   ["Plate II&nbsp;&#183; Code patch, d&nbsp;5", "/code",
    "Engraved plate: a five by five stabiliser lattice, two checks that fired and the chain of corrections joining them, with one closed cycle laid over the code."],
   ["Plate III&nbsp;&#183; Graph, depth 3", "/graph",
-   "Engraved plate: a reasoning tree branching from one root through three levels, traced as a single continuous stroke."]
+   "Engraved plate: a reasoning tree branching from one root through three levels, traced as a single continuous stroke."],
+  ["Plate IV&nbsp;&#183; Unknot, 0<sub>1</sub>", "/open",
+   "Engraved plate: the same strand with every crossing let go, closed as one round circle, the unknot, with six lead lines running out to the graduated scale."]
 ];
 
 var W = 0, H = 0, DPR = 1;
@@ -1294,7 +1342,7 @@ var raf = 0, last = 0, t0 = 0, lastP = -1, capI = -1, dark = 0;
 var pxT = 0, pyT = 0, pxC = 0, pyC = 0;
 var LW = 0, LH = 0, LXD = 0, LYD = 0, CAPH = 24;
 var RW = 0, RH = 0, RX = 0, RY = 0, RAIL = 0;
-var T1 = 0, T2 = 0, T3 = 0, D1 = 1, D2 = 1;
+var T1 = 0, T2 = 0, T3 = 0, TR = 0, D1 = 1, D2 = 1, D3 = 1;
 
 var YAW0 = -0.13, PITCH0 = 0.17;
 
@@ -1332,26 +1380,40 @@ function measure(){
      neither starts before the other finishes, and the first is held off the
      top of the document, so the fold is only ever plate I. */
   var qr = secQ.getBoundingClientRect(), ar = secA.getBoundingClientRect();
+  var cr = secC.getBoundingClientRect(), fr = secF.getBoundingClientRect();
   var yo = window.pageYOffset;
   T1 = qr.top + yo + qr.height/2 - vh/2;
   T2 = ar.top + yo + ar.height/2 - vh/2;
-  T3 = ar.bottom + yo - vh*0.45;
+  /* The plate is let go where it would otherwise crowd the close. Out in the
+     margin that is the moment the foot rises to meet it, and no sooner, since
+     nothing else is out there. Pinned across the column it is wherever the
+     document still has the run to carry it off the screen, so the last rows
+     are never left under a band. */
+  TR = RAIL ? fr.top + yo - (RY + RH + 24)
+            : Math.min(cr.bottom + yo - vh*0.42,
+                       document.documentElement.scrollHeight - vh - (RY + RH + 46));
+  /* Plate IV is cut by the time the close is on the screen to be read, not
+     when it is centred: the corollary is the last thing on a short page and
+     may never reach the middle of a tall window. */
+  T3 = Math.min(cr.top + yo - vh*0.55, TR - 150);
   /* On a window taller than the argument every anchor collapses toward zero,
-     which would open the page on plate III. Held apart and off the top, the
+     which would open the page on plate IV. Held apart and off the top, the
      degenerate case is only a quick run through, never a wrong first plate. */
   T1 = Math.max(T1, 60);
   T2 = Math.max(T2, T1 + 140);
   T3 = Math.max(T3, T2 + 140);
+  TR = Math.max(TR, T3 + 90);
   var gap = Math.max(160, T2 - T1)*0.55;
   D1 = Math.max(90, Math.min(340, gap, T1));
   D2 = Math.max(90, Math.min(340, gap));
+  D3 = Math.max(90, Math.min(340, Math.max(160, T3 - T2)*0.55));
   document.documentElement.style.scrollPaddingTop =
     (RAIL ? barh + 14 : RY + RH + 14) + "px";
 }
 
 function prog(){
   var y = window.pageYOffset;
-  return span(y, T1-D1, T1) + span(y, T2-D2, T2);
+  return span(y, T1-D1, T1) + span(y, T2-D2, T2) + span(y, T3-D3, T3);
 }
 
 /* one transform and two lengths: the ribbon is never re-rasterised to move */
@@ -1366,8 +1428,8 @@ function place(q, rel){
 }
 
 function caption(p){
-  var i = p < .5 ? 0 : p < 1.5 ? 1 : 2;
-  var f = p <= 1 ? p : p - 1;
+  var i = p < .5 ? 0 : p < 1.5 ? 1 : p < 2.5 ? 2 : 3;
+  var f = p <= 1 ? p : p <= 2 ? p - 1 : p - 2;
   cap.style.opacity = (.32 + .68*Math.abs(2*f-1)).toFixed(2);
   if (i === capI) return;
   capI = i;
@@ -1396,10 +1458,10 @@ function render(yaw,pitch,p){
    view, switched on the instant the section takes over, caption with it. */
 function snap(){
   var p = prog();
-  return p < .5 ? 0 : p < 1.5 ? 1 : 2;
+  return p < .5 ? 0 : p < 1.5 ? 1 : p < 2.5 ? 2 : 3;
 }
 function still(){
-  var p = snap(), rel = Math.max(0, window.pageYOffset - T3);
+  var p = snap(), rel = Math.max(0, window.pageYOffset - TR);
   place(cl1(p), rel);
   if (p !== lastP){ lastP = p; caption(p); size(); render(YAW0, PITCH0, p); }
   fig.classList.add("on");
@@ -1407,7 +1469,7 @@ function still(){
 
 function loop(now){
   raf = 0;
-  var p = prog(), rel = Math.max(0, window.pageYOffset - T3);
+  var p = prog(), rel = Math.max(0, window.pageYOffset - TR);
   if (rel > RY + RH + 40){
     if (!dark){ dark = 1; fig.style.visibility = "hidden"; }
     raf = requestAnimationFrame(loop); return;
@@ -1451,7 +1513,7 @@ requestAnimationFrame(function(){
   measure();
   var p = reduce.matches ? snap() : prog();
   lastP = p;
-  place(cl1(p), Math.max(0, window.pageYOffset - T3));
+  place(cl1(p), Math.max(0, window.pageYOffset - TR));
   caption(p);
   render(YAW0, PITCH0, p);
   fig.classList.add("on");
