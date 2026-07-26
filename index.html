@@ -205,7 +205,23 @@ h1 .sur{display:block;color:#cfcbf0}
    rather than allowed to turn over onto a second line */
 .plate.rail figcaption{font-size:8.5px;letter-spacing:.13em;gap:2px 10px}
 .figbox{position:relative;flex:1 1 auto;min-height:0}
-#plate{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* The plate is on a spindle now, so it takes a grab. pan-y hands a vertical
+   swipe straight back to the document, so a thumb landing on the engraving
+   can still read on; a sideways pull is the plate's own and the page never
+   moves under it. */
+#plate{
+  position:absolute;inset:0;width:100%;height:100%;display:block;
+  touch-action:pan-y;cursor:grab;
+  -webkit-user-select:none;user-select:none;
+}
+.figbox.grabbing #plate{cursor:grabbing}
+/* the marginal instruction, struck the first time a hand arrives */
+.hint{
+  position:absolute;left:20px;bottom:13px;z-index:1;pointer-events:none;
+  font-family:var(--mono);font-size:8.5px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--dim);opacity:.62;transition:opacity .5s ease;
+}
+.hint.off{opacity:0}
 figcaption{
   display:flex;justify-content:space-between;flex-wrap:wrap;gap:2px 14px;
   margin-top:11px;padding:0 2px;
@@ -546,8 +562,9 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
       <div class="slot" aria-hidden="true"></div>
       <figure class="plate">
         <div class="figbox">
-          <canvas id="plate" role="img"
+          <canvas id="plate" role="img" tabindex="0"
             aria-label="Engraved astronomical plate: a trefoil knot drawn in gold line, ringed by a graduated scale over a star field."></canvas>
+          <p class="hint" aria-hidden="true">Drag to spin</p>
         </div>
         <figcaption><span id="cap">Plate I&nbsp;&#183; Trefoil, 3<sub>1</sub></span><span>Seed <b id="sd">&nbsp;</b></span></figcaption>
       </figure>
@@ -1346,6 +1363,125 @@ var T1 = 0, T2 = 0, T3 = 0, TR = 0, D1 = 1, D2 = 1, D3 = 1;
 
 var YAW0 = -0.13, PITCH0 = 0.17;
 
+/* ---------- the spindle ----------
+   The morph owns which form is on the copper; the hand owns where the reader
+   stands to look at it. The two are independent, so they compose without
+   argument: scroll picks the curve, the drag picks the angle, and a plate
+   transition never takes the reader's angle away from them. The offset
+   persists. The idle breath and the pointer parallax are dropped the moment
+   a hand arrives and eased back in around wherever the plate was left. */
+var uYaw = 0, uPit = 0, vYaw = 0, vPit = 0;
+var grab = 0, gid = -1, gx = 0, gy = 0;
+var idleG = 1, quietAt = 0, live = 0, held = 0, ptv = 0;
+/* bounded short of edge on: plate IV is a circle already lying at 0.70 off
+   the page, and it has to stay an ellipse rather than a line */
+var TLO = -0.62, THI = 0.26;
+var YPX = 0.0080, TPX = 0.0035;    /* radians per pixel of drag */
+var FREE = 0.020, STOP = 0.00035;  /* radians per frame */
+var AHINT = " Interactive: drag it, or press the arrow keys, to turn the plate.";
+
+/* Velocity is read over a window of pointer samples, not per frame. Pointer
+   events and frames do not line up, so a per frame delta reads zero on any
+   frame the pointer happened not to move, and that kills every throw. */
+var smp = [];
+function sample(){
+  var t = performance.now();
+  smp.push(t, uYaw, uPit);
+  while (smp.length > 6 && t - smp[0] > 140) smp.splice(0,3);
+}
+function cap(v,m){ return v < -m ? -m : v > m ? m : v; }
+function toss(){
+  vYaw = 0; vPit = 0;
+  if (smp.length < 6) return;
+  var n = smp.length, dur = smp[n-3] - smp[0];
+  /* held still before letting go means settle here, not fly */
+  if (performance.now() - smp[n-3] > 90 || dur < 8) return;
+  var k = 16.667/dur;
+  /* ceiling set so the hardest flick carries about one turn, never a blur */
+  vYaw = cap((smp[n-2]-smp[1])*k, .10);
+  vPit = cap((smp[n-1]-smp[2])*k, .05);
+}
+
+/* One law for both axes. Above the free threshold the plate is on its
+   bearings and the friction is light, so a hard flick runs a couple of
+   seconds; below it the damping goes heavy and the plate arrives and stops
+   rather than creeping. There is no detent to spring to, so a slow drag stays
+   exactly where it was let go, which is most of what makes it read as an
+   instrument and not as a control that snaps back. */
+function decay(v,st){
+  var w = 1 - (v<0?-v:v)/FREE; w = w<0?0:w>1?1:w;
+  v *= Math.pow(.988 - .055*w, st);
+  return (v > -STOP && v < STOP) ? 0 : v;
+}
+function spin(now, st){
+  if (!grab){
+    vYaw = decay(vYaw, st); vPit = decay(vPit, st);
+    uYaw += vYaw*st; uPit += vPit*st;
+    if (uPit < TLO){ uPit = TLO; vPit = 0; }
+    else if (uPit > THI){ uPit = THI; vPit = 0; }
+    /* it is an angle, so it never needs to grow without bound */
+    if (uYaw > TAU) uYaw -= TAU; else if (uYaw < -TAU) uYaw += TAU;
+  }
+  var busy = grab || vYaw !== 0 || vPit !== 0;
+  if (busy) quietAt = now;
+  var want = now - quietAt > 820 ? 1 : 0;
+  idleG += (want - idleG) * (want ? .030 : .24) * st;
+  live = busy || idleG - want > .003 || want - idleG > .003;
+}
+
+var figbox = fig.querySelector(".figbox");
+var hintEl = fig.querySelector(".hint");
+function hush(){ if (!held){ held = 1; hintEl.className = "hint off"; } }
+
+cv.addEventListener("pointerdown", function(ev){
+  if (ev.button > 0) return;
+  grab = 1; gid = ev.pointerId;
+  try { cv.setPointerCapture(gid); } catch(e1){}
+  figbox.classList.add("grabbing");
+  vYaw = 0; vPit = 0;
+  gx = ev.clientX; gy = ev.clientY;
+  smp.length = 0; sample();
+  quietAt = performance.now();
+  hush();
+});
+cv.addEventListener("pointermove", function(ev){
+  if (!grab) return;
+  uYaw += (ev.clientX - gx)*YPX;
+  uPit += (ev.clientY - gy)*TPX;
+  if (uPit < TLO) uPit = TLO; else if (uPit > THI) uPit = THI;
+  gx = ev.clientX; gy = ev.clientY;
+  sample();
+  quietAt = performance.now();
+  if (reduce.matches) paint();
+});
+function letgo(){
+  if (!grab) return;
+  grab = 0;
+  figbox.classList.remove("grabbing");
+  /* reduced motion gets no momentum: it stops dead where the hand left it */
+  if (reduce.matches){ vYaw = 0; vPit = 0; } else toss();
+  try { cv.releasePointerCapture(gid); } catch(e2){}
+}
+cv.addEventListener("pointerup", letgo);
+cv.addEventListener("pointercancel", letgo);
+cv.addEventListener("lostpointercapture", letgo);
+
+cv.addEventListener("keydown", function(ev){
+  var k = ev.key, s = .105;
+  if (k === "ArrowLeft") uYaw -= s;
+  else if (k === "ArrowRight") uYaw += s;
+  else if (k === "ArrowUp") uPit -= s*.62;
+  else if (k === "ArrowDown") uPit += s*.62;
+  else if (k === "Home"){ uYaw = 0; uPit = 0; }
+  else return;
+  if (uPit < TLO) uPit = TLO; else if (uPit > THI) uPit = THI;
+  /* the keys are a graduated screw, not a throw: one step, then still */
+  vYaw = 0; vPit = 0;
+  quietAt = performance.now();
+  hush(); ev.preventDefault();
+  if (reduce.matches) paint();
+});
+
 function measure(){
   var barh = document.querySelector(".bar").offsetHeight || 52;
   var gut = parseFloat(getComputedStyle(document.querySelector(".quire")).paddingLeft) || 24;
@@ -1435,7 +1571,7 @@ function caption(p){
   capI = i;
   capL.innerHTML = PLATES[i][0];
   capS.textContent = hashSeed(SEED + PLATES[i][1]).toString(16).toUpperCase().slice(0,6);
-  cv.setAttribute("aria-label", PLATES[i][2]);
+  cv.setAttribute("aria-label", PLATES[i][2] + AHINT);
 }
 
 function size(){
@@ -1463,32 +1599,48 @@ function snap(){
 function still(){
   var p = snap(), rel = Math.max(0, window.pageYOffset - TR);
   place(cl1(p), rel);
-  if (p !== lastP){ lastP = p; caption(p); size(); render(YAW0, PITCH0, p); }
+  if (p !== lastP){ lastP = p; caption(p); size(); render(YAW0 + uYaw, PITCH0 + uPit, p); }
   fig.classList.add("on");
+}
+/* Reduced motion has no loop to draw on, so a hand on the plate is given one
+   frame per move, and nothing at all moves on its own. */
+var pq = 0;
+function paint(){
+  if (pq) return; pq = 1;
+  requestAnimationFrame(function(){
+    pq = 0; size();
+    render(YAW0 + uYaw, PITCH0 + uPit, snap());
+  });
 }
 
 function loop(now){
   raf = 0;
   var p = prog(), rel = Math.max(0, window.pageYOffset - TR);
   if (rel > RY + RH + 40){
-    if (!dark){ dark = 1; fig.style.visibility = "hidden"; }
+    if (!dark){ dark = 1; fig.style.visibility = "hidden"; letgo(); }
     raf = requestAnimationFrame(loop); return;
   }
   if (dark){ dark = 0; fig.style.visibility = ""; }
   place(cl1(p), rel);
+  var st = ptv ? Math.min((now - ptv)/16.667, 3) : 1;
+  ptv = now;
+  spin(now, st);
   var moving = Math.abs(p - lastP) > .0004;
-  if (!moving && now - last < 32){ raf = requestAnimationFrame(loop); return; }
+  /* a hand on the plate, or a throw still running, gets every frame; the
+     breathing alone is content with half */
+  if (!moving && !live && now - last < 32){ raf = requestAnimationFrame(loop); return; }
   last = now; lastP = p;
   if (!t0) t0 = now;
   var e = (now - t0)/1000;
   pxC += (pxT - pxC)*.06; pyC += (pyT - pyC)*.06;
-  /* the hand steadies as the instrument goes to the margin */
-  var idle = 1 - cl1(p)*.7;
+  /* the hand steadies as the instrument goes to the margin, and lets go of
+     it entirely while the reader has hold of it */
+  var idle = (1 - cl1(p)*.7)*idleG;
   caption(p);
   size();
   render(
-    YAW0 + (Math.sin(e*0.2244)*0.062 + pxC*0.075)*idle,
-    PITCH0 + (Math.sin(e*0.1571 + 1.1)*0.034 + pyC*0.055)*idle,
+    YAW0 + uYaw + (Math.sin(e*0.2244)*0.062 + pxC*0.075)*idle,
+    PITCH0 + uPit + (Math.sin(e*0.1571 + 1.1)*0.034 + pyC*0.055)*idle,
     p
   );
   fig.classList.add("on");
@@ -1528,7 +1680,7 @@ if (reduce.matches){
   }, { passive:true });
 } else {
   document.addEventListener("visibilitychange", function(){
-    if (document.hidden) stop(); else { t0 = 0; start(); }
+    if (document.hidden){ letgo(); stop(); } else { t0 = 0; ptv = 0; start(); }
   });
   if (matchMedia("(pointer:fine)").matches){
     window.addEventListener("pointermove", function(ev){
@@ -1553,7 +1705,7 @@ window.addEventListener("load", relayout);
 
 reduce.addEventListener && reduce.addEventListener("change", function(){
   lastP = -1;
-  if (reduce.matches) { stop(); still(); } else start();
+  if (reduce.matches) { vYaw = 0; vPit = 0; stop(); still(); } else { ptv = 0; start(); }
 });
 
 /* ---------- analytics, after the page is done painting ----------
