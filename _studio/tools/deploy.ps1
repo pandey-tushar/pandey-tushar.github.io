@@ -17,9 +17,11 @@ function Copy-Tree($src, $dst) {
   Copy-Item "$src\*" -Destination $dst -Recurse -Force
 }
 
-# 1. site and hub at the root
+# 1. the site at the root.
+# books.html used to be promoted from prototypes\books-hub. That prototype has
+# been deleted, so the copy at the root is now the only one and is edited in
+# place; it is checked below like everything else the site links to.
 Copy-Item "$studio\prototypes\site-full\index.html" "$repo\index.html" -Force
-Copy-Item "$studio\prototypes\books-hub\books.html" "$repo\books.html" -Force
 
 # 2. the two published editions, each in its own directory
 Copy-Tree "$studio\apps\unpolarized\dist" "$repo\life"
