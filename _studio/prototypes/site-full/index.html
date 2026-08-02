@@ -5,8 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Tushar Pandey &#183; Quantum &#215; AI</title>
 <meta name="description" content="Dr. Tushar Pandey. Quantum error correction, machine intelligence, and systems that ship. Trained on proofs; builds the improbable.">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#070a14">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b1122">
+<!-- The theme is settled before the first paint. Reading it in the body, or
+     from CSS alone, shows the wrong one for a frame and the page blinks. -->
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
 <link rel="canonical" href="https://pandey-tushar.com/">
 <meta property="og:title" content="Tushar Pandey">
 <meta property="og:description" content="Error, corrected. Reasoning that grows. Let's build the improbable.">
@@ -58,6 +73,22 @@
      scroll runs through two morphs at once. */
   --step:clamp(7.5rem,17vh,13rem);
 }
+
+/* ---------- paper ----------
+   The accents are tuned for a black ground and are far too bright on paper,
+   so they are darkened rather than reused: the same three hues, taken down
+   until they hold their own against white. Everything the page draws in ink
+   follows from these. */
+:root[data-theme="light"]{
+  --void:#eef1f8; --void2:#dbe2f0; --bar:#e8ecf6;
+  --ink:#101828;
+  --acc:#0a6f80; --cyan:#0a6f80; --violet:#5233c4; --mag:#a8226a;
+  --dim:#57617d;
+  --a08:rgba(10,111,128,.09); --a14:rgba(10,111,128,.17);
+  --a22:rgba(10,111,128,.27); --a40:rgba(10,111,128,.45); --a70:rgba(10,111,128,.78);
+}
+html{transition:background-color .4s ease}
+@media (prefers-reduced-motion:reduce){ html{transition:none} }
 
 *,*::before,*::after{box-sizing:border-box}
 html,body,h1,h2,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
@@ -479,6 +510,71 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
    dark field; on white paper it is a black rectangle, so it is left
    behind entirely.
    ================================================================= */
+/* ---------- paper, continued ----------
+   Everything above that names a colour outright instead of going through a
+   custom property has to be answered here, or it stays a dark-theme value on
+   a white page and disappears. Grouped rather than scattered so the next
+   person editing a colour can see what else owes an answer. */
+:root[data-theme="light"] body::before{
+  background:
+    radial-gradient(120% 80% at 84% 0%, rgba(82,51,196,.10), transparent 58%),
+    radial-gradient(90% 70% at 2% 96%, rgba(10,111,128,.09), transparent 58%),
+    radial-gradient(60% 40% at 96% 88%, rgba(168,34,106,.06), transparent 62%),
+    linear-gradient(180deg,#e7ecf7 0%,var(--void) 42%,#e3e9f5 100%);
+}
+:root[data-theme="light"] ::selection{background:rgba(10,111,128,.20)}
+:root[data-theme="light"] .skip{color:#fff}
+:root[data-theme="light"] .mark span{color:rgba(16,24,40,.86)}
+:root[data-theme="light"] h1{color:#0b1220}
+:root[data-theme="light"] h1 .sur{color:#175d72;text-shadow:none}
+:root[data-theme="light"] .rule{background:linear-gradient(90deg,var(--a40),rgba(82,51,196,.22) 40%,transparent)}
+:root[data-theme="light"] .lede{color:rgba(16,24,40,.94)}
+:root[data-theme="light"] .btn{
+  color:rgba(16,24,40,.9);border-color:rgba(10,111,128,.30);background:rgba(10,111,128,.03);
+}
+:root[data-theme="light"] .btn:hover,
+:root[data-theme="light"] .btn:focus-visible{
+  color:var(--acc);background:rgba(10,111,128,.09);box-shadow:0 0 18px -8px rgba(10,111,128,.5);
+}
+:root[data-theme="light"] .bar{background:linear-gradient(180deg,rgba(238,241,248,.82),rgba(238,241,248,.96))}
+:root[data-theme="light"] .status .v,
+:root[data-theme="light"] .names{color:rgba(16,24,40,.92)}
+:root[data-theme="light"] .grad{box-shadow:0 0 12px -4px rgba(10,111,128,.45)}
+:root[data-theme="light"] .ask{color:rgba(10,111,128,.92)}
+:root[data-theme="light"] .quire h2:not(.lbl){color:#0b1220}
+:root[data-theme="light"] .quire h2 em{color:#0d6b7e;text-shadow:none}
+:root[data-theme="light"] .say{color:rgba(16,24,40,.88)}
+:root[data-theme="light"] .say b{color:#0c5f70}
+:root[data-theme="light"] .qed{background:#0f8f52;box-shadow:0 0 0 3px rgba(15,143,82,.14),0 0 12px rgba(15,143,82,.45)}
+:root[data-theme="light"] .corr .val,
+:root[data-theme="light"] .foot-links{color:rgba(16,24,40,.88)}
+:root[data-theme="light"] .more a{color:rgba(16,24,40,.9)}
+:root[data-theme="light"] #hud i{color:rgba(16,24,40,.95)}
+/* the status strip carries its own ground so it stays legible over the field.
+   That ground was a near-black wash, which on paper reads as a black bar laid
+   across the first screen; it becomes the same wash in white. */
+:root[data-theme="light"] .status{
+  background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.90));
+}
+:root[data-theme="light"] .quire::before{background:linear-gradient(180deg,rgba(10,111,128,.30),rgba(10,111,128,.07))}
+
+/* the switch. Fixed, so it reads as interface rather than as another line of
+   the page, and a direct child of body so no transformed ancestor can steal
+   its positioning. It offers the theme you are NOT in. */
+#lamp{
+  position:fixed;right:clamp(14px,2vw,26px);bottom:clamp(14px,2vw,26px);z-index:40;
+  display:inline-flex;align-items:center;gap:9px;
+  padding:9px 15px;border-radius:999px;cursor:pointer;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--ink);border:1px solid var(--a22);
+  background:color-mix(in srgb, var(--void) 72%, transparent);
+  -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+  transition:color .18s,border-color .18s,background-color .18s;
+}
+#lamp:hover,#lamp:focus-visible{color:var(--acc);border-color:var(--a40)}
+#lamp b{font-weight:400;opacity:.55}
+@media print{ #lamp{display:none!important} }
+
 @media print{
   @page{margin:16mm 18mm}
   html{font-size:11pt;scroll-behavior:auto}
@@ -684,6 +780,10 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
   </div>
 </main>
 
+<button id="lamp" type="button" aria-label="Switch to the light theme" title="Switch theme">
+  <b>&#9788;</b><span id="lamptx">Let there be light</span>
+</button>
+
 <footer>
   <div class="foot">
     <ul class="foot-links">
@@ -736,8 +836,27 @@ function rng(seed){
 
 /* the book palette, unchanged, so the site and the editions are one body
    of work: cyan through violet through magenta on the same near black */
-var P = { v:"#070a14", v2:"#0c1226", ink:"#e6ecff", cyan:"#52d6e6",
-          violet:"#9b7bff", mag:"#f06ab0", white:"#ffffff", dim:"#8891b8" };
+/* Two palettes, one set of keys, so nothing downstream has to ask which
+   theme it is in. Note `white`: it is not the colour white, it is whatever
+   the hot end of a value ramp runs TOWARD. On a black ground that is white;
+   on paper it is ink. Every mix(col, P.white, x) in this file therefore
+   inverts on its own, and the points come out as black dots without a single
+   call site changing. `deep` and `edge` are the two grounds paintField
+   needed spelled out.
+   Named PDK/PPR, not PD/PL: PA..PD are already the four particle shapes, and
+   a palette called PD is silently a Float64Array by the time anyone reads it. */
+var PDK = { v:"#070a14", v2:"#0c1226", ink:"#e6ecff", cyan:"#52d6e6",
+           violet:"#9b7bff", mag:"#f06ab0", white:"#ffffff", dim:"#8891b8",
+           deep:"#04060e", edge:"#03040a" };
+var PPR = { v:"#eef1f8", v2:"#dbe2f0", ink:"#101828", cyan:"#0a6f80",
+           violet:"#5233c4", mag:"#a8226a", white:"#0c1220", dim:"#57617d",
+           deep:"#e4eaf6", edge:"#aab6d0" };
+var LIGHT = document.documentElement.dataset.theme === "light";
+var P = LIGHT ? PPR : PDK;
+/* Additive light is the whole technique here, and it is meaningless on paper:
+   white plus anything is still white, so the figure would simply vanish.
+   On the light theme every pass is laid down as ink instead. */
+var BLEND = LIGHT ? "source-over" : "lighter";
 
 var pcache = {};
 function parse(c){
@@ -768,7 +887,7 @@ function paintField(c,w,h){
   var g = c.createLinearGradient(0,0,0,h);
   g.addColorStop(0, mix(P.v,P.v2,.55));
   g.addColorStop(.5, P.v);
-  g.addColorStop(1, "#04060e");
+  g.addColorStop(1, P.deep);
   c.fillStyle = g; c.fillRect(0,0,w,h);
 
   /* two washes of hue, so the colour bleeds across the page rather than
@@ -798,7 +917,7 @@ function paintField(c,w,h){
   /* the corners fall away, so running text always has ground under it */
   var vg = c.createRadialGradient(w*.5,h*.45,Math.min(w,h)*.3, w*.5,h*.45,D*.68);
   vg.addColorStop(0, A(P.v,0));
-  vg.addColorStop(1, A("#03040a",.9));
+  vg.addColorStop(1, A(P.edge, LIGHT ? .40 : .9));
   c.fillStyle = vg; c.fillRect(0,0,w,h);
 }
 
@@ -1170,19 +1289,28 @@ function strand(p){
    strand runs cyan into violet into magenta and back, and depth is carried
    by brightness alone. Settling the strings once also keeps the per frame
    work down to alpha, which the parse cache already holds. */
+/* Rebuildable, because the theme can change while the page is up. Everything
+   derived from the palette is settled here and nowhere else. */
 var HUE = new Array(ARCS), HOT = new Array(ARCS);
-(function hues(){
+var FLASH, HOTC, HOTM, MCOL, GRIDC;
+function hues(){
   for (var q=0;q<ARCS;q++){
     var u = q/ARCS, col;
     if (u < 1/3) col = mix(P.cyan, P.violet, u*3);
     else if (u < 2/3) col = mix(P.violet, P.mag, (u-1/3)*3);
     else col = mix(P.mag, P.cyan, (u-2/3)*3);
-    HUE[q] = col; HOT[q] = mix(col, P.white, .60);
+    /* on paper the body of a point is already ink, so it is taken down
+       rather than left at full chroma, or the cloud reads as confetti */
+    HUE[q] = col;
+    HOT[q] = mix(col, P.white, LIGHT ? .30 : .60);
   }
-})();
-var FLASH = mix(P.cyan, P.white, .72);
-var HOTC = mix(P.cyan, P.white, .6), HOTM = mix(P.mag, P.white, .6);
-var CORE = "#080c1a";
+  FLASH = mix(P.cyan, P.white, .72);
+  HOTC  = mix(P.cyan, P.white, .6);
+  HOTM  = mix(P.mag,  P.white, .6);
+  MCOL  = [P.cyan, P.violet, P.mag];
+  GRIDC = LIGHT ? mix(P.cyan, P.white, .45) : P.cyan;
+}
+hues();
 
 /* the pulse: which station took the energy, when, and for how long */
 var PI0 = 0, PT0 = 0, PDUR = 900;
@@ -1211,7 +1339,6 @@ var MPX = new Float32Array(MN), MPY = new Float32Array(MN), MPZ = new Float32Arr
     MHU[i] = r() < .30 ? 1 : r() < .58 ? 2 : 0;
   }
 })();
-var MCOL = [P.cyan, P.violet, P.mag];
 
 /* ================= the fabric =================
    The page is not a page with a picture on it. It is a sheet, and everything
@@ -1358,7 +1485,7 @@ function drawFabric(c, ocx, ocy, unit, e){
   }
 
   c.save();
-  c.globalCompositeOperation = "lighter";
+  c.globalCompositeOperation = BLEND;
   for (bi=1; bi<NB; bi++){
     var t2 = bi/(NB-1);
     /* The ramp is deliberately short at both ends. It ran the whole way to
@@ -1368,11 +1495,14 @@ function drawFabric(c, ocx, ocy, unit, e){
        further, at about half the value: the difference across the sheet
        should be noticed, not looked at. */
     var col = mix(P.cyan, P.violet, t2*.72);
+    if (LIGHT) col = mix(col, P.white, .30);
     c.fillStyle = A(col, (.016 + t2*t2*.055)*lit);
     c.fill(bp[bi]);
   }
   c.lineWidth = 1;
-  c.strokeStyle = A(P.cyan, .10*lit);
+  /* the weave is a ground, not a subject: it should be felt before it is
+     read, so it sits close to the threshold of visible in both themes */
+  c.strokeStyle = A(GRIDC, (LIGHT ? .085 : .055)*lit);
   c.beginPath();
   for (j=0;j<rows;j++){
     gy = (j-1)*step;
@@ -1436,7 +1566,7 @@ function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
     MPX[mi] = pjx; MPY[mi] = pjy; MPZ[mi] = pjz;
   }
   function field(front){
-    c.save(); c.globalCompositeOperation = "lighter";
+    c.save(); c.globalCompositeOperation = BLEND;
     for (var i2=0; i2<MN; i2++){
       if ((MPZ[i2] >= 0) !== front) continue;
       var nr2 = cl1(.5 + MPZ[i2]*.16);
@@ -1454,7 +1584,7 @@ function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
      twelve bearings, and a lit run on the one the object is being held at. --- */
   if (RETA > .012){
     var rr0 = R*1.32, az = ((yaw % TAU) + TAU) % TAU, ma = -Math.PI/2 + az, k, ka;
-    c.save(); c.globalCompositeOperation = "lighter"; c.lineWidth = 1;
+    c.save(); c.globalCompositeOperation = BLEND; c.lineWidth = 1;
     c.strokeStyle = A(P.cyan,.085*RETA);
     c.beginPath(); c.arc(cx,cy,rr0,0,TAU); c.stroke();
     for (k=0;k<12;k++){
@@ -1473,7 +1603,7 @@ function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
   }
 
   c.save();
-  c.globalCompositeOperation = "lighter";
+  c.globalCompositeOperation = BLEND;
 
   /* --- state 2: the torus the cycle is laid on. Plaquettes as a checkerboard
      of the two kinds of stabiliser, the lattice both ways round, and the
@@ -1593,7 +1723,7 @@ function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
      order it comes out in does not matter and depth is carried by brightness
      and size alone. --- */
   c.save();
-  c.globalCompositeOperation = "lighter";
+  c.globalCompositeOperation = BLEND;
   var pfar = [], pnear = [], hb;
   for (hb=0; hb<ARCS; hb++){ pfar.push(null); pnear.push(null); }
   var pk, p3, tx0, ty0, tz0, sxp, syp, dsc, rsz;
@@ -1638,7 +1768,7 @@ function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
   }
   for (hb=0; hb<ARCS; hb++){
     if (!pnear[hb]) continue;
-    c.fillStyle = A(HUE[hb], .075*RETA);
+    c.fillStyle = A(HUE[hb], (LIGHT ? .042 : .075)*RETA);
     c.fill(pfar[hb]);
     c.fillStyle = A(HOT[hb], .74*RETA);
     c.fill(pnear[hb]);
@@ -1651,7 +1781,7 @@ function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
      subject the reader sees is the cloud: a line and a cloud in the same
      place only ever fight, and the cloud is the one that can be thrown. */
   c.save();
-  c.globalCompositeOperation = "lighter";
+  c.globalCompositeOperation = BLEND;
 
   /* --- what the code found, over the subject: two checks that fired, and
      the chain of corrections laid between them. --- */
@@ -1723,7 +1853,7 @@ function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
 function drawPulse(c,cx,cy,unit,pt){
   var fade = (1-pt)*(1-pt), i, j, k, d;
   c.save();
-  c.globalCompositeOperation = "lighter";
+  c.globalCompositeOperation = BLEND;
   c.lineJoin = "round"; c.lineCap = "round";
 
   var trav = pt*NS*0.5, wl = Math.max(1.2, unit*0.026);
@@ -2078,9 +2208,11 @@ function telem(){
   hTl.textContent = "AZ " + fw(az) + "  EL " + fw(el);
 }
 
-function size(){
+/* `force` exists for the theme switch: the viewport has not changed, so the
+   usual early return would leave the old sky painted under the new palette. */
+function size(force){
   var d = Math.min(window.devicePixelRatio || 1, 2);
-  if (VW === sW && VH === sH && d === DPR) return false;
+  if (!force && VW === sW && VH === sH && d === DPR) return false;
   sW = VW; sH = VH; DPR = d;
   cv.width = Math.round(VW*d); cv.height = Math.round(VH*d);
   ctx.setTransform(d,0,0,d,0,0);
@@ -2215,6 +2347,52 @@ function relayout(){
   lastP = -1; lastY = -1; lastF = -1;
   if (reduce.matches) still();
 }
+/* ---------- the switch ----------
+   The theme is a property of the document, so the canvases have to be told:
+   swap the palette, rebuild everything derived from it, repaint the ground
+   (which is painted once per size and would otherwise keep the old sky), and
+   force a frame in case the loop is asleep. */
+/* Three settings, not two. What is stored is the PREFERENCE, which may be
+   "auto"; what is on the document is the RESOLVED theme, which is only ever
+   light or dark. Keeping those apart is what lets auto keep following the
+   system after the choice is made, instead of freezing whichever theme
+   happened to be on at the time. */
+var lamp = document.getElementById("lamp"), lamptx = document.getElementById("lamptx");
+var mqLight = matchMedia("(prefers-color-scheme: light)");
+var PREF = document.documentElement.dataset.pref || "auto";
+function sayLamp(){
+  var g = PREF === "auto" ? "&#9680;" : PREF === "light" ? "&#9788;" : "&#9789;";
+  var w = PREF === "auto" ? "Auto" : PREF === "light" ? "Light" : "Dark";
+  lamp.firstElementChild.innerHTML = g;
+  lamptx.textContent = w;
+  lamp.setAttribute("aria-label",
+    "Theme: " + w + (PREF === "auto" ? " (following your system)" : "") + ". Click to change.");
+}
+function applyTheme(){
+  LIGHT = PREF === "auto" ? mqLight.matches : PREF === "light";
+  P = LIGHT ? PPR : PDK;
+  BLEND = LIGHT ? "source-over" : "lighter";
+  var d = document.documentElement;
+  d.dataset.theme = LIGHT ? "light" : "dark";
+  d.dataset.pref = PREF;
+  var mt = document.querySelector('meta[name="theme-color"]');
+  if (mt) mt.setAttribute("content", LIGHT ? "#eef1f8" : "#0b1122");
+  hues();
+  sayLamp();
+  size(true);                 /* repaint the ground under the new palette */
+  if (reduce.matches) still(); else { t0 = 0; ptv = 0; start(); }
+}
+sayLamp();
+lamp.addEventListener("click", function(){
+  PREF = PREF === "auto" ? "light" : PREF === "light" ? "dark" : "auto";
+  try { localStorage.setItem("tp-theme", PREF); } catch(e){}
+  applyTheme();
+});
+/* while on auto, the system changing its mind changes the page */
+if (mqLight.addEventListener) {
+  mqLight.addEventListener("change", function(){ if (PREF === "auto") applyTheme(); });
+}
+
 window.addEventListener("resize", function(){
   clearTimeout(rt);
   rt = setTimeout(relayout, 120);
