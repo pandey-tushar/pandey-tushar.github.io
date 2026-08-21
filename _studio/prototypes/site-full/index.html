@@ -487,6 +487,13 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
   .mark span{display:none}
   .bar{gap:12px}
 }
+/* Seven items fit at 375 with about 20px to spare, which is not enough margin
+   for a 360 or 320 wide phone. Tighten once more rather than let the bar
+   overflow. */
+@media (max-width:22.5em){
+  .nav{gap:7px}
+  .nav a{letter-spacing:.02em}
+}
 @media (max-width:400px){
   .nav a{letter-spacing:.05em;font-size:9px}
   .btn{padding:10px 12px;letter-spacing:.12em;font-size:10px}
@@ -672,6 +679,7 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
   <nav class="nav" aria-label="Primary">
     <a href="#quantum">Quantum</a>
     <a href="#ai">AI</a>
+    <a href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener">Writing</a>
     <a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">Research</a>
     <a href="books.html">Books</a>
     <a href="cv.html">CV</a>
