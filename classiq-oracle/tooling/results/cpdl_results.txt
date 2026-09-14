@@ -1,0 +1,92 @@
+CP-DL log (minimum-AND XAG synthesis of the one-comparator logo form, Sep 12)
+files: cpdl_sat.py (exact XAG SAT synth), cpdl_pieces.py (tables + 15 affine
+orbit reps of a 6-value 3-bit code), cpdl_run*.py, cpdl_emit.py, cpdl_*.prog
+form: F = [lev(y) <= cap(x,b3(y))], L = lev-1 in 0..5, C = cap in 0..5.
+pieces: 3 lev bits + b3 (6-var of y), 3 cap bits (7-var of x0..x5,b3) or
+lx_k/m_k pairs (6-var of x) muxed by b3, comparator P (6-var, 36 care rows).
+STEP 0 encodings are free up to AGL(3,2) on each 3-bit code (XOR of code bits
+is free on both sides), so exactly 15 orbits of injections {0..5}->{0..7}
+(20160/1344); reps in cpdl_pieces.REPS. All 3 lev bits have degree 5 in every
+rep (MC >= 4 each); b3 has degree 6 (MC >= 5), ANF 12 monomials.
+STEP 1 corrections/first numbers (measured, cpdl_sat.py, cadical195 forked
+with a wall cap; every solution replayed on all care rows, bad=0 throughout)
+ - CORRECTION: lev in 1..6, cap in 0..5, so with L = lev-1 the predicate
+   [lev<=cap] is the STRICT [L < C].  All comparator numbers below use that.
+ - B3 IS ALMOST FREE.  On every y with lev(y)=6 (22 of 64: y in [0,10],
+   {28}, [54,63]) the predicate is 0 for every cap, so the b3 input of cap is
+   a don't care there; b3 need only separate [11,27] from [29,53].
+   No affine separator exists, but MC = 2:  h = 1 ^ y5 ^ (y2 & y3 & y4)
+   (k=2, terms 7, AND-depth 2, 0/42 care rows wrong).  Exact b3 needs >= 4
+   (k=3 proved UNSAT in 13.8 s, deg 6 => MC >= 5).  Saving: >= 3 ANDs.
+ - COMPARATOR P (6-var, 36 care rows, 28 don't cares).  Swept 5 of the 15
+   lev-orbits x all 15 cap-orbits (cpdl_run_cmp.py, partial table in
+   cpdl_cmp_partial.txt): MC = 3 for 66 of the 75 pairs, 4 for the other 9.
+   Never more.  AND-depth 2 is reachable for 17 of the 75 pairs.
+ - LEV bits (6-var of y), sequential gate-sharing synthesis (cpdl_run_xy.py):
+   reps 0,1,2,10 all give 3 lev bits in 9 ANDs on top of h's 2, so 11 ANDs
+   for the whole y side; AND-depth 7 (rep2: 8).  terms 83/79/91/101.
+ - CAP bits.  Route A (7-var of x0..x5,h, rep10): 19 ANDs [5,6,8], depth 13.
+   Route B (mux, lx_k and m_k 6-var + 3 AND, rep10): 23+3 = 26 ANDs, depth
+   12; rep9 26 ANDs, depth 17.  Route A is 7 ANDs cheaper, route B shallower.
+STEP 2 first measurements (cpdl_emit.py; every program replayed exactly:
+mism 0, dirty 0, n = 12 data + ancillas; measure(lvl=(2,), shape='LOGO')).
+  emitter note: cpdh_core's automatic 'a^b^c' re-deal picks hosts for BOTH
+  operands out of one 'used' set, so it is wrong whenever the two operands of
+  an AND share a wire (constant here).  cpdl_emit writes the re-deals out and
+  orders the two accumulations so the second never reads the first carrier.
+  L=rep1 C=rep9  mux route, 40 ANDs:
+    no materialisation      n=53  block 717 / 1145 cx  forward 364 / 606
+    code bits materialised  n=59  block 649 / 1087 cx  forward 335 / 572
+    every operand on a wire n=105 block 371 /  859 cx  forward 182 / 429
+  L=rep0 C=rep10 7-var route, 33 ANDs:
+    every operand on a wire n=102 block 445 /  909 cx  forward 221 / 455
+  FALSIFIER block > 200: FIRED at 371.  Diagnosis: not AND count but AND
+  DEPTH.  Sequential gate sharing chains the bits (x-side AND-depth 12-18),
+  and a materialised operand wire costs |S| CX one way only (the mirror
+  clears it), so depth ~ 20 x (AND levels).  33 ANDs at depth 13 measure
+  WORSE (445) than 40 ANDs at depth 12 (371).
+STEP 2/3 best measured (cpdl_final.py 0 9 cpdl_xm.json cpdl_y.json;
+program in cpdl_best.prog = cpdl_logo1.prog, 357 forward lines)
+  L = orbit rep0 (0,1,2,3,4,5), C = orbit rep9 (0,1,2,4,6,3); 41 ANDs total
+  (y 11 incl. h's 2, x 26 = 23 lx/m + 3 mux, comparator 3, 1 CZ leg);
+  every AND operand materialised on its own wire, no unbuilds.
+  exact: mism 0 / 4096, dirty 0.  n = 106 (12 data + 94 ancillas).
+  BLOCK depth 367, 869 cx.  FORWARD 181, 435 cx.  model makespan 186.
+  wire-layers 2080, packing = wire-layers/(18*depth) = 0.315 (of n*depth
+  0.053 -- the program is nowhere near wire-limited).
+  most loaded wires: x1 44 touches / 46 busy, x2 36/36, s68 36/38, x5 34/34.
+  Critical wire x1 carries only 22 forward ops, so the 367 is a DEPENDENCY
+  chain, not wire contention: 41 RCCX at 7 target layers each with the
+  accumulation CX interleaved.
+  Variants measured (all exact, same netlist, L0/C9 unless stated):
+    no materialisation           n=53  block 717
+    code bits materialised only  n=59  block 649
+    all operands materialised    n=106 block 367   <- best
+    + ancilla reuse/unbuilds     n=101 block 421 (44 ANDs: 3 rebuilds)
+    shallow x (35 ANDs, depth 6) n=126 block 525
+    7-var cap route (33 ANDs)    n=102 block 445
+    L1/C9 371, L2/C9 371, L1/C10 397, L0/C10 (7-var) 445
+  FALSIFIER block > 200: FIRED at 367.  FALSIFIER joint > 40 ANDs for
+  codes+b3+P: FIRED at 41 (but 114.3 AND-eq -> 41 ANDs is a 2.8x cut).
+CP-DL summary
+1 Form F = [lev(y) <= cap(x,b3)] with L = lev-1: the predicate is the STRICT
+  [L < C], L,C in 0..5.  Encodings are free only up to AGL(3,2), so there are
+  exactly 15 orbits of 3-bit codes per side, not 20160 injections.
+2 b3 is nearly free: it is a don't care on the 22 y with lev(y)=6, so it need
+  only separate [11,27] from [29,53].  h = 1 ^ y5 ^ (y2 y3 y4), MC 2, depth 2
+  (exact b3 needs >= 4; k=3 UNSAT).  Measured, 0/42 care rows wrong.
+3 Comparator MC = 3 for 66 of 75 orbit pairs swept, 4 for the rest; AND-depth
+  2 for 17 of 75.  Never worse than 4.
+4 Piece table (n, ANDs, AND-depth): h 6,2,2 | 3 lev bits 6,9,7 (shared) or
+  6,14,5 (independent) | cap 3 bits 7,19,13 | lx_k+m_k+mux 6,26,12..17.
+  Whole oracle 41 ANDs vs the record's 114.3 AND-equivalents (2.8x).
+5 Best measured block (exact 0/4096, registers clean): depth 367, 869 cx,
+  forward 181 / 435 cx, model makespan 186, n=106, wire-layers 2080,
+  packing 0.315 of 18*depth.  Best wire load only 44 touches (x1).
+6 The 367 is an AND-chain latency, not width or wire contention: the x side
+  alone is 26 ANDs of AND-depth 17 because sequential gate sharing chains the
+  six lx/m bits.  Making the bits independent drops AND-depth to 6 but adds 9
+  ANDs and measured worse (525).  What takes it lower is depth-BOUNDED exact
+  synthesis (cpdl_sat.find_shallow, implemented, too slow at 15 s/profile to
+  use here): 41 ANDs arranged in <= 6 levels instead of 20 would put the
+  forward near 60 and the block near 130.

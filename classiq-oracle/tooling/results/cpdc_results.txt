@@ -1,0 +1,172 @@
+CP-DC: cross-register / disjoint hosting for block overlap
+============================================================
+
+STAGE 1: re-emit R1, R2t at reduced ancilla count
+--------------------------------------------------
+Method: hand lemma verified by full classical replay + statevector.
+A scratch value V created by RCCX/RC3X (controls C, fresh target W) can
+be freed (W restored to 0, reusable by a LATER role) by re-applying the
+SAME creation gate immediately after V's single use, PROVIDED none of
+the wires in C are written by the gate that consumes V.  Checked every
+scratch role in cpal_r1.py / cpal_r2t.py against this criterion:
+
+  R1  axis_x: q_x = ~x2 & x1  -> NOT uncomputable (the gate that
+              consumes q_x, CC([q_x,p_x],x2), WRITES x2, which is q_x's
+              own creation source) -> needs a dedicated wire.
+      axis_x: p_x = x4 & ~x0  -> uncomputable (consuming gate targets
+              x2, x0/x4 untouched) -> shareable.
+      axis_y: q_y = Wm (built from y5,y2,y1,p) -> NOT uncomputable
+              (consumed by CC([y3,q_y],y5), which later re-reads y5 as
+              q_y's own creation source before q_y's last use elsewhere
+              -- in practice q_y's final consumer overwrites y5, one of
+              its own inputs) -> dedicated wire.
+      axis_y: p_y = y3 & y0 -> uncomputable (consuming gate targets
+              q_y, y3/y0 untouched at that point) -> shareable, and its
+              live window sits entirely inside axis_y, which is itself
+              entirely after p_x's window -> p_x and p_y CAN share ONE
+              physical wire.
+      => R1 minimum via this lemma: AA, AB, q_x, q_y, p_shared = 5
+         ancillas (was 6).  3 ancillas is NOT reachable by this lemma
+         alone (q_x, q_y are provably stuck with it).
+
+  R2t axis_x: D (=x3 folded with ~s~t) -> NOT uncomputable (consuming
+              gate CC([x2,D],x3) targets x3, D's own creation source)
+              -> dedicated wire.
+      axis_x: Q = x4*c -> uncomputable (consumer targets AA, x4/x5=c
+              untouched) -> shareable.
+      axis_y: R (=y3 folded with y1y0) -> uncomputable (consumer
+              targets AB, y3/QR untouched by that gate... true source
+              y3,y1,y0 untouched by the consuming gate) -> shareable,
+              window entirely after Q's window -> Q and R share ONE
+              wire.
+      axis_y: U = y5~y4*g -> uncomputable in isolation but MUST coexist
+              live with R at the final CC([R,U],AB) gate -> needs its
+              OWN wire (cannot merge with Q/R).
+      => R2t minimum via this lemma: AA, AB, D, qr_shared, U = 5
+         ancillas (was 6).  Same floor as R1: 3 not reached.
+
+MEASURED (cpdc_emit.py, wires 12-16 for both, opt2, u3/cx basis):
+  R1  5-ancilla rebuild : classical fwd PASS (4096/4096), sv raw PASS
+      (err 2.44e-15, leak 3.2e-32), sv opt2 PASS (err 5.58e-15, leak
+      2.2e-30).  depth=91  cx=81   (shipped cpal_r1: depth=43 cx=73)
+  R2t 5-ancilla rebuild : classical fwd PASS (4096/4096), sv raw PASS
+      (err 2.55e-15, leak 4.1e-32), sv opt2 PASS (err 3.55e-15, leak
+      9.7e-31).  depth=81  cx=77   (shipped cpal_r2t: depth=39 cx=71)
+
+READING: the ancilla cut costs roughly 2x depth per block, NOT the
+~10-20% one might expect from "1 extra RCCX round trip".  Reason: the
+shared wire (p_shared) creates a REAL data dependency between axis_x
+and axis_y (axis_y's write to p_shared must wait for axis_x's uncompute
+of it), which destroys the x/y CONCURRENCY that cpal_r1/cpal_r2t were
+specifically designed around (cpu_rect.py's own header: "the two axes
+are computed CONCURRENTLY (disjoint wires)").  Losing that concurrency
+costs far more depth than the 1-2 extra RCCX layers the uncompute adds.
+
+3-ancilla-each is NOT achieved: q_x/q_y (R1) and D (R2t) are PROVEN
+stuck under the "replay the same creation gate" lemma (their creation
+source is overwritten by the very gate that consumes them), and no
+budget remained to hand-derive a structurally different boolean form
+that avoids this (the kind of multi-hour rederivation CP-BP..CP-BW did
+for D2, out of scope for this 120-min cap on top of stages 2-3).
+
+CONSEQUENCE FOR DISJOINT PAIRING: R1 needs >=5, R2t needs >=5 ancillas
+under this technique; 5+5=10 > 6 available.  True 3+3 disjoint
+concurrency is not reachable from the shipped boolean forms without a
+deeper rederivation.  Stage 2 below reports the best ACTUALLY
+MEASURED pairing given this hard constraint, not a hoped-for number.
+
+STAGE 2: pairing
+--------------------------------------------------
+Measured (cpdc_pair.py, opt2, u3/cx basis, strict statevector on the
+best of each row):
+
+  A. shipped forms (43,39), serial, ALL 6 wires shared (as shipped):
+     depth=85 cx=142   strict sv PASS (err 6.99e-15, leak 2.5e-30)
+
+  B. 5-ancilla forms (91,81), serial, 5 wires shared:
+     depth=171 cx=158  strict sv PASS (err 7.01e-15, leak 3.3e-30)
+
+  C. ILLEGAL-WIDTH ceiling: 5-ancilla forms on FULLY DISJOINT ancilla
+     lanes (width 22, R1 on 12-17, R2t on 18-21 + one more -- diagnostic
+     only, per the project's established illegal-width delete/ceiling-
+     probe convention, e.g. CP-CD/CE/CG):
+     depth=171 cx=158   -- IDENTICAL to the shared-ancilla case (B).
+
+DECISIVE FINDING: giving R1 and R2t completely disjoint ancilla wires
+(even at illegal width, i.e. with NO ancilla budget constraint at all)
+does not shave a single layer off the serial depth.  Root cause (also
+visible in the existing CP-BG host census): R1 hosts x2,y5 (nonlinear)
+and x3,x4,y3,y5 (affine); R2t hosts x0,x1,x3,x5,y2.  x3 is written by
+BOTH blocks (R1's "e", R2t's "G"); this is a genuine DATA-WIRE
+dependency, not an ancilla-contention one, and it alone is enough to
+force the scheduler to serialize almost everything, since x3's write
+sits mid-chain in each block's own critical path.  Disjoint ancilla
+hosting (this task's whole premise) addresses the WRONG resource: the
+binding constraint is the shared 12-wire DATA register, not the 6
+ancillas.  This matches (and sharpens, with a direct measurement) CP-
+BG's own DP result: "ANC+HOST INFEASIBLE (deadlock)", "all pairs
+infeasible too".
+
+Gate "pair < 80" is NOT met.  Best available remains the plain shipped
+serial concatenation, depth 85 (close to the CP-AL/AM-era 82 achieved
+after the project's usual per-boundary ancilla-perm descent, which was
+not re-run here since the conclusion -- no benefit from disjoint hosts
+-- does not depend on it).
+
+STAGE 3: triple {R1,R2t,D1} and oracle
+--------------------------------------------------
+D1's own host census (CP-BG, already on record): D1 hosts x0-x5, y0,
+y2, y4, y5 -- 10 of the 12 data wires.  Given R1/R2t already collide
+with D1 on x2,x3,x4,x5,y0,y2 individually, D1 is guaranteed to collide
+even harder; no reduced-ancilla rebuild of D1 was attempted (the
+Stage-1 finding that ancilla reduction itself costs ~2x depth per
+block, combined with Stage 2's finding that ancilla disjointness does
+not even help once built, made this not worth the remaining budget).
+
+Measured directly (cpdc_triple.py, shipped 6-ancilla forms: R1=43,
+R2t=39, D1=71):
+  shared-ancilla serial (12-17, as shipped):        depth=155 cx=284
+  ILLEGAL disjoint-ancilla ceiling (width 30,
+    3 independent 6-wire ancilla lanes):            depth=154 cx=284
+
+Again essentially IDENTICAL (154 vs 155, 1 layer): unlimited disjoint
+ancilla width buys nothing once the three blocks are chained, because
+they collide on the DATA register, not on ancillas.  This confirms the
+Stage-2 finding at n=3 and forecloses the oracle experiment: replacing
+any of R1/R2t/D1 with a disjoint-ancilla lane would not reduce the
+oracle below the already-verified best.
+
+Oracle baseline reproduced exactly (cpch_oracle.py, blocks R1=43/73,
+R2t=39/71, D1=71/142, D2=125/233, order R2t,R1,D2,D1, perms
+012354,104235,012345,023415):
+  depth=272 cx=512  STRICT (no phase division) err=2.495e-14 leak=8.2e-30
+  PASS.  Reloaded cpch_oracle.qasm: depth=272 cx=512, strict err=
+  3.437e-14 leak=3.9e-30 PASS.
+No disjoint-hosting variant beat this; gate "oracle < 272" is NOT met.
+No cpdc_oracle.qasm was written (nothing improved on the shipped 272).
+
+CONCLUSION
+--------------------------------------------------
+CP-DC's premise -- that R1/R2t/(D1) can be put on disjoint ancilla
+lanes to run concurrently -- fails on TWO independent, separately
+measured grounds:
+  1. Getting any of these blocks below 6 ancillas via the only
+     legitimate wire-freeing technique found (replay-the-creation-gate
+     uncompute) costs roughly 2x depth per block (43->91, 39->81),
+     because it destroys the x/y-axis-level concurrency the shipped
+     forms were built around.  5 ancillas is the proven floor per
+     block this way; 3 is not reachable without a deeper rederivation
+     of the boolean forms (out of scope for the remaining budget).
+  2. Even granting UNLIMITED disjoint ancilla width (illegal, measured
+     as a ceiling probe), the achieved depth is statistically
+     unchanged from the shared-ancilla serial case (171 vs 171 for the
+     pair; 154 vs 155 for the triple) because the blocks share DATA
+     WIRES (x3 between R1/R2t; x2,x3,x4,x5,y0,y2 additionally with D1)
+     with real read/write dependencies -- the binding resource is the
+     12-wire data register, not the 6 ancillas.
+Both gates (pair<80, oracle<272) are NOT met.  Files: cpdc_emit.py
+(5-ancilla R1/R2t rebuilds + verification), cpdc_pair.py (pairing
+measurements), cpdc_triple.py (triple ceiling diagnostic).  No files
+were deleted or modified outside the cpdc_ prefix; cpch_oracle.qasm
+(pre-existing) was regenerated in place with identical content by the
+baseline-reproduction run.

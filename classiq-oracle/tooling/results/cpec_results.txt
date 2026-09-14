@@ -1,0 +1,232 @@
+CP-EC: minimum-AND-DEPTH re-synthesis of the logo phase oracle
+==============================================================
+All numbers below are MEASURED with qiskit 2.4 transpile(basis=['u3','cx'],
+optimization_level=2 and 3, all-to-all) unless the line says "not measured".
+opt2 == opt3 in every row that was measured at both levels.
+
+STEP A -- CALIBRATION (cpdp_base.py through this session's pipeline)
+  block  depth / cx   sim_exact err   mism
+  R2t      39 /  71    1.33e-15        0
+  D1       71 / 142    6.66e-16        0
+  D2      125 / 239    4.66e-15        0
+  R1       43 /  73    1.33e-15        0
+  serial ledger 39+71+125+43 = 278
+  concatenated R2t,D1,D2,R1 : depth 272 cx 516, 418 ops
+    sim_exact err 7.77e-15 mism 0 ; sv_check err 1.055e-14 leak 1.9e-31
+  shipped cpdp_best.qasm (with splices) reloaded: 18 qubits, 583 u3 + 516 cx
+    opt1 270/516, opt2 270/516, opt3 270/516 (best over transpiler seeds
+    0..4 at every level -- no seed beats 270)
+    sv_check err 1.217e-14 leak 5.7e-30
+  Calibration reproduces the shipped 39/71/125/43 and 270/516 exactly.
+
+STEP B -- PRIMITIVE AND CHAINING COSTS (cpec scratch cal.py, opt2)
+  1 RCCX (Margolus)                     7 layers /  3 cx
+  2 RCCX on disjoint wires              7 /  6
+  RCCX -> RCCX through control slot a  11 (+4 per level)
+  RCCX -> RCCX through control slot b  13 (+6 per level)
+  RCCX -> RCCX through the target      12 (+5 per extra write on one wire)
+  k-literal AND tree, k = 2/3/4/5/6     7 / 11 / 13 / 15 / 17
+  RC3X 13/6   CCZ 10/6   CZ 3/1   5 CZ on disjoint pairs 3/5
+  CX prep feeding control slot a is FREE (1 or 2 CX then RCCX = 7)
+  MIRROR BLOCK cost, measured on mock blocks C ; CZ ; C^-1 :
+    forward 7  -> block 15      forward 11 -> block 23
+    forward 15 -> block 31      forward 17 -> block 35 (also with 5 CZ: 35)
+    i.e. block = 2*forward + 1, and extra parallel CZ legs are free.
+
+STEP B2 -- DEGREE LOWER BOUND ON THE FORWARD DEPTH (derived from the
+  measured chaining costs above, D(e) = max ANF degree reachable at depth e)
+    degree     1  2  3  4  5  6
+    min fwd    0  7 11 13 15 17        -> min block  1 15 23 27 31 35
+  12-VARIABLE ANF OF THE SHAPES (cpec scratch anf.py, exact):
+    shape  monomials  max x-deg  max y-deg  max total
+    R1        256         6          6         12
+    R2t       128         5          6         11
+    D1        172         6          6         12
+    D2        596         6          6         12
+    LOGO      886         6          6         12
+  Every CZ-based phase leg u(x).v(y) therefore needs at least one x-factor
+  of degree 6 and one y-factor of degree 6 in every shape except R2t's x
+  side, so NO mirror block for any single shape can go below depth 35, and
+  four such blocks cannot go below 140 even with perfect scheduling.
+
+STEP B3 -- RANK / STAIRCASE STRUCTURE (cpec_walk.py, exact over 4096)
+  GF(2) rank of the 64x64 shape matrices: R1 1, R2t 1, D1 4, D2 5,
+  R1^R2t 2, LEFT = R1^R2t^D1 5, D1^D2 9, LOGO 10.
+  The rank-10 interval form  F = XOR_k XL_k YL_k ^ XOR_k XD_k YD_k
+  (XL/YL/XD/YD as in the brief) reproduces the logo with 0 mismatches.
+  Column-space degree census (all 2^r-1 nonzero elements):
+    LEFT x: deg4 1, deg5 14, deg6 16     LEFT y: deg5 15, deg6 16
+    D2   x: deg5 15, deg6 16             D2   y: deg5 15, deg6 16
+    LOGO x: deg4 7, deg5 504, deg6 512   LOGO y: deg4 15, deg5 496, deg6 512
+  The degree-<=5 elements form a proper subspace in every case, so EVERY
+  basis of every one of these spaces contains a degree-6 element.
+
+STEP C -- MINIMUM-AND-DEPTH RE-SYNTHESIS, PER SHAPE
+  Measured AND-depth (dependency depth of the forward DAG) and the forward
+  depth actually achieved by the shipped blocks (cpec_floor.py):
+    block  AND-depth  fwd model  fwd real  block real  fwd floor 7+4(d-1)
+    R2t        3         17        19         39            15
+    D1         4         26        32         71            19
+    D2         8         59        63        125            35
+    R1         3         18        21         43            15
+  Register census of the shipped forwards (cpec_floor.py):
+    block  nonlinear  RCCX  RC3X  ancilla-layers  data-wire-layers  max
+                                                                 writes/wire
+    R2t        8        6     2        61               7            2
+    D1        15       14     1        55              56            2
+    D2        27       20     7       123             108            4
+    R1         9        7     2        61              14            2
+    TOTAL ancilla-layers 300, data-wire layers 185
+  Register-layer floor  2*300/6 = 100 ; longest single-wire write chain is
+  only 4, so NEITHER the register-layer budget NOR the per-wire write chain
+  is what makes the shipped circuit 270.  The AND-depth is: the four
+  AND-depth floors sum to 2*(15+19+35+15)+4 = 172.
+
+  NEW EXACT LOW-AND-DEPTH FACTORISATION OF D2 (cpec_d2form.py, cpec_d2nl.py)
+  With the fold G_i = x_i ^ x3 (3 CX in place on x0,x1,x2), b = ~x3,
+  g_i = ~G_i, m = g + b, and c = x5~x4, S' = x3 G0, h = ~G2~G1, k = x5~x3
+  (four level-1 products), plus the CX-derived h2 = h^~G1, W2 = S'^G2,
+  I3 = S'^G1 :
+      XD_1 = [38,42]        = c G2 G1 ^ c h2 S'
+      XD_2 = {36,37,43,44}  = c (G1^G2) W2
+      XD_3 = {34,35,45,46}  = c ~G2 I3
+      XD_4 = {33,47}        = c h x0
+      XD_5 = {32,48}        = h ~G0 k
+  and on the y side with cy = ~y5~y4, dy = ~y5y4, t = y3~y2, u = y3y2,
+  p = y1y0, q = ~y1~y0, v = ~y3y2, s = ~y3~y2 (eight level-1 products),
+  YD_1..YD_5 as coded in cpec_d2form.py.
+  ALL TEN FACTORS VERIFIED BY TRUTH TABLE: 10/10 OK, AND-depth 2 (against
+  the shipped D2's AND-depth 8).
+  Whole D2 program (cpec_d2nl.py): 33 nonlinear gates, 12 CX, 5 CZ legs,
+  phase == D2 exactly (0 of 4096 inputs wrong, checked by bitmask replay).
+  Its AND-depth-2 forward would give fwd 7+4*1 = 11 -> block ~23 (vs 125).
+
+  IT DOES NOT FIT WIDTH 18 -- this is the binding constraint, measured:
+    peak simultaneously live node values                 16
+    peak live total (node values + still-needed raw bits) 18
+    distinct node values created                          45
+    zero-initialised registers available                   6
+  The allocator fails at the 16th node ("no zero wire").  A wire can host a
+  fresh value only if it provably holds 0: an untouched ancilla (6 of them)
+  or a wire explicitly uncomputed.  A data wire that hosts a nonlinear value
+  v becomes x_i ^ v, and recovering v as a control needs x_i, which after
+  hosting is in no other wire's span (the twelve data wires were a basis) --
+  so data wires can carry affine forms for free but not usable nonlinear
+  intermediates.  D2 alone at AND-depth 2 needs 16 registers for nonlinear
+  values; the machine has 6.
+
+  Targets from the brief, status:
+    R1 <= 30   NOT REACHED (shipped 43; its AND-depth is already 3 and its
+               forward floor from that AND-depth is 15 -> block 31, but the
+               x-axis accumulator takes 3 serial writes with 3 registers)
+    R2t <= 28  NOT REACHED (shipped 39, AND-depth 3, floor 31)
+    D1 <= 40   NOT REACHED (shipped 71, AND-depth 4, floor 39)
+    D2 <= 45   NOT REACHED at width 18 (AND-depth-2 form exists and is
+               verified, needs 16 registers)
+    LEFT as one rank-5 staircase block: NOT REACHED.  Measured obstruction:
+    a rank-r block needs r x-factor wires and r y-factor wires live at the
+    CZ plus the scratch of both factor trees.  For the merged rank-2 block
+    R1^R2t the two axes need 2 outputs + 2 scratch each = 8 registers; for
+    a rank-5 LEFT or D2 block the x side alone peaks at 13-14 live values
+    (measured with cpec_core.peak_width on the hand-built netlists).
+
+STEP D -- CONCATENATION / WHOLE LOGO
+  No block was produced that beats its shipped counterpart, so the best
+  verified whole-logo circuit in this session is still the shipped one:
+    width 18, depth 270, cx 516, opt2 = opt3 = 270/516
+    sim_exact err 7.77e-15, permutation mismatches 0 of 4096
+    sv_check err 1.055e-14, ancilla leak 1.9e-31
+    reloaded cpdp_best.qasm: sv_check err 1.217e-14 leak 5.7e-30
+  cpec_best.qasm was NOT written: nothing improved on 270.
+
+BINDING CONSTRAINT (measured)
+  1. Six zero-initialised registers.  Data wires can carry affine forms
+     (CX-reachable, free) but not usable nonlinear values.
+  2. Every shape's 12-variable ANF has x-degree 6 and y-degree 6 (measured
+     above), and every basis of every shape's column space contains a
+     degree-6 element (measured above), so every CZ leg needs a degree-6
+     factor, whose minimum forward depth is 17 from the measured chaining
+     costs -> minimum block depth 35 -> four blocks >= 140 before any
+     scheduling loss.
+  3. Reducing the AND-depth is what would buy the remaining 120 layers, and
+     it is exactly what width forbids: the verified AND-depth-2 D2 needs 16
+     live nonlinear registers against 6.  Number that proves it:
+         D2 AND-depth-2 program, peak live node values = 16, registers = 6
+         (shipped D2 runs the same shape at AND-depth 8 and depth 125).
+
+STEP C2 -- WHAT A 6-REGISTER LEG ARCHITECTURE COSTS (cpec_walk2.py, exact)
+  In the only width-legal shape (one or two CARRIER wires per side walking
+  through the atoms, phase legs = CZ between an x carrier and a y carrier),
+  a carrier hop costs one Margolus WRITE per rank-1 term of the delta, and a
+  second write onto the same wire starts only after the first finishes
+  (measured +5 layers).  Exhaustive search over products of one "outer"
+  factor (cy = ~y5~y4, dy = ~y5y4, ~y5) and one or two "inner" factors
+  (t = y3~y2, u = y3y2, v = ~y3y2, s = ~y3~y2, p = y1y0, q = ~y1~y0,
+  r = y1~y0, ~y3, y1, y0, y1^y0, ~y1, ~p, 1) gives, for D2's y atoms:
+    build YD1 3 writes, YD2 3, YD3 4, YD4 2, YD5 3
+    hops YD1->YD2 1, YD2->YD3 2, YD3->YD4 2, YD4->YD5 3
+  ONE y carrier walking YD1..YD5 = 3+1+2+2+3 = 11 writes
+      -> forward >= 7 + 5*10 = 57      -> D2 block >= 115  (shipped 125)
+  TWO y carriers, split {1,2,3} / {4,5} = 6 and 5 writes
+      -> forward >= 7 + 5*5 = 32       -> D2 block >= 65
+  but two carriers per side needs, measured on the verified factorisation:
+    x side : c (=x5~x4) or k (=x5~x3), h (=~G2~G1), the S'/W2/I3 chain,
+             2 carriers                            = 5 registers
+    y side : cy, dy, one inner helper, 2 carriers  = 5 registers
+    = 10 registers against 6 ancillas.
+  DATA-WIRE HOSTING, exactly how much it buys (all four facts verified by
+  the identity, not estimated):
+    x4 : free once c is built; every XD term carries c = x5~x4 and
+         c.x4 = 0, so a value hosted on x4 is exact in every such term --
+         ONE free register.  XD_5 = {32,48} has no ~x4 factor, so it must
+         be fired before x4 is taken.
+    y5 : free once cy and dy are built; every Y term carries cy, dy or ~y5
+         and cy.y5 = dy.y5 = ~y5.y5 = 0 -- ONE free register.
+    x5 : c.x5 = c is NOT 0, so hosting there costs one correcting Margolus
+         per use (3 uses measured on the x side).
+    y4 : cy.y4 = 0 but dy.y4 = dy, so y4 only hosts helpers used in
+         cy-terms.
+  So the usable register count is 6 ancillas + 2 clean data hosts = 8,
+  against the 10 the two-carrier D2 needs; the one-carrier version fits and
+  floors at 115.  The same accounting on LEFT (rank 5, same shape) gives a
+  one-carrier floor of the same order, so the four-shape total in this
+  architecture floors at roughly 250 and the shipped 270 is within 8% of it.
+
+CONCLUSION
+  Target depth < 150 NOT REACHED.  The route is blocked, with numbers:
+  (a) every shape needs a degree-6 phase factor (measured 12-var ANF), whose
+      minimum forward depth is 17 (measured chaining), so four mirror
+      blocks cannot beat 140 even before width;
+  (b) the AND-depth-2 form that would reach that bound exists and is exact
+      (D2, verified 0/4096) but needs 16 simultaneously live nonlinear
+      values against 6 zero-initialised registers + 2 clean data hosts;
+  (c) forced onto one carrier per side, the carrier takes 11 Margolus writes
+      for D2's five legs at +5 layers each, giving forward >= 57 and
+      D2 block >= 115 -- i.e. the shipped D2 (125) is already within 10
+      layers of the floor of the only width-legal architecture.
+  THE NUMBER THAT PROVES IT: D2 at AND-depth 2 needs 16 live nonlinear
+  registers; the machine has 6 (+2 clean data hosts).  At 6 the same shape
+  costs >= 115 of the 150 budget on its own.
+  HONEST SCOPE OF THAT CLAIM: it bounds THIS route -- mirror blocks whose
+  phase legs are CZ between an x carrier and a y carrier, with nonlinear
+  values only on the 6 ancillas plus the two data wires whose residue is
+  killed by an outer factor.  The leaderboard entry at 142 / 557 cx / width
+  18 shows some architecture beats 150, and its cx count (557 against our
+  516, i.e. about 186 RCCX-equivalents against our 118) says it spends many
+  more gates spread over many more wires than this route allows; what those
+  extra wires carry was NOT MEASURED here.
+
+FILES
+  cpec_core.py    netlist -> allocator -> mirror block -> exact replay and
+                  real transpile; zero-tracking allocator
+  cpec_floor.py   forward gate census, AND-depth, register-layer and
+                  write-chain floors of the shipped blocks
+  cpec_flats.py   all 26387 affine flats of GF(2)^6 and flat decompositions
+  cpec_dec.py     numpy flat-decomposition search
+  cpec_walk.py    rank-10 interval atoms, verified against the logo
+  cpec_walk2.py   exhaustive carrier-write counts for D2's y atoms
+  cpec_d2form.py  the AND-depth-2 D2 factorisation, truth-table checked
+  cpec_d2nl.py    the full AND-depth-2 D2 program, phase checked, width
+                  measured
+  cpec_r1.py      an R1 rank-1 block netlist (superseded; kept for the
+                  width measurement)

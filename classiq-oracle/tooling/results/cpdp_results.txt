@@ -1,0 +1,137 @@
+CP-DP: overlap the four SHIPPED blocks in time (exactness by machine)
+=====================================================================
+STEP 1 -- baseline reproduced (cpdp_base.py), D2 source cpbh_d2
+  block  depth   cx   ops  gates
+  R2t      39    71    53  24 x, 12 ccx, 12 cx, 2 c3x, 1 cz, 2 c3x_dg
+  D1       71   142   103  28 ccx, 24 x, 1 c3x, 48 cx, 1 ccz, 1 c3x_dg
+  D2      125   239   195  100 x, 36 cx, 40 ccx, 7 c3x, 5 cz, 7 c3x_dg
+  R1       43    73    67  12 cx, 36 x, 14 ccx, 2 c3x, 1 cz, 2 c3x_dg
+  serial ledger 39+71+125+43 = 278
+  concatenated R2t,D1,D2,R1 (shipped perms): depth 272 cx 516, 418 ops
+  sim_exact err 7.77e-15 mism 0 PASS ; sv_check err 1.055e-14 leak 1.9e-31
+  per-wire touches
+    R2t  8 10  6 10  8  6  2  2  4 10  6  2  3  6  4  5  6  4
+    D1  14  8 16 21 10  6 12 12 16  6 22  7 16  8 10  3 14 14
+    D2  16 26 24 28 24 13 14 24 28 28 12 18 14 12 32 10 17 18
+    R1   6  4  6  8  6  8  2  8  2  4 10 18  9  7  4  8  4  6
+  model (cpae_core per-wire ASAP) depth of the serial list = 240 (real 272)
+  EVERY block touches EVERY one of the 18 wires (no zero in any touch row).
+
+STEP 1b -- live ranges (cpdp_live.py): max simultaneous NON-RAW wires
+  R2t 11 of 18 | D1 17 | D2 18 | R1 11.  D1 is dirty on 17 wires for ops
+  15..88 of 103; D2 on all 18 for ops ~50..145 of 195.  Two disks can never
+  be live at the same time at width 18.
+  Blocks are exact palindromes: first k ops touch the same wires as last k.
+  head/tail footprints (k=10): R2t {0,1,3,4,5,13,15} R1 {0,1,3,4,5,13,14,15}
+  D2 {8,9,10,11,12,15,17} D1 16 wires.
+
+STEP 2 -- the 12 ordered pairs (cpdp_pairs.py / cpdp_splice.py / cpdp_run4.py)
+  Bbrk/Abrk = gates whose OWN product is changed under a full ASAP interleave
+  (cpdi_park.merge_asap style); freeW = wires neither block ever dirties;
+  splices = number of EXACT (i,j) boundary splices found (bitmask replay,
+  4096 inputs), i = A tail ops jumped, j = B head ops moved forward.
+  A   > B    sumD concat  Bbrk Abrk  freeW  #exact  DAG-ASAP  BEST exact
+  R2t >D1     110   109     76   27   none      61       112  109 concat
+  R2t >D2     164   164     92   29   none     208       167  164 concat
+  R2t >R1      82    81     27   29   q6        30        81   81 concat
+  D1  >R2t    110   109     27   76   none      61       111  109 concat
+  D1  >D2     196   194     93   78   none      33       196  194 concat
+  D1  >R1     114   113     30   78   none     141       113  113 concat
+  D2  >R2t    164   163     29   92   none     208       165  163 concat
+  D2  >D1     196   193     79   93   none      33       198  192 splice i=2 j=3
+  D2  >R1     168   165     30   93   none     294       166  165 concat
+  R1  >R2t     82    81     27   25   q6        30        89   81 concat
+  R1  >D1     114   113     79   29   none     141       113  113 concat
+  R1  >D2     168   166     92   27   none     294       167  166 concat
+  FALSIFIER DOES NOT FIRE: all 12 pairs have exact merged circuits (30-294
+  exact splices each).  But the saving is 0-4 layers: plain concatenation is
+  already the best exact interleaving for 11 of 12 pairs.
+  Never-dirtied wires: R2t {6,7,11}, D1 {9}, D2 {}, R1 {1,6,8}.  D1 and D2
+  each hold ALL SIX ancillas q12..q17 non-raw for essentially their whole
+  span (D1 ops 0..101 of 103, D2 ops 4..189 of 195), so the "re-host A's
+  value on another free wire" patch has no wire to use in 10 of 12 pairs.
+
+STEP 3 -- best full interleaving (cpdp_run5.py)
+  24 block orders, plain concatenation, shipped perms: best 272
+    R1,D2,D1,R2t 272/516 | R2t,D1,D2,R1 272/516 (shipped) | D1,D2,R1,R2t
+    272/518 | R2t,R1,D2,D1 272/518 | ... worst D1,R1,R2t,D2 276/524
+  boundary-splice descent (3 seams, i,j <= 30, exactness by bitmask replay):
+    R1,D2,D1,R2t  -> 270 / 517  splices [(19,1),(2,3),(0,0)]
+    R2t,D1,D2,R1  -> 270 / 516  splices [(0,0),(11,2),(1,19)]   <-- BEST
+    D1,D2,R1,R2t  -> 270 / 518  splices [(11,2),(1,19),(0,0)]
+    R2t,R1,D2,D1  -> 270 / 519  splices [(0,0),(19,1),(2,3)]
+  BEST EXACT MERGED: width 18, depth 270, cx 516
+    sim_exact err 7.77e-15 mism 0 PASS ; sv_check err 1.055e-14 leak 1.9e-31
+    = 2 below the shipped 272, 8 below the 278 serial ledger.
+
+STEP 4 -- critical wire and the changes tried (cpdp_crit/run6/run7/anneal.py)
+  Critical path of the merged circuit is SATURATED: 272 (270) gates long for
+  272 (270) layers -- one path gate per layer, so there is no slack anywhere
+  on it.  It crosses all four blocks in order.
+  Critical wire q3: 139 of 270 layers busy (51%); next q17 133, q14 120,
+  q16/q13 118, q15 110, q12 104.  Path wire histogram q17:78 q10:41 q9:41
+  q3:35 q8:32 q12:25 q15:23.  No single wire is the bound (floor 139).
+  q3 raw op list (67 ops, T = q3 is the target, c = q3 is a control):
+   cxc cxc cxc ccxT ccxc ccxc ccxT cxc cxc cxc ccxc cxc cxc cxT xT ccxT cxc
+   cxc ccxT xT cczc xT ccxT cxc cxc ccxT xT cxT cxc cxc ccxc xT cxc xT ccxc
+   c3xT xT cxT xT ccxc xT c3xc xT c3xc xT xT c3x_dgc xT c3x_dgc xT ccxc xT
+   cxT xT c3x_dgT ccxc xT cxc xT cxc c3xc ccxT ccxc ccxc ccxT c3x_dgc cxc
+  CHANGE 1 -- ancilla perm descent UNDER the splices, 720 perms per block,
+    3 rounds (the shipped perms were tuned for plain concatenation): all 720
+    perms of every block are LEGAL with the splices in place, none beats
+    270/516.  No change.
+  CHANGE 2 -- anneal the merge word on the REAL transpiled depth (24 ms per
+    eval), 3 seeds x 100 s: 11,743 exact candidates evaluated, 11,336
+    accepted (96.5% of proposed exact moves accepted -- the move space is
+    wide open), best stays 270/516.  No change.
+  CHANGE 3 -- commutation DAG (exact by construction, 10,720 edges) + ASAP
+    list scheduling, 4 priority rules: real 276-287 (WORSE than 272; the
+    reorder costs the transpiler its cross-boundary cx/x cancellations),
+    model depth 240 unchanged.  No change.
+  WHY 270 IS THE FLOOR: cumulative concat depth 39 -> 109 -> 232 -> 272, i.e.
+  D1 adds 70 of its 71, D2 adds 123 of its 125, R1 adds 40 of its 43.  Every
+  block contributes 97-98% of its solo depth.  The three small blocks alone
+  (R2t,D1,R1) concat to 151 against a 153 serial sum -- the same 2-layer
+  ceiling with D2 removed, so this is not a D2 effect but a width effect.
+  Occupancy of the merged list: 174 of 418 ops run with 13-18 of the 18
+  wires holding non-raw values; D1 and D2 hold all six ancillas non-raw for
+  their entire span, so no second block can own an ancilla at any time.
+
+FINAL -- best exact merged oracle (cpdp_final.py, cpdp_best.qasm)
+  order R2t,D1,D2,R1  perms 301245,024315,013425,102345
+  splices (i,j) = (0,0) at R2t|D1, (11,2) at D1|D2, (1,19) at D2|R1
+  opt2 270/516, opt3 270/516; phase fix gp=5.727045047 on q8, depth 270->270
+  CHALLENGE METRIC width=18 depth=270 cx=516
+  STRICT err 1.156e-14 leak 8.2e-30 PASS
+  reloaded cpdp_best.qasm depth=270 cx=516 strict err 1.217e-14 leak 5.7e-30
+  sim_exact err 7.77e-15 mism 0 ; sv_check err 1.055e-14 leak 1.9e-31
+  NOT under 200.  -2 on the shipped 272, -8 on the 278 serial ledger.
+
+CP-DP summary
+  1. Baseline reproduced exactly: R1 43 / R2t 39 / D1 71 / D2 125 = 278
+     serial, merged 272/516 at width 18, sim_exact 7.8e-15, mism 0.
+  2. All 12 ordered pairs have EXACT merged circuits (30-294 exact boundary
+     splices each) -- the falsifier (fewer than 2 exact) does not fire.
+  3. But 11 of 12 pairs are best at PLAIN CONCATENATION; only D2>D1 gains
+     (193 -> 192).  Pair savings vs the serial sum: 0 to 4 layers.
+  4. Full ASAP interleaving (cpdi_park.merge_asap style) breaks 27-93 of the
+     inner block's gates' own products and leaves 10-18 wires dirty: the
+     parking law's "re-host on a free wire" patch has no wire to use, since
+     D2 dirties all 18 and D1 all but q9.
+  5. Best exact full interleaving: order R2t,D1,D2,R1 with splices
+     (0,0)/(11,2)/(1,19), width 18 DEPTH 270 CX 516, strict 1.156e-14,
+     leak 8.2e-30, written as cpdp_best.qasm (NOT under 200).
+  6. Three independent searches agree 270 is the floor for these blocks:
+     720-perm descent per block under the splices (0 improvements), 11,743
+     real-depth anneal evaluations with 96.5% acceptance (0 improvements),
+     exact commutation-DAG ASAP (276-287, worse).
+  7. Mechanism: D1 and D2 each hold ALL SIX ancillas q12..q17 non-raw for
+     their whole span, so two blocks can never be live at once at width 18;
+     cumulative depth 39/109/232/272 shows each block paying 97-98% of its
+     solo depth.  The merged critical path is saturated (one gate per layer)
+     and crosses all four blocks; the critical wire q3 is only 51% busy.
+  8. What would take it lower: not a schedule, a block -- a D2 whose ancilla
+     pool is <= 3 wires (leaving 3 free for a second block's tree) would let
+     R1 and R2t, together 82 layers, hide inside D2's 125; that is the same
+     "compliant pool" object CP-DI's P6 measured at 371 alone and is the
+     only lever the machine found that is not already saturated.

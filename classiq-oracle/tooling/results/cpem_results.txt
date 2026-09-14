@@ -1,0 +1,115 @@
+cpem -- numerical window re-synthesis of the 259-depth circuit (cpej_best.qasm)
+All numbers measured; "not measured" otherwise.  Scripts cpem_*.py.
+
+BASELINE (cpem_lib / logo.challenge_metrics)
+  cpej_best.qasm  depth 259 / 516 cx / 609 u3, width 18.
+  transpile(basis=[u3,cx], opt_level 0/1/2/3): 259 / 516 at every level.
+  commutation-aware ASAP schedule (cpej_ir DAG): 259; critical path
+  259 gates = 137 cx + 122 u3; wire visits q17 68, q4 42, q12 34, q9 33,
+  q10 32, q8 26, q3 24, q11 21.
+
+1. BQSKIT  (installed OK: bqskit 1.2.1 + bqskitrs 0.4.1 in /tmp/bqsk,
+   pip through the egress proxy worked)
+   cpem_bqskit.py = stock flow: MachineModel(18, {CNOT,U3}) all-to-all,
+   compile(optimization_level=2, max_synthesis_size=3, synthesis_epsilon).
+     eps 1e-12: 18.4 s -> 1110 gates, bqskit depth 258, cx 514
+     eps 1e-14: 39.8 s -> 1110 gates, bqskit depth 258, cx 514
+   qiskit re-measure of that output: opt1/2/3 = 258 / 514 / 596 u3.
+   after cpem_retime.py (cpej min-atom split + CP-SAT exact re-timing,
+   6 rounds, each round proved optimal): 258 -> opt2/opt3 = 257 / 514.
+   EXACTNESS: FAILS.  verify18.verify_sv18 err 2.21e-08, cpae_core.sv_check
+   err 1.40e-08 (leak 3.7e-17).  The re-timing itself is exact (statevector
+   vs the bqskit output 5.85e-14): the 1.4e-8 is introduced by bqskit's own
+   compile() flow and does NOT shrink when synthesis_epsilon is lowered from
+   1e-12 to 1e-14, so it is not the instantiation tolerance.  A 257/514
+   circuit at 1.4e-8 is 5 orders of magnitude outside the 1e-10 verifier
+   bound, so it is not usable.
+   cpem_bq2.py = explicit workflow QuickPartitioner(3) +
+   ForEachBlock(QSearchSynthesis(success_threshold=1e-14) + ScanningGate-
+   Removal(1e-14)) + Unfold: 74 s -> 2414 gates, cx 541; after exact
+   re-timing 315 / 537, and sv_check err 0.63 -- QSearch returns its best
+   partial result when it cannot reach the threshold, so from-scratch block
+   synthesis is both inexact and worse here.  Not usable.
+   opt_level 3 / max_synthesis_size 4 (LEAP): killed after 40 min without
+   finishing (4 cores shared).
+   WHY BQSKIT IS INEXACT HERE (measured).  Isolating the passes:
+     ScanningGateRemovalPass alone, success_threshold 1e-14: 516 -> 516 cx,
+       depth 259 (only 14 identity u3 dropped)  -- no cx is removable.
+     ScanningGateRemovalPass alone, success_threshold 1e-8 : 516 -> 516 cx,
+       depth 259 as well.
+     TreeScanningGateRemovalPass (tree_depth 3, block 4), threshold 1e-14:
+       516 -> 515 cx, depth 259; after exact re-timing 259 / 515, and
+       verify_sv18 err 2.87e-08 / sv_check 2.11e-08.
+   The stock compile() removes exactly two cx(8,17) (per-pair cx census vs
+   cpej_best: cx(8,17) 12 -> 10, every other pair unchanged) and lands at
+   1.40e-08.  bqskit's success_threshold is measured on a cost that is
+   QUADRATIC in the amplitude error (1 - |Tr(U^dag V)|^2/d^2), so a
+   threshold of 1e-14 in cost units is ~1e-7 in amplitude units; lowering
+   synthesis_epsilon from 1e-12 to 1e-14 changed nothing (same 514 cx, same
+   1.4e-8).  bqskit therefore cannot certify the 1e-10 amplitude accuracy
+   this challenge requires, and its 258/514 is not an exact rewrite.
+   Our own fitter (cpem_syn.fit3) uses a residual that is LINEAR in the
+   amplitude error (least_squares on U^dag V - e^{i phi} I with an analytic
+   Jacobian, Levenberg-Marquardt), and reaches 1e-15..1e-16; every rewrite
+   below is accepted only at < 1e-12.
+
+2. WINDOW CENSUS (cpem_census.py, cpem_win.py, cpem_pp.py, cpem_resyn.py)
+  Definition used: a window is a wire set W plus a maximal gate-index range
+  in which EVERY gate touching W lies inside W.  Such a set is convex in the
+  commutation DAG (any path out of it and back must use a wire of W), so it
+  can be contracted to one block and replaced.
+  gate-level windows of cpej_best.qasm with >= 2 cx, |W| <= 4:  2350
+    gate-count histogram 2:21 3:124 4:431 5:826 6:560 7:204 8:67 9:48 10:23
+    11:11 12:11 13:8 ... largest 22 gates / 9 cx on W=(1,2,3,16)
+    largest |W|=3 window 15 gates / 6 cx; largest |W|=4 19 gates / 8 cx
+  wider windows (pool = each wire with its 8 heaviest cx neighbours):
+    |W|=5  76 windows with >= 6 cx, largest 26 gates / 11 cx
+    |W|=6 143 windows with >= 6 cx, largest 39 gates / 21 cx
+    |W|=7 152 windows with >= 6 cx, largest 43 gates / 20 cx
+    the large |W|=6/7 windows carry ZERO critical-path gates; the largest
+    window that does is |W|=6 W=(7,8,9,10,14,17), 26 gates / 13 cx, 13 of
+    them critical (|W|=7 W=(6,7,8,9,10,14,17): 28 gates / 14 cx, 13 crit).
+  runs of consecutive critical-path gates and the wires they touch:
+    10 gates -> 3/5/7 wires (min/med/max), 20 -> 5/7/11, 30 -> 7/9/13,
+    40 -> 8/11/15, 60 -> 11/14/17.  A window big enough to hold 20 critical
+    steps already spans a median of 7 wires.
+
+3. WHY THE PHASE LADDERS CANNOT BE RE-HOSTED (cpem_pp.py, cpem_win.py)
+  Split every u3 into Rz-Rx-Rz atoms: 1953 atoms = 1131 Rz + 516 cx + 306 Rx.
+  Only 229 of the Rx are non-Pauli (Rx(pi/2)); the other 77 are X, which is
+  inside the CNOT-dihedral group.  Removing the 229 barriers leaves ONE
+  connected CNOT-dihedral region spanning all 18 wires with 477 of the 516
+  cx and 1026 of the 1131 Rz -- but it is not convex, so it is not a window.
+  Convex BARRIER-FREE (pure cx + Rz + X) windows, i.e. the ones a parity
+  network re-synthesis could rewrite with full freedom:
+    |W|=3 : 8 windows with >= 4 cx, largest 5 cx
+    |W|=4 : 70 windows with >= 4 cx, largest 6 cx
+    |W|=5 : 376 windows with >= 4 cx, largest 6 cx
+  i.e. no phase polynomial in this circuit has more than 6 cx in a convex
+  window.  Ladder census (maximal runs of cx that target one wire, separated
+  only by diagonal atoms on that wire):
+    wire 17: 10 ladders, 38 cx, longest 6 cx over 3 controls, 2 barrier Rx
+             on those controls inside the span
+    wire 12:  7 ladders, 38 cx, longest 13 cx over 4 controls, 8 barrier Rx
+    wire  4:  8 ladders, 28 cx, longest  5 cx over 4 controls, 3 barrier Rx
+    wire  3: 11 ladders, 36 cx, longest  4 cx over 2 controls, 1 barrier Rx
+    wire  9:  3 ladders, 10 cx, longest  4 cx over 2 controls, 2 barrier Rx
+  Every long ladder has non-Pauli Rx gates on its CONTROL wires inside its
+  own span, so the control value changes during the ladder: the object is a
+  genuine 5-7 qubit unitary, not a phase polynomial, and it cannot be
+  re-expressed as a parity network over more wires.
+  Idle (dirty) helper wires cannot carry phase either: a phase gadget on a
+  parity p (+) d contributes (-1)^d * theta_p * (-1)^p, and cancelling the
+  (-1)^d factor for all inputs forces every theta_p = 0.  A dirty wire is
+  therefore only a routing element (2 cx to use and restore it).
+
+4. CRITICAL STRUCTURE OF THE 259 CIRCUIT (cpem_lib.crit_path)
+  ASAP schedule under the commutation DAG: depth 259, critical path
+  137 cx + 122 u3, wire visits q17 68, q4 42, q12 34, q9 33, q10 32, q8 26.
+  layer occupancy mean 4.34 gates; 15 layers hold a single gate, 49 hold
+  <= 2, 69 hold >= 6.
+  zero-slack gates (ASAP layer == ALAP layer, i.e. on SOME critical path):
+  489 of 1125 (43%); per layer min 1, mean 1.89, max 4; 115 of the 259
+  layers have exactly one zero-slack gate, 144 have two or more.
+  So the critical structure is a braid, not a single chain: shortening one
+  window by one layer leaves a parallel critical path in 144 of 259 layers.

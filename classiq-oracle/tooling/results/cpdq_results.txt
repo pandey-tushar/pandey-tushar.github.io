@@ -1,0 +1,162 @@
+CP-DQ  phase-heavy architecture:  oracle = C ; P ; C^-1
+  C builds helper values (ANDs / AND3s), P = a bag of DIAGONAL gates
+  (Z free, CZ 3 layers x 2 wires, CCZ 10 x 3, C3Z 22 x 4) applied to affine
+  forms of the 18 wire values.  Requirement: F = XOR over gates of the
+  product of that gate's affine inputs, on all 4096 (x,y).  No shape
+  decomposition, no blocks.  All numbers below are measured unless marked.
+
+STEP 0  structure of the target (cpdq_lib.py, cpdq_sides.py, cpdq_prod.py)
+  F = LOGO, 1097 pixels, rank 10 over GF(2) as a 64x64 matrix.
+  10-term separable decomposition verified exact:
+    F = XOR_{t in 2,4,5,6,12} [r(x)=t](x) * [|y-41|<=t](y)
+      ^ XOR_{k=0..4}          [cx=k](x)   * [cy<=4-k](y)
+  col(F) (x-side space) and row(F) (y-side space) are both 10-dimensional.
+  DEGREE CENSUS over all 1023 nonzero elements of each (new, measured):
+    col(F):  degree 4: 7 elements (a closed 3-dim subspace)
+             degree 5: 504    degree 6: 512    degree <=3: NONE
+    row(F):  degree 4: 15 elements (a closed 4-dim subspace)
+             degree 5: 496    degree 6: 512    degree <=3: NONE
+  Only one of those low-degree elements is an affine flat ({33,47,50,60},
+  codim 4); the rest are not, so they are not single products of affine forms.
+
+STEP 1a  flat covers of the 20 side functions (cpdq_cov.py)
+  Minimum XOR-of-<=3-flats covers of the side functions need codim 4,5,6
+  factors (Lx4 = ~x0&(x1^x2)&(x1^x3)&x4&x5 is a codim-5 flat; Lx2, Lx12,
+  Ly4, Ly5, Ly6, Ly12, Dy<=4..2 have NO cover with <=3 flats at all).
+  So no side function is a cheap product of affine forms of raw bits.
+
+STEP 1b  the strict architecture (6 helpers on the 6 ancillas) is INFEASIBLE
+  Exact feasibility test (cpdq_anf.py): a phase gate on k affine forms of the
+  18 atoms realises a product of k affine forms, so the span of all gates with
+  k <= 4 is EXACTLY the span of the 4048 monomials of degree <= 4 in the 18
+  atoms.  F must lie in that span.  Measured over ~2500 helper sets
+  (cpdq_t1.py, cpdq_search1.py, cpdq_s3.py: structured pool of 51 geometric /
+  flat-cover / low-degree-col(F) candidates + random products of 2-3 affine
+  forms over the current atoms, greedy on residual weight with restarts,
+  1st- and 2nd-level (nested) helpers, x/y-separable and mixed):
+    F in span:            NEVER
+    best residual weight: 755 of 4096 (seed 1), 771 (seed 7)
+    largest span rank:    2161 of 4096 (greedy: cd2,rd3,rd1,fx1,fx11,fy2)
+    random 6-flat sets:   rank 1837-1909
+  Structural reason (measured + counting):
+   - no element of col(F)/row(F) has degree <= 3, so a helper built by ONE
+     AND/AND3 of affine forms of the RAW bits (degree <= 3) is never a usable
+     side value;
+   - a degree-4 value needs two independent degree-2 helper bases plus itself
+     = 3 ANDs per side (bases shared: 2 + k ANDs for k values), so 6 ANDs buy
+     at most TWO side values, while the rank-10 structure needs 10 per side;
+   - with only level-1 (flat) helpers every separable gate is a C3Z (px=py=2)
+     and one needs 10 independent col(F) elements that are 2-form products:
+     measured over 891 random flat triples the best was 3 (rank 2).
+  FALSIFIER for step 1 fired here: no cover exists at all, so there is no
+  "max wire load" to report for the strict variant.
+
+STEP 1c  what the architecture DOES want:  F is two 3-bit comparisons
+  (cpdq_codes.py, verified on all 4096 inputs)
+    F = [bL(y) <= aL(x)]  XOR  [bD(y) <= aD(x)]
+    aL(x) = level of r(x) in (-1,2,4,5,6,12) -> 0..5
+    bL(y) = level of |y-41| in (2,4,5,6,12)  -> 1..5, 7 outside
+    aD(x) = 5 - c(|x-40|),  bD(y) = c(|y-19|) + 1
+  and for 3-bit codes u,v
+    [v > u] = v2~u2 ^ ~(u2^v2) v1 ~u1 ^ ~(u2^v2) ~(u1^v1) v0 ~u0
+            = CZ ^ CCZ ^ C3Z
+  The two leading 1's of "1 ^ [v>u]" cancel between the halves, so
+    P = 2 CZ + 2 CCZ + 2 C3Z  =  SIX diagonal gates, and nothing else.
+  Cover verified EXACT against LOGO on all 4096 inputs (cpdq_cmp.py).
+    gates by type:      2 CZ, 2 CCZ, 2 C3Z, 0 Z
+    re-deal CX:         8 forward (2 two-term forms per comparison, hosted and
+                        un-hosted)  -> 44 cx after transpile
+    wire-layers:        264 (model: CZ 3x2, CCZ 10x3, C3Z 22x4, CX 1x2)
+    MAX WIRE LOAD:      37   (falsifier is 110 -- does not fire, 3x under)
+
+STEP 2  measured phase stage P on 18 wires (cpdq_meas.py, cpdq_meas2.py)
+  Wires 0,1,2 = aL bits; 3,4,5 = aD; 6,7,8 = bL; 9,10,11 = bD; 12..17 free.
+  Transpiled to u3/cx.  Calibration: one C3Z alone = depth 27 / 14 cx,
+  one CCZ alone = depth 10 / 6 cx  (the sheet's table says 22 and 10).
+   sched   hostA hostB | depth2  cx2 | depth3  cx3 | wirelay maxload packing
+   serial  y     y     |   52    44 |   52    44 |    264     37  0.282
+   serial  x     x     |   51    44 |   51    44 |    264     37  0.288
+   serial  y     x     |   52    44 |   52    44 |    264     37  0.282
+   inter   y     y     |   52    44 |   52    44 |    264     37  0.282
+   inter   x     x     |   51    44 |   51    44 |    264     37  0.288
+   inter   y     x     |   52    44 |   52    44 |    264     37  0.282
+   rev     y     y     |   52    44 |   52    44 |    264     37  0.282
+   rev     x     x     |   51    44 |   51    44 |    264     37  0.288
+   rev     y     x     |   52    44 |   52    44 |    264     37  0.282
+  Every schedule gives 51-52: the two comparisons already run fully in
+  parallel (disjoint wires); the depth is the serial chain CZ -> CCZ -> C3Z
+  inside ONE comparison, forced because the equality form ~(u2^v2) must be
+  hosted on the u2 or the v2 wire and the CCZ/C3Z both need the v1/u1 wires.
+  Per-wire load (inter,y,x): [22,12,5, 22,34,37, 22,34,37, 22,12,5, 0*6]
+  Most loaded wire = 5 (aD2) and 8 (bL2): load 37 = C3Z 22 + CCZ 10 + CZ 3
+  + 2 CX.  Written out as cpdq_P.qasm.
+  FLOOR of the phase stage (cpdq_meas3.py): give C three more values per
+  comparison (e = u2==v2, a copy e', e2 = u1==v1) so the CZ/CCZ/C3Z sit on
+  disjoint wires -> depth 45, cx 40, wire-layers 248, max load 22.
+  So the PHASE STAGE OF THE WHOLE LOGO COSTS ABOUT 50 LAYERS.  Under the
+  target of 200 that leaves 75 layers for C and 75 for C^-1.
+
+STEP 2b  but the 18-wire circuit for C cannot exist (cpdq_width.py)
+  P's gates use only the 12 code bits: 6 independent functions of x and 6 of
+  y, all of degree 5-6, so they span 12 dimensions.  At P time the 18 wire
+  values span an 18-dim space V (mod constants) which must
+   (a) contain those 12 functions   -- P's forms are affine in the wires, and
+   (b) SEPARATE all 4096 inputs     -- C is an invertible circuit on 18 wires
+       whose six ancillas start at 0, so (x,y) -> (18 wire values) is injective.
+  (a) uses 12 of the 18 dimensions, leaving 6, and those 6 must separate every
+  fibre of the code map.  Measured fibre structure:
+    x-classes 11, sizes 25,7,5,5,4,4,4,4,2,2,2
+    y-classes 11, sizes 22,12,5,5,4,4,4,2,2,2,2
+    largest fibre 25 x 22 = 550 points, needs 10 further dimensions
+    => 12 + 10 = 22 WIRES.  At 18 wires no C exists, for ANY C.
+  This is a clean width bound for phase-only architectures whose gates read
+  class codes, and it is exactly the 18-wire wall the CP-DN/CP-DO runs hit
+  from the other side.  It is the tension: the forms P needs are constant on
+  the shape's classes, the wires must resolve the inputs.
+
+STEP 3  attempts to shorten the loaded wire
+  1 re-deal host swap (aD2/bL2 <-> the other member of each mixed form):
+    51 instead of 52.  Recorded above (host x).
+  2 C3Z -> two CCZ with an extra helper: not applicable, the C3Z's four forms
+    are already 4 distinct atoms; splitting needs the e/e2 helpers, measured
+    as the FLOOR row: 45 / 40 cx / max load 22.
+  3 three schedules x three host choices: all 51-52 (table above).
+  No further change helps: the chain is CZ->CCZ->C3Z through one wire, and
+  breaking it costs ancillas that the width bound has already spent.
+
+STEP 2c  exact replay of the EMITTED phase-stage circuit (cpdq_verify.py)
+  All 18 wires initialised to the 12 code bits + six 0s, all 4096 (x,y), the
+  full op list (re-deal CX, X for negative controls, CZ/CCZ/C3Z) replayed:
+    every one of the 9 schedule/host variants: phase err 1.6e-15,
+    wire mismatches 0  -> EXACT, depth 51-52, cx 44.
+  So P is a verified circuit, not only a verified algebraic identity.
+
+CP-DQ summary
+1 F = [bL(y) <= aL(x)] XOR [bD(y) <= aD(x)] exactly: two comparisons of
+  3-bit level codes (LEFT's |y-41| thresholds, D2's class sums).  Verified on
+  all 4096 inputs.  This is the cheapest description of the logo found so far.
+2 In this architecture the whole phase stage is SIX gates:
+  2 CZ + 2 CCZ + 2 C3Z, 8 re-deal CX, no Z, no shape decomposition.
+  MEASURED on 18 wires: depth 51 (opt 2 and 3), 44 cx, 264 wire-layers,
+  MAX WIRE LOAD 37 (falsifier 110: does not fire), packing 0.29.
+  Exact by 4096-input replay for all 9 schedule x host variants.
+  Floor with three more helper values per comparison: depth 45, max load 22.
+3 The strict variant of the architecture (six helpers on the six ancillas,
+  twelve raw data bits) is FALSIFIED: the span of all phase gates on <= 4
+  affine forms of the 18 atoms is exactly the degree-<=4 monomial span, and F
+  was never in it over ~2500 searched helper sets (best residual 755/4096,
+  best span rank 2161/4096).  Reason: col(F) and row(F) contain NO element of
+  degree <= 3, so a one-AND helper is never a side value; a degree-4 value
+  costs 2 shared bases + 1 AND, so six ANDs buy two side values where the
+  rank-10 structure needs ten per side.
+4 And the comparison form cannot be hosted at 18 wires, for ANY C: P's forms
+  span the 12 code dimensions, leaving 6 of 18, and those 6 must separate
+  every fibre of the code map -- largest fibre 25 x 22 = 550 points, needing
+  10 dimensions.  12 + 10 = 22 WIRES.  That is a width bound on phase-only
+  architectures that read class codes, and it is the same 18-wire wall the
+  CP-DN / CP-DO value-building runs hit from the other side.
+5 What would take it lower: at 22 wires this architecture is 2*C + 51, so a C
+  that builds the four 3-bit codes in 70 layers gives 191 at width 22.  At
+  width 18 the only way through is a phase stage whose forms are NOT class
+  functions -- e.g. mixed x/y forms inside the products, which is the one part
+  of the gate space this search did not exhaust.

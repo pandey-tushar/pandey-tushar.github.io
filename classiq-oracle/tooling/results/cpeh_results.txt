@@ -1,0 +1,152 @@
+K= 6  no schedule / emission failed
+K= 8  no schedule / emission failed
+K=10  no schedule / emission failed
+order 11,10,9,8,7,6,4,3,1,0,2,5 nodes  91 nonaff  88 regs 43 width 55 mand  268 cx  718  fwd-model  394  opt2  1275/ 1430  opt3  1269/ 1425  mism 0 dirty 0
+order 4,2,3,5,1,0,11,10,6,7,8,9 nodes  82 nonaff  79 regs 39 width 51 mand  242 cx  634  fwd-model  302  opt2   945/ 1286  opt3   939/ 1281  mism 0 dirty 0
+order 9,10,11,8,7,6,5,4,0,3,1,2 nodes  81 nonaff  78 regs 41 width 53 mand  234 cx  606  fwd-model  279  opt2   865/ 1156  opt3   859/ 1151  mism 0 dirty 0
+order 5,3,1,2,0,4,11,10,9,6,7,8 nodes  82 nonaff  78 regs 38 width 50 mand  236 cx  480  fwd-model  268  opt2   757/ 1130  opt3   755/ 1129  mism 0 dirty 0
+order 5,4,3,2,1,0,11,10,9,8,7,6 nodes  83 nonaff  77 regs 38 width 50 mand  232 cx  578  fwd-model  284  opt2   911/ 1222  opt3   909/ 1221  mism 0 dirty 0
+
+========================================================================
+CP-EH  XAG + reversible pebbling of the WHOLE 12-input F
+========================================================================
+
+--- pebble sweep on the 82-node ROBDD-XAG, order 5,3,1,2,0,4,11,10,9,6,7,8 ---
+K= 6 width=18  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [0s]
+K= 7 width=19  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [0s]
+K= 8 width=20  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [0s]
+K= 9 width=21  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [0s]
+K=10 width=22  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [0s]
+K=12 width=24  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [0s]
+K=16 width=28  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [1s]
+K=20 width=32  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [1s]
+K=24 width=36  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [1s]
+K=30 width=42  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [1s]
+K=34 width=46  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [6s]
+K=36 width=48  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [1s]
+K=37 width=49  NO SCHEDULE (greedy reversible pebbler, recomputation allowed)  [2s]
+K=38 width=50 acts=248                         w=50 mand= 496 cx=1492 model=1942 opt2=  2183/  2364 opt3=  2181/  2363 mask-mism=0 dirty=0  replay err=0.00e+00 perm=0
+K=40 width=52 acts=224                         w=52 mand= 448 cx=1174 model=1660 opt2=  1711/  1904 opt3=  1709/  1903 mask-mism=0 dirty=0  replay err=0.00e+00 perm=0
+K=44 width=56 acts=178                         w=56 mand= 356 cx= 928 model=1338 opt2=  1507/  1618 opt3=  1505/  1617 mask-mism=0 dirty=0  replay err=0.00e+00 perm=0
+
+--- no-recomputation builds (registers = peak live) ---
+straight order 5,3,1,2,0,4,11,10,9,6,7,8 regs=38 w=50 mand= 236 cx= 480 model= 536 opt2=   757/  1130 opt3=   755/  1129 mask-mism=0 dirty=0  replay err=0.00e+00 perm=0
+straight order 9,10,11,8,7,6,5,4,0,3,1,2 regs=41 w=53 mand= 234 cx= 606 model= 558 opt2=   865/  1156 opt3=   859/  1151 mask-mism=0 dirty=0  replay err=0.00e+00 perm=0
+straight order 9,11,10,8,7,6,5,4,3,0,1,2 regs=36 w=48 mand= 232 cx= 570 model= 592 opt2=   895/  1180 opt3=   893/  1179 mask-mism=0 dirty=0  replay err=0.00e+00 perm=0
+straight order 11,10,9,8,7,6,4,3,1,0,2,5 regs=43 w=55 mand= 268 cx= 718 model= 788 opt2=  1275/  1430 opt3=  1269/  1425 mask-mism=0 dirty=0  replay err=0.00e+00 perm=0
+
+======================================================================
+CPEH SUMMARY -- XAG of the whole 12-input F + reversible pebbling
+(Meuli-Soeken-Roetteler-De Micheli ICCAD 2019 / DATE 2019 route)
+Every depth/CX below is qiskit transpile(basis u3,cx, seed 11); opt2 and
+opt3 both reported.  Every circuit exact: cpae_core replay over all 4096
+inputs, phase err 0.00e+00, 0 permutation mismatches, 0 dirty registers.
+======================================================================
+
+1. XAG TABLE (whole F, one 4096-entry truth table, no decomposition)
+   All verified: 0 mismatches over 4096 inputs.
+   source                     c_and AND-depth peak-live max-operand-req
+   cpdl_best.prog (repo)        41      ~20        26        --
+   cpdm_wide_tree.prog (repo)   47        6        33        --
+   cpdm_wide.prog (repo)        48        6        38        --
+   ROBDD-XAG order x,y          96       11        35        13
+   ROBDD-XAG order y,x         107       11        40        13
+   ROBDD-XAG x rev, y rev       83       11        28        11
+   ROBDD-XAG y rev, x rev       86       11        19        10
+   ROBDD-XAG 9,11,10,8,7,6,5,4,3,0,1,2   78 ANDs  <- fewest found
+   ROBDD-XAG 5,3,1,2,0,4,11,10,9,6,7,8   82 ANDs (78 non-affine)
+   peak-live = causal GF(2) liveness of cpdy_fit2 (AND outputs needed
+   simultaneously).  ROBDD node-VALUE liveness (one register per node,
+   which is what the emitter actually uses) is 36-43, see 3.
+   Variable-order search: 1500 orders by node-value pressure + 4000 by
+   level frontier + 3000 by Sethi-Ullman.  Node count 78-190; minimum
+   level-by-level frontier found 15; minimum node-value pressure 36.
+   tweedledum.classical.optimize on the 78-node XAG: 158 -> 137 gates,
+   AND count unchanged at 78 (0 mismatches after).  No mockturtle /
+   cut-rewriting engine is installed, so no further AND reduction.
+
+2. AFFINE-COSET (pure phase-gate) FAMILY -- ruled out by measurement
+   Walsh spectrum of F: 4096/4096 coefficients nonzero, max |W(l)| = 687
+   at l = 3072 (|F| = 1097).  Best codim-1 affine coset INCREASES the
+   popcount (best reduction -264).  Best codim-2 coset over all 8.4M
+   pairs of linear forms holds 647 of its 1024 points, so one CZ takes
+   the popcount 1097 -> 827.  A C^(k-1)Z cover of F therefore needs many
+   high-codimension cosets; the family cannot reach the board's CX count.
+
+3. MAKESPAN vs PEBBLES, 82-node ROBDD-XAG, order 5,3,1,2,0,4,11,10,9,6,7,8
+   Emitter: 12 data wires carrying the affine map, K clean ancillas,
+   Margolus AND (7 layers / 3 CX, relative phase cancels because the same
+   gate undoes it), node i built as
+       route host -> lo^hi ; mand(var, host, T) ; route back ; T ^= lo,
+   phase = one Z on the root register, then the whole list mirrored.
+   K  width  acts  mand   cx  opt2 depth/cx   opt3 depth/cx  exact
+    6    18    --    --   --   NO SCHEDULE      --           --
+    7    19    --    --   --   NO SCHEDULE      --           --
+    8    20    --    --   --   NO SCHEDULE      --           --
+    9    21    --    --   --   NO SCHEDULE      --           --
+   10    22    --    --   --   NO SCHEDULE      --           --
+   12    24    --    --   --   NO SCHEDULE      --           --
+   16    28    --    --   --   NO SCHEDULE      --           --
+   20    32    --    --   --   NO SCHEDULE      --           --
+   24    36    --    --   --   NO SCHEDULE      --           --
+   30    42    --    --   --   NO SCHEDULE      --           --
+   34    46    --    --   --   NO SCHEDULE      --           --
+   36    48    --    --   --   NO SCHEDULE      --           --
+   37    49    --    --   --   NO SCHEDULE      --           --
+   38    50   248   496 1492   2183 / 2364      2181 / 2363   yes
+   40    52   224   448 1174   1711 / 1904      1709 / 1903   yes
+   44    56   178   356  928   1507 / 1618      1505 / 1617   yes
+   No-recomputation builds (registers = node-value peak live, LIFO frees):
+   order                        regs width  mand  cx  opt2        opt3
+   5,3,1,2,0,4,11,10,9,6,7,8     38   50    236  480  757/1130   755/1129
+   9,10,11,8,7,6,5,4,0,3,1,2     41   53    234  606  865/1156   859/1151
+   9,11,10,8,7,6,5,4,3,0,1,2     36   48    232  570  895/1180   893/1179
+   11,10,9,8,7,6,4,3,1,0,2,5     43   55    268  718  1275/1430  1269/1425
+   Best whole-F build of this pass: 757 depth / 1130 CX at width 50.
+
+4. WHY 6 ANCILLAS IS THE WALL (the measured binding constraint)
+   Reversible unpebbling of an ROBDD node requires BOTH its children to
+   be in registers at that instant (the Margolus is undone by itself).
+   - with no recomputation the whole-F ROBDD-XAG needs 36 registers
+     (48 wires), measured over the best orders found;
+   - with full Bennett recomputation (compute hard child, compute easy
+     child, AND, uncompute both) the recursion
+       P = max(3, 1+P_hard, 2+P_easy),  T = 1 + 2*T_hard + 2*T_easy
+     gives, annealed over 2000 variable orders, a minimum of
+       13 registers and 46085 AND executions
+     (identity order: 18 registers / 577237 executions).
+     46085 Margolus = 138255 CX -- 248x the board's 557.
+   - the IRREVERSIBLE (black-pebble / Sethi-Ullman) number of the same
+     DAG is only 5-8 (annealed minimum 5), so the entire gap is the cost
+     of undoing, not of evaluating.
+   - the repo's cheap XAGs are worse still: 41 ANDs needs 26 live values,
+     47 needs 33, 48 needs 38 (cpdy_fit2), against 6 ancillas, and
+     cpdy_fit2's rematerialisation is infeasible at 6/7/8 registers and
+     costs x39 to x341 at 10-16.
+   THE NUMBER: 36 registers (best whole-F XAG, no recomputation) or
+   13 registers at 46085 AND executions (full recomputation), against
+   the 6 clean ancillas the problem allows.  Nothing in between was
+   found by the greedy reversible pebbler at any K < 38.
+
+5. TIMING MODEL vs REAL TRANSPILE (cpeh_model.py: self-inverse-pair
+   peephole + exact ASAP over the expanded u3/cx list, 1q runs merged)
+   build                    model   opt2   diff
+   straight width 50          783    757    +26
+   straight width 53          915    865    +50
+   straight width 48          925    895    +30
+   straight width 55         1299   1275    +24
+   pebbled K=38 width 50     2407   2183   +224
+   pebbled K=40 width 52     1861   1711   +150
+   pebbled K=44 width 56     1579   1507    +72
+   The model is pessimistic by 3-10%; it does NOT reach the 2-layer
+   agreement asked for (the residue is qiskit's commutation-aware
+   cancellation through the Margolus body).  Every depth/CX reported in
+   this file is a real transpile number, not a model number.
+
+6. RESULT
+   Nothing below the shipped 270 / 516 was produced at width 18.
+   cpeh_best.qasm NOT written.  Best whole-F circuit from this pass:
+   757 depth / 1130 CX at width 50 (exact), which is 32 wires over
+   budget.  Scripts: cpeh_xag.py, cpeh_order.py, cpeh_ord2.py,
+   cpeh_su.py, cpeh_su2.py, cpeh_cos.py, cpeh_peb.py, cpeh_run1.py,
+   cpeh_model.py, cpeh_final.py.

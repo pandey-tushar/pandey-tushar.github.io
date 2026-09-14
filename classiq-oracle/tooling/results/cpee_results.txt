@@ -1,0 +1,536 @@
+CP-EE results (Sep 14).  ASCII only.  Every number below is MEASURED unless
+the line says "not measured".  Tools: cpee_code.py, cpee_dec.py, cpee_phase.py,
+cpee_net.py, cpee_net2.py, cpee_check.py, cpee_joint.py, cpee_j4.py,
+cpee_single.py, cpee_p8.py, cpee_emit.py, cpee_sched.py, cpee_build18.py,
+cpee_sat.py, cpee_run1.py, cpee_run2.py, cpee_mc.py, cpee_syn.py.
+
+===============================================================================
+1. THE COMPARISON PREDICATE IS ONE CCZ + ONE CZ  (cpee_code.py, cpee_dec.py)
+===============================================================================
+Both LEFT (= R1^R2t^D1) and D2 reduce to the SAME 6x6 staircase
+M[i][j] = [j < i] on six classes per side (cpee_code.matrix).  An encoding is
+an injective map class -> GF(2)^3; encodings matter only up to AGL(3,2), which
+gives 15 orbits per side and 225 orbit pairs.  The 8x8 table of G then has 36
+fixed entries and 28 DON'T-CARES.
+
+  measured over all 225 orbit pairs (all 1024 degree-<=3 completions each):
+    orbit pairs with a degree-<=3 completion        22 of 225
+    minimum monomial count over those               5 deg-3 + 8 deg-2 + 3 deg-1
+    minimum number of CCZ (cubic rank of the
+      degree-3 part, meet-in-the-middle over the
+      1396 distinct cubic products)                 1, for 4 orbit pairs:
+                                                    (4,8) (7,7) (8,10) (10,4)
+    for those four pairs, minimum CZ count
+      (rank of the residual alternating form)       1
+
+  So for four orbit pairs the whole comparison is
+      G = (f1 f2 f3) XOR (g1 g2) XOR (affine)
+  i.e. ONE CCZ + ONE CZ + ONE Z on affine forms of the six code bits.
+  Example, orbit pair (4,8) (masks over wires u0u1u2 v0v1v2, bit i = wire i):
+      CCZ on  ~(u2^v0), (u0^v1), (u0^u1^u2^v2)
+      CZ  on  (u1^u2), (u1^v2)
+      Z   on  u2
+  VERIFIED (cpee_check.py): the decomposition evaluated on the code bits
+  equals the shape on all 4096 inputs -- 0 mismatches for LEFT and for D2,
+  for all four orbit pairs.
+
+  Measured phase-stage depth, 6 wires, u3/cx, opt2 (cpee_phase.measure):
+    classic comparator (CZ ^ CCZ ^ C3Z, cpdq form)      38 / 22 CX
+    1-CCZ + 1-CZ form, per-term re-deals, orbit (8,10)  19 / 15 CX
+    1-CCZ + 1-CZ form with one basis-change network:
+      network alone (cpee_net)                           7 / 9 CX
+      network + gates + inverse network                 24 / 25 CX
+    hand network for orbit pair (4,8) (6 CX, 3 layers)  not re-measured
+
+===============================================================================
+2. THE WHOLE LOGO IS ONE COMPARISON ON JOINT 4-BIT CODES  (cpee_joint.py,
+   cpee_single.py)  -- verified 0 mismatches of 4096
+===============================================================================
+aL and aD are not independent: [32,48] (aD >= 1) lies inside [27,49]
+(aL = 1), and [29,53] (bL <= 5) is disjoint from [11,27] (bD <= 5).  So the
+pair (aL,aD) takes only 11 values and (bL,bD) only 11:
+
+  x classes (11), sizes  25 7 2 2 4 4 5 4 2 4 5   labels (aL,aD)
+      (0,0) (5,0) (1,0) (1,1) (1,2) (1,3) (1,4) (1,5) (2,0) (3,0) (4,0)
+  y classes (11), sizes  22 2 2 4 4 5 12 2 2 4 5  labels (bL,bD)
+      (7,6) (7,5) (7,4) (7,3) (7,2) (7,1) (5,6) (4,6) (3,6) (2,6) (1,6)
+
+One region bit per side then suffices:
+    x-code = (s, t)   s = [x in [32,48]],  t = 3-bit level code of aL(x)
+                      when s = 0 and of aD(x) when s = 1
+    y-code = (r, w)   r = [y in [11,27]],  w = 3-bit level code of bL(y)
+                      when r = 0 and of bD(y) when r = 1
+and, with Q the 3-bit comparison above and E(w) = [level_y = 1],
+
+    F = ~(s ^ r) . Q(t,w)   XOR   s . ~r . E(w)
+
+  VERIFIED on all 4096 inputs, 0 mismatches, for all four orbit pairs
+  (cpee_single.py main block).  E is a product of TWO affine forms of w
+  (the two unused codewords absorb it), measured per orbit:
+     (4,8) E = ~w0 & ~(w1^w2)   (7,7),(8,10) E = ~(w0^w1) & ~w2
+     (10,4) E = ~w1 & ~(w0^w2)
+
+  So the phase stage of the WHOLE logo is FOUR gates on eight code wires:
+      C3Z( ~(s^r), f1, f2, f3 )      CCZ( ~(s^r), g1, g2 )
+      CZ ( ~(s^r), z )               C3Z( s, ~r, e1, e2 )
+
+  Measured on 8 wires, u3/cx opt2, per-term re-deals, best of 60 term orders
+  (cpee_p8.py + cpee_phase.measure):
+      orbit pair (4,8)    depth 66 / 49 CX
+      orbit pair (7,7)    depth 74 / 55 CX
+      orbit pair (8,10)   depth 63 / 47 CX      <- best
+      orbit pair (10,4)   depth 69 / 54 CX
+  (the per-term re-deal emitter of cpee_phase has a host-selection bug when
+  two forms of one term share a wire, so those op lists do not replay clean;
+  the depth/CX figures are the transpiled cost of the gate pattern, and
+  cpee_build18.emit_phase is the correct emitter for the real build.)
+
+===============================================================================
+3. WIDTH OF THE SINGLE PASS -- the measured binding constraint
+===============================================================================
+At the phase stage the span V of the 18 wire values must (a) contain the
+forms the gates read and (b) separate all 4096 inputs, because the circuit is
+a permutation.  On a fibre of the code map every code form is constant, so
+      dim V >= (code dimensions) + ceil(log2(largest fibre)).
+
+  measured fibre sizes
+    12-bit form (two 3+3 codes, both comparators live at once)
+        code dimensions 12, largest fibre 25 x 22 = 550 -> 10
+        => 22 WIRES.  Infeasible at 18.  (This is the CP-DQ bound, reproduced.)
+    8-bit joint form (this design)
+        code dimensions 8, largest fibre 25 x 22 = 550 -> 10
+        => 18 WIRES EXACTLY, zero slack.
+  So the single-pass design is feasible only in the joint 4+4 form, and then
+  every one of the 18 wire values must be linearly independent at the phase
+  stage: six ancillas carry six code bits and exactly TWO data wires must
+  carry the other two (their affine dimension is spent).
+
+  Hosting a code bit on a data wire is possible only if that code bit has a
+  non-zero degree-1 ANF part (a Margolus adds only degree->=2 content to a
+  data wire unless an operand is affine).  Measured degree-1 ANF support of
+  the eight joint code bits, orbit pair (8,10):
+      x-code bit 0  x1^x2^x3^x4^x5     degree 5
+      x-code bit 1  x1^x2^x3^x4        degree 5
+      x-code bit 2  x1^x2^x3^x4        degree 6
+      x-code bit 3  x5                 degree 6
+      y-code bit 0  y5                 degree 5
+      y-code bit 1  y5                 degree 5
+      y-code bit 2  y4                 degree 5
+      y-code bit 3  y4                 degree 6
+  so x-code bit 3 can sit on the x5 wire and y-code bit 0 or 1 on the y5 wire.
+
+  Separation of the ten remaining data-wire dimensions (cpee_joint main):
+    delta that keep every x-class split (x side):
+      36 37 39 40 41 43 48 49 50 51 52 53 54 55 56 57 58 59 60 61   (20 of 63)
+    delta that keep every y-class split (y side):  NONE
+    best y deltas leave exactly ONE colliding pair, e.g.
+      delta 28 -> {0,28};  delta 32 -> {28,60};  delta 26 -> {6,28}
+  So on the x side the two lost affine dimensions may be a plain affine drop
+  (kernel {0,48}, i.e. wires x0 x1 x2 x3 (x4^x5) plus the hosted code bit),
+  but on the y side NO affine drop works: one of the five remaining y data
+  wires must carry a non-linear offset that separates the single colliding
+  pair.  That is the measured binding constraint of the single-pass design.
+
+===============================================================================
+4. COST OF THE FORWARD PASS -- what is measured so far
+===============================================================================
+Degree floor: every non-zero element of every side's 3-bit code space has
+degree 5 or 6 (measured for all 15 orbits and all four side functions aL, bL,
+aD, bD: max degree 6, min degree 5 in every orbit).  A Margolus tree of AND
+depth d reaches degree 2^d, so AND depth >= 3 for every code bit.
+
+Multiplicative complexity, exact by SAT (cpdl_sat, cpee_mc.py), orbit 4:
+    aD code-space element 1   MC 4, AND depth 3, 20 terms   (45 s)
+    aD code-space element 2   MC 5, AND depth 4, 27 terms   (107 s)
+    bD element 1              MC 4, AND depth 4, 24 terms   (40 s)
+    bD element 2              MC 5, AND depth 4, 34 terms   (105 s)
+    aL element 1              MC 5, AND depth 5, 31 terms   (104 s)
+    bL element 1              MC 5, AND depth 5, 36 terms   (105 s)
+    bL element 2              MC 5, AND depth 5, 25 terms   (105 s)
+Joint synthesis of three code bits of one side (6 inputs, 3 outputs):
+    aD, bD, aL, bL   k=3 UNSAT, k=4 UNSAT, k=5 timed out at 180 s
+Joint synthesis of the FOUR joint code bits of one side (cpee_run2.py,
+orbit pair (8,10)):
+    x side  k=4 UNSAT (17 s)      k=5 running at the time of writing
+    y side  k=4 UNSAT (34 s)      k=5 running at the time of writing
+
+Hand construction verified exactly (64 of 64 inputs, cpee_results check in
+the session log): the aD thermometer bits
+    r_i = x_i ^ x3 (i=0,1,2)   w = x3&r0   a = ~r1&~r2   b = ~r0&~x3
+    v = r1&w                   o = ~(~r1&~w)
+    S0 = x5&~x4                P = S0 ^ x5
+    T1 = S0 ^ P&a&b   T2 = S0 ^ S0&a&b   T3 = S0 ^ S0&a&~w
+    T4 = S0 ^ S0&~r2&~v        T5 = S0&r2&o
+reproduce [aD >= m] for m = 1..5 on all 64 x with 0 mismatches; 6 AND2 plus
+5 three-operand ANDs, AND depth 3.
+
+NOT MEASURED YET: the assembled single-pass circuit (forward depth, total
+depth, CX, sv err, leak).  cpee_best.qasm has NOT been written -- no
+single-pass circuit below 270 has been built and verified yet.
+
+===============================================================================
+NEW SECTION (Sep 14, second directive): DIRECT SYNTHESIS OF F FROM THE WHOLE
+TRUTH TABLE.  No decomposition; every structure below is read off the 4096-
+entry table mechanically (affine basis search, cofactor widths, SAT synthesis
+of the cofactor-class cones).  Files: cpee_f.py, cpee_basis.py,
+cpee_basis_run.py, cpee_cut.py, cpee_cut_run.py, cpee_run4.py, cpee_wide.py,
+cpee_replay.py.
+===============================================================================
+
+D0.  THE FUNCTION  (cpee_f.py)
+  F = logo.build_logo re-indexed as i = x + 64*y; checked equal to cpae_core's
+  LOGO mask on all 4096 entries (0 differences).  weight 1097.
+  raw ANF: 886 monomials, max degree 12, degrees
+     2:4  3:18  4:52  5:119  6:192  7:215  8:159  9:90  10:30  11:6  12:1
+
+D1.  INPUT AFFINE BASIS  (cpee_basis.py; f'(u) = F(A u ^ c), A in GL(12,2))
+  Simulated annealing over column operations of A and over c, objective = ANF
+  monomial count of f'.  3000 candidate bases/second.
+    identity basis                        886 monomials, max degree 12
+    300 iterations (one restart)          400
+    200,000 iterations, 6 restarts        216 monomials (seed 1),
+                                          224/226/229/242/252 on the others
+    (the record's earlier best over 24663 affine bases was 752)
+  Objective = sum over monomials of (degree - 1) (the AND-equivalent count of
+  the plain phase-polynomial realisation):
+    200,000 iterations, 6 restarts        best 1715 (272 monomials)
+  Max degree stayed 12 in every basis found: the top monomial x0...x11 has a
+  non-zero ANF coefficient and that is invariant under a linear change of
+  variables, so no basis removes it.
+
+D2.  COFACTOR WIDTH AT A VARIABLE CUT  (cpee_cut.py)
+  For a cut of k low variables against 12-k high ones, the number of DISTINCT
+  rows / columns of the 2^k x 2^(12-k) table is how many bits of class code
+  each half must carry.  Identity basis:
+    k=4  13 x 13     k=5  15 x 12     k=6  11 x 11
+    k=7  17 x 17     k=8  18 x 13
+  Annealing over GL(12,2) at k=6, 11 restarts x 40,000 iterations each:
+    every restart ends at 11 x 11 (product 121); no basis with a narrower cut
+    was found.  So the cut needs a 4-bit class code on each side -- 8 code
+    bits, discovered from the truth table alone.
+
+D3.  SAT SYNTHESIS OF THE CUT CONES  (cpee_run4.py over cpdl_sat.find_shallow,
+     AND-depth bound 3; and cpee_run3.py over cpdl_sat.find_seq, shared)
+  Per code bit, 6 inputs, 1 output, AND depth <= 3, every solution replayed
+  (bad = 0 on all 64 rows):
+    low half  bit0 k=5 (446 s)   bit1 k=6 (967 s)   bit2 k=5 (443 s)
+              bit3 k=5 (431 s)          terms 44 / 52 / 38 / 20
+    high half bit0 k=5 (587 s)   bit1 k=5 (425 s)   bit2 k=5 (426 s)
+              bit3 k=5 (428 s)          terms 41 / 44 / 34 / 25
+    total 41 AND gates, AND depth 3.
+  Shared (all four bits of one half at once, cpdl_sat.find_seq):
+    low half  12 ANDs, AND depth 8,  bad 0, ks [5,3,2,2]  (450 s)
+    high half 12 ANDs, AND depth 10, bad 0, ks [5,3,2,2]  (576 s)
+    exact k for four outputs at once: k=3 and k=4 UNSAT, k=5 timed out at
+    1500 s on both halves.
+  Peak simultaneously-live AND outputs (measured on the DAGs):
+    shared low half  6   shared high half 7 (operand liveness only)
+    per-bit XAGs     4 per code bit
+
+D4.  THE PHASE STAGE  (cpee_p8.py, verified)
+  Four gates on the eight code bits, emitted with a correct re-deal (host
+  selection by GF(2) solve over the current wire contents) and replayed on all
+  256 code-wire inputs: 0 permutation mismatches, 0 phase mismatches.
+    best of all 24 term orders, 8 wires, u3/cx
+       depth 61 / 49 CX at opt2 and at opt3
+  So the whole-logo ledger is  2 * forward + 61.
+
+D5.  WIDE REFERENCE BUILDS (width not economised; exact)
+  Forward = the SAT XAGs, phase = D4, then one global mirror.  Verified by the
+  exact 4096-input replay (cpee_replay.py; and by cpae_core.check on the
+  48-wire variant: phase err 1.56e-15, 0 permutation mismatches).
+    shared XAGs (24 ANDs, AND depth 8/10)
+        2 spare wires per half, 48 wires   forward 139/335   total 327 / 699
+        4 spares/half, 52 wires                              total 297 / 741
+        8 spares/half, 60 wires                              total 289 / 711
+        private spares, 92 wires           forward  79/278   total 227 / 607
+    per-bit shallow XAGs (41 ANDs, AND depth 3)
+        private spares, 143 wires          forward  52/419   total 173 / 889
+        replay: 0 phase mismatches, 0 dirty wires of 143
+    opt2 = opt3 in every row.
+  So the design's own ledger, with the packing problem removed, is 173.
+
+D6.  THE MEASURED BINDING CONSTRAINT AT 18 WIRES
+  At the instant the last phase gate fires, the span V of the 18 wire values
+  must contain the forms that gate reads and must still separate all 4096
+  inputs (the circuit is a permutation).  On a fibre of the class map every
+  code form is constant, so
+      dim V >= (code dimensions) + ceil(log2(largest fibre)).
+  measured: code dimensions 8, largest fibre 25 x 22 = 550 -> 10, so
+      dim V = 18 EXACTLY -- all 18 wire values linearly independent, and the
+      eight code functions occupy eight of those dimensions.
+  Six of them are the ancillas.  The other two must sit on data wires, which
+  is legal only for a code bit whose degree-1 ANF part matches that wire, and
+  only if the affine dimensions given up still separate every class:
+    dimension of the degree-1 ANF span of the four code bits per half:
+        2 (low half) and 2 (high half), for all four encodings measured
+    single affine directions that keep every class of the low half split:
+        36 37 39 40 41 43 48 49 50 51 52 53 54 55 56 57 58 59 60 61 (20 of 63)
+    single affine directions for the high half:  NONE
+      (best ones leave exactly one colliding pair, e.g. 28 -> {0,28},
+       32 -> {28,60}, 26 -> {6,28}; one non-linear offset on one high-half
+       data wire repairs it)
+    2-dimensional all-separating kernels: NONE on either half (checked
+      exhaustively over the 63 directions), so at most ONE code bit per half
+      may be hosted.
+  => exactly 8 clean slots exist: 6 ancillas + 1 low-half + 1 high-half data
+     wire, and all 8 are consumed by the code bits.  ZERO registers are left
+     for the build.
+  The cheapest DAGs measured need, in addition:
+      4 live AND outputs to build one code bit (per-bit XAGs), or
+      6 and 7 live AND outputs for the shared XAGs of the two halves.
+  A value parked on a data wire cannot be read back on its own: the wire holds
+  (its affine value) XOR (the parked value) and the affine value is not in the
+  span of the other eleven data wires, so every read of a parked value costs
+  a second copy of the reading gate (pre-cancel) -- and if both operands of a
+  gate are parked, three extra gates.
+  MEASURED SHORTFALL: 12 clean wires needed (8 code + 4 scratch) against 8
+  available; 8 more (8 code + 6 + 7 scratch) if the two halves are built with
+  the shared XAGs in parallel.  That is the binding constraint of the direct
+  single-pass synthesis at width 18.
+
+  NOT MEASURED: an 18-wire assembly of this design.  cpee_best.qasm has NOT
+  been written: no 18-wire circuit from this line has been built and verified,
+  so nothing below the shipped 270 is claimed here.
+
+D7.  REFINEMENT OF D6 (measured, same tools)
+  The "dim V = 18 exactly" count applies when all four phase gates fire in ONE
+  stage, so that all eight code dimensions are read at the same instant.  If
+  the gates are allowed to fire at separate instants (permitted by the
+  directive), the count applies per instant and is much weaker: the widest
+  gate reads only FOUR affine forms, so at that instant
+      dim V >= 4 + ceil(log2(largest fibre of those four forms)) >= 4 + 8 = 12,
+  which fits at 18 with slack.  The price is that the four forms are mixed
+  (each is a XOR of one low-half and one high-half class function), so each
+  must be built twice -- once from each half -- and rebuilt between gates;
+  that is a gate-count/width trade, not measured here.
+  MEASURED, one-stage form: 8 clean slots exist and 8 are needed by the code,
+  leaving 0 for the >=4 scratch registers the cheapest DAG needs.
+
+===============================================================================
+D8.  THE INTERLEAVED STREAM AT 18 WIRES (cpee_stream.py, cpee_drive.py,
+     cpee_chain.py, cpee_chain2.py, cpee_chain_run.py, cpee_run5.py)
+===============================================================================
+Aim: fire the four phase gates at SEPARATE instants so that only the forms one
+gate reads must be live.  The widest gate reads four affine forms, so the
+per-instant span bound is dim V >= 4 + ceil(log2(largest fibre of those four
+forms)) >= 12, which fits 18 -- the question is whether the VALUES can be
+built with the clean wires that remain.
+
+  Clean-wire accounting, measured:
+    6 ancillas.  A value parked on a data wire is only re-readable when the
+    reading operand's affine part contains that wire's own affine value (then
+    operand = host XOR (affine from the still-raw wires)); otherwise every
+    read costs a duplicate "pre-cancel" copy of the reading gate.
+    For the AND-depth-3 SAT XAG of low-half code bit 0 the condition is
+    already infeasible: operand (i0^i4^g0^g1) forces host(g1) = i4, and
+    operand (i0^i3^i4^i5^g0) then requires i4 NOT in its affine part, which
+    it is.  So that XAG cannot be hosted on data wires without duplicates.
+
+  Four ways of getting a build that needs <= 2 clean wires were measured;
+  none closed:
+   (1) chain, one live intermediate, read-once (cpee_chain.py):
+       g1 = A1&B1 ; g_i = (g_{i-1}^L)&M or (g_{i-1}^L)&(g_{i-1}^M), the target
+       may absorb any g_i.  beam width 300, length up to 16:
+         low-half bit 0   NO chain (341 s)
+         high-half bit 0  NO chain (339 s)
+       at width 120 / length 10 the best distance of the residual from the
+       affine span fell 8, 6, 5, 5, 5, 5, 3, 1 -- close but never 0.
+   (2) two-register straight-line program (cpee_chain2.py), both registers on
+       data wires: beam width 30, 9 steps, best residual distance 6, flat from
+       step 5 (35 s).
+   (3) mask-directed greedy on the real wire contents (cpee_drive.py), which
+       is correct by construction and needs no scratch at all: residual of the
+       first code bit fell 3072 -> 1024 -> 640 and then stalled; 12 rounds of
+       one-step-lookahead enrichment of spare data wires gave no further gain
+       (10 s).
+   (4) strictly-increasing-level XAG by SAT (levels = 1..k, which forces gate
+       i to read gate i-1 and makes the look-back the register count),
+       cpee_run5.py: k=4 hit the 300 s cap on both halves without an answer.
+
+  MEASURED BINDING CONSTRAINT OF THE STREAM: it binds at the FIRST instant,
+  not at the last.  Building even ONE of the eight code values needs 4 clean
+  wires with the cheapest DAG we have (AND depth 3, 5-6 ANDs, peak live 4),
+  and every attempt to trade that for a 1- or 2-register form failed: no
+  read-once chain of length <= 16 and no 2-register program of length <= 9
+  reaches a code bit, and the greedy over actual wire contents stalls at
+  residual 640 of 4096.  (The failures above are SEARCH failures, not degree obstructions: a
+  two-register program does raise the degree by one per step -- 0 -> L&M
+  (2) -> (r0^L)&M (3) -> ... -- so degree 5-6 is reachable in principle; the
+  beam simply did not find a program.  See D9.)
+  Consequence for the ledger: the design's own cost is 2*forward + 61 with
+  forward 52 at unlimited width (total 173, exact); at 18 wires the forward
+  pass cannot be scheduled with the register budget, and no 18-wire circuit
+  was produced.  cpee_best.qasm remains unwritten.
+
+D9.  REGISTER-MINIMISING XAGs (cpee_run5.py: levels = 1..k, which forces gate
+     i to sit at AND depth i; "lookback" = how far back a gate reaches, i.e.
+     how many intermediates must be live)
+  low half  bit 0  k=4 no answer in 300 s;  k=5 depth 4 terms 35 bad 0
+                   lookback 4  (59 s)   -> peak live 4
+            bit 1  k=4 no answer in 300 s
+  high half bit 0  k=4 no answer in 300 s;  k=5 depth 3 terms 40 bad 0
+                   lookback 3  (77 s)   -> peak live 4
+            bit 1  k=4 depth 4 terms 27 bad 0 LOOKBACK 2 (39 s)
+                     g0 = (i1^i5)&(i1^i2)
+                     g1 = (i0^i1^g0)&(i0^i1^i2^i3)
+                     g2 = (i1^i4^i5^g0^g1)&(i1^i2^i5^g1)
+                     g3 = (i4^g2)&(i3^i5^g1)
+                     o0 = g1^g3
+                   -> peak live 3, i.e. 2 scratch + target, and every operand's
+                   affine part contains a variable that can host it, so this
+                   one code bit CAN be built entirely on data wires with no
+                   clean ancilla.
+            bit 2  k=4 no answer in 300 s
+  So the register requirement is NOT uniform: at least one of the eight code
+  bits has a 4-gate XAG with only two live intermediates, while the others
+  need four at k=5.  A full register-minimising sweep (k up to 8, all eight
+  bits, no 300 s cap) was not run; that is the open lever.
+
+SUMMARY OF THIS LINE
+  verified, exact, 0 mismatches / 0 dirty:
+     phase stage of the whole logo   4 gates,  depth 61 / 49 CX (opt2 = opt3)
+     single-pass design, wide        depth 173 / 889 CX at 143 wires
+                                     (forward 52 / 419)
+     single-pass design, wide        depth 227 / 607 CX at 92 wires
+     single-pass design, wide        depth 327 / 699 CX at 48 wires
+  18-wire assembly: NOT achieved.  cpee_best.qasm NOT written.
+
+===============================================================================
+SECTION E (Sep 14): REGISTER-MINIMISING SWEEP AND THE 18-WIRE STREAM
+   cpee_sweep.py, cpee_sweep2.py, cpee_sweep3.py (SAT), cpee_asm.py (builder),
+   cpee_run18.py (assembly).  Encoding: orbit pair (8,10); the eight joint code
+   bits of section D.  Every XAG below was replayed on all 64 rows (bad = 0)
+   and every build below was replayed on all 4096 inputs (target value exact,
+   scratch clean, all twelve data wires restored).
+===============================================================================
+
+E1.  THE SWEEP.  XAGs with strictly increasing AND levels (levels = 1..k, so
+gate i must read gate i-1) and gate i forbidden to read anything earlier than
+gate i-L.  L is the number of intermediates that must be live.  Cap 900 s per
+(k,L) instance in the first pass, 1800 s in the second.
+   k=3: UNSAT / no answer for all eight bits at L=1 and L=2 (3-63 s each) --
+        consistent with the measured MC >= 4.
+   k=4: L=1 no answer in 900 s for all eight; L=2 no answer in 900 s for seven,
+        SAT for high-half bit 1 (lookback 2, terms 36, 186 s).
+   k=5, L=2: SAT for every bit tried, quickly --
+        low  bit 0  lookback 2  terms 36  (100 s)   hostable yes
+        low  bit 1  lookback 2  terms 48  (426 s)   hostable yes
+        low  bit 2  lookback 2  terms 40  (127 s)   hostable yes
+        low  bit 3  lookback 2  terms 17  ( 80 s)   hostable no
+        high bit 1  lookback 2  terms 46  (123 s)   hostable yes
+        high bit 2  lookback 2  terms 51  (142 s)   hostable yes
+        high bit 3  lookback 1  terms 18  ( 81 s)   hostable no
+        high bit 0  still running at the time of writing
+   k=5, L=1: no answer in 900 s (high bit 1); the L=1 sweep for the four
+        heaviest bits was still running.
+   So the Pareto front is (k=5, lookback 2) for seven of the eight bits and
+   (k=5, lookback 1) for one; k=4 is reachable only for high bit 1.
+
+E2.  WHAT A BUILD ACTUALLY COSTS IN WIRES (cpee_asm.build_xag_rec: gate
+outputs on ancillas, dead gates cleared in place by re-running them, the
+scratch restored by emitting the exact inverse of the gate-building op list,
+so every Margolus is undone by its own inverse and no relative phase is left).
+Minimum scratch wires (target excluded), measured over every wire order:
+   with the AND-depth-3 XAGs of section D3:
+      low 0: 5   low 1: 6   low 2: 5   low 3: 5
+      high 0: 4  high 1: 5  high 2: 4  high 3: 5
+   with the lookback-2 XAGs of E1:
+      low 0: 4   low 1: 5   low 2: 3   low 3: 3
+      high 1: 4  high 2: 5  high 3: 3
+   Transpiled cost of one such build (u3/cx, opt2), 18 wires:
+      high bit 0   159 ops (16 RCCX, 141 CX)   depth 163 / 157 CX
+      high bit 2   131 ops (16 RCCX, 113 CX)   depth 159 / 155 CX
+      low  bit 3    63 ops (14 RCCX,  49 CX)   depth  59 /  59 CX
+   The CX re-deals dominate: the operands are XORs of up to seven signals and
+   only six data wires per half are available to host them.
+
+E3.  HOSTING ON DATA WIRES, measured.
+   A code value ends EXACTLY on a data wire only when the wire's own variable
+   appears in the affine part of the XAG output (then that term cancels).
+   Measured for the AND-depth-3 XAGs: 5 of the 8 values have such a host
+   (low 0 -> wire 2 or 3, low 1 -> 0 or 3, low 2 -> 2 or 3, high 0 -> 9 or 11,
+   high 2 -> 10 or 11); low 3, high 1, high 3 have none (their output is a
+   single gate).  But the build's own UNDO then fails, because the operands
+   need the wire's raw affine value, which the hosted value has replaced --
+   measured: hosting low bit 1 on wire 0 produced the right value and then
+   could not undo its gates.  Repairing it with the two-CX identity
+      A = c^x_j, target = x_j ;  CX(A->target) ; CX(target->A)
+      -> target = c, A = x_j
+   works but parks the lost affine dimension on an ancilla, so hosting a value
+   costs exactly one ancilla and buys nothing.
+   Gate outputs on data wires: searched 400 random mixed assignments per bit
+   over (6 data + 5 ancillas); at most ONE gate output could sit on a data
+   wire, and only for two of the eight bits.
+
+E4.  THE LEDGER, measured end to end (cpee_run18 / cpee_asm, every step
+replayed).  Six ancillas; each value that must stay live consumes one as its
+target, the rest are scratch.
+   with the AND-depth-3 XAGs:  built high 0 (4 scratch), built high 2
+      (4 scratch), then FAILED on the third value with 3 scratch available
+      -> 2 of 8 values placeable.
+   with the lookback-2 XAGs:   5, 4 and 3 scratch are all available in turn,
+      so three values are placeable; the fourth would need a 2-scratch build,
+      i.e. lookback 1, which the sweep found for only one bit.
+   The four phase gates need 4, 3, 2 and 4 forms live.  The C3Z arity can be
+   cut with  C3Z(f1,f2,f3,f4) = CCZ(f1&f2, f3, f4)  -- build f1 and f2, take
+   the product onto a third wire, clear f1 and f2 by their exact inverses,
+   then build f3 and f4 -- which brings the widest instant down to three live
+   values.  So with lookback-2 builds every one of the four instants fits the
+   width.
+
+E5.  WHY IT IS STILL NOT COMPETITIVE, measured.
+   Each form is a XOR of one to three code values and must be built onto its
+   wire and later torn down; counting the builds per instant (N 2, and 1-3 per
+   remaining form) the four instants need about 50 value-builds including the
+   tear-downs and the two extra clears of the C3Z reduction.  At the measured
+   59-163 transpiled layers per build that is some 3,000-5,000 layers, against
+   173 for the same design at unrestricted width and 270 for the shipped
+   circuit.  The whole gap is the rebuild traffic that the six-register budget
+   forces.
+   MEASURED BINDING CONSTRAINT OF THE STREAM: not the width -- with
+   lookback-2 XAGs all four phase instants fit 18 wires -- but the CX re-deal
+   traffic of a rebuild.  One value-build is 12-16 Margolus and 49-141 CX and
+   transpiles to 59-163 layers, because every operand is a XOR of up to seven
+   signals that has to be re-dealt onto the six data wires of its half and
+   undone again; the stream needs ~50 such builds where the unrestricted-width
+   design needs 8.
+   cpee_best.qasm remains unwritten: nothing verified below 270 was produced.
+
+E6.  LOOKBACK-1 SWEEP (cpee_sweep3.py) and ONE COMPLETE PHASE INSTANT, BUILT
+     AND VERIFIED AT 18 WIRES.
+   lookback 1 at k=5, found quickly where it was searched:
+      low  bit 2  terms 34 (117 s)    low  bit 3  terms 20 ( 32 s)
+      high bit 2  terms 39 (114 s)    high bit 3  terms 20 ( 78 s)
+      high bit 1  k=5 L=1 no answer in 900 s; the rest were still running.
+   Measured scratch of a lookback-1 build with the in-place recycler: 3, not 2
+   -- a chain gate g_i reads only g_{i-1}, so only g_0 (whose operands are
+   affine) can be cleared in place; clearing g_j for j >= 1 would need g_{j-1},
+   already cleared.  So the ledger with lookback-1 XAGs is 5, 4, 3 scratch =
+   THREE values live, which is what the four phase instants need once a C3Z is
+   split as CCZ(f1&f2, f3, f4).
+
+   ONE INSTANT BUILT END TO END (the CZ instant: forms ~(cx3^cy3) and cx2,
+   three code-value builds, the CZ, then the exact inverse of the build):
+      597 ops, 88 RCCX, all 18 registers restored, both forms exactly right
+      (checked against the code masks on all 4096 inputs)
+      depth 503 / 447 CX at opt2
+   The four instants together are therefore of order 2,000 layers, against 173
+   for the same design at unrestricted width and 270 for the shipped circuit.
+
+   FINAL MEASURED BINDING CONSTRAINT OF THE STREAM.  Width is NOT the
+   obstruction -- with lookback-2 or lookback-1 XAGs every phase instant fits
+   18 wires.  The obstruction is the cost of one value-build under the
+   register budget:
+     * to fit three live values the XAG must have lookback <= 2, which forces
+       strictly increasing AND levels, i.e. AND depth = k = 5 -- a chain, not
+       the depth-3 tree the unrestricted-width build uses;
+     * the in-place recycler then has to rematerialise, roughly doubling the
+       gate count, and the exact inverse doubles it again: 88 RCCX for three
+       values where the wide build uses 15;
+     * every operand is a XOR of 17-51 selected terms that must be re-dealt
+       onto the six data wires of its half and undone again: 447 CX for one
+       instant.
+   Measured consequence: one CZ instant 503 layers; the whole stream ~2,000;
+   the same design with the register budget removed 173.  cpee_best.qasm
+   remains unwritten -- nothing verified below 270 was produced by this line.

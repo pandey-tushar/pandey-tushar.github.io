@@ -1,0 +1,140 @@
+CP-EF (second directive): DIRECT SYNTHESIS OF F FROM THE 4096-ENTRY TRUTH
+TABLE -- no decomposition, F treated as one 12-input Boolean function
+=========================================================================
+Every number is MEASURED unless the line says "not measured".  Circuit
+numbers are qiskit 2.4 transpile(basis_gates=['u3','cx'], optimization_level
+2 and 3), all-to-all, width 18.  Exactness = cpae_core replay of all 4096
+inputs (phase vs (-1)^F, 18-wire permutation back to identity) and
+cpae_core.sv_check on |+>^12.
+
+TRUTH-TABLE FACTS (cpef_bdd.py, scratch m2.py; all from build_logo())
+  F has 1097 ones of 4096.
+  ANF of F: 886 monomials.
+  Distinct subfunctions after fixing all 6 y bits : 11
+      class sizes  22 12 5 5 4 4 4 2 2 2 2
+  Distinct subfunctions after fixing all 6 x bits : 11
+      class sizes  25 7 5 5 4 4 4 4 2 2 2
+  Communication matrix of those classes: 11 x 11 with 35 ones.
+  BDD (ordered subfunction) profiles, level k = distinct subfunctions after
+  k+1 variables:
+    x5..x0,y5..y0     [2,4,7,12,17,11,12,16,12,6,4,2]  105 nodes  maxwidth 17
+    y5..y0,x5..x0     [2,4,7,13,17,11,12,13,15,8,4,2]  108 nodes  maxwidth 17
+    interleaved msb   [2,4,8,12,18,23,31,31,20,14,4,2] 169 nodes  maxwidth 31
+    interleaved y1st  [2,4,7,12,16,23,29,31,26,14,4,2] 170 nodes  maxwidth 31
+    lsb-first         [2,4,8,13,15,11,17,18,13,7,4,2]  114 nodes  maxwidth 18
+    4000 random orders: best maxwidth 18 / 121 nodes -- none beats the two
+    "one variable group then the other" orders (17 / 105).
+
+METHOD 1 -- ESOP OF THE TRUTH TABLE (cpef_esop.py, cpef_cover.py)
+  Cube = (care mask, value mask); every rewrite verified on the 4096-bit
+  mask, so each cover below is an exact ESOP of F.
+    start = ANF (886 cubes)  ->  distance-1 merging  ->  196 cubes
+        literal histogram {4:3, 5:5, 6:14, 7:41, 8:44, 9:58, 10:25, 11:5, 12:1}
+    greedy largest-cube disjoint cover of the ON-set  ->  83 cubes
+        790 literals, histogram {5:2,6:4,7:4,8:15,9:14,10:15,11:16,12:13}
+        (114 s, exhaustive over all 3^12 = 531441 cubes per pick)
+    exorlink-2 on the 83-cube cover, 6000 random pair rewrites: 0 improvement
+        (no distance-2 pair exists among those 83 cubes)
+  MEASURED CONSEQUENCE.  83 cubes with 790 literals need an AND-DAG of at
+  least 790 - 83 = 707 two-input ANDs before any sharing.  With the measured
+  primitives (RCCX 7 layers, +5 per extra write on the same wire, 6 clean
+  ancillas) the forward pass alone is at least (707/6)*5 = 589 layers, so the
+  ESOP route cannot reach 270 at width 18 however the cubes are scheduled.
+  ESOP realised directly as multi-controlled Z on the 12 data wires
+  (cpef_mcz.py, no ancillas): 83 MCZ gates, 790 controls -- exact by
+  construction; transpiled depth NOT MEASURED (the 12-control ZGate
+  decomposition did not finish inside the session budget).
+
+METHOD 2 -- BDD-BASED REVERSIBLE SYNTHESIS
+  Best order gives 105 nodes and max level width 17, so the "current node"
+  is 5 bits and would fit the 6 ancillas.  IT IS NOT IMPLEMENTABLE IN PLACE,
+  and the truth table says why: the profile DECREASES at four levels
+  (17->11, 12->6, 6->4, 4->2), i.e. at those levels two distinct nodes have
+  the same child on the same input value.  An in-place state update
+  s <- T(s, v) must be a bijection on the state register for each fixed v;
+  T is not injective exactly where the profile decreases.  The alternative,
+  one register per BDD node, needs 105 registers against 6.
+  No BDD circuit was built.
+
+METHOD 3 -- COFACTOR-CLASS (XAG) SYNTHESIS AND ITS WIDTH WALL
+  F = M[j(x)][k(y)] with 11 classes on each side (above).  A class code needs
+  4 bits (11 > 8), so 4 of the 6 ancillas, leaving 2.
+  THE CODE CANNOT BE HOSTED ON THE DATA WIRES -- two independent measured
+  reasons.
+  (a) Class sizes.  An in-place reversible encoding of the code into b of
+      the six wires needs the 64 inputs to split into groups of exactly
+      2^(6-b) inputs, each group inside one class, so every class size must
+      be divisible by 2^(6-b).  y-class sizes are 22 12 5 5 4 4 4 2 2 2 2
+      and x-class sizes 25 7 5 5 4 4 4 4 2 2 2; both contain 5, so 6-b = 0.
+  (b) Not even ONE code bit is hostable (scratch m5.py / m6.py).  A single
+      code bit c can ride a wire iff, after a linear change of basis with
+      flip mask m, c(v) != c(v^m) for every v; that needs (i) class(v) !=
+      class(v^m) for all v and (ii) the class graph (classes as vertices,
+      an edge whenever some pair v, v^m crosses two classes) to be
+      2-colourable.  MEASURED: on the y side NO mask m of the 63 satisfies
+      (i) (the best leave 1 violating pair); on the x side 20 masks satisfy
+      (i) -- 36,37,39,40,41,43,48..61 -- but NONE of their class graphs is
+      bipartite, so (ii) fails for every one.  All 4 code bits must live on
+      clean ancillas.
+  Encoding search (scratch m3.py, m4.py): over random injective assignments
+  of the 11 classes to 4-bit codes, scoring each code bit by the cheapest
+  ESOP over all 728 products of literals of the six y variables:
+      no encoding sampled (4300 tried) has all four code bits expressible
+      with <= 3 such products; the cheapest forms found for individual code
+      bits need 4 terms of 3 to 5 literals.
+  So the four code functions are 12-18 two- and three-control gates reading
+  the same six y wires, and the measured fan-out law (a second reader of a
+  wire in RCCX control slot b costs +5 layers; slot a +1; RC3X +5 in every
+  slot) is what sets their depth.  Measured earlier this session on two
+  different code netlists for the same 4 bits: 69 data-wire reads -> 202
+  forward layers; 37 reads -> 111 forward layers; with every read given its
+  own copy of the y bit (55 extra wires) the same netlists measure 86 and 52.
+
+  RESIDUAL COST, MEASURED (scratch m7.py).  With the code on 4 ancillas the
+  phase left to apply is H(code, x), a 10-input function with 5*64 = 320
+  don't-cares.  Exhaustive greedy largest-cube covers of H for 6 random
+  injective encodings of the 11 classes:
+      cubes 49 42 43 48 43 47 ;  literals 404 342 346 396 348 385
+  i.e. the residual alone is 42-49 cubes / >= 300 two-input ANDs for a random
+  encoding, on the 2 ancillas the code leaves free.  A cheap residual needs a
+  special encoding, and the encoding search above shows the code functions
+  then get expensive; no encoding was found that makes both sides cheap.
+
+METHOD 4 -- SAT / A* SCHEDULING ONTO 6 ANCILLAS
+  NOT MEASURED.  No DAG produced by methods 1-3 is small enough to be worth
+  scheduling: the ESOP DAG is >= 707 ANDs (method 1) and the BDD DAG is 105
+  nodes with non-injective level transitions (method 2).
+
+RESULT
+  No direct-synthesis circuit measured below 270 this session, so
+  cpef_best.qasm was NOT written.  The best verified whole-image circuit is
+  still the shipped cpdp_best.qasm at width 18, depth 270, cx 516.
+
+BINDING CONSTRAINT OF THE DIRECT SYNTHESIS (measured, in one line each)
+  1. ESOP: the truth table's cheapest exact cover found is 83 cubes / 790
+     literals; that is >= 707 two-input ANDs, >= 589 forward layers on six
+     ancillas.  (Exhaustive largest-cube cover; exorlink-2 gives 0.)
+  2. BDD: max width 17 fits 5 ancilla bits, but the level profile decreases
+     at four levels, so the state update is not injective and cannot be an
+     in-place unitary; the node-per-register alternative needs 105 registers.
+  3. Cofactor classes: 11 classes per side force a 4-bit code, and two class
+     sizes are odd (5 and 5), so no part of the code can be hosted in place
+     on the data wires -- it must take 4 of the 6 ancillas.  The remaining
+     cost is then fan-out on the twelve data wires, measured at 202 forward
+     layers for 69 reads and 111 for 37 reads, against 86 and 52 when every
+     read has its own copy (55 extra wires).
+  The single number that bounds all three: the machine has 6 clean ancillas
+  and 12 data wires, a second slot-b reader of any wire costs +5 layers, and
+  the truth table needs either 707 ANDs (ESOP), 105 registers (BDD) or a
+  4-ancilla class code plus 37-69 data-wire reads (XAG).
+
+FILES (new this section)
+  cpef_esop.py   ANF, cube algebra, mask-verified distance-1 merging and
+                 exorlink-2 ESOP minimiser
+  cpef_cover.py  exhaustive greedy largest-cube disjoint cover (83 cubes)
+  cpef_bdd.py    ordered subfunction profiles, random order search
+  cpef_mcz.py    ESOP realised as multi-controlled Z on the data wires
+  cpef_host.py   hostability test (flip masks, class graphs) for code bits
+  cpef_resid.py  residual H(code,x) cover size vs class encoding
+  cpef_results.txt  this file
+  cpef_best.qasm NOT WRITTEN -- nothing measured this session beat 270

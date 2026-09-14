@@ -1,0 +1,19 @@
+CP-CY stage 2: concurrent composition of read-only blocks
+
+config                                           depth   cx    busiest data wire (touches)
+shipped R1+R2t pair (serial, data-hosting)          85   142    q2 (30)
+read-only pair k=3 concatenated                    352   245    q4 (27)
+read-only pair k=3 round-robin                     236   254    q4 (27)
+[R1_ro||R2t_ro rr] + D1 + D2 (shipped)             427   634    q3 (123)
+[R1_ro||R2t_ro cc] + D1 + D2 (shipped)             544   626    q3 (123)
+D2 + [R1_ro||R2t_ro rr] + D1 (shipped)             427   634    q3 (123)
+D2 + D1 + [R1_ro||R2t_ro rr] (shipped)             427   634    q3 (123)
+
+best composed depth 427 (cx 634) via [R1_ro||R2t_ro rr] + D1 + D2 (shipped)
+gate (< 272): NOT MET
+strict statevector on best config: err 1.465e-14 leak 3.2e-31
+
+read-only blocks on disjoint ancillas commute, so the pair IS
+concurrent: round-robin 236 vs 352 concatenated vs 356 serial
+sum -- interleaving is worth 33%.  But the read-only tax at
+k=3 (R1 43->175, R2t 39->181) is 4x and swamps it.

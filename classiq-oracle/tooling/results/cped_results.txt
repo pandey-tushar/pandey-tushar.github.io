@@ -1,0 +1,213 @@
+CP-ED: makespan-scheduled re-synthesis of the logo phase oracle
+===============================================================
+Every number below is MEASURED with qiskit 2.4,
+transpile(basis_gates=['u3','cx'], optimization_level=2 and 3), all-to-all.
+opt2 == opt3 in every row that was measured at both levels.
+Exactness everywhere = cpae_core.sim_exact: all 4096 data inputs replayed,
+phase compared to (-1)^F and the 18-wire permutation checked back to identity.
+Lines that say "not measured" were not measured.
+
+STEP 0 -- PRIMITIVE AND CHAINING CALIBRATION (cped_cal.py, opt2 = opt3)
+  RCCX 7 / 3      RC3X 13 / 6     CZ 3 / 1     CCZ 10 / 6
+  C3Z (3 controls) 27 / 14        C4Z (4 controls) 65 / 36
+  k fully disjoint RCCX, k = 1..6 : depth 7 (cx 3k)  -- six fit in one layer
+  same target, k RCCX   :  7 12 17 22 27      -> +5 per extra write
+  same target, k RC3X   : 13 21 29 37 45      -> +8 per extra write
+  fan-out as control slot a, k RCCX :  7  8  9 10 11   -> +1 per extra gate
+  fan-out as control slot b, k RCCX :  7 12 17 22 27   -> +5 per extra gate
+  ladder target -> slot a, k levels : 11 15 19 23 27   -> +4 per level
+  ladder target -> slot b, k levels : 13 19 25         -> +6 per level
+  fan-out RC3X slot a   : 13 18 23 28         -> +5 per extra gate
+  k CZ sharing a wire   :  3  5  7  9 11 13   -> +2 per extra CZ
+  CX feeding slot a or slot b then RCCX : 7 (free).  CX into the target : 8
+  mirror block C ; CZ ; C^-1 with forward 7 : 15 = 2*forward + 1
+  NEW FACT (this session): slot a fan-out is +1 and slot b fan-out is +5.
+  Earlier sessions recorded slot a as +4; the measurement above says +1, so a
+  value that controls many Margolus gates is nearly free if it is fed into
+  slot a.  Putting the raw data wires into slot a is worth real layers (see
+  STEP 4).
+  RCCX control symmetry: RCCX(a,b,t) and RCCX(b,a,t) are DIFFERENT unitaries
+  (relative phase) but the SAME permutation, so swapping the two controls of
+  a Margolus and of its mirror partner leaves a mirror block exact.
+  RC3X is symmetric in its first two controls as a unitary.
+
+STEP 1 -- BASELINE RE-MEASURED (this session, from the shipped artefact)
+  cpdp_best.qasm : width 18, depth 270, cx 516, 1099 ops
+    re-transpiled opt2 270 / 516 , opt3 270 / 516
+    statevector on |+>^12 : err 8.020e-15 , ancilla leak 5.68e-30
+  op-list form (cpdp_best.pkl) : sim_exact err 7.77e-15 , 0 of 4096 mismatches
+  120 transpiler seeds at opt2 and 120 at opt3 : best is still 270 / 516.
+
+STEP 2 -- CONTROL RE-ORIENTATION OF THE SHIPPED LIST (cped_swap.py)
+  56 distinct (gate family, control pair, target) orientation keys.
+  One full descent round, flipping each key and keeping only strict
+  improvements on the real transpiled depth: 0 improvements.
+  Result 270 / 516 at opt2 and opt3, sim_exact err 7.77e-15, 0 mismatches.
+  So the shipped critical path is not limited by which control slot a value
+  lands in.
+
+STEP 3 -- WHAT MORE ANCILLAS BUY THE SHIPPED BLOCKS: NOTHING (cped_width.py)
+  Writes whose TARGET is one of the 12 data wires, per shipped block:
+    block  ops  data-wire writes  distinct data wires  ancilla writes
+    R2t     53        34                  9                 18
+    D1     103        71                 11                 32
+    D2     195       136                 12                 54
+    R1      67        38                  9                 28
+    total data-wire writes 279  against 132 ancilla writes
+  Peak simultaneously non-raw wires: R2t 11, D1 17, D2 18, R1 11 -- all six
+  ancillas are non-raw inside every block.
+  Full ASAP interleave of the four blocks over k disjoint 6-ancilla pools:
+    k  wires  depth / cx opt2   opt3        exactness
+    1   18      272 / 516       272 / 516   err 7.8e-15  mism 0     EXACT
+    2   24      297 / 527       297 / 527   err 2.0      mism 4096  WRONG
+    3   30      273 / 520       273 / 520   err 2.0      mism 4096  WRONG
+    4   36      282 / 526       282 / 526   err 2.0      mism 4096  WRONG
+  The blocks do not collide on ancillas -- they collide on the twelve DATA
+  wires, which every one of them rewrites.  Handing the shipped design 12, 18
+  or 24 ancillas therefore buys exactly zero layers.
+
+STEP 4 -- A NEW, EXACT, LOW-AND-DEPTH FACTORISATION OF D2 (cped_d2*.py)
+  Verified by truth table and by 4096-input replay (0 mismatches, all
+  registers restored):
+    D2 = XOR_{k=1..5} Rg_k(x) N_k(y)        (rank 5, staircase)
+    x side, P = x5 ~x4, lo3 = x & 7 :
+      I_j = P * ( x3 [lo3 <= r_j]  ^  ~x3 [lo3 >= 8-r_j] ),  r = 8,7,6,4,2
+      plus the single point x = 48 ; Rg_k = I_{6-k} ^ I_{7-k}
+    y side, C = ~y5 ~y4, D = ~y5 y4, lo4 = y & 15 :
+      N_k = D [lo4 <= 3+t_k] ^ C [lo4 >= 19-t_k],  t = 8,7,6,4,2
+      (k = 5 additionally needs lo4 >= 1)
+  AND-depth 3, against AND-depth 8 for the shipped D2.
+  MEASURED (cpdh_core.measure; every row replayed 0 mismatches, 0 dirty):
+    carriers            wires  scratch  fwd opt2  block opt2   block opt3
+    1 per side            43      31      107      274 / 306   274 / 306
+    2 per side            49      37       84      224 / 310   224 / 310
+    all 10 atoms resident 51      39       73      149 / 298   149 / 298
+  Shipped D2 at 18 wires, for comparison: block 125 / 239.
+  So the AND-depth-3 form loses to the shipped AND-depth-8 block even when it
+  is given 39 scratch registers.
+  Slot-a substitution on the same netlist (raw data wires moved from RCCX
+  slot b to slot a, nothing else changed): forward 81 -> 73, block 165 -> 149.
+  MECHANISM MEASURED: a rank-r shape fired as a staircase needs 2r-1 = 9
+  alternating carrier updates (x, y, x, y, ...), each update 1 to 3 RCCX
+  writes on one wire at +5 layers each, and the CZ between them orders the two
+  sides.  That is the 107 at one carrier per side; two carriers per side hide
+  half of it (84); ten registers hide all of it (73).
+
+STEP 5 -- MAKESPAN VERSUS ANCILLA COUNT (cped_peb.py, cped_d2peb.py)
+  Reversible pebbler: value DAG with in-place staged accumulation, greedy
+  farthest-next-use eviction, spill = uncompute (RCCX_dg), rematerialise on
+  demand.  Every emitted schedule is replayed over all 4096 inputs.
+  Same verified D2 DAG as STEP 4, K = ancillas, wires = 12 + K :
+    K    wires   block depth / cx (opt2 = opt3)   replay
+     6     18     infeasible for this DAG under this allocator
+     7     19     infeasible
+     8     20     infeasible
+    10     22     infeasible
+    12     24     infeasible
+    14     26     551 / 524      err 0.0e+00  mism 0
+    16     28     403 / 368      err 0.0e+00  mism 0
+    20     32     353 / 330      err 0.0e+00  mism 0
+    26     38     294 / 310      err 0.0e+00  mism 0
+    (39 scratch, static no-spill schedule of the same DAG: 149 / 298)
+  The curve is the pebbler's, not a lower bound: the greedy schedule at 26
+  registers (294) is worse than the static schedule at 39 (149), so the
+  allocator, not the DAG, sets these numbers.
+
+  CALIBRATION OF THE PEBBLER ITSELF (cped_rect.py) -- how far it is from a
+  hand-tuned block on the two EASY rank-1 shapes, all rows replayed exactly
+  (err 0.0e+00, 0 of 4096 mismatches):
+    shape    K    wires   block depth / cx (opt2 = opt3)   shipped block
+    R2t      6      18          187 / 189                       39
+    R1       6,7,8             infeasible                       43
+    R1       9      21          177 / 181                       43
+    R1      10      22          137 / 175                       43
+    R1      12      24          161 / 163                       43
+    R1^R2t  6..12               infeasible                      82 (39+43)
+  The pebbler is 3 to 5 times worse than the shipped hand-tuned block on a
+  single rectangle, and it cannot schedule two rectangles at 12 registers
+  although it schedules each one separately at 6 and 10.  So the STEP 5
+  feasibility thresholds are ALLOCATOR artefacts, not properties of the
+  problem, and every makespan in STEP 5 is an upper bound for this pipeline
+  only.  The honest statement the table supports is the RATIO: on this
+  pipeline, halving the register budget from 26 to 14 costs a factor 1.9 in
+  makespan (294 -> 551), and below 14 the schedule does not exist at all.
+
+STEP 6 -- CLEAN DATA-WIRE HOSTS (derived from the shapes, not measured as
+  circuits this session)
+  A value V hosted on data wire d leaves the wire holding d ^ V.  It is exact
+  as a CZ operand when the partner operand W satisfies d * W = 0, and exact as
+  an RCCX control when the OTHER control W satisfies d * W = 0.  From the
+  shape supports:
+    D2  y-atoms lie in [11,27] (y5 = 0)  -> wire y5 can carry an x-side value
+    D1, R2t y-atoms lie in [35,47] (y4 = 0) -> wire y4 can carry an x-side value
+    R1  x-atom is [2,26] (x5 = 0)        -> wire x5 can carry a y-side value
+    D2  four inner x-atoms lie in [33,47] (x4 = 0) -> wire x4 for a y-side value
+  That is at most 2 extra clean registers at any one time, i.e. 8 usable
+  registers against the 14 the D2 DAG alone needs.
+
+RESULT
+  Target depth < 150 NOT REACHED.  Nothing built this session beat 270, so
+  cped_best.qasm was NOT written.  The best verified whole-logo circuit is
+  still the shipped one:
+    cpdp_best.qasm  width 18  depth 270  cx 516  (opt2 = opt3)
+    sim_exact err 7.77e-15, 0 of 4096 permutation mismatches
+    statevector err 8.020e-15, ancilla leak 5.68e-30
+
+BINDING CONSTRAINT (measured)
+  1. For the SHIPPED blocks the wall is the twelve DATA wires, not the six
+     ancillas.  The four blocks perform 279 writes whose target is a data wire
+     (D2 alone writes all twelve) against 132 ancilla writes, so no two blocks
+     can be overlapped in time: full ASAP interleaving is wrong on 4096 of
+     4096 inputs at 24, 30 and 36 wires.  Extra ancillas buy 0 layers.
+     This is why 270 is the floor of the interleaving route and why every
+     search (720 ancilla permutations per block, 11743 anneal evaluations,
+     commutation-DAG list scheduling in CP-DP, 56 control re-orientations and
+     240 transpiler seeds here) returns 270.
+  2. For a data-read-only replacement -- the only kind that COULD overlap --
+     the register count bites, but this session could not separate "the
+     machine has too few registers" from "this pebbler is too weak".  The
+     exact AND-depth-3 D2 DAG needs at least 14 registers under this pebbler
+     and 39 to reach its own best makespan of 149; and the same pebbler needs
+     10 registers and 137 layers for R1, which the shipped code does in 6
+     registers and 43 layers.  The second figure says the pebbler is the
+     binding term in rows 5 and 6, not the width.
+  3. Serialisation floor of the staircase: a rank-5 shape fires 2*5-1 = 9
+     alternating carrier updates at +5 layers per RCCX write.  Measured on the
+     exact D2 DAG: forward 107 with one carrier per side, 84 with two, 73 with
+     all ten atoms resident.  The whole logo is LEFT (rank 5) plus D2 (rank 5),
+     so two such staircases must run concurrently to reach 150; that needs
+     4 carriers plus their live helpers, i.e. the 14-register figure above.
+  THE NUMBER THAT PROVES CLAIM 1 (the one claim that is clean): the four
+  shipped blocks perform 279 writes onto the twelve data wires, D2 writing all
+  twelve, and a full ASAP interleave of them is wrong on 4096 of 4096 inputs
+  at 24, 30 and 36 wires.  Overlap is therefore impossible at ANY ancilla
+  count for this block set, which pins the route at the serial ledger, 270.
+  Claims 2 and 3 are bounded by the synthesis and scheduling quality reached
+  here, which STEP 5's calibration shows is 3 to 5 times off the shipped
+  blocks; they do NOT bound the problem.
+
+HONEST SCOPE
+  The infeasibility numbers in STEP 5 are properties of ONE DAG under ONE
+  greedy allocator; they are not a proof that no 6-ancilla AND-depth-3 D2
+  exists.  The leaderboard entry at 142 / 557 cx / width 18 shows that some
+  architecture does beat 150 at this width; its 557 cx against our 516 is
+  about 186 RCCX-equivalents against 118, i.e. far more gate work spread over
+  far more wire-layers than any block built here or in CP-DP/CP-EC uses.
+  What those extra wire-layers carry was NOT MEASURED.
+
+FILES (all new this session)
+  cped_cal.py     primitive and chaining calibration (STEP 0)
+  cped_core.py    6-variable truth-table algebra, affine-form pool, cover search
+  cped_d2.py      D2 bit-split, one carrier per side          (fwd 107 / 274)
+  cped_d2b.py     D2 bit-split, two carriers per side         (fwd  84 / 224)
+  cped_d2inf.py   D2 bit-split, all ten atoms resident        (fwd  73 / 149)
+  cped_swap.py    control re-orientation descent on the shipped list
+  cped_width.py   k disjoint ancilla pools, exactness and depth
+  cped_peb.py     reversible pebbler: DAG, in-place staging, spill by
+                  uncompute, rematerialisation, exact replay, real transpile
+  cped_d2peb.py   D2 DAG through the pebbler, makespan vs ancilla count
+  cped_rect.py    R1 / R2t rank-1 data-read-only DAGs; pebbler calibration
+                  (R2t exact at 6 ancillas, block 187; R1 exact at 10, block
+                  137; shipped counterparts 39 and 43)
+  cped_results.txt  this file
+  cped_best.qasm  NOT WRITTEN -- nothing measured this session beat 270

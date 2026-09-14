@@ -1,0 +1,53 @@
+CP-CY stage 1: strictly read-only blocks (q0-11 never written, asserted in the emitter)
+shipped reference (data-hosting, 6 ancillas): R1 43/73  R2t 39/71  D1 71/142  D2 125/239
+
+shape  k  depth   cx  opt3     exact  notes
+R1     6     73   89   73/ 89   Y      x||y concurrent, 3 wires per axis, CZ phase
+R1     4    181  119  181/119   Y      x then y serial + scratch clean-up between
+R1     3    175  121  175/121   Y      A on 1 wire, y axis absorbed into phase (CZ+CCZ+C4Z)
+R2t    6     91   99   91/ 99   Y      x||y concurrent, 3 wires per axis, CZ phase
+R2t    4    166  121  166/121   Y      x then y serial + scratch clean-up between
+R2t    3    181  124  181/124   Y      A on 1 wire, U/R scratch-free, phase C3Z(A,U,R)
+
+D1  k=2,3,6: NOT BUILT (see cpcy_census.py / final report)
+D2  k=2,3,6: NOT BUILT (see cpcy_census.py / final report)
+R1/R2t k=2: NOT BUILT -- both axes need a wire at the phase gate and each axis needs >=1 scratch, so 2 wires leaves 0 scratch for the second axis.
+
+every row above: classical replay 0/4096 mismatches, net permutation identity, ancillas clean, strict statevector (no global-phase division) on raw AND transpiled circuit.
+
+NOT BUILT -- exact reasons (none of these is a proof of impossibility)
+---------------------------------------------------------------------
+D1, D2 at every k: not built in this task's budget.  cpcy_census.py replays
+the SHIPPED blocks over all 4096 inputs and counts the peak number of live
+COMPUTED values (data wires holding something other than their own raw bit
+or its complement, plus non-trivial ancillas):
+    R1 10, R2t 11, D1 17, D2 18   (peak, with the wires listed in the log)
+That is the wire demand of a NAIVE one-to-one re-hosting of the shipped op
+list.  It is NOT a lower bound on read-only feasibility: R1 and R2t are
+built read-only here at 6 and even 3 wires by re-emitting from the FORM,
+well under their census of 10/11.  What the census does say is that a
+read-only D1/D2 needs a form-level re-derivation (D1's CP-AO form alone
+carries PX,QX,PY,QY + four class codes + WX,WY,WXY + H3/HXY + KW plus the
+affine preloads that the shipped block hosts in place on x0-x3,y0-y2), not
+an op-list re-host, and that was outside this task's 120-minute cap.
+D2 additionally FOLDS |x-40| and |y-19| onto the data wires themselves, so
+its whole compute stage has no read-only analogue in the folded frame; the
+fold-free frames (CP-BP..CP-BU, CP-BW) were already measured to need >= 7
+wires per axis, i.e. >= 14, against 6.
+
+k=2 for R1 and R2t: not built.  The smallest read-only forms found need
+THREE wires.  R1 at k=3 already absorbs the entire y axis into the phase
+(CZ + CCZ + C4Z on data-wire legs) and still needs A + hh + Wm alive at the
+phase moment; pushing Wm into the phase too makes its last term an arity-4
+AND with no scratch left (no relative-phase 4-control Toffoli exists at 18
+wires with zero free scratch) or turns the phase legs into C5Z/C6Z, both
+deeper than the k=3 build by construction.  R2t at k=3 absorbs B as
+C3Z(A,U,R) and still needs A + U + R.
+
+SEARCH BUDGETS (all work-capped, none exhaustive)
+-------------------------------------------------
+Control-slot local search: 300 scored candidates per (shape,k), each ranked
+by a REAL transpile at opt2, seed 0, starting from identity slots.  The
+reported depths are therefore upper bounds for these op lists; a larger cap
+may find a few layers.  No form search was run at all -- the boolean forms
+are the shipped ones (cpal_form.py, cpal_r2t_form.py) taken as given.

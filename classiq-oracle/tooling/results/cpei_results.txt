@@ -1,0 +1,279 @@
+===============================================================================
+CP-EI   (1) symmetries of F as a whole   (2) interleaved whole-image stream
+All numbers below are measured on the 4096-entry truth table of F
+(logo.build_logo, 1097 ones, index i = x + 64*y).  "not measured" where no
+experiment was run.  Scripts: cpei_auto.py cpei_part.py cpei_fold.py
+cpei_rank.py cpei_two.py cpei_omp.py cpei_pp.py cpei_span.py cpei_bddw.py
+===============================================================================
+
+A.  THE AFFINE AUTOMORPHISM GROUP OF F   (cpei_auto.py)
+-------------------------------------------------------------------------------
+Aut_aff(F) = { (A,b) in GL(12,2) x GF(2)^12 : F(Ax+b) = F(x) for all x }.
+
+Search is exhaustive, not sampled.  Two invariants are exactly preserved by
+every affine automorphism and both are independent of b:
+    C(d)   = sum_x (-1)^{F(x)+F(x+d)}                    (autocorrelation)
+    T(d,e) = sum_x (-1)^{F(x)+F(x+d)+F(x+e)+F(x+d+e)}    (2-flat correlation)
+      C(Ad) = C(d),   T(Ad,Ae) = T(d,e).
+The linear part is built one basis image at a time; fixing a_0..a_{k-1}
+determines all 2^k subset sums, and every one of them is checked against C,
+so by induction all 4095 non-zero subset sums are checked.  Then b is tested
+exhaustively over all 4096 values for each surviving A.
+
+  MEASURED
+    C takes 309 distinct values on 4096 points; the class of e_0 has size 1.
+    search nodes 70; A's surviving the C/T conditions: 1 (the identity).
+    valid b for the identity: 1 (b = 0).
+    ==> |Aut_aff(F)| = 1.  GENERATORS: none (the group is trivial).
+    ORBIT STRUCTURE on the 4096 inputs: 4096 orbits, every one a singleton.
+  Consequences measured, not assumed:
+    - there is no non-trivial fold/XOR of the data wires that leaves F fixed,
+      so no "canonical domain" smaller than 4096 points exists;
+    - deg(F) = 12 is invariant under every affine change of variables
+      (cpee D1 measured max degree 12 in every basis), so the multiplicative
+      complexity bound MC >= deg - 1 = 11 is the same before and after any
+      affine map.
+
+B.  PARTIAL AUTOMORPHISMS   (cpei_part.py, cpei_fold.py)
+-------------------------------------------------------------------------------
+agree(A,b) = #{x : F(Ax+b) = F(x)}; for a fixed A the best b is read off one
+XOR-convolution, so each A costs one WHT.
+  translations (A = I): agree = (4096 + C(d))/2.  Smallest derivatives:
+     d=1   |D_d F| =  90  agree 4006/4096        d=  64  154  3942
+     d=65  210  3886      d=2 / d=3  258  3838   d=128 / d=192  286  3810
+     max derivative weight 2174, mean 1606.8.
+  elementary linear parts (132 single-CX maps, 66 wire swaps), b optimised:
+     x0 <- x0^x4^1   agree 4072/4096   (24 exceptions)  <- best of all 198
+     x0 <- x0^x2     agree 4072/4096
+     x0 <- x0^x3^1   agree 4070/4096
+     y0 <- y0^y2^1   agree 4064/4096
+  greedy maximisation of agree over all of GL(12,2) x GF(2)^12 (6 restarts,
+  elementary column moves): converged to the identity, 4096/4096; no
+  non-trivial map above 4072 was found.
+  Involution that swaps halves of the image: NONE exists exactly (A above).
+
+  FOLDING ALONG THE SPARSEST DERIVATIVE (the only "cheap" near-symmetry):
+  F(x,y) = G(x>>1,y) ^ x0 & D(x>>1,y) exactly, with 11-variable G and D.
+     F : 1097 ones / 4096,  BDD 106 nodes, ANF 886 monomials
+     G :  563 ones / 2048,  BDD  84 nodes, ANF 508 monomials
+     D :   45 ones / 2048,  BDD  82 nodes, ANF 378 monomials
+  The fold costs nothing (it is a variable drop) but 84 + 82 = 166 BDD nodes
+  against 106 for F, and 508 + 378 = 886 monomials against 886: the sparse
+  derivative does NOT make the pair simpler than the whole.  Measured
+  negative.
+
+C.  COMPLEXITY BEFORE / AFTER THE BEST AFFINE MAP   (cpei_part.py basis)
+-------------------------------------------------------------------------------
+Greedy over column operations of A in GL(12,2), 8 restarts, objective =
+ROBDD node count of F(Ax) with the fixed variable order.
+     identity basis          BDD 106 nodes   ANF 886 monomials
+     best basis found        BDD  90 nodes   ANF 799 monomials
+        cols [1,2,4,12,31,40,64,128,384,3840,1024,768]
+     best basis, annealed    BDD  85 nodes   ANF 902 monomials  (cpei_bdsweep.py)
+        cols [38,1,14,11,3,31,128,64,384,1728,2112,832]
+        nodes/level 1 2 4 7 9 10 10 15 12 9 4 2; cut 2 4 7 9 10 10 15 14 10 6 2 0
+        register need max_i(cut[i]+i+1) = 22 against 18 (best measured)
+     best basis by ANF (6 restarts, this greedy)   ANF 368   BDD 182
+  (cpee D1 annealing reached 216 ANF monomials; 90 BDD nodes is below the 96
+  of the record.)  Cofactor count at the 6|6 cut: 11 x 11 in every basis
+  (cpee D2, not re-run).  Multiplicative complexity c_and before/after: NOT
+  MEASURED under the affine map; the MC lower bound deg-1 = 11 is provably
+  unchanged (section A).  Walsh support of F: 4096 of 4096 (re-measured; the
+  "4095" in FACTS.md is off by one).
+
+D.  THE WHOLE TRUTH TABLE AS ONE 64x64 GF(2) MATRIX   (cpei_rank.py)
+-------------------------------------------------------------------------------
+M[x][y] = F(x,y).  rank_GF2(M) = 10, so the phase is exactly ten CZ-type
+products:  F = XOR_{i=1..10} u_i(x) & v_i(y).  U = column space (dim 10),
+V = row space (dim 10).  11 distinct rows and 11 distinct columns, sizes
+   x classes 25 7 5 5 4 4 4 4 2 2 2      y classes 22 12 5 5 4 4 4 2 2 2 2
+U = the class functions vanishing on the 25-point background class.
+
+  THE HOSTING BOUND (new, and it is the hard one).  The six x data wires
+  always hold the coordinates of a bijection of the 64 x-values, so every
+  non-zero element of their span has weight exactly 32.  Measured:
+      U has     7 balanced elements of 1023;  V has 25 of 1023
+      largest subspace of U all of whose non-zero elements are balanced: dim 1
+      largest such subspace of V:                                      dim 1
+  ==> at any instant AT MOST ONE dimension of U can sit on the x data wires
+      and at most one dimension of V on the y data wires.  With a ancillas on
+      the x side and b = 6-a on the y side, one instant of CZ firing retires
+      at most 1+a dimensions of U and 1+b of V, so the number of firing
+      instants obeys  T >= 10/(1+a) and T >= 10/(1+b); the best split a=b=3
+      gives T >= 3.  Each instant must therefore build three fresh degree-5/6
+      elements of U on three ancillas that are themselves the targets, i.e.
+      with zero clean scratch.
+  Also measured: min over A in span{x_i} (x) span{y_j} of rank(F + A) = 10
+  (annealed, 8 restarts x 60000 moves).  Firing CZs between RAW x wires and
+  RAW y wires cannot reduce the rank at all, because U meets span{x_i} in 0.
+  And U (dim 10) cannot be contained in span{x_i} + L for any 6-dim L, since
+  dim(U + span{x_i}) = 16 > 12: two instants starting from the raw basis are
+  impossible.
+  Every non-zero element of U and of V has ANF degree 5 or 6 (FACTS), so
+  every step of any carrier walk inside U is itself a degree-5/6 value.
+
+E.  THE WHOLE ORACLE AS ONE DIAGONAL PHASE POLYNOMIAL   (cpei_omp.py, cpei_pp.py)
+-------------------------------------------------------------------------------
+Six ancillas carrying Boolean functions g of the data bits turn the oracle
+into: build g | one CX+Rz parity network on 18 wires | unbuild g.  On the
+reachable 4096 points the wires read (x,g(x)); the other 258048 points of
+GF(2)^18 are don't-cares.  One CX per parity term, so the design is decided
+by the smallest number of terms.  Atom (S,T) = chi_T(x) * (-1)^{G_S(x)};
+batch OMP with exact least-squares refit, batch 32, cap 704 atoms:
+      0 ancillas                       704 atoms, residual 1.68  (exact
+                                       representation needs 4096: the Walsh
+                                       support of F is full)
+      6 ANDs x_i & y_i                 704 atoms, residual 0.97
+      6 random ANDs of affine forms    704 atoms, residual 0.78 / 1.00
+  Target scale is pi = 3.14, so none of these is close to exact at 704 terms.
+  MEASURED: cheap degree-2 ancilla values do not make the whole-logo diagonal
+  sparse in the 18-wire parity basis; >= 704 CX for the phase stage alone,
+  against 557 CX for the entire leading entry.  This design line is dead.
+
+F.  DEGREE-CLOSURE STREAM SEARCH   (cpei_span.py)
+-------------------------------------------------------------------------------
+Formulation with no parts at all: wires hold exact 4096-bit masks; at any
+instant the firable phases are the GF(2) span
+    Sp_d = < m_i , m_i&m_j , (m_i&m_j&m_k) >,
+so the oracle is "enrich the wire contents with CX (1 layer) and Margolus
+(7 layers) until the logo mask lies in Sp_d, fire, run the enrichment
+backwards".  Margolus is an involution whose relative phase cancels exactly
+against its own undo (verified algebraically: a&~b&t XOR a&~b&(t^ab) = 0),
+so the mirror leaves no phase debt and no separate uncompute phase is needed.
+  MEASURED, raw wires:  residual of F modulo Sp_2 has popcount 1373,
+  modulo Sp_3 1299 (canonical coset representative; 0 would mean firable).
+  Beam search, beam 6, 14 steps, 1260-8703 candidate states per step:
+      step 1  1097   step 2  1077   step 3  967   step 4  937
+      steps 5-14: 937, no further progress; the beam collapses.
+  MEASURED BINDING CONSTRAINT OF THIS SEARCH: the coset-representative
+  popcount has no gradient once four ops have been placed - every one of the
+  8703 successors has the same score - so the search stalls at exactly the
+  same place as the mask-directed greedy of cpee (residual 640 there).
+
+G.  BOTTOM-UP BDD STREAM AND THE 18-WIRE REGISTER BUDGET   (cpei_bddw.py)
+-------------------------------------------------------------------------------
+A bottom-up ROBDD evaluation is a true stream: node = lo ^ v_i & (lo^hi) is
+one Margolus plus one CX, variable v_i is read only at its own level so its
+data wire is free afterwards, and at level i the machine owns 6 ancillas plus
+(12-i) freed data wires = 18-i registers.  It must hold the cut: the nodes
+below level i still referenced from above.
+      identity basis, 106 nodes
+         nodes/level  1 2 4 8 13 15 10 16 17 12 6 2
+         cut below    2 4 8 13 15 10 16 17 12  6 2 0
+         free regs   17 16 15 14 13 12 11 10  9  8 7 6
+         levels over budget: 4, 6, 7, 8   (worst: cut 17 against 10)
+      best-BDD affine basis (90 nodes)
+         cut below    2 4 7 10 13 10 16 14 10  5 2 0
+         levels over budget: 6, 7, 8      (worst: cut 16 against 11)
+  Affine-basis sweep to minimise the overrun: see the last line of this file.
+
+G2. WHY THE BDD STREAM DOES NOT ACTUALLY FIT (measured reasoning + FACTS)
+-------------------------------------------------------------------------------
+The cut profile above is the NO-RECOMPUTE live set only if a dead node's
+register can be cleared.  Clearing a node means re-running its own gates,
+which needs BOTH its children live; a child dies before its parent in the
+bottom-up order, so nothing can be freed until the whole DAG unwinds -- the
+register requirement is one per node, not one per cut edge:
+      identity basis 106 registers, best affine basis 90 registers.
+Including the variables still to be read, the cut-based LOWER bound is
+already max_i (cut[i] + i + 1) = 25 (identity) and 23 (best basis) against
+the 18 available.  Both numbers are above budget; the design is register-
+bound, not depth-bound.
+
+H.  NEAR-INVARIANCE UNDER SMALL SUBSPACES (cpei_part.py / direct count)
+-------------------------------------------------------------------------------
+How close F is to a function of fewer affine coordinates: for a subspace S,
+replace F on every coset of S by the majority value and count the errors.
+      S = <1>            2048 cosets   45 non-constant   45 errors
+      S = <64>           2048 cosets   77                77
+      S = <1,64>         1024 cosets   61               105
+      S = <1,2>          1024 cosets   87               129
+      S = <1,64,2>        512 cosets   63               177
+      S = <1,64,2,128>    256 cosets   49               231
+  So F agrees with a function of only EIGHT affine coordinates on 3865 of the
+  4096 inputs, but the 231-pixel correction is itself an unstructured
+  12-variable function (section B shows the same for the 45-pixel one), so no
+  folding reduces the synthesis problem.  Together with |Aut_aff(F)| = 1 this
+  is the complete symmetry answer: F has no exact symmetry to exploit and its
+  best approximate ones do not decompose it.
+
+I.  EXACTNESS OF THE STREAM MACHINERY, AND THE DEPTH BUDGET (cpei_check.py)
+-------------------------------------------------------------------------------
+Validation of the bookkeeping the stream needs, on 18 wires, exact:
+random enrichment (CX + Margolus) | Z/CZ/CCZ fired on the actual wire
+contents | enrichment run backwards.  Five random 40-op streams:
+      all 18 registers restored (dirty = [] every time)
+      the 4096-bit phase model equals the statevector phase
+      statevector err 1.0e-15 .. 2.3e-15, ancilla leak 9.3e-33 .. 1.7e-32
+so the Margolus relative phase does cancel exactly against its own undo and
+no mirror-phase debt exists.  Depths (opt2, best of 3 random placements,
+12 phase gates, forward Margolus count n, same number of CX):
+      n      5   10   15   20   25   30   41
+      depth 37   67   82  112  157  151  251
+      CX    65   98  128  175  191  233  315
+  MEASURED DEPTH BUDGET OF THIS DESIGN AT WIDTH 18:
+      below 270  needs  <= about 45 forward AND gates
+      below 150  needs  <= about 25 forward AND gates
+  The best XAGs known for the whole F have 41 / 47 / 48 ANDs (cpeh), i.e.
+  they are INSIDE the 270 budget and just outside the 150 budget -- but they
+  need 38 registers, and at 18 registers the reversible pebbler needs 46085
+  AND executions (cpeh).  The measured liveness/size trade for whole-F XAGs
+  is 41 ANDs at 38 live ... 78-96 ANDs at 19-36 live.
+  THE BINDING CONSTRAINT OF THIS DESIGN, IN ONE LINE: an XAG of the whole
+  truth table with at most ~45 ANDs AND peak live at most 18 would beat the
+  shipped 270 with this emitter; the best measured point is 41 ANDs at 38
+  live or 78-96 ANDs at 19 live, and no point in between has been found.
+
+J.  STATUS
+-------------------------------------------------------------------------------
+No circuit below 270 was produced by this line.  cpei_best.qasm was NOT
+written.  Verified artefacts of this pass: the exactness validation in
+section I (5/5 streams, 0 dirty registers, sv err < 2.4e-15, leak < 2e-32).
+
+I2. THE EMITTER'S SENSITIVITY TO CX RE-DEAL TRAFFIC (cpei_check.py)
+-------------------------------------------------------------------------------
+Same mirror stream, 41 forward Margolus, r CX per Margolus (r is exactly the
+"operand re-deal" cost that cpee measured at 9 CX per AND for the SAT XAGs):
+      r          1     2     3     6     9
+      depth    223   191   233   304   352
+      CX       329   335   403   543   686
+and at other AND counts:  n=25 r=1 -> 124 / 203 CX;  n=25 r=3 -> 175;
+      n=25 r=6 -> 159;  n=20 r=3 -> 142 / 217 CX;  n=30 r=2 -> 182 / 268 CX.
+  So the objective that decides this design is NOT the AND count alone: an
+  XAG of the whole truth table with 41 ANDs and <= 2 CX per AND, schedulable
+  inside 18 registers, transpiles to about 190 layers -- below the shipped
+  270 -- while the same 41 ANDs at the 9-CX-per-AND re-deal rate that the
+  AND-count-optimal SAT XAGs actually have transpiles to about 350.
+  ACTIONABLE, MEASURED: synthesise the whole-F XAG with a bound on the number
+  of XOR literals per operand (<= 2) and on peak liveness (<= 18), not only
+  on the AND count.  No such synthesis was run in this pass.
+
+K.  WHY THE MASK-DIRECTED GREEDY CANNOT START (cpei_mp.py)
+-------------------------------------------------------------------------------
+Matching pursuit of the logo mask over the wire products: with the raw wires
+the score is 1097 and NO first move exists.  Every pairwise product of raw
+data wires has weight 1024 and F has density 1097/4096 = 0.268, so a product
+would have to cover more than 512 of F's pixels to reduce the popcount and
+none does.  Popcount descent is the wrong metric for an XOR-structured
+target; the canonical-coset-representative popcount used in cpei_span.py has
+the same defect (flat after four ops, section F).  Both measured stalls have
+the same cause, and it is a SEARCH-METRIC failure, not a degree obstruction.
+
+L.  THE FRONTIER, PUT TOGETHER (this pass, using cpeh's measured XAG census)
+-------------------------------------------------------------------------------
+   what the emitter costs (section I2, measured)     what exists (cpeh)
+   41 ANDs, 2 CX/AND, <= 18 live  ->  191 depth      41 ANDs, 38 live
+   45 ANDs, 2 CX/AND, <= 18 live  ->  ~200           47 ANDs, 33 live
+   25 ANDs, 1 CX/AND, <= 18 live  ->  124            48 ANDs, 26 live
+   20 ANDs, 3 CX/AND, <= 18 live  ->  142            78-96 ANDs, 19-36 live
+The shipped 270 sits between them.  cpeh's reversible pebbler found NO
+schedule for the 41-AND XAG at K = 6..37 scratch registers, and the twelve
+data wires used as hosts only bring the budget to 18, which is inside that
+tested range -- so that XAG is out of reach at width 18, measured.  The one
+point on the census with liveness near 18 (19 live) costs 78-96 ANDs, which
+the emitter prices at roughly 350 layers.
+THE BINDING CONSTRAINT OF THIS DESIGN: no XAG of the whole truth table is
+known with both (a) at most ~45 AND gates and (b) peak liveness at most 18;
+the measured frontier is 41 ANDs at 38 live and 78 ANDs at 19 live, and the
+emitter prices those at 191 (unreachable) and ~350 (reachable but worse than
+the shipped 270).

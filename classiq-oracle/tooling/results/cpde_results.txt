@@ -1,0 +1,60 @@
+CP-DE: interleave search + packing ceiling for the disjoint-write R1/R2t pair
+==============================================================================
+Hard cap 60 min wall clock. Files: cpde_interleave.py (task 1),
+cpde_pack.py (task 2). No files deleted/modified outside the cpde_ prefix.
+
+CP-DE task 1: interleave search
+============================================================
+
+VARIANT: DISJOINT (cpdd_r1fix + cpal_r2t)
+------------------------------------------------------------
+  stream sizes: A(R1)=61 ops, B(R2t)=53 ops
+  (a) per-wire touch counts (target+controls, X counts):
+      q0:14 q1:12 q2:22 q3:14 q4:18 q5:12 q6:4 q7:8 q8:8 q9:16 q10:8 q11:12 q12:12 q13:8 q14:14 q15:8 q16:14 q17:12
+      MAX (hard floor) = 22
+  serial (A then B): depth=88 cx=144 classical=PASS
+  ASAP (priority=remaining chain length): classical=FAIL depth=None cx=None
+  local search (2000 iters/seed, swap+shift moves, seeded):
+      seed=0 iters=2000 valid_candidates=1149 best_depth=88 best_cx=144
+      seed=1 iters=2000 valid_candidates=1153 best_depth=88 best_cx=144
+      seed=2 iters=2000 valid_candidates=1090 best_depth=88 best_cx=144
+      seed=3 iters=2000 valid_candidates=1136 best_depth=88 best_cx=144
+  BEST across seeds: depth=88 cx=144 (serial=88 for reference)
+  Gate 'pair < 88': NOT MET (best=88)
+  wall time this variant: 163.9s
+
+VARIANT: SHIPPED (cpal_r1 + cpal_r2t, x3 shared)
+------------------------------------------------------------
+  stream sizes: A(R1)=59 ops, B(R2t)=53 ops
+  (a) per-wire touch counts (target+controls, X counts):
+      q0:14 q1:12 q2:20 q3:16 q4:14 q5:12 q6:4 q7:8 q8:8 q9:16 q10:8 q11:12 q12:12 q13:8 q14:14 q15:8 q16:14 q17:12
+      MAX (hard floor) = 20
+  serial (A then B): depth=85 cx=142 classical=PASS
+  ASAP (priority=remaining chain length): classical=FAIL depth=None cx=None
+  local search (2000 iters/seed, swap+shift moves, seeded):
+      seed=0 iters=2000 valid_candidates=1246 best_depth=85 best_cx=142
+      seed=1 iters=2000 valid_candidates=1298 best_depth=85 best_cx=142
+      seed=2 iters=2000 valid_candidates=1275 best_depth=85 best_cx=142
+      seed=3 iters=2000 valid_candidates=1300 best_depth=85 best_cx=142
+  BEST across seeds: depth=85 cx=142 (serial=85 for reference)
+  Gate 'pair < 88': MET (best=85)
+  wall time this variant: 152.4s
+
+TOTAL wall time: 316.2s
+
+CP-DE task 2: packing ceiling at 18 wires
+============================================================
+
+RCCX chains (arity=3 wires/gate, random distinct wires, no imposed dependencies):
+  N=40   fwd depth=93   fwd cx=120   identity(untranspiled full)=PASS (mism=0 perr=0.0e+00) sustained RCCX/layer=0.430
+  N=100  fwd depth=205  fwd cx=300   identity(untranspiled full)=PASS (mism=0 perr=0.0e+00) sustained RCCX/layer=0.488
+  N=200  fwd depth=500  fwd cx=592   identity(untranspiled full)=PASS (mism=0 perr=0.0e+00) sustained RCCX/layer=0.400
+  N=300  fwd depth=681  fwd cx=880   identity(untranspiled full)=PASS (mism=0 perr=0.0e+00) sustained RCCX/layer=0.441
+
+RC3X chains (arity=4 wires/gate, random distinct wires, no imposed dependencies):
+  N=40   fwd depth=242  fwd cx=240   identity(untranspiled full)=PASS (mism=0 perr=2.5e-14) sustained RC3X/layer=0.165
+  N=100  fwd depth=671  fwd cx=598   identity(untranspiled full)=PASS (mism=0 perr=6.4e-14) sustained RC3X/layer=0.149
+  N=200  fwd depth=1243 fwd cx=1190  identity(untranspiled full)=PASS (mism=0 perr=1.3e-13) sustained RC3X/layer=0.161
+  N=300  fwd depth=2061 fwd cx=1796  identity(untranspiled full)=PASS (mism=0 perr=1.9e-13) sustained RC3X/layer=0.146
+
+wall time task2: 0.6s

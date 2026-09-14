@@ -1,0 +1,113 @@
+=== CP-DR : one shared network per side ===================================
+[S0] Setup facts (re-derived, all exact).
+  The rank-10 decomposition is the GF(2) rank of F as a 64x64 matrix, so the
+  x-space (col space) and y-space (row space) are FIXED 10-dim spaces; only
+  the BASIS is free, and the two sides' bases must be dual.  W = span(1,
+  v0..v5, atoms) has dim 17 on both sides (confirms T12).
+  Consequence: CX/X preserve the span of register values, an AND adds <=1
+  dim, so  min #AND per side = min length of a product chain generating W,
+  and this count is INDEPENDENT of which basis of the atom space is used
+  (once the span is W, any basis element is one CX away).  The two sides
+  therefore decouple for AND-COUNT; only the schedule couples them.
+[S1] Exact helper accounting.  Every product landing in W buys exactly one
+  of the 10 dims, so  #AND = 10 + #helpers (products outside W).
+  Measured: of the 2604 products of two affine 6-bit forms, 0 land in W on
+  the y side (consistent with T5', MC>=3).  Closure test over all 2604
+  single helpers: dim(W n L) stays 7 for every one -> >= 2 helpers ->
+  >= 12 ANDs per side.  New lower bound, tighter than T12's 10.
+[S2] Architecture found.  Per side the 6 data registers carry an affine basis
+  T (one CX network); A = regs 3,4,5 (hi), B = regs 0,1,2 (lo).  Every 6-bit
+  function is then an 8x8 GF(2) matrix and a product u(A)&w(B) is a rank-1
+  matrix costing ONE AND.  Modulo F (functions of A alone + of B alone) the
+  10-dim atom space is a 10-dim space of 7x7 matrices, so
+     #AND terms for a side = min # rank-1 matrices spanning it.
+  Because a free CX copies a live register, the atom registers form a
+  spanning TREE over {0, atom_1..atom_10}, edge weight rank(M_i ^ M_j).
+  Swept ~100k affine bases T per side:
+    x side  MST 13, min-weight basis 12, 1-register walk 16, 2-reg 15, 3-reg 14
+            best T = [20,1c,2c,06,22,21]
+    y side  MST 15, min-weight basis 15, 1-register walk 17, 2-reg 16, 3-reg 15
+            best T = [01,02,04,08,10,20]  (the IDENTITY split hi=v>>3, lo=v&7)
+  Duality costs: the leg order is common to both sides, so a single register
+  per side forces a joint Hamiltonian walk = 36 terms (x 18 + y 20);
+  annealing over M in GL(10,2) (dual bases) only reached 36.
+  Degree facts: every nonzero element of either atom space has degree >= 4
+  (7 of degree 4, 504 of 5, 512 of 6 on the x side) so NO coset of codim <= 3
+  can appear alone; a degree-6 term needs deg(u)=deg(w)=3, i.e. two scratch
+  registers at that instant.
+[M1] First exact 18-wire build of the shared network (cpdr_v3.prog):
+  mism=0 dirty=0, AND=70 AND3=49 CX=127 legs=10, fwd2 371/556,
+  BLOCK depth 804 cx 1126, wire-layers 3810, packing 0.263.
+  Critical wires s3 (y sB) 512 touches, s1 (x sB) 494, s5 (y atom) 472.
+  Diagnosis: only 36 of the 119 gates are atom terms; 83 are sA/sB pool
+  walks (2.3 gates per term).  The pool walk, not the atom walk, is the cost.
+[M2] Emitter improvements, all exact (mism=0, dirty=0, 18 wires):
+  v1  naive pool rebuild per term      gates 195 (x 85 / y 110)  not measured
+  v2  same, redeal undone every term   gates 119  blk2 916 / cx 1486  CX=343
+  v3  persistent block basis (CX delta only)      blk2 804 / cx 1126  CX=127
+  v4  pool-state-aware factor choice   gates  92  blk2 751 / cx 1004
+  v5  R-light (atom register never an AND3 target)
+                                       gates 137  blk2 720 / cx 1055  AND=113 AND3=24
+  v6  = v5 + affine F-residues taken straight off a data register (no change)
+  Sweep of 3 x-bases x 2 y-bases x 3 leg orders x 2 modes (24 exact builds):
+  best 720, median ~840, worst 977.  Best = TX=[20,1c,2c,06,22,21],
+  TY=identity, order [9,8,7,6,5,1,2,3,4,0], R-light.
+[M3] Best measured block (cpdr_v6.prog -> cpdr_best.qasm):
+  depth 720, cx 1055, forward 335/515, wire-layers 3636, packing 0.281,
+  exact: check_block 0 mismatches / 0 dirty, sv_check 1.9e-14 phase, 6e-31 leak.
+  Wire loads (block touches): s1 602, s3 576, s4 474, s0 434, s5 318, s2 250,
+  then every DATA wire 50-118.  The six ancillas carry 2654 of 3636
+  wire-layers; the twelve data wires are idle.
+[M4] Falsifiers.  Step-1 falsifier (>26 ANDs on a side) is NOT triggered by
+  the term count: the shared network needs only 13 (x) / 15 (y) rank-1 AND
+  terms, and 18/20 on the single-register walk forced by leg duality.
+  Step-2 falsifier (block over 200) IS triggered: 720.  The excess is not
+  the atom network, it is the pool: 101 of the 137 gates in the best build
+  are sA/sB walk gates, and they all land on two wires per side.
+[S3] Step-1 tables (the shared network, one per side).
+ X side, basis TX=[20,1c,2c,06,22,21], installed by a 19-CX network:
+   CX x4 x5; x2 x5; x1 x5; x0 x5; x2 x3; x1 x3; x4 x3; x3 x4; x4 x3; x4 x2;
+   x3 x2; x1 x2; x4 x1; x3 x1; x1 x3; x3 x1; x5 x0; x0 x5; x5 x0
+   registers after it: x3,x4,x5 = A (hi), x0,x1,x2 = B (lo);
+   ancillas s0 = sA (a function of A), s1 = sB (of B), s2 = the atom register.
+   Shared network = 13 rank-1 AND terms (spanning tree over {0,X1..X10}),
+   AND-depth 2.  Tree edges (parent -> atom : rank) 0->1:1 2->2:1 0->3:1
+   0->5:1 6->6:1 0->7:1 0->8:1 0->9:1 0->10:3 1->4:2.
+ Y side, basis TY = IDENTITY (hi = y>>3, lo = y&7), CX network EMPTY:
+   y3,y4,y5 = A, y0,y1,y2 = B, s3 = sA, s4 = sB, s5 = atom register.
+   Shared network = 15 rank-1 AND terms, AND-depth 2.  Tree edges
+   0->1:1 0->8:1 0->9:1 0->10:2 0->2:2 3->4:1 0->3:2 0->5:2 6->6:1 0->7:2.
+ Nesting is exploited automatically: on the y side the telescoping walk
+ Y10->Y9->Y8->Y7->Y6->Y2->Y3->Y4->Y5->Y1 has hop ranks 1,2,2,2,1,2,2,2,2,4;
+ the two nested chains (YL and YD) each cost 1 term for their innermost
+ atom and 1-2 per level after that.
+[S4] AND-depth of the whole forward is 2.  The 720 is therefore NOT an
+ AND-chain latency (unlike CP-DL's 367); it is pure wire contention: two
+ wires per side carry the entire pool.
+
+CP-DR summary
+1 The rank-10 decomposition's x- and y-spaces are the column/row spaces of F
+  over GF(2), so they are FIXED; only the basis is free and the two sides'
+  bases must be dual.  W = span(1,vars,atoms) has dim 17 per side.
+2 CX/X preserve the span of register values and an AND adds <= 1 dim, so
+  min #AND per side = min product-chain length generating W, and this count
+  does not depend on which basis of the atom space is used: the sides
+  decouple for AND count and are coupled only by the leg schedule.
+3 #AND = 10 + #helpers (products outside W).  Of the 2604 products of two
+  affine 6-bit forms none lands in W, and no single helper lets any product
+  land in W, so >= 12 ANDs per side -- tighter than T12's 10.
+4 Best shared network found: a 3+3 affine split per side makes u(A)&w(B) a
+  rank-1 8x8 matrix = one AND.  Free CX copying makes the atom registers a
+  spanning TREE, giving 13 terms (x, basis [20,1c,2c,06,22,21]) and 15
+  terms (y, IDENTITY split hi=v>>3 lo=v&7).  Falsifier (>26/side) not hit.
+5 Leg duality forces a COMMON leg order, so one atom register per side
+  costs a joint Hamiltonian walk: 36 terms (x 18 + y 20); annealing over
+  GL(10,2) dual bases did not beat 36.
+6 Measured, all exact (check_block 0/0, sv_check 1.9e-14 / 6e-31 leak):
+  v2 916, v3 804, v4 751, v5=v6 720 (cx 1055, fwd 335, packing 0.281).
+  24-build sweep: best 720, median ~840, worst 977.  Falsifier (>200) HIT.
+7 Cause, measured: AND-depth of the forward is 2, so this is not latency.
+  101 of 137 gates are sA/sB pool walks and they land on 2 wires per side;
+  s1 602 / s3 576 / s4 474 / s0 434 touches vs 50-118 on every data wire.
+8 Next lever: host the pool on the idle DATA wires (a data register can
+  carry a nonlinear value reversibly) to cut the max wire load ~3x.

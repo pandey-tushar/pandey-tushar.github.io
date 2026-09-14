@@ -1,0 +1,112 @@
+cpen: depth attack on cpej_best.qasm (assumption -> measured result)
+
+BASELINE RE-MEASURED
+- cpej_best.qasm: 1125 gates (516 cx, 609 u3), opt2 depth 259.
+  Per-wire touch counts (congestion lower bound = max): q3 142, q17 134,
+  q14 123, q13 121, q16 121, q15 110, q12 105, q4 91, q11 87, q5 84,
+  q10 76, q9 74, q2 74, q8 67, q6 65, q0 58, q1 56, q7 53.  LB 142.
+- ASAP under the exact u3/cx commutation DAG of cpej_best.qasm: 259
+  (= plain depth; no commutation slack left at gate granularity).
+
+ASSUMPTION: the 259 is a phase-polynomial scheduling problem, so maximal
+CX+diagonal regions can be re-synthesised with a depth objective.
+RESULT: false at u3/cx granularity.  The 609 u3 split 303 diagonal / 306
+non-diagonal (59 X-type, 247 general).  Maximal contiguous CX+diagonal
+regions: 252 regions, largest 12 gates, 819 of 1125 gates covered.
+No region is large enough to re-synthesise.
+
+OP-LEVEL STRUCTURE (cpdp_best.pkl, 418 ops -> the same 270/516 circuit)
+- op mix: 184 x, 108 cx, 94 ccx, 12 c3x, 12 c3x_dg, 7 cz, 1 ccz.
+- cpae_core.model_depth = 240; real opt2 depth of ops_to_qc = 270.
+- model critical chain 57 ops (29 ccx, 14 cx, 10 c3x/c3x_dg, 4 cz/ccz).
+  Start-to-start gap histogram: 6 x15, 0 x9, 3 x8, 5 x5, 12 x4, 2 x3,
+  11 x2, 9 x2, negative x5, other x5.
+- The gap-6 links are "same target wire as the previous nonlinear op"
+  (RCCX target profile is layers 1..7, so a target-to-target link costs 6);
+  the gap-12 links are the same for RC3X (profile 1..13).  19 such links
+  carry 138 of the 240 model layers.  That is the serial accumulation.
+- Nonlinear same-target links: 35 are mirror undo (forced), 29 are genuine
+  accumulation t ^= A then t ^= B (candidates for splitting).
+- Free |0> ancillas over the op stream: 147 of 418 positions have 0 free,
+  123 have 1, 35 have 2, 48 have 3, 32 have 4, 22 have 5, 11 have 6.
+  Zero data wires are |0> at any point (0/418).
+- Control-swap freedom: RCCX is NOT control-symmetric (swap distance 2.0)
+  but every wiring occurs exactly twice or four times (43 wirings x2,
+  2 wirings x4), so swapping all occurrences of a wiring cancels the
+  relative phase and is exact.  RC3X is symmetric in controls 0/1 only
+  (distance 0.0 for [1,0,2,3], 1.41 for [0,2,1,3] and [2,1,0,3]).
+  -> 45 + 12 = 57 free binary variables; all 57 single flips verified exact.
+
+OBJECTIVE USED FOR SEARCH (0.18 s/evaluation)
+ops -> ops_to_qc -> transpile(u3/cx, opt2) -> min-atom Rz/Rx split ->
+commutation DAG -> heuristic list schedule + reverse polish.
+Baseline op list scores (260, 516) on this objective (cpej's CP-SAT
+optimum for the same gate set is 259).
+
+ASSUMPTION: single control swaps improve depth.
+RESULT: no.  All 57 single flips exact; best raw opt2 depth 270 (13 flips
+neutral, the rest 270-272); none below the 270 baseline.
+
+ASSUMPTION: random-restart annealing over the 57 swap variables reaches
+below 259.
+RESULT: 3 chains x 900 s from random starts reached 262/518 (they start
+above the 260 baseline; abandoned in favour of the combined move set).
+
+=== session 2 (dependency analysis) ===
+ASSUMPTION: the 259/240 is scheduling slop at op level.
+RESULT: false.  Op-level dependence DAG (RAW/WAR/WAW on wires, reads
+commuting) of the 418-op list has list-schedule model_depth 240 = the
+baseline.  No op reordering slack at all.  DAG has 13469 conflict pairs.
+
+ASSUMPTION: the 240 is anti-dependency from reusing the 6 ancilla wires.
+RESULT: false.  Giving every ancilla EPOCH (nonzero interval, 28 epochs,
+46 virtual wires) its own fresh wire: model_depth 238 (from 240).
+
+MEASURED: value-DAG of the same op list (unlimited registers, each distinct
+4096-bit value produced once; ccx 7 layers, c3x 13, cx 1):
+  138 non-raw values, 8 phase ops, forward makespan 69, all phases by 72,
+  ASAP peak live non-raw values 47 (mean 22.8, median 19, p90 45).
+  Unlimited-register critical path of the whole op list: 82.
+=> 240 / 82 = 2.9x; the gap is wire reuse under 18 registers, and the
+   binding number is peak live 47 vs 6 free ancillas.
+
+MEASURED: exact commutation of RCCX at op level: same-target RCCX/RCCX_dg
+pairs do NOT commute (relative phase depends on the target), so the DAG
+keeps WAW edges; disjoint-target ops commute exactly.
+
+BANKED: cpen_search_11.pkl emitted -> cpen_best.qasm
+  opt2 (258, 520), opt3 (258, 520), verify_sv18 True err 7.9e-15,
+  sv_check err 3.2e-13 leak 1.7e-29.  (previous best 259 / 516.)
+
+ASSUMPTION: a single nonlinear op can be moved off its busy target wire onto
+a free ancilla (3-op form) to convert a 6-layer WAW link into a 1-layer cx.
+RESULT: measured identity  RCCX(a,b,w); cx(w,t); RCCX_dg(a,b,w); cx(w,t)
+== CLEAN ccx(a,b,t) exactly (and the same for RC3X/C3X); with w in |0> the
+trailing cx is unnecessary.  So the move is exact when applied to EVERY
+occurrence of a wiring.  Measured effect: 119 single-op candidates, best
+rescheduled model_depth 240 (= baseline), worst 264; NONE improves.
+1026 whole-wiring clean-host moves (57 wirings x 18 host wires): none
+improves 240.
+
+ASSUMPTION: hosting every nonlinear wiring on the critical chain at once,
+each on the least-occupied wire, shortens the chain.
+RESULT: false.  Round 0 hosted 24 wirings -> model_depth 614 (from 240),
+nops 564, cx~829, occmax 148; round 1 -> 1387.  Writing an intermediate to
+a data wire makes that write a barrier against every reader of the wire.
+
+ASSUMPTION: detaching every nonlinear op onto its own fresh wire removes the
+target-occupancy links.
+RESULT: false.  136 wires, 654 ops -> model_depth 363 (from 240).
+
+MEASURED dependence-class decomposition of the 418-op list (18 wires,
+list schedule / DAG critical path):
+  all edges            240 / 413
+  RAW+WAW (no WAR)     235 / 247
+  RAW+WAR (no WAW)     254 / 325
+  RAW only             165 /  67
+  no WAR on ancillas   248 / 297
+  no WAR on data       245 / 383
+=> only removing WAR *and* WAW together (i.e. giving every value its own
+register) unlocks anything: 165.  Per-wire occupancy of the op list:
+q14 138, q17 138, q3 136, q16 131, q13 129, q15 124, q12 114, ... q0 48,
+q7 48 -> op-model congestion LB 138, so congestion is NOT binding at 240.

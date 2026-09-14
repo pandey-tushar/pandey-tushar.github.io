@@ -1,0 +1,53 @@
+CP-DA stage 1: brick library (dyadic-box read-only bricks)
+
+total bricks: 117  build+verify+transpile time: 0.8s
+classical FAILS: 0 (must be 0)
+
+shape  bricks  depth(min/med/max)  cx(min/med/max)  k-values
+R1         30     39/   54/   56          29/   60/   86      [2, 3, 4]
+R2t         8     45/   56/   66          36/   70/   90      [3, 4]
+D1         34     52/   52/   56          54/   70/   88      [4]
+D2         45     46/   54/   66          42/   74/  100      [3, 4]
+
+bricks with depth > 60: 5
+
+serial sum of all brick depths (naive concat lower bound): 6225
+shipped LEFT (R1+R2t+D1) reference: 153  (43+39+71)
+shipped oracle reference: 272
+
+CP-DA stage 2b: LEFT-blob-only (R1+R2t+D1, 72 bricks) comparison
+  LEFT-only serial concat:      depth 3352  cx 3387
+  LEFT-only flight (best order): depth 3204  cx 3465  (rounds=65)
+  exact check (extract+sim_exact vs XOR-of-boxes): PASS (err 1.5e-13, 0 mismatches)
+  shipped LEFT reference (R1+R2t+D1, hosted, non-read-only): depth 153
+  -> flight is 21x worse than shipped LEFT
+
+CP-DA stage 3: NOT RUN (time cap). Rationale recorded, not a recommendation
+to stop: the k=4 tax is structural, not a scheduling artifact. Of 117
+bricks, 95 have k=4 (mostly single-pixel or near-single-pixel leftover
+boxes from the dyadic decomposition of non-power-of-2 rectangle edges and
+disk boundaries); only 22 bricks have k<=3 (2 with k=2, 20 with k=3).
+Optimal bin-packing of this k-multiset onto 6 ancillas admits at most
+10 (k=3,k=3) pairs + 2 (k=4,k=2) pairs + 93 unpaired k=4 bricks = 105
+rounds minimum (measured: 106-107 achieved by depth/k-sorted greedy,
+close to this counting floor) -- so >=93 of 117 bricks can NEVER run
+concurrently with anything, regardless of scheduling. A shared-prefix
+stage (hoisting common low-bit products like x0x1, y0y1 ahead of the
+bricks that use them) would need bricks to share IDENTICAL literal+
+polarity sub-products; because almost all bricks are the leftover
+1x1/1x2/2x2 boundary cells of a non-dyadic decomposition, their fixed-bit
+patterns are largely distinct per box, so a naive prefix hoist is not
+expected to close a 20x gap -- this is recorded as an open lever, not
+tested, per the no-paper-only-pricing rule (not measured = not claimed).
+
+CP-DA FINAL: gate (oracle < 272) NOT MET.
+  full-logo flight best: depth 5389 cx 5786 (opt2, order=by_depth_desc,
+    107 rounds); opt3 same circuit: depth 5375 cx 5101.
+  full-logo serial (same 117 bricks, identity order): depth 5503 cx 5621.
+  flight beats serial by only 2-3% (round-robin concurrency ceiling is
+  bounded by the k=4-dominated brick multiset above, not by scheduling).
+  shipped oracle reference: 272.  Both numbers are ~19-20x the shipped
+  oracle -- the "many light bricks" read-only architecture at per-pixel
+  dyadic-box granularity is dominated by the k=4 read-only tax on ~95
+  boundary/single-pixel bricks, which the interleaving cannot amortize
+  because concurrency is capped at ~1.5x by the ancilla budget.

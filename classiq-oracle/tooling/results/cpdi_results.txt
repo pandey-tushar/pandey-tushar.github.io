@@ -1,0 +1,69 @@
+CP-DI results (Sep 12) -- the frame question: what lets the logo's gates interleave on 18 wires.
+
+OCCUPANCY (real transpile, per-wire busy counts): oracle 272 = 1,613 wire-layers of work over
+  18 x 272 = 33% busy; max wire 139.  Blocks: R1 43/245 (32%), R2t 39/228 (32%), D1 71/432 (34%),
+  D2 125/765 (34%).  Forward halves 650 wire-layers -> 36 layers at 100%, 48 at 76% (leaders).
+  Content is not the gap; packing is.
+
+PARKING LAW (new, exact, cheap to check): block B may read a wire carrying block A's values if
+  those values vanish on supp(B); B's phase must be gated by its own window bits, which no block
+  may host on; the two operand wires of a leg may not both carry dirt of the same other block.
+  Then any interleaving that keeps each block's own gate order is exact (mirror = reverse of the
+  merged forward, conjugation argument).  The record's host law is the strict special case.
+  Shipped blocks violate it everywhere (cpdi_park census over the 12 ordered pairs): 7-16 of each
+  block's non-raw values are nonzero on the other supports; every block dirties window bits
+  (R1: x4,y5; R2t: x5; D1: x4,x5,y4,y5; D2: x4,y4); nested pairs give 462-1,277 mismatches.
+  TEST with compliant blocks (cpdi_park.py): class-form D2 (private literal copies, 116 wires,
+  block 72) + bar block [32,47]x[39,43] (S & rows, values carry y5~y4, block 65, 16 wires):
+  every interleaving exact (0/4096, all registers restored).  Depth: sum 137; d2;bar 91;
+  bar;d2 125; ASAP merge 125; bar mid-forward 135.  Order = nesting: the block listed later is
+  inner and overlaps fully; the block listed first pays forward + mirror at the two ends.
+
+SHARED FOLD FRAME (cpdi_frame.py, cpdi_fold.py, exact on 4096): x: u' = u ^ (x4?1111:0) then
+  f = (s, alpha mod 8), s=[u'>=8], alpha=|u'-8|; both disks' distances (|x-40| on x5~x4, |x-55|
+  on x5x4) are alpha.  y: v' = 11 - v (affine), same fold: beta = |y-19| on y in [11,27].
+  Fold program: 4 CX + CX + AND3 + AND per axis, in place, NO scratch, forward 25 layers (both
+  axes parallel).  In this frame every disk class of both disks is ONE affine flat (2 gates with
+  the outer literal); R1's [2,26] and the bar have no <=2-flat cover (4-5 gates by hand forms).
+  Identity F = [cxL+cyL<=4] ^ [cxD+cyD<=4] with the LEFT radii {12,6,5,4,2} and D2 radii
+  {8,7,6,4,2} as class codes: 0/4096.  R1 ^ BAR[27,61]x[39,43] ^ D1' ^ D2 = logo (0/4096),
+  D1' = D1 minus rows 39-43 = a 3-term staircase; D1' and D2 have disjoint x and y supports.
+
+THE OBSTACLE, quantified: under the law the shipped D2 cannot host any other block (it hosts on
+  all four window bits and its 7 pool values do not vanish off its support).  A compliant D2
+  needs a tree whose pool values carry the window (arity +1 on ~5 leaves, +2 pool wires for the
+  in-place affine leaves Sa/Sb that must become products) on the 6 ancillas: estimated tree 34 ->
+  50-70, D2 alone 150-190.  A leg-form D2 (10 operands) does not fit 6 own wires at all
+  (cpdh_sched 700 at 18).  PROJECTION: oracle 190-210 with a compliant shipped-style tree;
+  150-170 only if a window-carrying rank tree exists with pool <= 6 and forward <= 45 in the
+  shared frame (open: P6).
+
+== CP-DI addendum: compliant D2 tree in the shared frame, pool measured (cpdi_pool2.py)
+Tree D2 = S Wy N ^ col48 (machine-checked), window Wy hosted on x4 (3 writes: W1 AND,
+W2 AND3, row-11 chain r1,r2 + W3), values S,Pa,Ra,Pb,Rb,A8,B8,(Ma,Mc),h1..h3 on ancillas,
+register allocator with rematerialisation (evict = unbuild with inputs live; rebuild on
+next use), random topological sink orders, every candidate replayed exact on 4096 inputs
+(mism 0, dirty 0 required), fold prefix (25) included in every forward.
+Bugs fixed vs cpdi_pool.py: f2 g2 Rb term lacked the S gate (x4 cross term) -> 287 mism;
+values were unbuilt after their inputs were freed; CCZ lines printed the None target.
+Variant b = accumulators on x5/y4 + corrections CZ(x4,x5) CZ(x4,y4) CZ(x4,S), 2 legs.
+Variant L = every term a CZ/CCZ leg against x4 (no accumulators, no corrections).
+3000 orders x hosts, seed 2 (best model_fwd per ancilla count; real = transpiled block):
+  anc  variant  model_fwd  ANDs_fwd  block_real_depth  cx   wires  fwd wire-layers / packing
+  3    b,L      no exact feasible order (3000)
+  4    b,L      no exact feasible order (3000)
+  5    b        231        41        515               453  17
+  5    L        no exact feasible order (3000)
+  6    b        165        35        371               359  18     688 = 23% of 18x165
+  6    L        183        34        425               381  18     664 = 20% of 18x183
+  7    L        163        34        409               400  19
+  8    L        143        29        365               349  20     575 = 20%
+  10   L        116        27        309               325  22     (chain floor probe)
+Shipped D2 block: 125 (765 wire-layers, 34%).  Class-product leg-form D2: 72 at 116 wires.
+Why it is deep (numbers): x4 carries 13-17 serial ops (3 window writes + 9 legs or 2 legs +
+3 corrections) = 100+ layers on one wire; value chains S -> Pa -> A8 -> leg are 4 gates deep
+on top of the 2-gate fold; with 10 ancillas the forward is still 116 (chain, not pool).
+Pool floor of this tree: 6 ancillas with rematerialisation (5 for variant b at 231 fwd).
+Oracle consequence: parked oracle with this D2 >= 371 + ~90 (unoverlapped ends) ~ 460;
+the frame route needs a D2 form with <= 3 gates on the critical path and <= 4 ops per wire,
+not a smaller pool.  272/512 stands.

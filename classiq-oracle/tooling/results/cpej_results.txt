@@ -1,0 +1,167 @@
+cpej -- commutation-aware depth optimisation of the shipped u3/cx circuit
+input: cpdp_best.qasm; submission22.qasm is BYTE-IDENTICAL to it (diff = 0),
+so there is one input, not two.  All numbers below are measured.
+
+VERIFICATION USED EVERYWHERE
+  cpae_core.check() (exact 4096-input replay) is NOT APPLICABLE to a u3/cx
+  circuit: u3 is not permutation*diagonal and the simulator asserts.  Every
+  circuit below is checked with cpae_core.sv_check (full 2^18 statevector on
+  |+>^12 x |0>^6: max err over the 4096 diagonal entries, plus ancilla leak)
+  AND by comparing the whole 2^18 statevector against the input circuit's,
+  which also pins the global phase.
+
+STAGE 0  baseline (cpej_base.py)
+  cpdp_best.qasm  583 u3 + 516 cx, width 18, qc.depth() = 270, global phase 0
+  transpile(basis=[u3,cx], opt_level = 0 / 1 / 2 / 3): 270 / 516 at every
+  level -- the file is already a fixed point of the transpiler.
+  sv_check: err 1.217e-14, leak 5.7e-30.
+  per-wire gate counts q0..q17:
+     56 58 74 139 88 80 64 52 68 73 74 86 104 118 120 110 118 133
+  max wire load 139; mean wires busy per layer 5.98 of 18.
+  critical path of the shipped order: 270 gates = 152 cx + 118 u3.
+
+STAGE 1  commutation DAG over whole u3 gates (cpej_ir.py)
+  exact rules used (complete for this gate set): u3 commutes with a cx iff it
+  is diagonal and sits on the control, or commutes with X and sits on the
+  target; cx/cx commute iff controls are equal or targets are equal.
+  u3 census: 267 diagonal, 73 X-type, 243 neither.
+  wire-order DAG longest path     270   (= shipped depth)
+  commutation DAG longest path    256
+
+STAGE 2  split each u3 into Rz(a) Rx(b) Rz(c) (cpej_atoms.py, exact ZXZ)
+  ZXZ, not ZYZ: with ZXZ both the outer factors (Rz, commute through a cx
+  control) and the middle factor (Rx, commutes through a cx target) have an
+  exact commutation rule; with ZYZ the middle Ry commutes with nothing.
+  1985 atoms: 1152 Rz, 316 Rx, 516 CX.  Angle census: Rz 3pi/2 x426,
+  3pi/4 x234, pi/4 x231, pi/2 x185; Rx pi/2 x207, pi x83 -> Clifford+T.
+  split + re-merge reproduces 270 / 516, sv err 2.8e-13.
+  merge-aware longest path over atoms (a maximal 1q run on one wire costs
+  one layer)                      257
+  CX-only commutation longest path 54 of 516 cx  <- the 2q network itself is
+  only 54 deep; the depth is set entirely by the interleaved 1q rotations.
+  Global phase: the net leftover phase of a u3 decomposition is invariant
+  under any redistribution of phase between gates, so it is repaired by
+  inserting Rx(theta)/Rx(-theta) around one cx on its target wire (exact
+  identity, absorbed by the neighbouring u3, theta found by bisection).
+  Bug found and fixed while doing this: dropping an Euler angle that is
+  2pi mod 4pi silently drops a factor -1 (Rz(2pi) = Rx(2pi) = -I).
+
+STAGE 3  exact CX rewrites (cpej_cancel.py, cpej_flip.py, cpej_pauli.py)
+  identical-cx pairs that commutation can bring together and cancel:   0
+  qiskit CommutativeCancellation / CommutativeInverseCancellation on the
+  input: 0 cx removed, depth 270 unchanged.  opt3 has already taken every
+  cancellation this rewrite set can see.
+  cx direction flips cx(c,t) = (H_c H_t) cx(t,c) (H_c H_t), all 516 tried
+  one at a time: 0 lower the scheduled depth (262 greedy), 0 lower the
+  merge-aware bound (257); the worst single flip raises the bound to 261.
+  Pauli pushes X_control / Z_target through a cx: only 6 such Paulis are
+  adjacent to a cx they block; none lowers the bound (257) or the depth.
+
+STAGE 4  scheduling (cpej_sched.py, cpej_sched2.py, cpej_ils.py)
+  greedy critical-path-priority layering with 1q-run merging, one pass: 262
+  cx-first layering variant:                                          262
+  1237 randomised restarts (priority jitter + ASAP/ALAP reverse polish): 260
+  iterated local search, 2 seeds x 25 min:                             260
+
+STAGE 5  exact optimum of the reordering problem (cpej_cpsat.py, cpej_opt.py)
+  CP-SAT model: one integer layer per atom; precedence L_j <= L_i for two 1q
+  atoms of the same wire (they merge into one u3) and L_j < L_i otherwise;
+  on each wire a cx may not share a layer with any DAG-incomparable atom of
+  that wire.  The model is a relaxation of the real circuit, so INFEASIBLE
+  is a proof.  87569 precedence pairs reduce transitively to 2803; 1040
+  layer-exclusion pairs remain.
+    T = 260  FEASIBLE (1 s)
+    T = 259  INFEASIBLE (1 s)
+    T = 258  INFEASIBLE (1 s)
+  => 260 is the exact minimum depth reachable by commutation reordering of
+     the plain Rz-Rx-Rz split (see stage 6 for the form choice that beats it).
+  Same run with every u3 split as Rx Rz Rx (XZX) instead: 1907 atoms,
+  bound 256, exact minimum also 260 (proved).
+
+STAGE 6  per-u3 choice of Euler form (cpej_atoms.py modes, cpej_ctx.py,
+         cpej_greedy4.py)
+  Four forms per u3, named by (leading, trailing) factor type; the leading
+  factor is what can slide LEFT out of a merged 1q run, the trailing factor
+  what can slide RIGHT:
+    form 0  Rz Rx Rz        (z,z)   slides through cx controls on both sides
+    form 1  Rx Rz Rx        (x,x)   slides through cx targets on both sides
+    form 2  Rz Rx Rz Rx     (z,x)   control on the left, target on the right
+    form 3  Rx Rz Rx Rz     (x,z)   target on the left, control on the right
+  Forms 2 and 3 are 4-factor and always exist (one free parameter, fixed by
+  keeping the full leading factor of the 3-factor form).  Longer alternating
+  words add nothing: only the two end factors can ever leave the run.
+  All four verified exact on the whole circuit (sv err 2.4e-13 .. 3.0e-13).
+  Exact minimum depth (CP-SAT, proved) for uniform choices:
+    all form 0  1985 atoms  bound 257  min 260
+    all form 1  1907 atoms  bound 256  min 260
+    all form 2  2039 atoms  bound 257  min 260
+    all form 3  2357 atoms  bound 257  min 260
+    context-driven per gate (cpej_ctx.py)  2012 atoms  bound 257  min 260
+  What does move it: picking per gate the form with the FEWEST non-trivial
+  atoms (many u3 collapse to 1 or 2 rotations in one of the four forms --
+  130 gates are a single Rx in form 1, 5 are a single Rz in form 0):
+    min-atom per gate   1767 atoms  bound 256  exact min 259 (proved)
+  (a single gate, index 123, switched to form 1 already gives 259.)
+  No single form change lowers the bound below 256 (cpej_lbsweep.py, all
+  583 x 3 alternatives).  cx direction flips re-tested on the min-atom
+  split (cpej_flip.py over all 516 cx): bound stays 256, no flip helps.
+  Greedy at T=258 from the min-atom base (cpej_greedy4.py): all 583 gates
+  x 3 alternative forms tested by CP-SAT, every one INFEASIBLE at 258
+  (1674 s).  259 is a proved local optimum under single form changes.
+
+STAGE 7  fixed point of  schedule -> merge -> re-split (cpej_iter.py)
+  Re-splitting the merged 1q gates of the optimised circuit gives a
+  different (smaller) atom set each round; 12 rounds:
+    atoms 1767, 1716, 1705, 1701, 1697, 1703, 1698, 1689, 1688, 1692,
+          1683, 1696   -- exact minimum 259 at EVERY round, proved optimal
+  each time.  The loop reaches a fixed point at 259.
+
+RESULT (cpej_best.qasm)
+  depth 259 / cx 516 / u3 609, width 18, u3+cx only, single 18-qubit qreg.
+  transpile opt_level 0 / 1 / 2 / 3: 259 / 516 at every level -- the
+  transpiler keeps every move (it neither undoes nor improves them), so the
+  circuit is emitted directly in u3/cx form and logo.py challenge_metrics
+  (which takes the best of opt 1/2/3) scores it at 259.
+  sv_check: err 3.050e-13, ancilla leak 4.9e-30 (both well inside 1e-10).
+  repo verify18.verify_sv18 (independent 2^18 run): PASS, err 5.60e-15.
+  full 2^18 statevector vs the input circuit: max|new - old| = 4.71e-15,
+  i.e. identical unitary including global phase.
+  1q gates moved: all 583 u3 were split (1767 atoms, of which 1251 are 1q
+  rotations); 142 of those 1251 rotations (11%) end up in a different cx
+  interval on their wire, i.e. they actually commuted across at least one
+  cx -- signed histogram of cx crossed: -9 x1, -6 x2, -5 x3, -4 x8, -3 x9,
+  -2 x25, -1 x40, +1 x30, +2 x4, +3 x6, +4 x9, +5 x1.  The emitted 1q-gate
+  count goes 583 -> 609; cx is unchanged at 516 (no commutation move can
+  add or remove a cx here).
+  critical path 270 -> 259.
+  Intermediate verified result kept in the log: 260 / 516 / 591 u3 with the
+  plain Rz-Rx-Rz split, proved optimal for that split.
+
+WHY IT STOPS AT 259 -- the measured blocking structure
+  Critical path of the shipped 259 circuit: 259 gates = 143 cx + 116 u3
+  (input was 270 = 152 cx + 118 u3).
+  The bound-achieving chain of the shipped atom DAG has 275 atoms
+  (133 cx, 119 Rz, 23 Rx); its consecutive-pair reasons are
+     cx then Rz on its target        111
+     Rz then cx on its target        107
+     Rx then cx on its control        15
+     cx then Rx on its control        12
+     Rz then Rx on the same wire      11
+     cx then cx (control = target)    10
+     Rx then Rz on the same wire       8
+  chain wire visits: q17 68, q4 40, q9 38, q12 38, q3 38, q10 36, q15 32.
+  218 of the 274 steps (80%) are an Rz sitting on the TARGET wire of the
+  neighbouring cx.  That pair never commutes, and no splitting helps: the
+  blocking factor is already a single Rz atom (T / T-dagger / S).  Each such
+  segment is a phase ladder  cx(a,t) Rz cx(b,t) Rz cx(c,t) Rz ...  on one
+  wire, i.e. a phase polynomial whose successive parities are all carried on
+  that same wire, so those layers are intrinsically serial.
+  Of the 23 Rx blockers on the chain only a handful are Rx(pi) (Pauli, and
+  therefore propagatable through a cx); the rest are Rx(pi/2), the H of the
+  Clifford+T form, which commutes with nothing on its wire and with no cx
+  that has that wire as control.
+  For comparison the cx network alone is only 54 deep under the same
+  commutation rules, so 205 of the 259 layers are charged to the 1q
+  rotations that pin the cx ladder in place.  Shortening the chain needs
+  those phases re-hosted on other wires (parity-network re-synthesis),
+  which is not a commutation move and needs free wires -- all 18 are in use.

@@ -1,0 +1,172 @@
+CP-DG results, Sep 11
+
+[a4x] arity<=3 cap=200000 maxh=all  57.2 s  cap_hit=False
+  k=1 : NO PLAN (cap_hit=False)
+  k=2 : NO PLAN (cap_hit=False)
+  k=3 : NO PLAN (cap_hit=False)
+  k=4 : 22993 plans, 76 distinct delivery orders
+    PARETO ANDs=4 chain=33 peak_nonraw=4 arities=[3, 3, 2, 2] nonraw_seq=[0, 1, 2, 3, 4]
+      order = ['0xe00e', '0x9832', '0x600d', '0x8002']
+    PARETO ANDs=4 chain=39 peak_nonraw=3 arities=[3, 3, 2, 3] nonraw_seq=[0, 1, 2, 3, 3]
+      order = ['0x8002', '0x600c', '0x8003', '0x9833']
+    order ['0xe00e', '0x9832', '0x600d', '0x8002']  best chain=33 peak=4 arities=[3, 3, 2, 2]
+    order ['0x8002', '0x600c', '0x8003', '0x9833']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x8003', '0x9832']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x8003', '0xf83e']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x600d', '0xf83e']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x8003', '0x1831']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x8003', '0x783c']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x8003', '0x1830']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x783c', '0x1', '0xe00f']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x1', '0x9832']  best chain=39 peak=4 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x1', '0x9833']  best chain=39 peak=4 arities=[3, 3, 2, 3]
+    order ['0x8002', '0x600c', '0x1', '0x783c']  best chain=39 peak=4 arities=[3, 3, 2, 3]
+
+[b6x] arity<=3 cap=1500 maxh=12  330.2 s  cap_hit=True
+  k=1 : NO PLAN (cap_hit=True)
+  k=2 : NO PLAN (cap_hit=True)
+  k=3 : NO PLAN (cap_hit=True)
+  k=4 : NO PLAN (cap_hit=True)
+  k=5 : NO PLAN (cap_hit=True)
+  k=6 : NO PLAN (cap_hit=True)
+
+[greedy x n=8 cand=200] 0 gates (0 deliveries) arities [] chain(serial)=None
+  order []
+
+[beam x n=8 depth=8 beam=40] 103.8 s
+  NO PLAN within depth 8 beam 40 (BUDGET)
+
+[a4y] arity<=3 cap=200000 maxh=all  55.5 s  cap_hit=False
+  k=1 : NO PLAN (cap_hit=False)
+  k=2 : NO PLAN (cap_hit=False)
+  k=3 : NO PLAN (cap_hit=False)
+  k=4 : 22993 plans, 57 distinct delivery orders
+    PARETO ANDs=4 chain=33 peak_nonraw=3 arities=[3, 3, 2, 2] nonraw_seq=[0, 1, 2, 3, 3]
+      order = ['0xe3c1', '0x94c1', '0x6300', '0x6b00']
+    PARETO ANDs=4 chain=39 peak_nonraw=2 arities=[3, 3, 2, 3] nonraw_seq=[0, 1, 2, 2, 2]
+      order = ['0xe3c1', '0x1400', '0xebc1', '0x94c1']
+    order ['0xe3c1', '0x94c1', '0x6300', '0x6b00']  best chain=33 peak=3 arities=[3, 3, 2, 2]
+    order ['0xe3c1', '0x94c1', '0x800', '0xf7c1']  best chain=33 peak=4 arities=[3, 3, 2, 2]
+    order ['0xe3c1', '0x94c1', '0x88c1', '0xf7c1']  best chain=33 peak=4 arities=[3, 3, 2, 2]
+    order ['0xe3c1', '0x94c1', '0xebc1', '0xf7c1']  best chain=33 peak=4 arities=[3, 3, 2, 2]
+    order ['0xe3c1', '0x94c1', '0x9cc1', '0xf7c1']  best chain=33 peak=4 arities=[3, 3, 2, 2]
+    order ['0xe3c1', '0x94c1', '0x6300', '0x800']  best chain=33 peak=5 arities=[3, 3, 2, 2]
+    order ['0xe3c1', '0x94c1', '0x6b00', '0x6300']  best chain=33 peak=5 arities=[3, 3, 2, 2]
+    order ['0xe3c1', '0x1400', '0xebc1', '0x6b00']  best chain=39 peak=2 arities=[3, 3, 2, 3]
+    order ['0xe3c1', '0x1400', '0xebc1', '0x6300']  best chain=39 peak=2 arities=[3, 3, 2, 3]
+    order ['0xe3c1', '0x1400', '0xebc1', '0x94c1']  best chain=39 peak=2 arities=[3, 3, 2, 3]
+    order ['0xe3c1', '0x1400', '0xebc1', '0x88c1']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+    order ['0xe3c1', '0x1400', '0x800', '0x6b00']  best chain=39 peak=3 arities=[3, 3, 2, 3]
+
+[coupling, 4-bit control] coupled 0 / 76 x orders (no dual 0, y cannot serve 76)
+
+[coupling, 6-bit CP-DG basis] index pairing exact under 3 random invertible P: mismatches [0, 0, 0] / 4096
+
+================ CP-DG SUMMARY (Sep 11) ================
+BASIS (cpdg_basis.py, exact): D2 = XOR_{k=0..4} f_k(x) h_k(y), 0 mismatches
+  / 4096.  f_k = [c_x <= 4-k] (x intervals about 40), h_k = [c_y = k] (y
+  shells about 19).  dim K_x = dim K_y = 5 = GF(2) rank of the 64x64 D2
+  matrix; K_x = its column space, K_y its row space; 1 not in either; ZERO
+  affine elements; all 31 nonzero elements of each have degree 5 or 6.
+  f_1..f_4 all contain x5&~x4; f_0 = x5 & ~(x4 & [u!=0]); h_4 = ~y5 & [v=11].
+  BASIS FREEDOM VERIFIED: 3 random invertible 5x5 P, f' = P f, h' = P^-T h ->
+  0 mismatches / 4096 each.  ORDER FREEDOM VERIFIED: all 120 delivery orders
+  exact (legs are plain CZ on rank-1 terms, so they commute).  CP-CC's
+  'B4 delivered last' blocker is an ACCUMULATOR property and does NOT apply.
+
+EXACT THEOREM (degree, width-independent).  Every element of K_x and K_y has
+  degree >= 5 over the 6 raw bits.  S_0 = span{1,x0..x5} has degree <= 1, and
+  after ONE AND of arity <= 3 every element of S_1 has degree <= 3.  Each AND
+  raises dim(seen) by at most 1 (CP-BV).  Hence at 6-bit width
+     arity <= 3:  k >= 6 AND gates per axis;  all-RCCX: k >= 7.
+  (all-RCCX: S_2 has degree <= 4 < 5.)  Both hold at ANY number of wires --
+  the 6-bit analogue of CP-BZ's all-RCCX theorem.  The b6x/b6y BFS confirms
+  it: level 1 is EMPTY for every k <= 5.
+
+STAGE-1 RUNS
+ [a4x] control, 4-bit, n=6, arity<=3, complete: k<=3 NO PLAN, k=4 PLAN,
+   levels 4 / 113 / 1795 / 8082  ==  CP-BV's recorded numbers exactly.
+   22,993 plans, 76 distinct delivery orders in the analysed sample
+   (paths/state capped at 3, first 4,000 plans analysed -- CP-BV counted 399
+   sequences over the uncapped set, so the order table here is a SUBSET).
+   PARETO (ANDs, chain, peak non-raw): (4, 33, 4) arities [3,3,2,2];
+   (4, 39, 3) arities [3,3,2,3].
+ [a4y] control, 4-bit, n=6: same level shape, 57 distinct orders in sample.
+   PARETO: (4, 33, 3) arities [3,3,2,2]; (4, 39, 2) arities [3,3,2,3].
+ [b6x/b6y] 6-bit, n=8, cap 1500 states/level, maxh 12, arity<=3:
+   k <= 5 NO PLAN (level 1 empty -- the degree theorem), k = 6 NO PLAN with
+   cap_hit = True  ->  BUDGET, not a negative.
+ [beam x] n=8, depth 8, beam 40, H restricted to the 'delete one basis
+   vector' family: 20,181 states at step 1, 807,000 at step 2, dim(seen) = 0
+   after 4 gates, wall-clock abort at 103.8 s -> BUDGET.
+ CHAIN MODEL used: CP-CF's measured law, entry via slot a = 4 (RCCX) / 11
+   (RC3X), final gate via target = 7 / 13; chain = sum of entries + last.
+ PEAK NON-RAW definition (as stated in the brief): at a state S with
+   dim S = d, r_S = dim(span{1} + span{raw bits in S}) - 1, minimum number of
+   registers holding a non-raw value = d - 1 - r_S; peak = max over states.
+
+COUPLING TABLE (4-bit control, exact over the sampled order sets):
+  76 x orders x their FORCED duals (cpbv_filt.dual) vs 57 y orders
+  -> 0 coupled.  Scope: both order sets are the capped samples above, so this
+  is BUDGET-scoped, not a proof.  (CP-BV found 867 coupled schedules when the
+  basis SET was allowed to vary; here the set is fixed by the x order.)
+
+WIRE LEDGER (exact)
+  direct 6-bit delivery (config b): x0..x5 + 2 scratch = 8 per axis, 16 + 2
+    spare = 18 of 18 -> FITS.  Needs a config-b plan: BUDGET.
+  window-gated lift f_k = w & A_k over the 4-bit frame (the only construction
+    that is CONCRETELY realisable today): x = 4 hosts + 2 products + x4 + x5 +
+    w-wire + f-leg wire = 10, y = 10 -> 20 of 18.  SHORTFALL exactly 2: the
+    window wire and the leg wire on each axis.  This is why per-term CZ legs
+    are not realisable at 18 wires from the 4-bit staggered plans.
+
+WIDTH CENSUS, SHIPPED cpbh_d2 (measured, 4096-bit masks, full forward+leg
+  stream = cops + every leg C/I block, 139 ops)
+  makespan 125 / 239 CX at opt2 AND opt3, classical 0 / 4096 (reproduced).
+  PEAK non-raw = 18 of 18 (strict: value not 0 and not one of the 12 raw
+  bits), reached at ops 80..104 of 139; X-free convention (complements of raw
+  bits counted as raw) also 18.  HOST SET = all 18 registers.
+  -> the record's 'peak 17' was an UNDERCOUNT; the true figure is 18/18.
+  Over the FIRST stage alone (cops, 51 ops) the peak is 15 strict / 14
+  X-free, at exactly one op (index 49, ('ccx',14,13,15)); swapping ops 49 and
+  50 (disjoint wires, ('cx',10,12)) drops that stage peak to 14 / 13 at
+  IDENTICAL depth 125/239 and 0/4096 -- but the leg blocks dominate, so the
+  block peak stays 18.
+  P1 GATE VERDICTS for cpbh_d2: strong (peak <= 12, makespan <= 110) FAILS
+  on both; weak (peak <= 14, makespan <= 125) FAILS on peak (18), meets 125.
+
+[openings x] 2 two-gate openings
+  e=0001000100000000 |e|=2  helper p1=000f000f00000000 (arity 3) then 2 more literals; affine offset 0000000000000000
+  e=0000800200000000 |e|=2  helper p1=0000f00f00000000 (arity 3) then 2 more literals; affine offset 0000000000000000
+  seeded BFS: NO PLAN within 7 gates / beam 20 / 80 s -- BUDGET
+
+[openings y] 2 two-gate openings
+  e=0000000008000800 |e|=2  helper p1=000000000f000f00 (arity 3) then 2 more literals; affine offset 0000000000000000
+  e=0000000004001000 |e|=2  helper p1=000000000f00f000 (arity 3) then 2 more literals; affine offset 0000000000000000
+  seeded BFS: NO PLAN within 7 gates / beam 20 / 60 s -- BUDGET
+
+OPENING-COUPLING NEGATIVE (exact, new)
+  At 6-bit width the K elements deliverable in TWO AND gates are exactly the
+  ones that are affine shifts of flats of codimension <= 5.  Per axis there
+  are exactly two, and both are 2-point flats:
+    x: {32,48} = f_0^f_1 (helper 0x000f000f<<32), {33,47} = f_1^f_2
+       (helper 0x0000f00f<<32) -- each arity 3 then arity 3.
+    y: {11,27} = h_4 (helper 0x0f000f00), {12,26} = h_3 (helper 0x0f00f000).
+  Writing the opening as u = a.f and z = c.h, a leg may pair (u,z) iff
+  a.c = 1 over GF(2).  Coordinates: a = 11000, 01100 (x); c = 00001, 00010
+  (y).  ALL FOUR products a.c = 0 -> NO leg index can be served by both
+  axes' cheapest openings; at least one axis must spend >= 3 AND gates before
+  its first delivery.  (Independent of the search caps.)
+
+[b6y] arity<=3 cap=1500 maxh=12  200.1 s  cap_hit=True
+  k=1 : NO PLAN (cap_hit=True)
+  k=2 : NO PLAN (cap_hit=True)
+  k=3 : NO PLAN (cap_hit=True)
+  k=4 : NO PLAN (cap_hit=True)
+  k=5 : NO PLAN (cap_hit=True)
+  k=6 : NO PLAN (cap_hit=True)
+
+[b6x] k=6 levels [1500 (cap), 29] -> 0 plans, 330.2 s, cap_hit
+[b6y] k=6 levels [1500 (cap), 4]  -> 0 plans, 200.1 s, cap_hit
+[seeded x, FULL hyperplane enumeration, beam 8] killed by the 700 s abort
+  guard inside the first level, no output -> BUDGET.

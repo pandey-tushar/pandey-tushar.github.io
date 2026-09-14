@@ -1,0 +1,146 @@
+CP-DN log (fan-in-capped term-minimal XAG + linear register allocation, Sep 12)
+files: cpdn_sat.py (fan-in cap + terms-primary objective on top of
+cpdl_sat.Synth), cpdn_step1.py (per-group driver, every bit synthesised
+INDEPENDENTLY so its gates can be unbuilt at once), cpdn_emit18.py (linear
+register allocator: register states are vectors in the base atom space, an
+operand is available iff it is in the span, hosts on data registers, unbuild
+by repeating the AND), cpdn_*.json / cpdn_*.prog.
+carried in from CP-DM: best wide block 387 (47 ANDs, AND-depth 6, 492 terms);
+18 registers NOT reachable at all, narrowest realisation 47 registers
+(block 1241); the block is linear in the number of XOR TERMS.
+STEP 1 (LEVER A: hard per-operand fan-in cap |A|,|B| <= c, PRIMARY objective
+ = total terms via the incremental at-most encoding, AND count secondary)
+ method: cpdn_sat.build adds a seqcounter at-most-c over each operand's
+ selection variables (the constant is already excluded by noconst); the
+ search walks k upward and, per k, over a short list of level profiles
+ (cpdl_sat.profiles, chain first), first SAT wins, then terms are minimised
+ at that k.  Every bit is its own SAT instance (independent), only h's two
+ gates are shared.
+ TABLE (group, orbit, cap c, ANDs, terms, AND-depth, wall, status)
+  lev 3 bits + h (6-var of y, h = 1^y5^y2y3y4 shared, 2 ANDs, depth 2)
+    rep1  c=3  16 ANDs (2+5+5+4)  terms  85  AND-depth 4   191 s  SAT
+    rep2  c=3  19 ANDs (2+8+5+4)  terms 103  AND-depth 5   350 s  SAT
+    rep2  c=2  --  no bit found in 700 s (k<=12, all profiles)   TIMEOUT
+    (CP-DM, uncapped: 14 ANDs, terms 144, AND-depth 3)
+  comparator P (6-var, 36 care rows)
+    L1/C1  c=3   3 ANDs  terms 15  AND-depth 3    4 s  SAT
+    L1/C10 c=3   3 ANDs  terms 23  AND-depth 3    8 s  SAT
+    L1/C10 c=2   5 ANDs  terms 21  AND-depth 3  119 s  SAT
+    (CP-DM, uncapped: 3 ANDs, terms 18, AND-depth 2)
+  cap (7-var of x0..x5,h, 3 outputs -- the route that needs only 3 live values)
+    rep10 c=3  NONE in 500 s (k=5..12, all profiles) TIMEOUT
+    rep9  c=3  NONE in 500 s                         TIMEOUT
+    rep1  c=3  NONE (killed at 300 s)                TIMEOUT
+    7-var care sets (128 rows) are out of reach for the capped encoding.
+  lx_k/m_k (6-var of x, 6 bits, + 3 mux ANDs cap_k = lx_k ^ h&m_k)
+    rep1  c=3  bit0 5 ANDs terms 23 / bit1 6 ANDs terms 35 (see table below)
+ FALSIFIER "no solution with c <= 3 and ANDs <= 25 per side": NOT fired for
+ the y side or the comparator (16 and 3 ANDs, both well inside), NOT fired
+ for the 6-var x bits; it DID fire for the 7-var cap route, where no capped
+ netlist was found at all inside the wall cap.
+ TERMS: the cap is worth about 2x.  y side 144 -> 85 terms for 16 ANDs
+ instead of 14; comparator 18 -> 15.  Operand width drops from ~11 atoms to
+ <= 3 by construction, so every AND costs at most 2+2 CX of re-deal instead
+ of 22.
+ (bits of the capped lx/m route finished inside the session: rep1 c=3
+  bit0 5 ANDs / 23 terms, bit1 6 / 35, bit2 7 / 39, all AND-depth <= 6;
+  bits 3-5 still running when the clock ran out.)
+STEP 2 (LEVER B: linear register allocation, cpdn_emit18.py + cpdn_run18.py)
+ method: register states are vectors over the base atoms {ONE, 12 data bits,
+ one atom per AND}; an operand is available iff its vector is in the span of
+ the current states (Gaussian solve with the target register removed, the
+ null-space combinations searched for the shortest CX route).  The plan is
+ generated from the netlist itself: topological build order, and as soon as
+ every gate of a code bit's output set exists that whole XOR is PARKED on one
+ register (a data register whose raw bit the output set contains -- then that
+ register holds exactly the code value -- else a scratch), after which the
+ bit's whole cone is unbuilt by repeating its ANDs.  Lifetimes obey the
+ uncomputation rule: a gate must outlive the unbuild of every consumer.
+ Greedy target choice + random restarts scored by cpae_core.model_depth.
+ Every program below has check_block == (0, []) on LOGO before measuring.
+ VARIANTS (netlist = capped lev rep1 + x side + capped comparator)
+  V1 x = cpdl_xi_10 (independent, 35 ANDs, depth 6), cmp L1/C10, hosting on
+     min scratch 42  n=54  block 1227/1739 cx  forward 671/ 963
+     model 624  wire-layers 5096  packing(18) 0.231  packing(n) 0.077
+     most loaded: x1 418 touches/454 busy, x2 402/426, x0 380/428
+     x1 carries 209 forward ops, all CX re-deals of x-side operands.
+  V2 same netlist, hosting off: identical (1227/1739) -- no data register
+     ever qualified as a host, see the erasure argument below.
+  V3 x = cpdm_lxm_seq_r1_D3mt (shared, 27+3 ANDs, term-minimised), cmp L1/C1
+     min scratch 39  n=51  block 1819/2425 cx  forward 912/1234
+     model 626  wire-layers 6172  packing(18) 0.189  packing(n) 0.067
+     most loaded: x0 820/884, x2 442/470, x1 344/356
+  18 REGISTERS: NOT reached by any variant.  Minimum register count reached
+  is 51 (V3) / 54 (V1).  Below that the allocator runs out of registers
+  while the cone of the bit being computed is still live.
+ WHY (the erasure argument, and it is structural, not a search failure)
+  1 The 12 data registers carry 12 independent input atoms.  CX is a row
+    operation, so it can never reduce that rank, and an input atom cannot be
+    uncomputed (that needs a second copy of itself).  A data register can
+    only be REPLACED: accumulate a value v whose XOR set contains the raw bit
+    d, and the register then holds exactly v.
+  2 But raw d is then recoverable only from the gates in v's set, so those
+    gates must stay live for as long as anything still reads raw d.  Since
+    every lev bit is a function of all six y bits and every cap bit of all
+    six x bits, that is "until the whole side is finished" -- so hosting is
+    free only for the LAST bit of each side, and costs exactly one stranded
+    scratch for every earlier one.  Parking the value in a scratch costs the
+    same one register.  Measured: the host candidate list was empty at every
+    park in V1/V2, which is why hosting on/off measured identically.
+  3 No lev or cap bit is affine in any single variable (checked: the
+    derivative D_a f is constant for no (bit, variable) pair in any of the
+    orbits 0,1,2,3,9,10), so the "output set contains y_a and no gate reads
+    y_a" escape does not exist.
+  4 Hence at the comparator the span must contain 6 independent code values
+    on top of the 12 input dimensions, i.e. 18 registers exactly, with
+    nothing left for the comparator's own ANDs.  18 registers can hold the
+    one-comparator form only if the comparator is a pure sum of products of
+    linear forms in the code bits, and CP-DM already proved that UNSAT.
+ The real gap between 18 and the 51 measured is not that argument but the
+ CONE SIZE: cpdl_xi_10's three output sets reach back across the whole
+ 35-gate netlist, so its park cones cover nearly every gate and almost
+ nothing can be unbuilt before the end.
+STEP 3 (the one change, A/B at fixed width and fixed x side)
+ The critical register is x1, 209 forward ops, every one a CX re-deal of an
+ x-side operand.  The change that shortens its op list is the fan-in cap
+ itself, so the control is: same x side (cpdl_xi_10), same comparator
+ (L1/C10), same 42 scratch, only the y side swapped.
+   y = cpdm_lev_ind_r1_D3 (uncapped, 15 ANDs, 125 terms)
+       n=54  block 1801/2123 cx  forward 927/1085  model 786  wl 5544
+       packing(18) 0.171
+   y = cpdn_lev_r1_c3  (|A|,|B| <= 3, 16 ANDs, 85 terms)
+       n=54  block 1227/1739 cx  forward 671/ 963  model 624  wl 5096
+       packing(18) 0.231
+ -32 % block and -28 % forward for -32 % terms on ONE side only, at
+ identical width, identical AND-depth budget and one extra AND.  The
+ term/block relation is linear, as CP-DM measured, and the fan-in cap is the
+ cheapest way to move it.
+ (The fixed-affine-basis control was not run: the clock ran out while the
+ capped lx/m synthesis was still on bit 3 of 6.)
+CP-DN summary
+1 LEVER A works.  |A|,|B| <= 3 with TERMS primary is SAT for every 6-var
+  piece: y side 16 ANDs / 85 terms / AND-depth 4 (was 14/144/3), comparator
+  3 ANDs / 15 terms, lx/m bits 5-7 ANDs and 23-39 terms.  c = 2 found nothing
+  for the lev bits in 700 s; the 7-var cap route found nothing at c = 3.
+2 Terms nearly halve for one extra AND: operands go from ~11 atoms to <= 3,
+  so an AND costs at most 4 CX of re-deal instead of about 22.
+3 Measured A/B at fixed width and fixed x side: the capped y side alone takes
+  the block 1801 -> 1227 (-32 %), forward 927 -> 671.  Linear in terms.
+4 LEVER B is implemented and exact (check_block == (0,[]) everywhere): span
+  based operands, parking a code bit on one register as soon as its output
+  cone exists, unbuild by repeating the AND, uncomputation-correct lifetimes,
+  restarts scored by model_depth.
+5 18 registers NOT reached.  Best 51 registers (block 1819) and 54 (1227).
+  (a) structural: an input atom can never be erased, only replaced by a value
+      whose XOR set contains it, and that strands the gate its recovery needs
+      until the whole side is done.  No lev or cap bit is affine in a single
+      variable (checked, 6 orbits), so the escape does not exist; at the
+      comparator the span needs 6 code values on top of 12 input dimensions
+      = 18 exactly, nothing left for the comparator's ANDs (not CZ legs).
+  (b) practical and larger: the available x netlists reach back across their
+      whole gate list from their output sets, so the park cones cover nearly
+      every gate and almost nothing can be unbuilt early.
+6 What takes it lower: finish the per-bit capped lx/m synthesis (3 of 6 bits
+  done).  Its cones are disjoint and 5-7 gates wide, so the peak becomes
+  12 data + one live cone + the parked bits, about 24 registers not 54, and
+  by item 3 the block should land near 400-500.

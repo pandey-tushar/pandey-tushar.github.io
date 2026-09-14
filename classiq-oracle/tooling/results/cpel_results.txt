@@ -1,0 +1,88 @@
+CP-EL -- decompose the 259 stream (cpdp_best.pkl = cpej_best.qasm source),
+fuse uncompute/recompute pairs, re-time.  All numbers measured.
+Scripts: cpel_census.py (value census, cpel_census.pkl/out), cpel_press.py
+(register pressure, span test), cpel_prof.py (room vs layer), cpel_show.py
+(gate listing with wire contents), cpel_dp.py (exact two-stream DP
+interleaver with register relabeling), cpel_fuse.py (relabel sweeps),
+cpel_chain.py (DP along the chain), cpel_rpair.py (register-lean variants).
+
+STEP 1 -- algebraic census of the 418-op stream (4 segments, exact masks)
+  value instances (non-raw wire contents)      152
+  distinct non-raw masks                        97   (65 modulo affine-in-raw)
+  per segment distinct values / nonlinear:  R2t 12/8  D1 36/31  D2 40/38  R1 11/9
+  phase gates 8: cz 110 px (R2t), ccz 137 (D1), cz 192/225/225/192/235 (D2;
+    the two 225s are adjacent identical cz(16,5), already cancelled by the
+    transpiler: removing them keeps 270/516), cz 625 (R1); xor = LOGO.
+  masks with >1 instance 45; consecutive (uncompute, recompute) pairs 55,
+    of which WITHIN a segment (the mirror itself) 53, CROSS-segment 2:
+      Y[y2^y3] R2t w8 -> D2 w9, X[x2^x3] D2 w4 -> R1 w4  -- both AFFINE
+      (one cx each; the D2|R1 pair is adjacent after the (1,19) splice and
+      is already cancelled: 518 -> 516 cx).  Layers at stake: 0-2.
+  nonlinear values shared identically across segments: 0.
+  span test (later segment's values in GF(2) span of earlier segments'
+    values + affine): R2t 0, D1 0, D2 3 (Y[000ffff0..], X[00ffffff00ffffff],
+    one XY[2048]), R1 0 -- the 3 D2 values are spanned by D1 values that D1
+    has uncomputed 80-100 ops earlier, at D1's 16-register phase instant.
+  => there is NO uncompute/recompute redundancy to fuse: the four segments
+     build disjoint value sets.
+
+STEP 1b -- register pressure (wires holding a nonlinear value; 18 wires)
+  peak nonlinear wires: R2t 7, D1 16, D2 18, R1 8
+  at the phase instants: R2t op26 7 (6 anc busy), D1 op104 16 (6 anc),
+    D2 op207 12 (5 anc), op245/246 17 (6), op254/255 18 (6), R1 op384 8 (6).
+  all 6 ancillas busy: R2t 2/53 ops, D1 76/103, D2 53/195 (>= 5 busy for
+    ~150/195), R1 16/67.  Every segment has all 6 busy at its own phase.
+  data wires non-raw over the segment (op-span %): R2t w0 86 w1 83 w3 49
+    w5 56 w8 33; D1 12 wires (w0 67 w3 64 w2 60 ...); D2 w9 98 w10 96 w4 83
+    w3 75 w2 73 w1 72 ...; R1 w4 92 w3 59 w9 44.
+  room vs model layer (cpel_prof): D1 layers 40-79 nonlinear 14-16, D2
+    layers 110-159 14-18; ramps 10-20 layers wide with 2-12 free.
+
+STEP 2 -- fusion: nothing to fuse (0 nonlinear cross-segment pairs; the 2
+  affine pairs are already cancelled or cost 1 cx).  Carrying any D1 value
+  into D2 needs a register at D1 op 104 (16/18 nonlinear) -- none free.
+
+STEP 3 -- re-timing with the exact DP interleaver (cpel_dp: every gate must
+  see its solo product; beam 4-6; real transpile of winners):
+  identity registers along the chain R2t,D1,D2,R1: 109 / 231 / 273 (522 cx)
+    vs shipped splices 109 / 232 / 270 (516).  Model depth 240 both.
+  720 ancilla perms of the second stream, DP-merged, best REAL depth:
+    R2t+R1 80/144 (concat 81)   R2t+D1 109/211 (=concat)
+    D1+D2 193/379 (concat 194)   D2+R1 166/311 (splice 165)
+  hosting relabels (an ancilla target moved to a data wire, 2052 maps for
+    R1 vs R2t and R2t vs R1): 4 solo-exact, best pair 81; 0 solo-exact the
+    other way.  No boundary gains beyond CP-DP.
+
+STEP 4 -- register-lean forms of the small segments (cpel_rpair.py, exact
+  by replay, real transpile opt2 = opt3):
+  R2t: shipped 39/71 (6 anc; 5 during the chain, 6 at the cz)
+       ccz on (AA,RR,U) instead of ccx+cz+ccx      44/70  (5 anc)
+       + Q uncomputed before the ccz, recomputed    44/70  (4 anc at phase)
+       + D uncomputed too                           44/70  (3 anc at phase,
+                                                    5 during the chain)
+  R1:  shipped 43/73 (6 anc)
+       cz+ccz (y code = [32..47] ^ w11'&W)          51/73  (5 anc)
+       + P undone                                   51/73  (4)
+       + P,V undone                                 51/73  (4 at phase: AA,AB,W,T;
+                                                    6 during the chain)
+       + T undone too                               60/83  (3 at phase)
+  => at no instant can R2t (>= 3 anc, 5 during its chain) and R1 (>= 3, 6
+     during its chain) both be active on 6 ancillas; hosting on data wires
+     is blocked because every chain gate's controls are the data wires the
+     value would sit on (checked: P, D, Q have no product-preserving host).
+     The pair floor with these builds is 80 (perm-DP) vs 81 shipped.
+
+RESULT
+  best verified circuit remains cpej_best.qasm 259 / 516 cx; cpel_best.qasm
+  NOT written (nothing below 259 verified).
+  BINDING CONSTRAINT of the fused stream (measured): the four segments share
+  0 nonlinear values, so fusion has no content, and overlap is register-
+  bound: each segment holds all 6 ancillas at its phase instant and >= 5
+  through its build (D1 6/6 for 73% of its ops, D2 >= 5/6 for ~77%), while
+  the D segments hold 16-18 of 18 wires nonlinear at their phase instants
+  (data wires included: D2 w9 98%, w10 96%, w4 83% non-raw).  Total live
+  registers if the four builds overlapped: 7+16+18+8 = 49 >> 18.
+  Depth floor of this stream at 18 wires = sum of segment depths minus
+  boundary overlap = 278 - 19 = 259 (cpej), boundaries exhausted (DP +
+  720 perms per seam, 0 gain).  Below 150 needs segment builds that are
+  register-lean by >= 3x, i.e. a different synthesis, not a re-timing.

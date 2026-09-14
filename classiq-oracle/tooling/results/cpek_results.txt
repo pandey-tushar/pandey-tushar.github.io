@@ -1,0 +1,192 @@
+CP-EK   whole-F XAG synthesis under the JOINT bound
+        (AND count <= 45, peak simultaneously live <= 18 wires, <= 2 XOR
+        literals per AND operand).  All numbers measured; anything not
+        obtained is written "not measured".  Scripts: cpek_*.py.
+        NO CIRCUIT WAS EMITTED THIS PASS: cpek_best.qasm was NOT written,
+        no stream depth / CX was measured, the shipped 259 / 516 stands.
+
+===============================================================================
+A.  THE OBJECT THE SYNTHESIS SEES   (cpek_core.py)
+===============================================================================
+F read as one 4096-entry table.  Cofactor classes (x ~ x' iff the whole
+y-cofactor agrees) -- this is the only structure used anywhere below:
+    x: 11 classes, sizes 25 7 5 5 4 4 4 4 2 2 2
+    y: 11 classes, sizes 22 12 5 5 4 4 4 2 2 2 2
+    cofactor spaces dim 10 each; over the 1023 nonzero elements of each,
+      x: deg 6 x512, deg 5 x504, deg 4 x7     y: deg 6 x512, deg 5 x496, deg 4 x15
+So every function CONSTANT ON CLASSES has ANF degree >= 4 (almost all 5-6),
+hence multiplicative complexity >= 3, and AND-depth >= 3 to reach degree >= 5.
+11x11 class incidence table T has GF(2) rank 10.
+
+===============================================================================
+B.  WIDTH LAW OF A SINGLE PHASE INSTANT (generalises the CP-EE 4+4 result)
+===============================================================================
+The 18 wire values must separate all 4096 inputs, so
+    (code dimensions) + ceil(log2(largest x-fibre * largest y-fibre)) <= 18.
+CP-EE used codes CONSTANT on classes, where the fibres ARE the classes
+(25*22 = 550 -> 10) and concluded that 4+4 is the only legal split.  MEASURED
+here: a code that REFINES the classes shrinks the fibres and buys width:
+    5+4 legal when largest x-fibre <= 23
+    5+5 legal when (largest x-fibre)*(largest y-fibre) <= 256
+    6+6 legal when that product <= 64
+and a 5+5 code built in section C has x-fibres 8 7 4 ... , y-fibres 9 5 4 ... ,
+i.e. 10 + 7 = 17 wires, one register to spare.  So 4+4 is NOT forced.  What is
+forced is the trade measured in section E.
+
+===============================================================================
+C.  HOW CHEAP CAN THE CODE BITS BE?  (cpek_cover.py, cpek_cell2.py, cpek_k2.py)
+===============================================================================
+"one-AND bit" = one Margolus whose two operands are XORs of at most two raw
+variables (emitter re-deal r <= 1): a function A & B ^ C with A, B 2-literal
+affine and C affine -- 18046 distinct such functions of 6 variables.
+Separation scored on the 1648 (x) / 1677 (y) cross-class point pairs.
+
+  code width k     pool                          best residual  x / y
+       4           affine only                       39 / 40
+       4           the 18046 one-AND functions       30 / 31     never 0
+       5           the 18046 one-AND functions        5 /  7     never 0
+       6           affine only                        0 /  0   (= the raw wires)
+       4           the 1023 class-constant funcs      0 /  0   degrees 5,6,6,5
+(coordinate-descent set cover, 200 restarts.)
+
+AFFINE-PART OBSTRUCTION for a 4-dim code U (cpek_cos.py).  Minimum over ALL
+affine quotients of (max classes per coset):
+       quotient dim 2 -> 5 (x), 6 (y)   needs <= 4  => dim(U ^ affine) != 2
+       quotient dim 3 -> 4 (x), 4 (y)   needs <= 2  => dim(U ^ affine) != 3
+       quotient dim 1 -> 7/7 (x, form x4), 7/6 (y, form y5)   <= 8, allowed
+So a 4-wire code has dim(U ^ affine) in {0,1}: at least THREE nonlinear
+dimensions, hence >= 3 ANDs per half at AND-depth >= 3.
+
+CELL LADDER.  With j cheap bits the other k-j bits are only a labelling, so
+the condition is "at most 2^(k-j) classes per cell of the j cheap bits":
+   j=2, cap 4 (a 4-wire code with two one-AND bits)
+        EXHAUSTIVE over all 18046^2/2 pairs: min penalty 1 on BOTH halves
+        (520 s x, 751 s y)  =>  NO 4-wire class-refining code has two of its
+        bits realisable by a single AND with 2-literal operands.
+   j=3, cap 2 -> penalty 4 (x) and 4 (y), 4000 coordinate-descent restarts
+   j=4, cap 2 -> penalty 0 on BOTH halves, i.e. FOUR one-AND bits plus ONE
+        labelling bit give a 5-wire class-refining code per half:
+   x  ff00ff0ffffffff  33cc33ccf00ff00f  f0ffffff0f000   f00f0ff0ffff
+   y  ffff00ffff000    7777777777777777  f00000f0fffff0f ff0f0fff00f0f0
+        (fibres x 8 7 4 ..., y 9 5 4 ...)
+
+THE FIFTH BIT (cpek_rel.py -- SAT on the RELATION "constant on every
+(cell,class) part, opposite on the two parts of a two-class cell", so all
+2^16 colourings are searched at once; the four one-AND bits are given to the
+solver as signals already on wires):
+   x half, <= 2 literals per operand:  k=1,2 UNSAT, k=3 UNSAT (325 s),
+                                       k=4 TIMEOUT (1200 s)   -> k >= 4
+   x half, <= 3 literals per operand:  k=1,2 UNSAT, k=3 SAT (64 s)
+        gates ([3,8],[1,3,7]) ([8,9],[1,2,5]) ([11,12],[1,10,11])
+        out [3,4,9,11,12,13]     (signals: 0 const, 1-6 x, 7-10 the four
+        one-AND bits, 11+ these gates)
+   y half, <= 3 literals per operand:  k=1,2 UNSAT, k=3 TIMEOUT (600 s),
+                                       k=3 and k=4 at 2500 s: not measured
+
+===============================================================================
+D.  EXACT SAT UNDER THE JOINT BOUND   (cpek_run.py, cpek_wsat.py)
+===============================================================================
+Encoding 1 (cpdl_sat.Synth + CardEnc.atmost on every operand selection):
+   four class-constant code bits of the x half together, <= 2 literals:
+        k = 4 ANDs -> UNSAT (7 s)
+   one class-constant code bit alone, <= 2 literals:
+        k = 0..3 UNSAT;  k = 4,5,6 TIMEOUT at 120 s each
+   same, <= 3 literals:  k = 0..3 UNSAT;  k >= 4 TIMEOUT
+Encoding 2 (cpek_wsat.py, NEW -- the stream itself is the SAT object):
+   9 wires per half; step i picks a target wire (one-hot) and two operands,
+   each an XOR of at most L CURRENT WIRE VALUES; the Margolus updates the
+   wire in place; acceptance = four wire values separate every cross-class
+   pair.  This encodes AND count, peak liveness and re-deal cost at once.
+   m=3, L=2: 19847 vars / 72809 clauses.  m=4, L=2: 23424 / 85220.
+   Cadical153 gave NO answer (neither SAT nor UNSAT) in 45+ min on m=3 and
+   m=4, both halves.  Not measured.
+Encoding 3 (cpek_sat.py): "is there a 4-wire code all of whose bits have ANF
+   degree <= 2" -- no answer in 30 min.  Not measured.
+
+===============================================================================
+E.  THE PHASE STAGE, AND WHY THE CODE CHOICE IS THE WHOLE GAME
+===============================================================================
+Prices used (measured primitives): Z 1, CZ 3, CCZ 10, C3Z 27, C4Z 65,
+C5Z 150, C6Z 350, C7Z 800.
+
+  4+4 CODE (121 care points of 256).
+  ANF of the phase after greedy don't-care removal (cpek_phase.py):
+      class-constant code drawn at random     cost 1833
+        (degree profile 2:11 3:19 4:15 5:7 6:5; 40 random invertible affine
+         changes of the eight code coordinates did not improve it)
+  Coset / affine-ESOP decomposition (cpek_coset.py, cpek_finish.py) -- the
+  right basis, one multi-controlled Z per coset:
+      25 random class-constant codes: greedy STALLS every time, residual
+        5..13 of 121 after 5-6 terms costing 36..63 (the same popcount-descent
+        failure as CP-EI section K, now on the phase side)
+  THE CODE LABELLING IS THE LEVER (cpek_label.py, cpek_lab3.py).  A 4+4 code
+  is an injection of the 11 classes into 16 codewords; annealing that
+  injection:
+      objective = ANF cost      1833 -> 251
+      objective = coset cost     946 -> 178 -> 134 -> 107 -> 87
+        in 1200 evaluations (488 s).  BEST: cost 87, SIX terms
+        (1 CZ + 3 CCZ + 2 C3Z), at
+          x labels [2,5,10,9,13,11,8,4,0,12,15]
+          y labels [2,3,4,15,6,12,13,1,9,11,5]
+        (labels = the codeword given to class 0..10 of that side)
+  For comparison CP-EE's structured 4+4 code has a FOUR-gate phase stage,
+  C3Z+CCZ+CZ+C3Z = 67 in these units, measured at 61 depth / 49 CX.  So a
+  generic code costs 10-20x what a well-chosen one costs, and a plain
+  hill-climb on the labelling -- with no geometry, only the 11x11 class table
+  -- gets within 30% of the structured code (87 vs 67).
+
+  5+5 CODE (756 care points of 1024) -- the cheap-to-build one of section C:
+      ANF after don't-care removal: cost 42027 (best of four colourings)
+      coset greedy: STALLS at residual 121 of 756 after three terms (cost 23)
+  i.e. widening the code to make the build cheap makes the phase hopeless.
+
+===============================================================================
+F.  TABLE OF XAGs FOUND (whole F)
+===============================================================================
+ XAG of the whole truth table          ANDs  peak live  CX/AND  AND-depth  emitted
+ 4 one-AND bits per half (5-wire code,
+   4 of its 5 bits)                      8    4/half      <=1       1        no
+ + fifth bit, x half, L<=3               3    7/half       <=2      3        no
+   => 5+5 code, x half complete          7    7/half       <=2      3        no
+   => whole F (y half not synthesised)  ~14   ~7/half      <=2      3        no
+ 4-wire class-constant code per half     ?      ?           ?       ?        no
+   (UNSAT at 4 ANDs/half with <=2 literals; >=5 undecided)
+ ROBDD of the class map per half        32(x) 33(y)  BDD width  1    ~6       no
+   (cpek_bdd.py, best of all 720 variable orders; 65 forward ANDs, over the
+    45-AND budget before any CX is counted)
+ CP-EE reference (not re-measured): per-bit SAT XAGs 41 ANDs, depth 3, ~9
+   CX/AND;  shared SAT XAGs 24 ANDs, 6-7 live/half, depth 8-10, ~9 CX/AND.
+
+ The 14-AND row is the cheapest XAG of the whole function found anywhere so
+ far by AND count AND by operand cost.  It was NOT emitted, because its code
+ is 5+5 and section E measures that code's phase as undecomposable by the
+ available search (residual 121/756).  The 7 ANDs/half also carry 7 live
+ nonlinear values on a 9-wire half, i.e. the liveness bound is at the edge and
+ was not scheduled.
+
+ STREAM DEPTHS MEASURED THIS PASS: none.  cpek_best.qasm NOT written.
+
+===============================================================================
+G.  THE MEASURED BINDING CONSTRAINT
+===============================================================================
+Below 150 needs <= 25 forward ANDs at r <= 1 CX/AND (CP-EI).  The joint bound
+is not one constraint but a TRADE between two, and both ends are now measured:
+
+ (1) NARROW CODE (4+4) -- phase is cheap (87 in the primitive cost model
+     once the labelling is annealed), but the BUILD is the wall:
+        no 4-wire class-refining code has even TWO one-AND bits (exhaustive
+        over all 18046^2/2 pairs, both halves), so every one of its four bits
+        costs >= 2 ANDs; exact SAT with <=2-literal operands is UNSAT at
+        4 ANDs per half for the four bits together and undecided from 5 up.
+
+ (2) WIDE CODE (5+5) -- the BUILD is cheap (7 ANDs per half, AND-depth 3,
+     <= 3 XOR literals per operand, 14 ANDs for the whole function, well
+     inside the 45-AND budget), but the PHASE is the wall: 42027 by ANF and
+     the coset greedy stalls at residual 121 of 756.
+
+The single quantity that decides this design is therefore
+     2 * (cost of building the code) + (coset-ESOP cost of THAT code's phase)
+and the two terms move in opposite directions with the code width.  Nothing
+in this pass synthesised a code that is cheap at both ends, so no circuit was
+emitted and < 150 was missed by the build wall (1) for the only code width
+whose phase is affordable.

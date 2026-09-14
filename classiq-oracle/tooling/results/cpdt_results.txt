@@ -1,0 +1,151 @@
+CP-DT: one whole-logo circuit, all 18 wires load-balanced.
+Baseline re-measured (cpdr_v6.prog): blk2 depth 720 cx 1055, fwd2 335/515,
+  wire-layers 3636, packing 0.281, makespan 680, maxload s1=602,
+  loads s1=602 s3=576 s4=474 s0=434 s5=318 s2=250 | data 50-118.
+[I1] cpdt_v1.prog  generalised block worlds (3 data + 1 anc per 3-bit block,
+  data registers may hold nonlinear values, targets chosen to minimise
+  Phi=sum load^2 over all 18 wires; data targets take controls only from the
+  other two data regs so the data triple stays a bijection; ANF walk onto the
+  world ancilla as guaranteed fallback).  TX=[20,1c,2c,06,22,21] TY=identity
+  order [9,8,7,6,5,1,2,3,4,0], kdec=3, greedy term order, POW=2.
+  EXACT mism=0 dirty=0 sv=2.15e-14/6.0e-31
+  blk2 depth 612 cx 862  fwd2 285/425  AND=72 AND3=27 CX=59
+  wire-layers 2742 packing 0.249 makespan 539 maxload 382
+  loads s1=382 s3=362 s5=354 s4=322 s0=276 s2=274 | data 52-76
+[I2] cpdt_v2.prog  world generalised: ANY of the 4 registers of a block may be
+  a gate target (controls = the other three); a move is rejected only if it
+  would leave no register with a coordinate-system complement.  Same Phi=load^2
+  chooser.  EXACT mism=0 dirty=0 sv=2.03e-14/6.2e-31
+  blk2 depth 601 cx 862  fwd2 278/425  AND=76 AND3=25 CX=60
+  wire-layers 2750 packing 0.254 makespan 520 maxload 354
+  loads s5=354 s3=336 s2=274 s4=266 s1=254 s0=236 x1=196 x3=132 y1=126 |rest 56-72
+  DIAGNOSIS: every wire ENDS at 500-520 while carrying only 56-354 layers, i.e.
+  the block is latency-bound, not load-bound.  Spreading a serial accumulator
+  chain over more wires does not shorten it.
+[I3] cpdt_v3.prog  chooser replaced by an incremental copy of model_depth:
+  carries the per-wire ASAP layer with PROF's rigid intra-gate offsets and
+  scores each candidate gate sequence by d(sum_w lay_w^2); later-ready control
+  placed in the cheap slot; the two sides' hops ordered by whichever atom
+  register is ready first; legs fire as soon as both atom registers are live.
+  EXACT mism=0 dirty=0 sv=1.96e-14/5.4e-31
+  blk2 depth 565 cx 871  fwd2 260/429  AND=78 AND3=25 CX=56
+  wire-layers 2774 packing 0.273 makespan 481 maxload 404
+  loads s1=404 s3=394 s5=342 s4=294 s2=262 s0=228 x3=134 |rest 54-92
+[I4] knob sweep on the I3 chooser (all EXACT, whole logo):
+  chooser mode time/load/mix(pt,pl,wmix in {1.5,2,3,4}x{0.3,1,3}): 559-566,
+    best mix wmix=0.3 -> blk2 559 cx 871.
+  kdec (candidate rank-1 decompositions per hop, each fully emitted and kept
+    by model makespan): 1 -> 683/1060, 3 -> 559/871, 6 -> 540/853,
+    12 -> 540/853, 20 -> 534/851, 40 -> 534/851.
+  greedy term order off -> 611/961.
+  basis/leg-order sweep 4 TX x 3 TY x <=3 joint orders x 2 modes (44 builds):
+    best stays TX=[20,1c,2c,06,22,21] TY=identity order [9,8,7,6,5,1,2,3,4,0]
+    at 540; TX1 617, TX2 586, TX3 611; other TY 580-660; other order 656.
+[I5] cpdt_v4.prog  kdec=20 mode=time.  EXACT mism=0 dirty=0 sv=1.85e-14/4.8e-31
+  blk2 depth 534 cx 851  fwd2 254/419  wire-layers ~2740 packing 0.284
+  makespan 454 maxload 422 (s1).  loads s1=424 s3=408 s5=342 s4=326 s2=262
+  s0=230 | twelve data wires 48-86.
+[I6] cpdt_emit term chooser widened: a term's A-factor and B-factor may each be
+  realised as ONE control or as the AND of TWO controls already readable in
+  that world, so a term is emitted as AND (2 controls) or RC3X (3 controls),
+  whichever the ASAP score prefers; all 4 na/nb combinations scored.
+  kdec=20 mode=time: EXACT, blk2 523 cx 811, fwd2 246, model 443, maxload 382,
+  packing 0.276.  (Enabling a 1-move search for those control pairs instead
+  of using only already-readable values: 607/849 -- worse, rejected.)
+[I7] random restarts (jitter d -> d*(1+rnd*U) on every chooser comparison).
+  scored by model_depth: rnd=0.15 kdec=6, 40 restarts -> best model 467 (real
+  565); rnd=0.05 kdec=20, 44 restarts -> best model 456 (real 581).  model and
+  real depth correlate badly (model 461 -> real 539, model 456 -> real 581),
+  so restarts re-scored by REAL transpile depth: rnd=0.04 kdec=12, 59 restarts
+  -> cpdt_r200_0.prog blk2 524 cx 841 fwd2 243 model 437 maxload 342 EXACT.
+  Critical path of that block: 105 gates, target wires s5=40 s4=25 s3=19 s2=9
+  s1=7 s0=3 x0=2 -- the Y side and its atom register s5 are the critical side
+  (baseline cpdr_v6 for comparison: 157 gates, s1=52 s2=35 s4=24 s0=20 s5=20).
+[I8] leg-order and basis searches (each candidate a full measured whole-logo
+  build).  held_karp joint orders over 24 (a,b) weightings give only 3 distinct
+  orders: 9876512340 -> 523, 9876514230 -> 630, 9876512430 -> 650.  2-opt over
+  15 transpositions of the best order: every neighbour worse (best swap 585).
+  Random invertible bases scored by the walk term count under that leg order
+  (400k samples each side, 73-79 s): X reaches 16 (default 18), Y reaches 18
+  (identity 20).  Built 3 best X x 3 best Y + defaults (12 builds):
+  x16c=[1c,30,0c,04,03,25]/TY=identity 522/823, x16b/def 547, x16a/y18a 564,
+  worst 647 -- a shorter walk does not mean a shallower block.
+[I9] intra-gate slot assignment made readiness-aware: controls sorted by ASAP
+  layer and placed in the cheap PROF slots (AND offsets 4 | 2,6 -> latest-ready
+  first; RC3X offsets 4,8 | 6,10 | 2,12 -> latest to slot 1, then slot 0, then
+  slot 2), and each CZ leg's operands ordered the same way.
+  TX/TY default, kdec=20: EXACT blk2 518 cx 824 fwd2 245/? model 433
+  maxload 386 packing 0.283.   (x16c basis with the same chooser: 538/842.)
+[I10] chooser lookaheads tested and rejected (all EXACT):
+  forced alternation of the accumulator register (candidate score x ALT when
+  its target was the previous target in that world): 1.0 -> 518, 1.2/1.5/2.0
+  -> 524, 3.0/8.0 -> 549.
+  "one move then a full ANF walk" added to provide (walk2): 547 (kdec 40) /
+  545 (kdec 160) vs 513 / 511 without.
+  hop score = makespan vs sum lay^2 vs lexicographic: 518 / 518 / 518 at
+  kdec 20; 513 / 518 / 513 at kdec 40.
+[I11] kdec (decompositions per hop, each fully emitted): 20 -> 518/824,
+  40 -> 513/814, 80 -> 513/814, 160 -> 511/826, 400 -> 511/826 (factor cap
+  400 saturates).  Basis grid re-run with the final chooser at kdec=160:
+  def/def 511, x16b/def 515, x16a/def 532, x16c/def 538, all TY!=identity
+  549-617.
+[I12] cpdt_best.prog  FINAL.  TX=[20,1c,2c,06,22,21] TY=identity
+  order [9,8,7,6,5,1,2,3,4,0] kdec=160 mode=time.
+  EXACT mism=0 dirty=0 sv=1.42e-14 phase / 3.4e-31 leak
+  blk depth 511 cx 826 at BOTH opt2 and opt3; fwd 242/408
+  AND=86 AND3=18 CX=53 legs=10   wire-layers 2656 packing 0.289
+  model makespan 429  maxload 360
+  loads s1=360 s3=344 s4=342 s5=330 s2=286 s0=256
+        x1=80 y5=80 x0=64 x2=64 y2=62 y4=62 x4=60 y1=60 x5=58 x3=56 y3=48 y0=44
+  critical path 100 gates, targets s5=32 s4=23 s2=16 s3=14 s1=10 s0=3 x1=1 y4=1
+  baseline for comparison cpdr_v6: 720/1055 opt2, 720/1053 opt3.
+[I13] register-budget test.  World generalised to any register count so an
+  ancilla can be moved between the four block worlds.  Every allocation that
+  gives one world a 5th register must leave another world with 3 registers
+  (12 data + 6 ancillas = 4 worlds x 4 + 2 atom registers, zero slack).
+  Measured: all three such allocations (xA->0/yB->2, xA->0/yA->2,
+  xB->0/yB->2) FAIL to emit -- a 3-register world has no 3-subset of the
+  others left, so no ANF walk exists and neither a 1- nor a 2-move search
+  reaches an arbitrary block function.  The 4+4+1 per side layout is forced.
+[I14] decomposition-pool saturation: factor cap 400/kdec 160 -> 511/826,
+  cap 1200/kdec 300 -> 511/826, cap 3000/kdec 600 -> 512/812 (19.5 s).
+[I15] random restarts re-run on the final chooser: rnd=0.03 kdec=20, 41
+  restarts -> best 525/868; rnd=0.02 kdec=40, 29 restarts -> best 523/858.
+  No restart beats the deterministic build.
+[I16] gate targets in the final forward (168 ops): AND/AND3 on s5 20, s3 18,
+  s2 16, s1 17, s0 13, s4 15, and only 5 on data wires (x1,x4,y1,y4,y5); the
+  data wires carry controls (1-2 layers) almost exclusively.
+
+CP-DT summary
+1 Baseline cpdr_v6 re-measured on the whole logo: depth 720 cx 1055 (opt2),
+  720/1053 (opt3), wire-layers 3636, packing 0.281, maxload s1 602.
+2 One circuit throughout: one gate list, one mirror, exactness always
+  check_block(ops,'LOGO')==(0,[]) plus sv_check on all 4096 inputs.
+3 I1 generalised block worlds (data registers may hold nonlinear values,
+  Phi=sum load^2 chooser): 612/862, wire-layers 2742, maxload 382.
+4 I2 any register of a world may be a gate target: 601/862, maxload 354;
+  every wire then ENDS at 500-520 while carrying 56-354 layers.
+5 I3 chooser switched from load to an incremental model_depth (per-wire ASAP
+  layer, rigid PROF offsets): 565/871, model 481, maxload 404.
+6 I4 knob sweep: mode time/load/mix 559-566; kdec 1/3/6/12/20/40 ->
+  683/559/540/540/534/534; non-greedy term order 611.
+7 I6 term controls widened (A- and B-factor each 1 or 2 readable controls,
+  AND or RC3X): 523/811, model 443, maxload 382.
+8 I8 leg order: 3 distinct held_karp orders (523/630/650), all 15 2-opt
+  neighbours worse (best 585).  Bases: 400k random per side, X walk cost 16
+  and Y 18 reachable (defaults 18/20) but every such build is deeper
+  (522-647); defaults win.
+9 I9 readiness-aware PROF slot assignment for AND/RC3X controls and CZ
+  operands: 518/824.
+10 I11 kdec 40/80/160/400 -> 513/513/511/511.
+11 FINAL cpdt_best.prog: depth 511 cx 826 at opt2 AND opt3, forward 242/408,
+   AND 86, AND3 18, CX 53, legs 10, wire-layers 2656, packing 0.289,
+   model makespan 429, maxload 360, EXACT mism=0 dirty=0
+   sv 1.42e-14 phase / 3.4e-31 leak.
+12 Final loads: s1 360 s3 344 s4 342 s5 330 s2 286 s0 256; data wires
+   x1 80 y5 80 x0 64 x2 64 y2 62 y4 62 x4 60 y1 60 x5 58 x3 56 y3 48 y0 44.
+13 Critical path 100 gates, targets s5 32 s4 23 s2 16 s3 14 s1 10 s0 3
+   x1 1 y4 1.
+14 I13: no allocation of the 6 ancillas gives any world a 5th register
+   without leaving another with 3, and a 3-register world cannot emit.
+15 Not under 200, so no cpdt_best.qasm was written.

@@ -1,0 +1,107 @@
+CP-DB: coarse read-only bricks in flight -- STATUS AT HARD CAP (120 min)
+
+GATE (oracle < 272): NOT MET.  No flight-scheduled oracle was produced.
+No brick was completed to a verified (classical 4096 + real transpile)
+state.  This file records what WAS established, all of it either an
+exact geometric identity (checked bit-for-bit against cpae_core.SHAPES)
+or a real transpile measurement -- no paper-only estimates are reported
+as if they were builds.
+
+=== Stage 0: reading + design (done) ===
+Read CP-BO, CP-CY, CP-DA, CP-CD(2), cpbo_cube.py/cpbo_shape.py,
+cpcy_lib.py/cpcy_compose.py, cpda_lib.py/cpda_compose.py, cpch_oracle.py,
+logo.py, verify18.py.
+
+Key facts used:
+- assert_ro (cpcy_lib) forbids ANY gate targeting q0-11 -- checked on the
+  TARGET only.  A phase leg (CZ/CCZ/C3Z/C4Z) never targets anything (Z-type
+  gates are pure diagonal on every qubit they touch, control or not), so
+  window-literal-product controls may sit directly on data bits in the LEG
+  for free, at any polarity, with zero ancilla cost.  Only the FORWARD (C)
+  stage's RCCX/RC3X/CX gates are the ones that must never target q0-11.
+- CP-CY/CP-CZ precedent: read-only reformulations of the shipped shapes are
+  expensive (R1 43->73 at k=6 ancilla, ->175-181 at k=3; D1/D2 read-only
+  need 7-8 ancillas with the emitter they used, exceeding a 3-ancilla cap).
+
+=== Stage 1a: exact geometry (VERIFIED identities, cpae_core.SHAPES) ===
+CP-BO's 8-piece cube decomposition of LEFT collapses, once cube-alignment
+(needed only for the DATA-HOSTING architecture) is dropped: pieces
+P_x0_y1+P_x0_y2+P_x0_y3+P_x1_y1+P_x1_y2(R1 part)+P_x1_y3 reassemble to
+exactly R1 = rect[2,26]x[29,53] (625 px); P_x1_y2's R2t part + P_x2_y2
+reassemble with P_x3_y2 to R2t=rect[27,48]x[39,43] (110px) + D1 (137px,
+the true disk, not the 142px cube-clipped piece).  So the read-only
+brick set only needs: R1 (1 rectangle brick), R2t (1 rectangle brick),
+D1, D2 (disks).
+
+D1 and D2 were decomposed exactly (0 mismatches vs cpae_core.SHAPES) into
+disjoint rectangles by grouping rows with an IDENTICAL (xlo,xhi) pair
+(script-verified, not hand-derived):
+  D1 (4 groups, XOR = D1 exactly):
+    x[49,61] rows [39..43]                (5 rows, contiguous)
+    x[50,60] rows [37,38] u [44,45]       (2 runs)
+    x[51,59] rows {36} u {46}             (2 points)
+    x[53,57] rows {35} u {47}             (2 points)
+  D2 (5 groups, XOR = D2 exactly; merge any 2 adjacent for a <=4-brick cut):
+    x[32,48] rows [17..21]
+    x[33,47] rows [15,16] u [22,23]
+    x[34,46] rows [13,14] u [24,25]
+    x[36,44] rows {12} u {26}
+    x[38,42] rows {11} u {27}
+  These match CP-CB's published nested-rectangle terms exactly.
+
+Total brick budget under this plan: R1(1) + R2t(1) + D1(4) + D2(4, after
+merging one pair) = 10 bricks -- inside the 12-brick / <=3-ancilla-per-
+brick / <=4-for-D2 constraints, IF the residual (window-boundary)
+computation can be made cheap.  This part was NOT reached.
+
+=== Stage 1b: real-transpile measurement of the residual cost (VERIFIED) ===
+Dyadic decomposition (cpda_lib.decompose1d) of every x/y window above
+needs pieces of arity up to 6 (single-point pieces at interval boundaries,
+e.g. x=2 or x=26 alone, or the D1/D2 single-row groups, fix all 6 bits).
+An exact (non-relative-phase) open/negative-control X gate is the direct
+way to realize such a term with a fixed polarity per bit; measured by
+real transpile (u3/cx, opt2):
+    k (controls)   depth   cx
+        2            12     6
+        3            27    14
+        4            65    36
+        5           130    84
+        6           192   124
+A SINGLE arity-4 term already exceeds the 60-layer/brick cap in this
+task; arity 5-6 terms (needed at essentially every window boundary here)
+are 2-3x over budget by themselves.  This rules out the naive
+"open-control-X per dyadic piece, XOR-accumulate" brick design outright
+and confirms (independently, by direct measurement rather than by
+citing CP-CY/CP-CZ) that read-only residual computation is the expensive
+part, matching the project's prior read-only-tax findings.
+
+The intended fix (relative-phase RCCX/RC3X ladder with 2 ping-pong
+scratch ancillas, echoing any needed negated data bit onto ancilla via
+one X+CX pair so the ladder only ever uses positive-polarity literals)
+was drafted (cpdb_probe.py) but has a wiring bug in the >3-literal branch
+(scratch-wire bookkeeping) and was not debugged and verified before the
+120-minute cap. No brick using it was built or measured.
+
+=== What was NOT reached ===
+- No single brick (R1, R2t, D1-group, or D2-group) was built, classically
+  verified, and real-transpiled end to end.
+- No flight/round-robin scheduling was attempted (cpcy_compose.roundrobin
+  exists and is reusable, but there was nothing to schedule).
+- No comparison table (brick | px | k | depth | CX | exact) was produced.
+- No LEFT-only or full-oracle flight depth number exists to compare
+  against shipped 153 / 272.
+- No statevector check, no cpdb_oracle.qasm.
+
+=== Honest summary ===
+GATE (oracle < 272): NOT MET -- no candidate circuit was produced.
+The exact geometric reduction (8 cube pieces -> R1 + R2t + 4 D1 groups +
+5 D2 groups, all bit-verified) is a real, reusable result and matches
+published counts (CP-CB).  The real-transpile cost table for exact
+open-control X gates (k=2..6) is a real, reusable result.  Everything
+past that (a working <=3-ancilla residual ladder, actual bricks, flight
+scheduling, the oracle number) was not completed inside the 120-minute
+hard cap and is NOT claimed.
+
+Files: cpdb_probe.py (broken ladder draft, NOT a working brick emitter --
+do not reuse without fixing the scratch-wire collision in the arity>3
+branch). No cpdb_oracle.qasm was produced.

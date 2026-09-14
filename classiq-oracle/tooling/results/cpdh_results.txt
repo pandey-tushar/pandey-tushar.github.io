@@ -1,0 +1,52 @@
+CP-DH results (Sep 12) -- D2 in the class-product basis, exact, unlimited width first.
+
+BASIS (cpdh_flats.py, cpdh_d2.py): D2 = XOR_{i+j<=4} Xc_i(x) Yc_j(y), 15 plain CZ legs,
+  Xc_i = x5 & [x in class i of |x-40|, window absorbed], Yc_j = ~y5 & [y in class j of |y-19|].
+  Every class is an XOR of <= 2 affine flats (exhaustive over the 306 flats of GF(2)^4 and the
+  2450 flats of GF(2)^5).  Gate counts with the outer literal (gates(m)=1 for <=3 factors, 2 for
+  4-5, 3 for 6): 4-bit + S=x5~x4: x 13 gates / 5 helpers; 5-bit windowed: x 17 / y 17.
+  Nested (interval) bases are worse: x 23 gates / 7 helpers, y 25 / 7.
+  Block exact: classical 0/4096, all registers restored (nested-leg mirror), for every build below.
+
+UNLIMITED WIDTH (real transpile u3/cx opt2, cpdh_bank.py on cpdh_d2_15leg.prog; 34 ANDs = 8 RCCX + 26 RC3X, 15 CZ):
+  re-deal affine controls on the data registers (no bank), 40 wires:  fwd 150 / block 279 / cx 413
+     mechanism: the pre/post CX re-deals pin every gate that shares a data register behind the
+     previous gate's 13-layer AND3 window (per-wire load only 28; it is dependency, not load).
+  literal bank (each affine literal once on its own wire), no copies, 73 wires: fwd 79 / block 160
+  fan 4 (<= 4 readers per literal copy), 76 wires:  fwd 55 / block 111
+  fan 3, 80 wires: 52 / 107;  fan 2, 86 wires: 50 / 101
+  fan 1 (private copy per read), 116 wires: fwd 34 / block 72   <- dependency floor of the form
+  nested-x variant (5 legs, CX-summed operands), 78-121 wires: 82/165 .. 41/83 (never better).
+
+CHEAP FOLD SEARCH (cpdh_bij.py): every sequence of 0..2 in-place RCCX/RC3X on the nibble (6,481
+  per side) followed by the free affine re-index: min helpers per side 3 (x) / 4 (y) vs 5 with no
+  fold, at cover gates 9-11; the 25-layer increment fold (shipped) is the only map that makes the
+  classes 1-2 literal cubes.  So the helper products (3- and 4-way flats times the window literal)
+  are the width cost of every fold-free D2 in this basis.
+
+HOSTING RULES derived (algebra, to be used by an 18-wire build; not yet built):
+  x-operand on the y5 wire is free (y5 ^ X, and every Yc_j vanishes where y5=1);
+  y-operand on the x5 wire costs one Z on the partner (x5 ^ Y, X x5 = X);
+  y-operand on the x4 wire is free for legs with X_0..X_3 (S x4 = 0), not for X_4;
+  operand on a dead nibble wire needs one pre-fired correction CZ(raw bit, partner) per leg.
+
+18-WIRE ESTIMATE (not built): 6 scratch = S + 5 x operands leaves helpers to serialise on the
+  x4 host (4-5 helpers x ~25 layers) and the y side's 8-9 helpers on one scratch: forward >= 100,
+  block 150-200, i.e. above the shipped 125.  Final oracle if built serially: 150 + D2.
+
+SCHEDULER (cpdh_sched.py, cpdh_basis.py; Sep 12, user's rule: unlimited CX, total makespan only):
+  greedy list scheduling of the class-product D2 on W wires, operands rebuilt whenever a wire is
+  needed (recompute free), helpers transient, 15 legs fired when both operands live, ranked by
+  the cpae per-wire model over 60 restarts, winner re-measured by real transpile (opt2), all exact
+  (0/4096, registers restored):
+    raw recipes, LIFO scratch:      W=18 fwd 999 / blk 2008 ; W=24 598 / 1181 (identical W>=24)
+    re-indexed recipes (cpdh_basis: x basis x0,x1^x2,x3,x1^x3; y identity; 7 functionals per
+      register vs 4-5 plain, so re-deals remain), round-robin scratch:
+      W=18 fwd 713 / blk 1509 (39 RCCX + 92 RC3X after rebuilds) ; W=20 519 / 1074 ;
+      W=24 388 / 723 ; W=28 375 / 689 ; W=40 388 / 689 (peak 10 operands held, no rebuilds).
+  separation at W=40: scheduled program 388 fwd; same ops with private literal copies 175 (depth
+  reading only, 32 mismatches from copying before the re-index); plain 15-leg emission with the
+  same copies 34.  So at low width two costs stack: shared data-register reads ordered by polarity
+  X pairs and re-deal CX pairs (~2x), and the helper rebuild structure + sequential op order of the
+  greedy (~2x).  The class form's depth is bought entirely by copy wires; at 18 wires it is >= 5x
+  the shipped D2 in this scheduler.  No 18-wire number below 125 exists on this line.

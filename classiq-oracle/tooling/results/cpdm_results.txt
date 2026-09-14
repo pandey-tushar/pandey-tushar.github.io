@@ -1,0 +1,122 @@
+CP-DM log (depth-bounded XAG synthesis + the 18-wire squeeze, Sep 12)
+files: cpdm_shallow.py (profiles_all / find_sh2 / seq_shallow2 = absolute
+AND-depth-bounded exact synthesis, all level profiles, no gaps), cpdm_step1.py
+(piece driver), cpdm_cmp.py (comparator), cpdm_emit18.py (18-wire realiser),
+cpdm_*.json / cpdm_*.prog.
+carried in from CP-DL: best block 367 (forward 181, 869 cx, n=106, 41 ANDs,
+AND-depth ~20); the 367 is AND-chain latency, not width.
+STEP 1 (depth-bounded exact synthesis)
+ method: gate i is pinned to an absolute level p_i; it may read only signals
+ of strictly smaller level, so max(p) is the AND-depth.  All no-gap
+ non-decreasing profiles are tried (compositions of k into d<=D parts), k from
+ the degree bound (MC >= deg-1) upward, first SAT wins.  minterms off during
+ the search.  Every solution replayed on all care rows (bad column).
+ probe: lev bit 0 of rep0, D<=3: k=4 not found, k=5 SAT in 90 s (terms 56).
+ STEP 1 TABLE (group, encoding orbit, mode, D, k, AND-depth, terms, wall, res)
+  lev 3 bits + h (6-var of y, h = 1^y5^y2y3y4 prebuilt at depth 2)
+    rep1 seq D<=3  k=14 (2+[4,4,4]) depth 3 terms 144 123 s SAT
+    rep2 seq D<=3  k=14 (2+[4,4,4]) depth 3 terms 139 125 s SAT
+    (CP-DL, unbounded: k=11, depth 7)      k=4/bit is the degree floor (deg 5)
+  lx_k + m_k (6 bits, 6-var of x; cap_k = lx_k ^ h&m_k adds 3 mux ANDs)
+    rep1 seq D<=3  k=27 ([5,5,4,4,4,5]) depth 3 terms 362 368 s SAT
+    rep3 seq D<=3  k=28 ([4,5,5,5,5,4]) depth 3 terms 423 306 s SAT
+    with the 3 muxes: 30 / 31 ANDs at AND-depth 4
+    (CP-DL, unbounded: 23+3 = 26 ANDs at AND-depth 12-17)
+  comparator P (6-var, 36 care rows), depth-bounded
+    L2/C1 D<=2 k=3 terms 18 8 s SAT ; L1/C3 D<=2 k=3 terms 18 11 s SAT
+    L4/C0 D<=2 k=3 terms 18 12 s SAT ; L0/C4 D<=2 k=3 terms 18 10 s SAT
+    D<=1 (a pure sum of products of LINEAR forms, i.e. a quadratic form, so
+    the whole comparator would be k CZ legs and zero AND depth):
+    UNSAT for k <= 9 on L2/C1 and L1/C3, 2 s.  So the comparator cannot be
+    done as CZ legs alone; 3 ANDs in 2 levels is the floor found.
+  FALSIFIER "no (d<=6, k<=30) solution for the x side": NOT fired -- the x
+  side is 30 ANDs at AND-depth 4 (27 + 3 muxes), well inside the box.
+ CHOSEN XAG  L = orbit rep2, C = orbit rep1: 47 ANDs total
+   (y 14 = h 2 + lev 12 at depth 3; x 30 = 27 lx/m + 3 mux at depth 4;
+    comparator 3 at depth 2), whole-oracle AND-depth 6, terms 524.
+   netlist replayed exactly: 0/4096 mismatch.
+ (CP-DL's best was 41 ANDs at AND-depth ~20.)
+STEP 2 (realise wide, all operands materialised, cpdl_emit)
+   L2/C1 mat1/ops1  n=142  block 409 / 1307 cx  forward 203 / 653   ands 47
+   L2/C1 mat1/ops0  n= 67  block 1081/ 1793 cx  forward 545 / 899
+   L2/C1 mat0/ops0  n= 60  block 1221/ 1943 cx  forward 606 / 971
+   balanced-XOR-tree re-deals (cpdm_emitw.py) instead of the CX chain:
+   n=142 block 745 / 1891 cx forward 377 -- WORSE.  A tree touches every
+   source wire twice and the sources are the 12 data wires, so all the
+   accumulations serialise on them; the chain touches each source once.
+ RESULT: AND-depth 20 -> 6 did NOT lower the wide block (367 -> 409).  The
+ cost moved from AND chaining to CX re-dealing: 524 XOR terms over 47 gates
+ (11 atoms per gate) means every operand costs a |S|-long CX chain, and the
+ data wires are read by every one of them.
+ best wide (L2/C1, all operands materialised, cpdl_emit):
+   n=142  block 409 / 1307 cx  forward 203 / 653  model 142  wire-layers 2996
+   packing(18) 0.407  packing(n) 0.047  forward ops 564
+   most loaded: x3 76 touches/76 busy, x4 66/66, x2 60/60, x5 60/60
+   critical wire x3 carries 38 forward ops (all of them CX re-deals of
+   11-atom operands onto a data wire, two per AND).
+ L1/C3 same treatment: n=144 block 481 / 1445 cx forward 239.
+STEP 3 (the 18-register squeeze; cpdm_emit18.py, cpdm_run18.py)
+ method: everything is done in the BASE atom space {ONE, 12 data bits, one
+ atom per AND}.  An 'acc' is not a new atom, it is a request that some
+ register end up holding a given base vector, so a register's state is a
+ vector and an operand set is realisable iff its vector lies in the span of
+ the register states (exact Gaussian solve with the target register removed
+ from the basis; the free null-space combinations are searched to minimise
+ the CX count).  Constants ride along as a per-register parity and come out
+ as '~' controls / X.  Two hosting tricks fall out automatically:
+   * a code bit whose output XOR-set contains the raw atom d can be hosted on
+     register d (accumulate S\{d}: the register then holds exactly the code
+     bit and raw d is gone) -- used for h and the lev bits on y registers;
+   * a dead register is cleared either by repeating its AND (unbuild) or by
+     XORing its vector back from other registers.
+ plus a register-pressure list scheduler, Belady eviction of the live gate
+ whose next use is farthest (only if it can still be rebuilt from what is
+ live), and rebuild-on-demand.
+ measured (every program check_block == (0, []) before measuring):
+  variant                      min registers  block/cx     forward   wirelayers
+  transient re-deal + hosting      47 (35 scr) 1341 / 2263  672/1154   5604
+  transient re-deal, no hosting    47 (35 scr) 1351 / 2221  677/1132   5372
+  operands materialised (matops)   none <= 57  --           --         --
+  term-minimised netlist           48 (36 scr) 1241 / 2165  624/1105   5328
+  packing(n) 0.089, packing(18) 0.232 for the 47-register one.
+  most loaded: x0 560 touches / 600 busy (280 forward ops), x1 506/532,
+  x3 348/354.  The x0 op list is CX x0 x2 | CX x0 x3 | CX x0 x4 | CX x0 x5 |
+  AND s18 x1 x0 | CX x0 x2 | ... -- an 11-long CX chain onto x0, the AND, and
+  the same chain back, repeated for essentially every one of the 47 gates.
+ FALSIFIER "block over 200 at 18 registers": FIRED, and in the strongest
+ form -- 18 registers are not reachable at all.  The greedy allocator needs
+ 47 registers; below that the live gate values cannot all be held and the
+ evictions are not rebuildable from what is left.
+STEP 4 (the one change)
+ The critical register is a DATA register carrying the CX re-deals, so the
+ change that shortens it is fewer XOR terms, not a different host.  Re-ran
+ step 1 with the incremental-totalizer term minimisation on (x side 362 ->
+ 316 terms, whole oracle 524 -> 492) and re-measured:
+   wide     n=137 block 387 / 1251 cx forward 192 / 625  (was 409 / 1307)
+   narrow   n= 48 block 1241 / 2165 cx forward 624       (was 1341 / 2263)
+ a 5-8 % cut for a 6 % cut in terms -- the relation is linear, so the term
+ count is the whole story at both widths.
+CP-DM summary
+1 Depth-bounded exact synthesis works and is cheap: every piece of the
+  one-comparator form has a shallow XAG.  3 lev bits at AND-depth 3 for 12
+  ANDs (was 9 at depth 7); the 6 lx/m bits at AND-depth 3 for 27 ANDs (was
+  23 at depth 12-17), +3 muxes = depth 4; the comparator at AND-depth 2 for
+  3 ANDs.  Whole oracle 47 ANDs at AND-depth 6 (was 41 at depth ~20).
+2 k = deg-1 is tight for these bits: 4 ANDs per 6-var degree-5 lev bit, 5 per
+  degree-6 lx/m bit, at D <= 3.  D <= 4 bought nothing (same 27 ANDs).
+3 The comparator is NOT a quadratic form: no sum of k <= 9 products of
+  linear forms fits its 36 care rows (UNSAT, 2 s), so it cannot become CZ
+  legs; 3 ANDs in 2 levels is the floor.
+4 Cutting AND-depth 20 -> 6 did NOT cut the measured block: 367 -> 409
+  (387 after term minimisation).  The cost simply moved from AND chaining to
+  CX re-dealing.  A depth-bounded XAG is a WIDE XAG: 524 XOR terms over 47
+  gates, 11 atoms per gate, and every operand is a |S|-long CX chain landing
+  on the 12 data registers, which every gate reads.
+5 At 18 registers the form does not fit at all.  The narrowest realisation
+  found is 47 registers (block 1241-1341); the data registers then carry
+  560 touches each and the block is 3.4x the wide one.  Minimum-AND and
+  minimum-AND-depth are both the wrong objective here.
+6 What would take it lower: minimise TERMS, not ANDs or AND-depth.  An XAG
+  with 2-3 atom operands, even at 60-80 ANDs and AND-depth 10, would put the
+  forward near the read floor.  The missing piece is a hard per-operand
+  fan-in cap (|A|, |B| <= 3) inside cpdl_sat.Synth._build.

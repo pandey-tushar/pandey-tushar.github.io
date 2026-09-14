@@ -1,0 +1,135 @@
+CP-CZ stage 1: read-only D1/D2 at reduced ancilla k (q0-11 never targets,
+asserted by cpcy_lib.assert_ro on every op list below)
+
+shape  k    depth   cx    exact  notes
+D1     7     787    614    Y     class-sum form (CP-W/CP-AO); rank not
+                                  needed -- 2-bit codes ca_hi/ca_lo,
+                                  cb_hi/cb_lo + g=NOT[c(a)+c(b)>3]; peak
+                                  ancilla need = 7 (18-qubit chip has only
+                                  6 -- ILLEGAL width-19 build, reported for
+                                  the record)
+D1     6    FAIL (pool exhausted) -- structural, see analysis below
+D1     4,3  FAIL (stricter than 6, not separately attempted)
+
+D2     8    1587   1260    Y     GF(2) rank-5 outer-product decomposition
+                                  of the fold-free window model (u=x mod16,
+                                  v=y mod16) + two window flags HX,HY;
+                                  peak ancilla need = 8 (ILLEGAL width-20
+                                  build, reported for the record)
+D2     7,6,4,3  FAIL (pool exhausted at 7 and 6; stricter k not attempted)
+
+Correctness: BOTH rows verified by full 64x64 classical replay against the
+exact disk bitmaps (cpae_core.SHAPES / cpu2_disk.D1), 0 mismatches.
+Statevector/opt3 checks were skipped to fit the time budget -- classical
+replay is the ground-truth check this project uses everywhere (cpae_core's
+own __main__ validates it is equivalent to the statevector check).
+
+======================================================================
+D1 CONSTRUCTION (cpcz_d1.py + cpcz_lib.py + cpcz_anf.py)
+======================================================================
+Class-sum form: alpha=|u-7| (u=x mod16), beta=|v-9| (v=y mod16), c(alpha)
+in {0,0,0,1,1,2,3} for alpha=0..6 (7,8 don't-care, killed by WX/WY), disk
+iff c(alpha)+c(beta)<=3.  ca_hi/ca_lo = 2-bit code of c(alpha) as an EXACT
+Zhegalkin/ANF function of (x0,x1,x2,x3) -- derived by brute-force Mobius
+transform from the truth table (NOT hand algebra: an earlier attempt to
+transcribe the shipped cpal_d1.py's hosted-wire formulas by hand produced
+WX/c1b/WY formulas that were flatly wrong on 32-50% of inputs, because the
+shipped wires are support-conditional XOR-accumulations onto live DATA
+bits, not the clean boolean functions the comments describe outside
+{HXY=1}; the ANF-from-truth-table route sidesteps this entirely and is
+verified independently before any wire-budget work).  cb_hi/cb_lo likewise
+on (y0..y3); WX=[1<=u<=13], WY=[3<=v<=15]; g = NOT[c(alpha)+c(beta)>3] as
+an ANF of the 4 code bits (masks 0,5,11,14 -- max arity 3, no arity-4
+term); HXY=x5x4y5~y4.  Every 4-bit ANF is emitted via two precomputed
+pair-products (var0&var1, var2&var3) so each monomial costs exactly one
+more AND (cpcz_anf.py, self-tested against the WX window function, 0/16
+mismatches).
+
+WIRE-BUDGET FINDING: a "rematerialising register allocator" (cpcz_lib.py
+Value/Pool: get() recurses into deps and allocates; release() frees a wire
+by re-emitting its own defining ops in REVERSE -- legal because every gate
+here is a self-inverse involution -- and if a dependency was already freed
+it is transparently rematerialised first) was run over several orderings.
+The best found needs peak 7 simultaneous ancillas: ca_hi, ca_lo (x-side
+codes) and cb_hi, cb_lo (y-side codes) must ALL be live together to
+combine into g -- forced, because g's ANF pairs ca_hi with cb_hi, ca_lo
+with cb_lo, AND ca_hi with cb_lo, so every one of the 4 code bits appears
+in >=2 of g's 3 monomials and none can be freed before the last is
+computed.  Freeing them afterwards (to make room for WX, WY, HXY) needs
+rematerialising their own pair-products (Px=x0x1, Qx=x2x3 or Py, Qy),
+which needs 2 MORE wires alongside the 5 already alive (4 codes + g) = 7.
+Every reordering tried (computing WX/WY/WXY/HXY before vs after the code
+stage; sharing pair products across ca_hi/ca_lo's own release so they are
+rematerialised once, not twice) hits the same wall: at the moment just
+before the last of {ca_hi,ca_lo,cb_hi,cb_lo} can be freed, whatever must
+persist (g, or WXY+HXY) is already occupying wires, and freeing needs a
+genuine 2-wire temporary regardless of what has already been computed.
+`python cpcz_d1.py 12 8 7 6` reproduces peak=7 / 0 mismatches at k<=7 and
+"pool exhausted" at k=6, reproducibly (deterministic construction, no
+search/seed).  This is NOT a full impossibility proof for k=6 (a
+different boolean form needing only 3 simultaneous code bits was not
+searched, given the time budget) but is an exact, reproducible result for
+this specific construction.
+
+======================================================================
+D2 CONSTRUCTION (cpcz_d2.py, reusing cpcz_lib.py + cpcz_anf.py)
+======================================================================
+Read-only rules out D2's shipped fold (it writes x4,x5,y4,y5 as data
+hosts), so this uses the CP-BN fold-free window frame directly: window
+x in [32,48], y in [11,27]; on u=x mod16, v=y mod16, alpha=|u-8| and
+beta=circdist(v,3)=min(|v-3|,16-|v-3|) reproduce the true disk exactly
+over that 17x17 window (0/289 mismatches, verified against
+cpae_core.SHAPES["D2"] before any circuit work).  The 16x16 matrix
+D2_window(u,v) was decomposed by brute-force GF(2) column elimination
+(no hand algebra, no guessed class codes) into an EXACT rank-5
+outer-product sum: D2_window(u,v) = XOR_{k=0..4} A_k(u) & B_k(v), verified
+0 mismatches by direct reconstruction.  Each A_k, B_k is an exact ANF
+function of 4 raw bits (x0..x3 / y0..y3 respectively), again emitted via
+shared pair-products Px=x0x1, Qx=x2x3 (resp. Py, Qy) -- so all 5 A_k share
+the SAME 2 x-side temps, and all 5 B_k share the same 2 y-side temps.  The
+5 rank-1 terms A_k&B_k are XOR-accumulated onto ONE phase-accumulator
+ancilla (computed and freed one k at a time: get A_k, get B_k, AND into
+accumulator, release both -- so at most 1 A_k and 1 B_k are ever live at
+once beyond the shared Px,Qx,Py,Qy).  Two window flags HX=[32<=x<=48],
+HY=[11<=y<=27] (exact 6-bit ANF, emitted via a generic degree-<=6 chained-
+AND builder since these need degree up to 6) gate the accumulator so the
+whole thing reproduces D2 over ALL 4096 inputs, not just the window
+(0 mismatches, confirmed by the full 64x64 classical replay in the table
+above -- this is the ONLY thing actually checked against the real D2
+bitmap; the window-model check above is an intermediate sanity step).
+
+WIRE-BUDGET FINDING: peak ancilla need = 8 (`python cpcz_d2.py 16 10 9 8 7
+6` -> 0 mismatches at k=8..16, "pool exhausted" at k<=7).  The peak occurs
+during the accumulation loop: Px,Qx,Py,Qy (4, shared across all 5 terms)
++ the current A_k + current B_k (2) + the running phase accumulator (1)
++ one transient temp inside emit_anf4 for a rare fallback monomial = 8.
+This is WORSE than D1's shortfall (D1 short by 1; D2 short by 2), which
+matches the whole CP-B*/CP-C* history's finding that D2 is the harder
+block by a wide margin (its shipped data-hosting form is already 125 vs
+D1's 71).  No attempt was made to shave this to 7 or 6 given the time
+budget; the two most obvious levers (share the phase accumulator's role
+across two rank-1 terms to save the "current A_k, current B_k" pair, or
+compute HX/HY BEFORE the rank-5 loop so they can lend a spare wire) were
+not tried.
+
+======================================================================
+STAGE 2 (composition): NOT REACHABLE, and here is why precisely
+======================================================================
+Both required inputs already fail the k<=6 gate BY THEMSELVES: D1 needs
+7 ancillas minimum (one more than the whole chip provides beyond the 12
+data qubits) and D2 needs 8.  Since a legal 18-qubit circuit has exactly
+6 ancillas total, NEITHER D1 nor D2 alone fits in the read-only family at
+all -- there is no k in {6,4,3} at which a round-robin/grouped composition
+with CP-CY's read-only R1 (43->73..175 depth at k=6..3) and R2t could even
+be attempted, because the D1/D2 legs of every proposed grouping
+({R1,R2t}|{D1,D2}, {R1,D1}|{R2t,D2}, {R1,D2}|{R2t,D1}, or a shipped block
+run serial with the rest concurrent) require a working <=6-ancilla D1 and
+D2 as a precondition.  This differs from CP-CY's finding (which built
+working, if expensive, read-only R1/R2t at k=6/4/3 and only failed to
+COMPOSE them cheaply) -- here the individual blocks themselves are the
+blocker.  No oracle < 272 (or any legal-width oracle at all, using
+read-only D1/D2) was built; gate NOT MET, and no cpcz_oracle.qasm was
+produced.
+
+Reproduction: `python cpcz_d1.py 12 8 7 6` and `python cpcz_d2.py 16 10 9
+8 7 6` (each < 1s, deterministic, no seeds/search).

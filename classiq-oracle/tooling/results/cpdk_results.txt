@@ -1,0 +1,25 @@
+CP-DK summary (one-comparator whole-logo form, Sep 12)
+files: cpdk_{id,cov,pair,enc,frame,synth,td,emit}.py, cpdk_logo1.prog
+1 IDENTITY (measured) F(x,y)=[lev(y)<=cap(x,b3)] with the stated lev/cap
+  tables: 0 mismatches / 4096 vs cpae_core.SHAPES['LOGO'] (1097 px). No fix
+  needed. lev is forced on every row, cap on every column (no don't cares):
+  a row with lev=6 needs code >= max cap, a column outside needs cap=0.
+2 CONTENT (measured, cpdk_emit.py) in the cpdi_frame fold frame:
+  7 y pieces (f0..f2 in-window, g0..g2 out-window, b3) + 6 x pieces
+  (lx0..2, m_k=lx_k^dx_k) as XOR-of-affine-flat covers = 63 flat gates;
+  emitted 27 AND + 47 AND3 = 114.3 AND-equivalents (13/7 per AND3).
+  FALSIFIER >50 AND-eq: FIRED at 114.3 (63 flat gates).
+  cheap f0 1 f1 1 f2 2 g1 3 g2 3 lx1 3 m1 3; dear b3 9 lx0 8 m0 7 lx2 7
+  m2 11 g0 5 (all degree 5-6 in the frame).
+  One change tried: best cap code B (exhaustive over the 28 increasing
+  injections, all 128 x-subsets re-priced): B=(2,3,4,5,6,7) gives x side 40
+  vs 42 for binary -> total 61 flat gates. Still fired.
+3 HOSTING (measured) hosts in the built program = x0,x1,x2,x3,y1,y2,y3 (the
+  fold only). 0 of 6 code bits hostable: every cover term of every piece
+  reads all six frame bits of its axis, so no data wire has its last raw
+  read before the first code write. FALSIFIER <4 of 6: FIRED at 0 of 6.
+4 PACKING (measured, 3 orderings yx/xy/alt, identical DAG) exact 0/4096,
+  registers clean: n=54, block depth 729 / 976 cx, forward 355 / 487 cx,
+  model makespan 596, wire-layers 24741, packing 76.9%.
+  FALSIFIER block > 200: FIRED at 729 (packing fine). Critical wires
+  x0 29 touches, x1 27, x2 26 (raw-bit fan-out of the x-side covers).

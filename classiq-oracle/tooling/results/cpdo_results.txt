@@ -1,0 +1,164 @@
+CP-DO log (in-place one-sided codes on 18 registers, Sep 12)
+files: cpdo_lib.py (8/9-wire in-place simulator + real-transpile depth),
+cpdo_search.py (beam/anneal over in-place programs; Goal/Goal2/Goal3/Goal4
+scorers), cpdo_run.py (resumable beam with per-level checkpoints),
+cpdo_y1..y7.py cpdo_diag.py cpdo_ysearch.py cpdo_ys2.py (drivers),
+cpdo_deg3.py cpdo_deg3b.py (degree-<=3 atom codes), cpdo_emit.py
+cpdo_ybuild.py cpdo_ysparse.py, cpdo_y.prog, cpdo_ycode_B4.npy.
+
+STEP 0  primitives, real transpile (opt 2), 18 wires
+  CX 1/1   AND(RCCX) 7/3   2 ANDs chained 11/6   3 chained 15/9
+  2 ANDs parallel 7/6      AND3(RC3X) 13/6      4 ANDs same target 22/12
+  CZ 3/1   CCZ 10/6        AND + its inverse 0/0
+  So an AND costs 7 alone and +4 per link in a chain; +5 per extra AND on
+  the same target wire.
+
+STEP 0b tables (cpdk_id, re-verified 0/4096)
+  lev class sizes           1:10 2:8 3:6 4:4 5:14 6:22
+  (lev,h) sizes             (1,*) 5/5 (2,*) 4/4 (3,*) 4/2 (4,*) 2/2
+                            (5,1) 2 (5,0) 12 (6,-) 22, h FREE exactly on
+                            lev = 6 (the 22 rows {0..10,28,54..63})
+  lx sizes 0:4 1:24 2:2 3:4 4:5 5:25 ; dx sizes 0:47 1:2 2:2 3:4 4:4 5:5
+  band bit  h = 1 ^ y5 ^ y2 y3 y4   exact on all 42 care rows (1 AND3);
+  PROVED by exhaustive search over all (affine L, affine A, affine B) that
+  h = L ^ A&B has NO solution, so h costs one AND3 or two chained ANDs.
+
+STEP 0c STRUCTURAL: the span of an in-place program
+  An in-place AND written onto a DATA wire never enlarges the affine span of
+  the wire values: the six y wires stay a bijective re-encoding of y, hence
+  six linearly independent functions, so span = 7 (with the constant) no
+  matter how many gates are applied.  Only a write onto a wire that is still
+  0 adds a dimension.  Hence on 8 wires the span is at most 9-dimensional.
+  Consequence, measured: the record's y fold (re-index 11-v, 4 free affine
+  ops, then the nibble fold, 1 AND3 + 1 AND) leaves the scorers EXACTLY
+  where raw y is -- 3 code functions in the span still miss 7 difference
+  vectors / 936 bad pairs, Goal(function-of-lev) residual 58 both before and
+  after.  The fold reshapes the frame but adds no dimension, so it cannot by
+  itself deliver a code.  (cpdo_diag.py)
+  Counting bound.  With w wires, span dimension d <= w+1, and c code bits,
+  the code is a linear map on the span; two inputs collide iff their state
+  difference lies in the (d-c)-dimensional kernel W.  Differences live in the
+  8-dimensional subspace V of vectors with the constant coordinate 0, so
+  dim(W cap V) >= d-c+8-d = 8-c, and every one of its 2^(8-c)-1 nonzero
+  vectors must avoid the realised difference set D.  Measured |D| = 63 of 63
+  at d=7 (so 7 forced collisions), 119 of 127 at d=8.  For c=3 that demands a
+  5-dimensional subspace (31 vectors) inside the 8 non-differences -- flatly
+  impossible.  This is why "3 code bits that refine lev on their own" is the
+  wrong target on 8 wires, and why the comparator must read h as a 7th input
+  so that only (c_y,h) JOINTLY has to determine lev.
+
+STEP 1 (y side, 3 code bits + h on 8 wires; or 4 + h on 9)
+ (a) fold-based  -> no progress at all, see STEP 0c.
+ (b) in-place beam search, moves = w ^= (affine of <=2 other wires) &
+     (affine of <=2 other wires) and the AND3 version, scored by the number
+     of bad (different-lev) input pairs left unseparated by the best k-bit
+     affine code found with a Walsh-transform greedy + local search.
+     k = 4 (3 code + h): after the h AND3, 40 unseparated pairs; then
+       1 AND 34, 2 28, 3 25, 4 18, 5 15, 6 12, 7 10, 8 9, 9 ANDs 7,
+       then PLATEAU (widths 5, 8, 24; operand support 2 and 3 -- no move in
+       the 9632-move and 24000-move sets improves on 7).
+     k = 5 (4 code + h): 10 -> 8 -> 7 -> 6 over 3 ANDs, also plateauing.
+     k = 6: 0 with the h AND3 alone, but the 6 designated bits are then
+       (h, y0..y4), i.e. y itself -- the work has merely moved into the
+       comparator.
+     Simulated annealing over fixed-length programs (L=4..6, 10^5 moves):
+       best 30 at L=4.  No valid k=4 program was found.
+ (c) degree-<=3 ATOM code -- the construction that WORKED.
+     If every code bit is an XOR of monomials of degree <= 3 over the atoms
+     {y0..y5, h}, then every monomial is exactly one CX / AND / AND3 gate
+     that reads only raw wires and writes onto that bit's own wire: AND-depth
+     2, no intermediates, no scheduling, nothing to unbuild.  Targets must
+     avoid their own variable, which fixes the wire order.
+     anneal results (unseparated pairs, 0 = valid):
+       3 code + h, atoms y only, targets s1,y5,y4        best 22
+       3 code + h, atoms y only, targets s1,s4,y5        best 31
+       4 code + h, atoms y only, targets s1,y5,y4,y3     best  5
+       3 code + h, atoms y and h, targets s1,y5,y4       best 19
+       4 code + h, atoms y and h, targets s1,s4,y5,y4    best  0  VALID
+     The valid code (cpdo_ycode_B4.npy, seed 5, 28 s): 5 designated wires
+       s0 = h, s1 = c0, s4 = c1, y5 = c2, y4 = c3; 30 codewords, max fibre 5,
+       refines lev on all 64 rows, h exact on all care rows.
+     After greedy pruning 84 monomials (34+24+19+7) -> cpdo_y.prog,
+       87 lines = 25 AND + 52 AND3 + 9 CX + 1 X.
+     MEASURED y-side forward, real transpile opt 2:  depth 539, cx 297
+       (identical on 9 and on 18 wires -- the gates are stacked on four
+       target wires, so nothing overlaps).
+     MEASURED y-side mirrored block (forward + mirror, no phases):
+       depth 1029, cx 564.  Touches per wire: y0 42, y5 40, y4 37, y3 36,
+       s1 34 (all 34 as TARGET), y2 31, s0 30, y1 28, s4 24.  The critical
+       wire is s1: 34 AND/AND3 gates stacked on one target, about 15
+       transpiled layers each.
+     Term minimisation at fixed validity (cpdo_ysparse.py, 80 s): 84 -> 83.
+     STEP 4 (the one change) identified but NOT implemented for lack of
+       clock: split each dense polynomial across several target wires by
+       accumulating part of it on a residual wire and folding it in with one
+       CX.  Depth here is gates-per-target-wire, not AND-depth, so 84
+       monomials over eight target wires (about 11 each) would be roughly 60
+       layers instead of 539.  The legality condition is only that a wire
+       used as a partial accumulator must not appear as an atom in the
+       monomials still to be read from it.
+     FALSIFIER "y-side forward over 50 layers": FIRED for every construction
+     above.  The degree-<=3 form is valid at 18 registers and has AND-depth 2
+     but is dense (about 84 gates), and 84 gates on 4 target wires is ~5
+     layers each: 539.
+
+STEP 2 (x side)  NOT RUN -- the clock went on step 1.  The machinery is
+  generic (cpdo_search.Goal4 and cpdo_deg3b take any target table and any
+  atom set), so the x side is the same call with targ = cap(x,h) over 128
+  rows and atoms {x0..x5, h}.
+
+STEP 3 (comparator) -- analysis done, assembly NOT reached.
+  P(c_y,c_x) = [lev-1 < cap] on the realised code pairs.
+  3-bit codes, 36 care rows: degree-2 completion exists for 0 of the 225
+    affine-orbit code pairs -> a pure-CZ comparator is impossible.
+    A degree-3 completion exists for 22 of 225 -> a comparator made only of
+    CCZ/CZ legs (no ANDs, no scratch) is available for those code pairs.
+  4-bit codes, 36 care rows: 0 of 4000 random code pairs have a degree-2
+    completion.  PROOF (new): on a product care set a degree-2 function is
+    exactly q_y(u) + q_x(v) + B(u,v) with B bilinear, so every column of
+    M[L][C] = [L<C], taken modulo the constant and one fixed function, has to
+    be a LINEAR function of the code.  M's column space is {v : v_5 = 0},
+    5-dimensional, and the all-ones vector lies outside it, so those columns
+    span at least 5 dimensions, while the linear functions of a k-bit code
+    span at most k.  Hence a pure-CZ comparator needs k >= 5 code bits on
+    EACH side (11 designated registers with h) -- it is not reachable with
+    the 3- or 4-bit codes that 18 registers allow.
+  Corollary used above: [lev <= cap] = XOR_k ([lev=k] & [cap>=k]) would be
+  five CZ legs if both sides published thermometer codes, and the bound says
+  five bits per side is exactly the price of that.
+  A cheap injective 3-bit code exists and is worth recording:
+    c_y = (T2, T4, T1^T3^T5) with Tk = [lev <= k] gives the six levels the
+    distinct words 111,110,010,011,001,000 (lev 1..6), and each Tk is a union
+    of two intervals, [|y-19| <= a] u [|y-41| <= b] with a = 2,4,6,7,8 and
+    b = 2,4,5,6,12.
+
+CP-DO summary
+1 In-place is the right frame but the affine span is the binding resource:
+  an AND on a data wire adds no dimension (STEP 0c).  With 8 wires the span
+  is 9-dimensional, and the kernel-versus-difference-set count shows 3 code
+  bits cannot refine lev on their own.  The fix is to let the comparator read
+  h, so that only (c_y, h) jointly determines lev; that is the formulation
+  everything below uses.
+2 h = 1 ^ y5 ^ y2y3y4 is exact on all 42 care rows and PROVABLY needs an
+  AND3 (or two chained ANDs): h = affine ^ A&B has no solution.
+3 The record's nibble fold is worthless here: measured, it leaves both
+  scorers exactly at their raw-y values, because it only re-frames the six
+  y wires and adds no span dimension.
+4 Beam search over in-place programs: 40 unseparated pairs after the h gate,
+  down to 7 after nine further in-place ANDs, then a hard plateau.  No valid
+  3-code-bit program found.
+5 The degree-<=3 ATOM code is the construction that closes: 4 code bits + h
+  on the wires s0,s1,s4,y5,y4, every bit a flat layer of CX/AND/AND3 over
+  {y0..y5,h}, AND-depth 2, 30 codewords, max fibre 5, verified refining lev
+  on all 64 rows.  It is valid at 18 registers.
+6 Measured y-side forward depth 539 / 297 cx.  The falsifier (over 50) fired:
+  the form is shallow in AND-depth but dense (84 monomials) and all of it
+  lands on four target wires.
+7 Comparator: no pure-CZ comparator exists below 5 code bits per side
+  (proved); with 3-bit codes 22 of 225 orbit pairs admit a degree-3
+  completion, i.e. a comparator of CCZ legs with no scratch at all.
+8 What would take it lower: minimise the MONOMIAL COUNT inside the
+  degree-<=3 atom family by SAT rather than by annealing (annealing moved
+  84 -> 83 only), and spread the monomials over more target wires -- the
+  depth here is #gates-per-wire, not AND-depth, so eight target wires at
+  ~11 gates each would be about 60 layers instead of 539.

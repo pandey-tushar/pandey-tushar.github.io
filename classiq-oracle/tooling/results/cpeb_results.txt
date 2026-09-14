@@ -1,0 +1,141 @@
+CP-EB  time-shifted phase hosting  (host the code on a DATA wire, keep all
+three ancillas per side free as pebbles).  Everything below is measured with
+qiskit 2.4 transpile(basis=['u3','cx'], optimization_level=2 and 3) on 18
+qubits unless it says "not measured".
+
+STEP 0  the four-CZ hosting identity            (cpeb_check.py: identity4)
+  CZ(v,u) ^ CZ(v^a,u) ^ CZ(v,u^b) ^ CZ(v^a,u^b)  =  phase (-1)^(a b)
+  for ANY carrier values v,u.  Realised as
+    CZ(x0,y0); Margolus x1,x2 -> x0; CZ; Margolus y1,y2 -> y0; CZ;
+    Margolus x1,x2 -> x0; CZ; Margolus y1,y2 -> y0
+  with a = x1x2, b = y1y2.  Exact GF(2)-phase replay over all 4096 inputs:
+    phase mismatches 0, all 18 wires restored, no +-i component.
+  Margolus semantics confirmed by brute force (cpeb_core.py __main__):
+    t ^= a&b, phase (-1)^(a & ~b & t_in), self-inverse, depth 7 / 3 cx.
+  Consequence used everywhere: a toggle/untoggle pair of the same gate on the
+  same controls has total phase 0 even when the target changed in between, as
+  long as the intervening toggles are undone LIFO.  Measured: every circuit
+  below has 0 inputs carrying a +-i component.
+
+STEP 1  decomposition of LEFT (872 pixels), verified on all 64x64 pixels
+  LEFT = [2,26] .[29,53]  ^  [53,57].{35,47}  ^  [51,59].{36,46}
+       ^ [50,60].{37,38,44,45}  ^  [27,61].[39,43]
+  (x thermometer basis, y ring basis; one GL(5,2) change of basis away from
+  the CP-DQ form).  The four inner y factors live in [32,47] and are written
+  in FOLDED coordinates g_i = y_i ^ ~y3 (i = 0,1,2), g = |(y mod 16) - 8|,
+  installed by 3 CX + 3 X in one layer.  x side 20 AND-nodes / 15 toggles,
+  y side 19 AND-nodes / 12 toggles (cpeb_side.py, all factors verified).
+
+STEP 2  how many ancillas a side actually needs  (cpeb_check.py, optimal
+  reversible pebbling by Dijkstra over (resident set, event index))
+  gates = Margolus/RC3X moves, None = no schedule exists at that width
+    side        nodes   K=2    K=3   K=4
+    x  (LEFT)     20    None    22    20
+    y1 (LEFT)      6    None     6     6
+    y2 (LEFT)     13    None     8     8
+  K is the number of SCRATCH pebbles; the factor itself is XORed onto a data
+  wire, so it costs no pebble.  Two further variants measured:
+   - factor VALUE required resident on scratch (the classical C;CZ;C^-1 shape,
+     one CZ per term, no hosting): with single-node factors K=3 is INFEASIBLE
+     and K=4 costs 76 gates.  That is the same width wall CP-DQ hit: holding
+     the code costs one wire more than the pebbles need.
+   - factor accumulated on a scratch wire (host = ancilla, so 2 pebbles left):
+     K=2 INFEASIBLE for x, y1 and y2, also with the window rule relaxed and
+     with up to three data wires reserved for the host (cpeb_asym.py).
+  So at 3 ancillas per side the code MUST be hosted on a data wire: the CP-EB
+  idea is not an optimisation here, it is the only feasible variant.  The
+  price is that the y side then also hosts, and all four corners of the
+  identity have to be visited.
+
+STEP 3  measured LEFT circuit                     (cpeb_left.py -> cpeb_left.qasm)
+  18 wires, x = 0-5, y = 6-11, x scratch 12-14, y scratch 15-17.
+  Best over all 24 term orders x host assignments x pipeline depths:
+    term order   A1 A5 A4 A3 A2      software pipeline II = 2
+    hosts        x: 0,3,2,4,5      y: 6,10,8,9,11
+    opt 2        depth 579   cx 418
+    opt 3        depth 578   cx 415
+    (un-pipelined, II >= 3:  opt2 584 / 422,  opt3 584 / 421)
+    exactness    replay phase mismatches 0 / 4096, dirty wires 0,
+                 +-i components 0,
+                 statevector on 18 qubits: err 2.37e-14, ancilla leak 6.16e-31
+    ops          286 (28 Margolus, 56 RC3X/RC3X-dg, 20 CZ, 14 CX, 168 X)
+    wire-layers  1452, max wire load 142 (wire 12), packing 0.14
+    per-wire load [64,44,86,72,64,72, 126,40,104,98,80,80, 142,52,112,
+                   60,90,66]
+    cpeb_left.qasm reloaded from disk and re-checked independently:
+      statevector err 3.81e-14, ancilla leak 6.52e-31,
+      transpile opt2 579 / 418 cx, opt3 578 / 415 cx.
+      (The file is dumped in the native gate set; dumping the TRANSPILED
+       circuit loses qiskit's global_phase, which OPENQASM 2 cannot carry --
+       measured as a uniform factor e^{4.462 i}, spread 3.8e-15.)
+  GATE (LEFT <= 75 with <= 3 ancillas per side):  NOT PASSED, 579.
+
+STEP 4  where the 579 goes -- the binding constraint
+  Same op list with the 20 CZ gates deleted:
+    x side alone        depth 101 / 60 cx
+    y side alone        depth  69 / 42 cx
+    both (they are on disjoint wires)   depth 101-114 / 102-108 cx
+  So the gate content costs about 110 layers and the twenty phase gates add
+  about 470.
+  The reason is structural, not a scheduling accident:
+   - both factors of a term sit on data wires, so all four corners
+     (raw,raw) (host,raw) (host,host) (raw,host) must occur;
+   - a monotone schedule reaches them only as
+       x-toggle -> y-toggle -> x-untoggle -> y-untoggle,
+     i.e. FOUR x<->y alternations per rank-1 term, 20 for LEFT;
+   - a toggle group is 2-4 gates on one host wire, 7 layers per Margolus and
+     13 per RC3X, so 26-39 layers per alternation.
+  Measured attempts to shorten a toggle group to a single gate:
+   - single-node factors (A_k = one Margolus/RC3X): pebbling needs K=4,
+     and forcing them through at K=3 by extra nodes gave depth 702 / 496.
+   - all-Margolus single-node factors: K=3 INFEASIBLE.
+  Measured attempt to pipeline the staircase across terms (cpeb_left.py
+  build3, initiation interval II, term k's four checkpoints in global slots
+  k*II + 0..3):
+    II = 4 (no overlap)  x-side plans with a legal host assignment 24/24,
+                         best LEFT 584 / 422
+    II = 3               24/24,  584 / 422
+    II = 2               24/24,  579 / 418   <- best measured
+    II = 1 (full overlap)  0/24  -- NO data wire is left free to host, because
+                         the union of the x data wires touched inside four
+                         simultaneously open hosted windows is all six.
+  That is the concurrency the leader's 67 percent packing would need, and the
+  hosting rule forbids it: a hosted code makes its carrier wire unusable as an
+  input for as long as it is live.
+  Measured attempt to remove the staircase:
+   - y factor accumulated on a scratch wire (2 corners, 1 alternation per
+     term) needs 3 pebbles + 1 accumulator = 4 ancillas on that side and 3 on
+     the other = 7 wires; the budget is 6.  x at 2 pebbles is INFEASIBLE
+     (checked strict, non-strict, and with 1-3 reserved host wires).
+  Floor of the route at 18 wires, from the measured pieces (this line is an
+  argument over measured quantities, the number itself is not measured):
+    (n + 3) alternations after perfect pipelining x 26-39 layers
+    LEFT  n=5  -> about 210 layers
+    LOGO  n=10 -> about 340 layers
+  Whole logo: NOT BUILT.  LEFT alone is 579, and D2 is a second rank-5
+  comparison of the same shape, so the whole logo on this route is far above
+  both 270 and 150; no cpeb_best.qasm was written.
+
+REFERENCE POINTS measured in the same harness
+  shipped cpdp_best.qasm (whole logo)      depth 270 / 516 cx
+  shipped blocks, standalone:  R1 71/103  R2t 65/89  D1 111/189  D2 185/265
+  CP-EB LEFT                                depth 579 / 418 cx
+  (CX count is competitive -- 418 for three quarters of the logo against 516
+   for all of it -- the loss is entirely depth/packing.)
+
+FILES
+  cpeb_core.py    gates, exact Z4-phase replay on 4096 inputs, statevector
+                  check, transpiled depth/cx, per-wire load
+  cpeb_side.py    the AND-DAGs and toggle decompositions of the LEFT factors
+  cpeb_dags.py    DAG container (nodes = AND of 2 or 3 literals)
+  cpeb_plan.py    optimal reversible pebbling with hosted-toggle events
+  cpeb_emit.py    plan -> wire-level ops, host-wire selection
+  cpeb_left.py    assembly + search over term order, host, pipeline depth;
+                  writes cpeb_left.qasm
+  cpeb_asym.py    2+4 ancilla split attempt (infeasible, see STEP 4)
+  cpeb_check.py   the checks quoted in STEP 0 and STEP 2
+  cpeb_synth.py   beam-search AND-DAG synthesis (used to size the factors)
+  cpeb_sat.py     exact minimum-AND synthesis by SAT (too slow past 2 gates)
+  cpeb_flat.py, cpeb_esop.py  flat / ESOP covers of the side functions
+  cpeb_left.qasm  the measured LEFT circuit, native gate set, 18 qubits
+                  (transpiles to 579/418 at opt2 and 578/415 at opt3)
