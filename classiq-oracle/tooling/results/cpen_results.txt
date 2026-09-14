@@ -110,3 +110,82 @@ list schedule / DAG critical path):
 register) unlocks anything: 165.  Per-wire occupancy of the op list:
 q14 138, q17 138, q3 136, q16 131, q13 129, q15 124, q12 114, ... q0 48,
 q7 48 -> op-model congestion LB 138, so congestion is NOT binding at 240.
+
+MEASURED: model_depth (op-model, cpae_core) vs the real emit objective on 14
+progressively perturbed op lists: pearson r = 0.995, real = model + 21..40.
+So model_depth is a valid 500x-cheaper proxy (9 ms vs 0.18 s per evaluation
+after replacing the per-op |0> scan with np.bitwise_or.reduce, 55 ms -> 4.9 ms).
+
+ASSUMPTION: the 240 depends on the list-scheduler tie-break.
+RESULT: no.  92,667 randomized-priority list schedules of the op DAG: best
+240, identity tie-break 240.  Zero scheduling slack.
+
+ASSUMPTION: RC3X can be split into two Margolus through a free ancilla to cut
+the 13-layer target occupancy to 7.
+RESULT: identity holds and is exact, but 18 legal (wiring, ancilla-pair)
+combinations all measure worse: best 242, then 246, 246, 249 ... (base 240).
+Free |0> ancillas exist at only 7 of the 12 RC3X wirings.
+
+ASSUMPTION: simulated annealing over {control swap, clean-host, RC3X split,
+fan-out copy} escapes the local minimum.
+RESULT: 11,581 evaluations (100 s) from 240: best 240.
+
+ASSUMPTION (brief's lever 1+2): spending CX freely on parallelism-buying
+moves (clean-host, RC3X split, fan-out copy) walks the depth down.
+RESULT: measured exchange rate on the plateau walk (accept only
+non-worsening model_depth), 3 chains, op cap 900/1400:
+  240 cx~547 nops 418  (start)
+  239 cx~547 nops 418
+  238 cx~597 nops 468
+  237 cx~613 nops 484
+  236 cx~767 nops 638   <- stalls here for >4 min in all 3 chains
+i.e. 4 model layers for +220 model-CX, and then no further non-worsening
+move exists.  Extrapolated cost of 108 layers (258 -> 150) at that rate is
+~6000 CX, and the op list's own RAW-only floor (below) forbids it anyway.
+
+MEASURED (decisive): per-wire-class relaxation of the 418-op list.  Dropping
+WAR+WAW on a set of wires = pretending that wire has unlimited copies.
+  free wires = none          -> 240
+  free wires = ancillas 12-17 -> 246
+  free wires = data 0-11      -> 248
+  free wires = all 18         -> 165
+  best over all C(6,k) subsets of the ancillas: k=0 240, k=1 240, k=2 239,
+  k=3 239, k=4 240, k=5 242, k=6 246.
+=> no proper subset of wires helps; the serial chain alternates between
+ancilla and data wires, so neither extra ancillas nor extra width nor any
+register reallocation can shorten it.  Only replacing the computation can.
+
+Gate-level profile of the banked cpen_best.qasm (opt2): depth 258, 520 cx,
+580 u3, per-wire touches q3 141, q17 129, q14 123, q13 119, q16 117,
+q15 116, q12 108, ... q7 51 -> congestion LB 141, so depth / LB = 1.83.
+
+CORRECTION (measured): the model_depth proxy is only valid near the start.
+Real emit objective of the plateau-walk winners:
+  cpen_walk_41.pkl model 236 nops 638 -> real (437, 750)
+  cpen_walk_42.pkl model 237 nops 582 -> real (384, 692)
+  cpen_walk_43.pkl model 237 nops 478 -> real (295, 587)
+  cpen_search_11.pkl (banked)  nops 422 -> real (258, 520)
+The r=0.995 fit was measured on lists of 418-438 ops; beyond ~470 ops the
+op-model underestimates by 60-200 layers (it does not model the u3/atom
+layering of the expanded clean-Toffoli forms).  The whole clean-host /
+plateau-walk line is therefore void at the real metric; best stays 258/520.
+
+SUMMARY OF THE SESSION (measured numbers only)
+- Banked: cpen_best.qasm, width 18, opt2 = opt3 depth 258, 520 cx, 580 u3,
+  verify_sv18 True err 6.11e-15.  Previous best 259 / 516.
+- The 418-op list behind it has: op-model congestion LB 138, dependence-DAG
+  list-schedule 240 (= its own critical path; 92,667 randomized tie-breaks
+  found nothing below it), RAW-only (all 18 wires given unlimited copies)
+  165, pure value-DAG chain 67-82 with ASAP peak live 47.
+- Every local restructuring move measured (control swap 57 flips, detach
+  119 single-op, clean-host 1026 whole-wiring, RC3X split 18, critical-chain
+  batch host, all-detach) left model_depth at 240 or made it worse; the only
+  moves that reduced model_depth blew up the real metric (236 model ->
+  437 real).
+- Spec a replacement computation would have to meet for real depth < 150:
+  op-model congestion <= ~130 AND dependence-DAG critical path <= ~130.
+  This one is 138 and 240.
+- Real-objective local search (swap / host / fan move set, 0.18 s per
+  evaluation) restarted from the 258/520 state, 3 chains x ~15 min: no
+  improvement; seed53 completed a full sweep of the move set and reported
+  "local min (258, 546)".  258/520 is a local minimum for that move set.
