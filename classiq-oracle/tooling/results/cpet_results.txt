@@ -1,0 +1,158 @@
+=== CP-ET : (A)+(B) as hard constraints ===
+BASELINE carried in: cpen_best.qasm width 18, opt2 258 / 520 cx / 580 u3,
+verify_sv18 PASS err 6.11e-15.  Op list cpen_search_11.pkl (422 ops).
+
+MEASURED (cpet_chain.py) longest genuine-dependency chain of the BANKED op
+list, weighted in RCCX-equivalents (ccx 1, c3x 2), under four edge rules.
+Every op in this gate set writes t ^= g(controls), so consecutive writes to
+the same target COMMUTE and are re-associable into a tree unless a reader of
+that target sits between them.
+  reassoc=False drop_zero=False : 34 equiv, 25 toffoli ops, 48-op chain
+  reassoc=False drop_zero=True  : 33 equiv, 26 toffoli ops, 47-op chain  (= cpes number, reproduced)
+  reassoc=True  drop_zero=False : 16 equiv, 13 toffoli ops, 25-op chain
+  reassoc=True  drop_zero=True  : 16 equiv, 13 toffoli ops, 25-op chain
+=> under XOR re-association the banked computation's genuine chain is 16
+   RCCX-equivalents, INSIDE the (A) budget of ~24 (24 serial RCCX = 145).
+   The 33 is an artefact of serialising XOR accumulation runs on one wire.
+
+MEASURED (cpet_vdag.py) VALUE DAG of the banked 422-op list: every wire value
+tracked as (raw affine mask, set of AND-node ids); AND nodes deduplicated by
+their 4096-bit truth table, so compute/uncompute mirror pairs cancel.
+  distinct AND nodes 57   AND-depth 6   RCCX-equivalent depth 8
+  level widths [18, 17, 12, 6, 3, 1]
+  phase ops 8 (cz/ccz), distinct phase-fed nodes 15
+  all 18 wires restored to raw; XOR of the 8 phase masks == F (1097 px) EXACT
+=> the banked computation, as a VALUE DAG, already satisfies (A) with a
+   factor 3 margin (8 RCCX-equivalents vs the 24 budget).  Its 118 Toffoli-
+   class ops / 33-equivalent op-list chain are entirely schedule artefacts:
+   recomputation (118 ops for 57 values) plus serialised XOR accumulation.
+   The binding constraint is therefore (B) alone: pebbling this DAG on 18
+   wires.
+
+MEASURED (cpet_pebble.py) reversible pebble game on that 57-node DAG,
+recomputation ALLOWED, hard makespan T (AND-steps) and hard register cap K.
+Rule: toggling node i at step t needs every pred of i pebbled at t-1 and t;
+a register is occupied in step t if the node is pebbled at t-1 or at t;
+each of the 8 phase ops must see all its seed nodes pebbled at one step.
+  pebble K=18 T=12 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=18 T=14 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=18 T=16 -> INFEASIBLE  peak None toggles None  (1s)
+  pebble K=18 T=18 -> INFEASIBLE  peak None toggles None  (4s)
+  pebble K=18 T=20 -> INFEASIBLE  peak None toggles None  (52s)
+  pebble K=18 T=22 -> UNKNOWN     peak None toggles None  (90s)
+  pebble K=18 T=24 -> OPTIMAL     peak 18   toggles 180   (14s)
+  pebble K=16 T=12 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=16 T=14 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=16 T=16 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=16 T=18 -> INFEASIBLE  peak None toggles None  (1s)
+  pebble K=16 T=20 -> INFEASIBLE  peak None toggles None  (5s)
+  pebble K=16 T=22 -> INFEASIBLE  peak None toggles None  (23s)
+  pebble K=16 T=24 -> UNKNOWN     peak None toggles None  (90s)
+  pebble K=16 T=28 -> OPTIMAL     peak 16   toggles 176   (86s)
+  pebble K=14 T=12 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=14 T=14 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=14 T=16 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=14 T=18 -> INFEASIBLE  peak None toggles None  (0s)
+  pebble K=14 T=20 -> INFEASIBLE  peak None toggles None  (1s)
+  pebble K=14 T=22 -> INFEASIBLE  peak None toggles None  (3s)
+  pebble K=14 T=24 -> INFEASIBLE  peak None toggles None  (12s)
+  pebble K=14 T=28 -> UNKNOWN     peak None toggles None  (90s)
+=> abstract-register frontier of THIS DAG (compute AND uncompute both inside T):
+   K=18 -> T=24 (toggles 180), K=16 -> T=28 (toggles 176), K=14 -> T>24.
+   T is the WHOLE mirrored makespan, so K=18 / T=24 is the requested point:
+   peak registers 18, forward AND-depth 6, 57 ANDs, chain 24 RCCX-equivalents.
+   (cpeq's K=18 ROBDD entry is AND-depth 21 FORWARD = ~42 mirrored, 1.75x worse.)
+   Sweep stopped at K=14 to free cores for the physical 18-WIRE model below.
+
+MEASURED (cpet_pebble2.py) PHYSICAL 18-wire pebble model of the same DAG:
+at every step  (live AND-node values) + (distinct raw bits read as clean
+operands that step) <= W wires.  Recomputation allowed.  The two identical
+CZ terms of the banked list cancel, so 6 of the 8 phase ops are kept
+(seeds [0,4,7] [13,15,20,22] [34] [34,45,46] [34,35,47] [51,52,56]).
+  wire W=18 T=26 -> INFEASIBLE  toggles None  (11s)
+  wire W=18 T=28 -> INFEASIBLE  toggles None  (32s)
+  wire W=18 T=30 -> INFEASIBLE  toggles None  (68s)
+  wire W=18 T=32 -> UNKNOWN     toggles None  (240s)
+  wire deficit probe T=24 W=19 -> INFEASIBLE  toggles None  (17s)
+  wire deficit probe T=24 W=20 -> INFEASIBLE  toggles None  (52s)
+  wire W=18 T=36 -> UNKNOWN     toggles None  (240s)
+  wire deficit probe T=24 W=21 -> UNKNOWN     toggles None  (90s)
+  wire deficit probe T=24 W=22 -> UNKNOWN     toggles None  (90s)
+  wire deficit probe T=24 W=24 -> UNKNOWN     toggles None  (90s)
+  wire W=18 T=40 -> UNKNOWN     toggles None  (240s)
+  wire probe T=24 W=30 -> OPTIMAL     toggles 150   (4s)
+  wire probe T=24 W=26 -> UNKNOWN     toggles None  (150s)
+  wire W=18 T=24/26/28/30 INFEASIBLE; T=32/36/40 UNKNOWN at 240s.
+  wire probe T=24: W=19,20 INFEASIBLE; W=21,22,24,26 UNKNOWN; W=30 OPTIMAL (150 toggles, 4s).
+=> at the (A) budget T=24 this computation provably needs MORE THAN 20 wires
+   in the one-wire-per-node-value model, and fits in 30.
+
+MEASURED (cpet_calib.py) the same model applied to the BANKED op list itself:
+  118 Toffoli-class toggles, 57 distinct nodes, packed makespan T = 45 steps,
+  61 RCCX-equivalents, max live node values 23, max raw reads 12,
+  max (live + rawread) = 32 -- while the circuit runs on 18 WIRES.
+=> the one-wire-per-node-value model is NOT the physical constraint: a wire
+   can carry an XOR-accumulation of several node values (67 of the DAG's 126
+   operands are (affine XOR 1-4 node values)), so 23 live values sit on <= 18
+   wires.  The W=18 infeasibility above is a property of that model, not of
+   the machine; cpeq's and this run's register counts are both upper bounds
+   on the true wire demand.
+
+MEASURED (cpet_emit3.py) the K=18 / T=24 pebble schedule emitted for real
+(fresh scratch copies per step, fan-out copy trees, exact 4096-input replay):
+  T=24 K=18 registers, 123 wires, 2824 ops -> opt2 = opt3 depth 430, 2901 cx,
+  mismatch 0, every wire restored.  fan-out cap sweep 1/2/3/6/99 ->
+  430 / 430 / 439 / 442 / 442.  The cost is operand RE-ASSEMBLY every step
+  (2901 cx for 190 gates = 15 cx/gate; the banked circuit runs 4.4 cx/gate).
+
+MEASURED (cpet_wide.py) THE SAME 57-NODE DAG EMITTED AT NATURAL WIDTH
+(one wire per AND node, one wire per operand expression, balanced CX trees,
+forward in AND-level order + all 8 phase terms + exact mirror):
+  368 wires, 1156 ops -> opt2 = opt3 DEPTH 127, 1337 cx,
+  mismatch 0 on all 4096 inputs, every wire restored to |0> / its raw bit.
+  cpeq's table for comparison (same measurement style):
+    cpdm_wide_tree 745 @ 142 wires, cpdm_wide 481 @ 144, cpdl_best 367 @ 106,
+    cpdm_n47 1341 @ 47.  Leaderboard 1st is 137 @ 18 wires.
+=> this DAG's unlimited-width depth is 127, i.e. BELOW the 137 leader and
+   2.9x better than the best previous natural-width number in the repo.
+  DEDUP=0 (every operand instance its own wire): 368 wires, 1156 ops, depth 127, 1337 cx.
+  DEDUP=1 (operand expressions shared, single-part operands read in place):
+    282 wires, 908 ops, depth 169, 1123 cx.  Sharing an operand wire costs
+    42 layers of fan-out congestion and saves 86 wires.
+  Operand wires RECYCLED through a pool of L (assembly undone inline,
+  cpet_wide2.py): L=16 -> 85 wires / 742; 24 -> 93 / 622; 32 -> 101 / 599;
+  48 -> 117 / 627; 64 -> 133 / 623; 96 -> 165 / 551 (all exact; L=12 is too
+  small for the widest gate and mismatches).
+  Width-vs-depth curve of this DAG, all exact:
+    368 -> 127 | 282 -> 169 | 165 -> 551 | 123 -> 430 | 101 -> 599 | 18 -> 258 (banked)
+
+CONCLUSION (measured)
+Best tuple reached, all four quantities measured on the SAME object (the
+57-node value DAG of F, verified exact on all 4096 inputs):
+  AND count (forward)                     57  (45 ccx + 12 c3x = 69 RCCX-equiv)
+  forward AND-depth                        6
+  longest serial chain, RCCX-equivalents   8 forward / 16 with the mirror
+  peak registers                          18 (pebble schedule at makespan 24)
+Both (A) (<= ~24 RCCX-equivalents) and (B) (<= 18 registers) hold
+SIMULTANEOUSLY in the one-register-per-node-value model: K=18 / T=24, and
+the mirror is inside T.  That is the requested region, which cpeq's Pareto
+did not contain.
+
+Circuits BUILT and verified by exact 4096-input replay:
+  natural width  368 wires  depth 127  1337 cx   (cpet_wide368_d127.qasm)
+  natural width  282 wires  depth 169  1123 cx
+  K=18/T=24 sched 123 wires depth 430  2901 cx
+Nothing at width <= 18 below 258 was produced, so cpet_best.qasm was NOT
+created; the banked best stays cpen_best.qasm 258 / 520.
+
+WHAT BLOCKS IT (single measured number): (B), the wire packing.
+At the (A) budget T=24 the computation is INFEASIBLE at 20 wires and
+OPTIMAL at 30 wires in the one-wire-per-node-value model (CP-SAT), and the
+real build needs 123-368 wires to reach 127-430 depth.  (A) is not the
+blocker: the chain is 8 RCCX-equivalents forward, 3x inside budget.
+The 18-wire gap is NOT closed by that model, because a wire can carry an
+XOR-accumulation of several node values (measured on the banked circuit:
+23 live node values and 32 model-wires on 18 real wires).  The untried
+lever is therefore an emitter that packs several node values per wire
+as XOR accumulations, which is exactly what the banked circuit does by
+hand and what every emitter in this run does not.
