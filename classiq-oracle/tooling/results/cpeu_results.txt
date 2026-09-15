@@ -1,0 +1,141 @@
+=== CP-EU : width-18 emitter with XOR-accumulation wire packing ===
+Object: the 57-node value DAG of F from cpen_search_11.pkl (cpet_vdag.py).
+Baseline carried in: cpen_best.qasm width 18, opt2 258 / 520 cx.
+
+MEASURED (cpeu_dag.py) phase-term factoring of the DAG's 8 phase terms
+(a*b ^ a*c = a*(b^c), identical pairs dropped):
+  8 terms -> 4 terms (one arity-3, three arity-2), XOR of products
+  reproduces F exactly (mismatch 0 / 4096).
+  Phase stage cost by the measured primitive table: 1 CCZ (10/6) +
+  3 CZ (3/1) = 13 depth / 9 cx if serial, 10 / 9 if the CZs overlap.
+
+MEASURED (cpeu_dag.py) dependency structure of the 57-node DAG:
+  the node set splits into 4 node-DISJOINT cones (0 shared nodes in all 6
+  pairs), sizes 8 / 15 / 9 / 25, max node level 2 / 3 / 2 / 5.
+  100 distinct operands over 57 nodes + 4 phase terms.
+  operand shape (n node parts, n raw bits) histogram:
+    (0,1):23 (0,2):9 (1,0):15 (1,1):19 (1,2):4 (1,3):6 (2,0):7 (2,1):1
+    (2,2):4 (2,3):3 (2,5):2 (3,0):1 (3,3):1 (4,1):1 (4,2):1 (4,3):2 (4,5):1
+  node fan-out into distinct operands: 1:37 2:9 3:4 4:3 5:1 6:2 8:1
+
+MEASURED (cpeu_run/cpeu_order) resource model of the emitter: a wire holds an
+affine form (const ^ raw subset ^ node-value subset); CX preserves the SPAN of
+the 18 wire vectors, so the binding quantity is
+    dim span { residue(O) : O a still-pending operand }
+where residue(O) = O with the not-yet-computed node bits cleared.  This is a
+hard lower bound on the wire count at that instant, and it is the packed
+quantity (several node values on one wire count as one dimension).
+  peak LIVE NODE VALUES over 300 component-DFS orders: 16
+  peak DIM-SPAN of the same orders (i.e. after packing): 19
+=> packing turns 16 live node values into 7 dimensions above the 12 raw bits.
+   Budget is 18.  Gap at this point: 1 dimension.
+
+MEASURED (cpeu_run4.py) demand-driven accumulator emitter (DFS from the 4
+phase terms, recomputation allowed, LIFO dimension reclamation):
+  W=30  1176 ops, exact (4096-input replay mismatch 0, every wire restored),
+        opt2 depth 1019 / 1291 cx
+  W=18 / 20 / 24: incomplete (no wire available for an accumulator)
+=> the DFS drive order is correct but almost fully serial (1.3 cx / layer).
+
+MEASURED (cpeu_run4.py, DFS emitter, self-inverse segment per phase term,
+exact 4096-input replay, every wire restored):
+  W=40  510 ops  opt2 depth 461 / 747 cx
+  W=30  608 ops  opt2 depth 637 / 853 cx
+  W<=24 incomplete
+MEASURED first width at which this DFS emitter can build each phase term's
+cone on its own (all exact):
+  term 0 (8-node cone)  : W=18  depth 107 / 101 cx
+  term 2 (9-node cone)  : W=18  depth 141 / 107 cx
+  term 1 (15-node cone) : W=27  depth 155 / 244 cx
+  term 3 (25-node cone) : W=35  depth 240 / 357 cx
+=> a pure depth-first recursion holds an accumulator wire at every level, so
+   its wire demand is the sum of the arities along the recursion path; the 12
+   data wires cannot be freed by CX at all (a raw bit can only leave a wire if
+   it is duplicated elsewhere or a nonlinear write lands on that wire), so the
+   recursion has only the 6 ancillas to work in.
+
+MEASURED (cpeu_beam.py) beam search over node orders, objective = peak
+dim-span of the pending-operand residues:
+  BW=200 seed 0            -> 18
+  BW=1200 seeds 0,1,2,3    -> 18 (all four)
+=> 18 is reachable but with ZERO slack: at the peak the 18 wires must be a
+   basis of the residue span, so no wire is free for scratch and any three
+   operands read by one gate must be linearly independent.
+
+MEASURED (structural, follows from the model and confirmed in every run):
+  CX is the only assembly instruction and it preserves the span exactly, so a
+  raw bit can leave a data wire ONLY if it is duplicated on another wire or a
+  nonlinear write lands on that wire.  The 12 data wires are therefore pinned
+  for the whole circuit unless node values are hosted on them; the emitter's
+  free scratch is the 6 ancillas plus whatever hosting it can arrange.
+
+MEASURED (cpeu_run4.py + cpeu_curve.py) the accumulator emitter, whole DAG,
+self-inverse segment per phase term, exact 4096-input replay, all wires
+restored, opt2 = opt3 everywhere:
+  W    depth   cx    ops   nonlinear gates (RCCX-equiv)   cx per gate
+  18   incomplete
+  26   incomplete
+  32   incomplete
+  36    473   761    510      152 (178)                      4.28
+  40    461   739    492      152 (178)                      4.15
+  48    461   737    492      152 (178)                      4.14
+=> CX-PER-GATE TARGET MET: 4.14-4.28 against the 4.4 target and against the
+   15 cx/gate of the four cpet emitters.  The XOR-accumulation discipline
+   (AND results written straight onto the operand wire) removes the operand
+   re-assembly cost entirely.  178 RCCX-equivalents against the DAG's 138
+   (69 forward + mirror), i.e. 29% recomputation.
+  Per-wire touches of the W=40 build: data q0..q11
+   56 42 62 34 24 46 46 24 32 22 24 22 (max 62), ancillas 1712 (max 161),
+   total 2146 -> congestion is not what holds it at 461.
+
+MEASURED (cpeu_par.py) the 4 node-disjoint cones built on disjoint ancilla
+pools and concatenated (data wires 0-11 shared, each segment self-restoring):
+  62 wires, 544 ops, exact, opt2 = opt3 depth 617 / 809 cx, 4.35 cx/gate.
+  Same segments driven serially by the joint emitter at 40 wires: 461.
+=> running the cones concurrently did not help here: the per-cone builds were
+   taken at each cone's own minimum width (18/27/18/35), which makes each of
+   them deep, and the joint 40-wire build gives every cone more room.
+
+MEASURED (cpeu_run5.py) the same machine driven by the beam order instead of
+depth-first, with a self-inverse segment per phase term:
+  W=30  1232 ops exact, opt2 depth 1791 / 1513 cx
+  W=18 / 20 / 24 incomplete (best progress 24 / 57 nodes at W=18,
+  48 / 57 at W=24); relaxing the span invariant to raw bits only, and then
+  dropping it entirely, over 5 beam orders x widths 18/20/24: still
+  incomplete, first loss being a raw bit hosted on a data wire and then
+  needed again before the segment mirror restores it.
+
+BASELINE re-measured this session (insurance):
+  cpen_best.qasm opt2 258 / 520 cx, opt3 258 / 520 cx,
+  verify_sv18 (True, 6.110262476351803e-15).
+Nothing at width <= 18 below 258 was produced, so cpeu_best.qasm was NOT
+created and the banked best stays cpen_best.qasm 258 / 520.
+
+CONCLUSION (measured)
+The emitter lever asked for works on the quantity it was aimed at: writing
+each AND result straight onto the wire that accumulates the operand it feeds
+takes the emitter from 15 cx/gate to 4.14 cx/gate, at or below the 4.4 target,
+and it needs 178 RCCX-equivalents against a 138 floor.  It does not convert
+into depth.  The single measured number that blocks < 258 at width 18:
+  the accumulator emitter's DEPTH AT UNLIMITED WIDTH is 461 (opt2 = opt3,
+  exact, 48 wires), against 127 for the same DAG emitted by cpet_wide with one
+  wire per operand instance.  The cost of packing several node values per wire
+  is a 3.6x longer dependence chain, because each accumulator must receive its
+  node values in sequence on ONE wire while the unpacked emitter writes them
+  on separate wires in parallel and XORs them with a balanced CX tree.
+  Secondary blocking number: the emitter does not complete at width 18 at all;
+  its first feasible width for the whole DAG is 36, and per cone 18 / 27 / 18
+  / 35, because the depth-first drive holds one accumulator per recursion
+  level while the 12 data wires cannot be freed by CX.
+
+MEASURED (cpeu_ph.py) the identical phase-term pair applied to the BANKED op
+list: the 8 phase ops are at indices 28,106,211,249,250,258,259,388; the
+identical pair is (249,250) and they are ADJACENT, so the transpiler already
+cancels them.  Deleting both by hand:
+  banked op list through ops_to_qc : opt2 278 / 520 cx, opt3 278 / 520
+  same with the two CZs deleted    : opt2 278 / 520 cx, opt3 278 / 520
+  verify_sv18 on the reduced circuit (True, 7.98e-15)
+=> no gain; the 8 -> 4 phase-term factoring is already realised in the banked
+   circuit as far as the metric can see.  (Note: ops_to_qc of the banked op
+   list measures 278, while the banked cpen_best.qasm itself measures 258 --
+   the qasm came from a better emission of the same op list.)
