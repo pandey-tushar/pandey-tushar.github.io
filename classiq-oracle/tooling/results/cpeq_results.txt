@@ -1,0 +1,127 @@
+=== CP-EQ : depth-vs-liveness Pareto frontier of the whole-F XAGs ===
+Ordering only (every AND executed exactly once, no recomputation).
+Model: 1 register per AND-node output, held from its production step until
+its last consumer step.  "end" = the single CZ consumes all its feeders at
+one instant (cpeo_dag's definition).  "incr" = the CZ accumulator absorbs
+each feeder as soon as it exists (feeders with no AND consumer die at once).
+Tool: cpeq_dag.py (DAG extraction) + cpeq_pareto.py (CP-SAT cumulative
+scheduling, minimise makespan in AND-levels subject to capacity K).
+
+MEASURED minimum peak live over ALL topological orders (CP-SAT, proven
+optimal: objective value == best bound), vs the ASAP figure in cpeo_results:
+  XAG                   nands  AND-depth  ASAP peak  min peak (end)  (incr)
+  cpdm_wide_tree.prog     47       6         34           29           29
+  cpdm_wide.prog          48       6         38           33           33
+  cpdl_best.prog          41      19         27           20           20
+=> ordering alone buys 5 / 5 / 7 registers; the "incr" phase model buys 0.
+
+MEASURED Pareto frontier K -> min AND-depth (CP-SAT, OPT unless noted):
+  cpdm_wide_tree : K=4,5,6,7,8,10,12,16,20,24 INFEASIBLE ; K=34 -> 7 ;
+                   K=40 -> 6 ; K=64 -> 6   (heuristic 9 / 6 / 6)
+  cpdm_wide      : K=4..24 INFEASIBLE ; K=34 -> 9 ; K=40 -> 7 ; K=64 -> 6
+  cpdl_best      : K=4..16 INFEASIBLE ; K=20 -> 25 ; K=24 -> 21 ;
+                   K=34 -> 19 ; K=40 -> 19 ; K=64 -> 19
+Identical in both phase modes.
+
+MEASURED fine Pareto grid (CP-SAT, all OPT; K -> min AND-depth in levels;
+"inf" = no schedule exists at that register budget without recomputation):
+  K            4..16  17  18  19  20 21 22 23 25 26 27 28 29 30 31 32 33 34 36 38 40 42 48 64
+  wide_tree     inf  inf inf  -   inf -  -  - inf inf  ?  inf 12 10  8  8  7  7  6  6  6  6  6  6
+  wide          inf  inf inf  -   inf -  -  -  -  -   -   -  inf inf inf inf 11 9  7  7  7  6  6  6
+  cpdl_best     inf  inf inf inf  25 23 22 21  -  20  -  19 19  19 19 19 19 19 19 19 19 19 19 19
+  n47           inf  inf inf  -   inf -  -  -  -  -   -   - inf inf  -  -  inf inf  -  - inf  -  -  8
+  ("?" = 45 s CP-SAT time-out at wide_tree K=27, bracketed INFEASIBLE both sides)
+  min peak live (proven optimal): wide_tree 29, wide 33, cpdl_best 20, n47 45
+    ("incr" phase model: 29 / 33 / 20 / 41)
+
+MEASURED (cpeq_raw.py) raw-input read pattern -> data wires usable as hosts.
+A data wire can host an intermediate only after its raw bit's last operand
+read.  Number of the 12 data wires free BEFORE each AND level:
+  cpdm_wide_tree  level 0,1,2: 0   level 3,4: 2   level 5: 5   after: 8
+  cpdm_wide       level 0,1,2: 0   level 3: 2  level 4: 4  level 5: 7  after: 10
+  cpdm_n47        level 0,1,2: 0   level 3..6: 2   level 7: 5   after: 8
+  cpdl_best       levels 0-5: 0  level 6: 1  levels 7-13: 4  14-16: 5
+                  level 17: 7  level 18: 10  after: 12
+  (wide_tree 41 of its 47 ANDs are at levels 0-2, where 0 data wires are free)
+=> effective budget during the high-pressure levels is K = 6 (the clean
+   ancillas), rising to 8-11 only after most ANDs have fired.  The absolute
+   ceiling, counting every wire in the machine as a register, is 18.
+
+MEASURED (cpeq_check.py, independent of CP-SAT) peak live of the identity
+and ASAP orders and best of 20,000 random topological orders:
+  cpdm_wide_tree  identity 35  ASAP 35  best random 30   (CP-SAT optimum 29)
+  cpdm_wide       identity 39  ASAP 39  best random 34   (CP-SAT optimum 33)
+  cpdl_best       identity 28  ASAP 30  best random 22   (CP-SAT optimum 20)
+  cpdm_n47        identity 53  ASAP 57  best random 48   (CP-SAT optimum 45)
+  (these run 1 higher than cpeo_dag.py's 34/38/27/52 because cpeo_dag frees
+   a value at the index of its last consumer instead of after it; a Margolus
+   holds its operands while it writes, so the +1 count is the physical one)
+
+MEASURED (cpeq_wire.py) strictly different register accounting: one wire per
+operand XOR-accumulator (open from its first contribution to the AND firing),
+one register only for nodes with >= 2 delivery targets, pure-raw-affine
+operands free (in-place CX on a data wire).  Nodes with exactly 1 target:
+7/47, 6/48, 6/41, 9/63 -- the accumulator trick applies to almost nothing.
+  cpdm_wide_tree  min peak 23 (FEAS at 120 s, bound 2)
+  cpdl_best       min peak 34 (FEAS at 120 s, bound 2)
+
+MEASURED (cpeq_bdd.py) the repo's ROBDD-XAG family of the whole F
+(cpeh_xag.bdd + bdd_xag, AND-output DAG in the same model as above):
+  order            ANDs AND-depth ASAP peak  best-of-4000-random peak
+  cpeh_78           78     11        27            19
+  yrev_xrev         86     11        27            21
+  x_then_y          96     11        27            25
+  xrev_yrev         83     11        32            24
+  cpeh_82           82     11        34            27
+  y_then_x         107     11        41            35
+  msb_first        140     11        48            39
+  interleaved      190     11        53            48
+  Free data wires before each AND level (BDD reads each raw variable in one
+  band, so wires free up progressively -- unlike the cpdm XAGs):
+    cpeh_78    [0,0,0,1,2,5,6,7,8,9,11,12]
+    yrev_xrev  [0,0,0,0,2,4,5,6,7,8, 9,12]
+
+MEASURED (cpeq_bfine.py) Pareto frontier of the ROBDD-XAGs (node model,
+CP-SAT, "end" phase mode):
+  cpeh_78   (78 ANDs, AND-depth 11): min peak live <= 18 (FEAS at 60 s);
+            wire-model min peak <= 21
+  yrev_xrev (86 ANDs, AND-depth 11): min peak live <= 17 (FEAS at 60 s)
+  x_then_y  (96 ANDs, AND-depth 11): min peak live <= 22 (FEAS at 60 s)
+
+MEASURED (cpeq_bfine.py) full Pareto grid of the ROBDD-XAGs, node model,
+CP-SAT 60 s per point ("unk" = 60 s time-out, no decision):
+  K              6   8  10  12  14  16  18  20  24  30
+  cpeh_78 (78)  inf inf inf inf unk unk <=21 17  14  12
+  yrev_xrev(86) inf inf inf inf unk unk  21  17  14  12
+  x_then_y (96) inf inf inf inf unk inf inf unk 16  12
+  min peak live: cpeh_78 <=18, yrev_xrev <=17, x_then_y <=22 (node model);
+                 wire model <=21 / <=20 / <=40
+=> the ROBDD family is the best of the two families at low K, and it is
+   still INFEASIBLE at every K <= 12, and its first feasible point at
+   K = 18 costs AND-depth 21 (147 Margolus layers forward, ~294 mirrored).
+
+MEASURED (cpeq_measure.py, cpdh_core.measure, shape=LOGO, forward + mirror,
+qiskit transpile basis u3/cx) the REAL transpiled depth of each whole-F XAG
+emitted at its NATURAL width with UNLIMITED registers -- the best case the
+structure can ever give, with no liveness constraint at all:
+  XAG                  wires regs ANDs  fwd opt2      block opt2 = opt3   exact
+  cpdm_wide_tree.prog   142  130   47  377 / 987 cx   745 /  1891 cx     mism 0 dirty 0
+  cpdm_wide.prog        144  132   48  239 / 722 cx   481 /  1445 cx     mism 0 dirty 0
+  cpdl_best.prog        106   94   41  181 / 435 cx   367 /   869 cx     mism 0 dirty 0
+  cpdm_n47.prog          47   40   63  672 /1154 cx  1341 /  2263 cx     mism 0 dirty 0
+  Baseline already banked: cpen_best.qasm 258 depth / 520 cx at 18 wires.
+=> at 124 extra wires and 130 free registers the AND-depth-6 XAG measures
+   745; the best of the four measures 367.  The 6 AND levels are 42 layers
+   of Margolus; the other 700 layers are the affine operand assembly
+   (926 CX forward for cpdm_wide_tree).  AND-depth was never the binding
+   quantity for these XAGs.
+
+CONCLUSION (measured): at the register budget that exists (6 clean ancillas
+during every level where these XAGs fire most of their ANDs; 18 counting
+every wire in the machine as a register, which destroys the inputs) the
+minimum AND-depth of every whole-F XAG in the repo is undefined -- no
+ordering exists at all, for K = 6, 8, 10, 12 and (for the cpdm family) for
+every K <= 28.  The first feasible budgets are 20 (cpdl_best), 29
+(cpdm_wide_tree), 33 (cpdm_wide), 45 (cpdm_n47), >=14 and <=18 (cpeh_78 /
+yrev_xrev ROBDD).  Nothing was built; the banked best stays
+cpen_best.qasm 258 / 520.
