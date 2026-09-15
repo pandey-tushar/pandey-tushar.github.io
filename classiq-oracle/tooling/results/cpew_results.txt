@@ -1,0 +1,235 @@
+=== CP-EW : shaped objective (density + depth penalty), gate count allowed to grow ===
+TRUE metric everywhere: transpile(basis_gates=['u3','cx'], optimization_level=2)
+then qc.depth(); width <= 18; verify18.verify_sv18 bound 1e-10.
+density = (2*cx + u3) / (width * depth).
+
+BASELINE re-measured this session (cpew_obj.py on the file):
+  cpev_best.qasm opt2: width 18 depth 249 cx 520 u3 536 density 0.352
+                       verify_sv18 True err 4.18e-15
+  cpev_best.qasm opt3: width 18 depth 249 cx 520 u3 536 density 0.352
+
+STATE MACHINERY (cpew_state.py): search variables
+  op-order priority vector (422 ops), 58 control-swap bits, and a NEW
+  per-wiring host map over 57 distinct nonlinear wirings (sorted-control key).
+  A host entry replaces EVERY occurrence of that wiring by
+    G(ctrls,w); cx(w,t); G^-1(ctrls,w)  [+ cx(w,t) if w is not |0>]
+  which is the gate-count-GROWING variable (+2 or +3 ops per occurrence).
+  Re-measured the three cpev end states through this machinery:
+    cpev_search_s21.pkl -> depth 249 cx 520 u3 540 density 0.3525
+    cpev_search_s22.pkl -> depth 249 cx 520 u3 538 density 0.3521
+    cpev_search_s23.pkl -> depth 249 cx 520 u3 536 density 0.3516
+  identity order, no swaps, no hosts -> depth 254 cx 520 u3 540 density 0.3456
+  evaluation cost 0.41-0.53 s.
+
+STRUCTURE of the 249 op list (cpew_probe.py, measured)
+  422 ops: 184 x, 112 cx, 94 ccx(RCCX), 12 c3x, 12 c3x_dg, 7 cz, 1 ccz.
+  free-|0> wires along the stream: min 0, max 6, mean 1.32;
+    histogram {0:170, 1:110, 2:41, 3:61, 4:18, 5:20, 6:2}
+  118 nonlinear ops, 55 of them have a clean free wire available.
+  => room for gate growth exists but is thin: 170 of 422 op positions have
+     no free wire at all.
+
+SHAPE FEATURES of the banked 249 circuit (cpew_shape.py, on the opt2 transpile)
+  depth 249, 1056 gates (520 cx + 536 u3), density 0.3516
+  zero-slack (critical) gates 632 / 1056 = 59.8%
+  mean slack 1.43 layers
+  ASAP layer occupancy mean 4.241 gates/layer, variance 2.713
+  max per-wire touches 135, headroom 249-135 = 114
+  => 60% of all gates are critical; that is the measured reason depth is a
+     plateau (most single moves cannot shorten any critical path).
+
+PLATEAU PROBE (cpew_log_smoke.txt, 259 evaluations of order/swap/host moves
+from the 249 state, alpha = 0):
+  depth 249: n=134, density 0.3514..0.3530, cx 520..522, hosts 0
+  depth 250: n=  5, density 0.3502..0.3509
+  depth 251: n= 14, density 0.3484..0.3502
+  depth 253: n= 10, density 0.3461..0.3485
+  => on the plateau (equal depth 249) the density spread is only 0.0016, and
+     it is entirely carried by cx 520..522.  Confirms: at fixed width and
+     fixed gate count density and depth are the same quantity; density is
+     informative only through the gate count.
+  Evaluations with at least one host entry: 64, min depth 255, median 281.
+  Evaluations with no host entry: 195, min 249, median 249.
+  => a single un-repaired host move costs 6-32 layers, so the gate-growth
+     variable cannot be explored by a greedy chain; it needs a repair step.
+
+ALPHA SCALE (derived from the measured spread, not assumed)
+  J = depth - alpha*density.  Plateau density spread 0.0016 =>
+    alpha = 30   : 0.05 units, weaker than the cx tie-break
+    alpha = 300  : 0.48 units, a strong tie-break inside the plateau,
+                   cannot cross a layer on its own
+    alpha = 1000 : 1.6 units, can trade one layer for density
+  Chains run at alpha = 0 / +300 / -300 (below).
+
+OP-LEVEL CRITICAL PATH of the 249 state (cpew_crit.py, PROF occupancy weights)
+  longest weighted path 438 (op model), 99 ops on it:
+    27 x, 34 ccx, 24 cx, 3 cz, 5 c3x, 5 c3x_dg, 1 ccz
+  44 nonlinear ops on the path over 29 distinct wirings (host-move targets).
+
+GADGET-MODE LEVER (cpew_emit.py, measured by me on the standalone gadgets,
+transpile u3/cx opt2, and by Operator() comparison against a clean CCX/C3X):
+  RCCX  (mode 0)     depth  7 cx  3 u3  4   max|U - clean CCX| = 2.00
+  h;CCZ;h (mode 2)   depth 11 cx  6 u3  8   max|U - clean CCX| = 2.2e-16
+  clean CCX (mode 1) depth 11 cx  6 u3  8
+  RC3X  (mode 0)     depth 13 cx  6 u3  7   max|U - clean C3X| = 2.00
+  h;C3Z;h (mode 2)   depth 28 cx 14 u3 19   max|U - clean C3X| = 2.2e-16
+  clean C3X (mode 1) depth 28 cx 14 u3 19
+  => modes 1 and 2 are the same circuit after transpile; the only real choice
+     is RCCX/RC3X (relative phase, cheap) vs clean (exact, expensive).
+
+WAVE 1 -- ALPHA SWEEP (cpew_search.py, J = depth - alpha*density, same start
+state cpev_search_s23.pkl = 249/520, same move set incl. the host map,
+1500 s each, 3 chains in parallel).  Every number below is from the chain's
+own evaluation log (cpew_log_<tag>.txt); depth is the TRUE metric.
+  alpha     evals   min depth   evals at depth 249   density at 249 (min..max/mean)   evals with gate growth   of those at 249
+    0       2422       249       201  ( 8.3%)        0.3516..0.3539 / 0.3530          1481                     0
+  +300      2362       249      1258  (53.3%)        0.3516..0.3608 / 0.3582          1759                   862
+  -300      2432       249       457  (18.8%)        0.3512..0.3581 / 0.3521           446                     1
+  Densest depth-249 state found WITH a grown gate set (alpha=+300):
+     depth 249  cx 534  u3 549  density 0.3608  428 ops  1 host entry
+     (banked 249: cx 520 u3 536 density 0.3516)
+  => SIGN OF ALPHA: POSITIVE.  alpha = +300 (i.e. ~0.5 layer per 0.0016 of
+     density, the measured plateau spread) is the only shaping of the three
+     that (a) keeps the search on the depth plateau -- 53% of evaluations at
+     249 against 8% for plain depth -- and (b) finds equal-depth states whose
+     GATE COUNT HAS GROWN: 862 of them, against 0 for alpha=0 and 1 for
+     alpha=-300.
+  => GATE GROWTH IS AFFORDABLE AT CONSTANT DEPTH: +14 cx and +13 u3
+     (520 -> 534, 536 -> 549) absorbed with the depth unchanged at 249.
+  None of the three chains went below 249.
+
+WAVE 1 RAW-LOG DERIVED QUANTITIES (same logs, computed by me)
+  cx per layer of the densest constant-depth state: 534 / 249 = 2.14
+  cx per layer of the banked 249:                   520 / 249 = 2.09
+  leader (137 / 561):                               561 / 137 = 4.09
+  => 14 extra CX were absorbed at constant depth; they raised cx/layer by
+     0.05, i.e. the gate growth was absorbed by existing slack rather than
+     converted into parallelism.
+  How much gate growth survives at depth 249 (wave-1 logs):
+    alpha=0     at 249: cx 520..524, 0 evaluations with a host entry
+    alpha=+300  at 249: cx 520..534, up to 1 host entry (428 ops, +6 ops)
+    alpha=-300  at 249: cx 520..530, up to 1 host entry (428 ops, +6 ops)
+    largest op list reached anywhere in the three chains: 458 ops (+36),
+    but never at depth 249.
+  => the plateau absorbs AT MOST ONE hosted wiring (+6 ops, +14 cx).  Any
+     second one costs depth.
+
+WAVE 1 FINAL: all three chains ended at depth 249 / 520 cx
+  alpha=0 3120 iterations, alpha=+300 3096, alpha=-300 3255
+  (9471 shaped evaluations in total; none below 249).
+
+GADGET-CHOICE SWEEP (cpew_modes.py, 114 evaluations, 53 s): replacing EVERY
+occurrence of one wiring's Margolus gadget by the CLEAN form
+  mode 1 = CCX / C3X, mode 2 = h;CCZ;h / h;C3Z;h
+from the 249 state, one key at a time:
+  depth over all 114 single-key mode changes: min 249, median 255, max 310
+  mode 1 and mode 2 give the IDENTICAL (depth, cx) for 54 of 57 keys
+  four keys are FREE in depth while growing the gate count:
+    key (0,1,11)  -> depth 249 cx 523 u3 542 density 0.3543
+    key (6,7,12)  -> depth 249 cx 525 u3 545 density 0.3559
+    key (11,17,15)-> depth 249 cx 526 u3 537 density 0.3545
+    key (2,11,6)  -> depth 249 cx 526 u3 542 density 0.3556
+  => a second, ancilla-free gate-growth lever exists (the clean gadget needs
+     no free wire), and it too is absorbed at constant depth but does not
+     lower it.
+
+GATE-GROWTH WITH TIMING REPAIR (cpew_repair.py: apply a clean-host move to a
+wiring, then re-time with a 25-evaluation order/swap ILS before judging;
+host wires restricted to wires that are |0> at EVERY occurrence of that
+wiring, 70% of proposals aimed at wirings on the op critical path):
+  19 wirings have such a clean host wire, 32 (wiring, wire) pairs,
+  11 of the 19 lie on the op-model critical path.
+  30 repaired hops from the 249 state, alpha = +300:
+    repaired depth distribution 258 x2, 259 x1, 262 x5, 265 x3, 272 x4,
+    274 x1, 275 x1, 277 x1, 283 x5, 285 x1, 287 x1, 290 x1, rest deeper;
+    BEST 258 (+9 layers over 249).
+  => hosting a whole wiring costs at least 9 layers even after re-timing.
+
+DIRECTED DENSIFICATION AT CONSTANT DEPTH (cpew_greedy.py: each round sweeps
+every single gate-growing move -- gadget-mode change on a wiring, clean host
+on a wiring -- and keeps the one that grows (2cx+u3) most without raising the
+depth; 85-89 moves per round):
+  base                                   depth 249 cx 520 u3 536 gates 1576 density 0.3516
+  round 0 took mode (6,7,12)  -> clean   depth 249 cx 525 u3 545 gates 1595 density 0.3559
+  round 1 took mode (2,11,6)  -> clean   depth 249 cx 531 u3 552 gates 1614 density 0.3601
+  round 2 took mode (12,17,13)-> clean   depth 249 cx 537 u3 559 gates 1633 density 0.3643
+  round 3 took mode (11,17,15)-> clean   depth 249 cx 543 u3 560 gates 1646 density 0.3672
+  round 4: 85 moves, NONE free in depth -> saturated.
+  verify_sv18 on the densest state: True, err 1.07e-14 (width 18, exact).
+  => +23 cx and +24 u3 (gates 1576 -> 1646, +4.4%) are absorbed at UNCHANGED
+     depth 249; the 5th such move is not.  cx/layer 2.09 -> 2.18.
+     (This circuit is NOT a better submission: same depth, higher cx, so it
+     loses the CX tie-break to the banked 249/520.)
+
+PLATEAU WALKS (cpew_plateau.py, accept only depth <= 249, 800 evaluations):
+  density-seeking endpoint : depth 249 cx 522 u3 541 density 0.3536
+  leanness-seeking endpoint: depth 249 cx 520 u3 534 density 0.3512
+  (the greedy sweep above reaches a far denser constant-depth state, 0.3672,
+   than the random plateau walk does, 0.3536)
+  ILS from the densest constant-depth state (900 order/swap evaluations at the
+  grown gate set 543 cx / 560 u3): best depth 249, cx 543.
+  => the denser launching point did not produce a drop either.
+
+LAUNCHING-POINT EXPERIMENT (cpew_launch.py): three depth-249 states that differ
+only in density, each given THREE identical 350-evaluation plain-depth
+order/swap local searches (same rng seeds for all three states):
+  start                         density   best depth reached (3 reps)   evaluations at depth <= 249
+  dense plateau endpoint 0.3536  0.3536   249/522, 249/522, 249/520      24, 166, 76
+  lean  plateau endpoint 0.3512  0.3512   249/520, 249/520, 249/520      24,  97, 77
+  banked 249 state       0.3516  0.3516   249/520, 249/520, 249/520      24,  97, 77
+  => the denser launching point has the wider plateau basin in 1 of 3 reps
+     (166 vs 97 evaluations at depth <= 249) and is identical in the other 2;
+     none of the three produced a depth below 249.
+
+ALPHA = +1000 (strong enough to trade a layer for density), 1800 s,
+host moves at 35%: 3671 iterations, best depth 249 / 520.  The chain settles
+at depth 252-254 with density 0.368-0.370 and 3-4 host entries, i.e. at this
+magnitude the shaping buys density by PAYING depth -- too strong.
+  => alpha = +300 is the right magnitude; +1000 overshoots.
+
+FOUR-VARIABLE SHAPED SEARCH FROM THE DENSEST STATE (cpew_search3.py: order,
+control swaps, host map, gadget-mode map; alpha = +300; started from the
+greedy 249 / 543 cx / 0.3672 state; 1975 evaluations, 1000 s):
+  354 of 1975 evaluations (17.9%) at depth 249
+  densest depth-249 state reached: cx 567 u3 592 density 0.3851, 8 clean-gadget
+    wirings, 0 hosts (exact by construction -- the clean-gadget substitution is
+    a per-wiring identity -- measured through the objective, not separately
+    sv-verified)
+  leanest depth-249 state in that run: cx 543 u3 560 density 0.3672
+    (verify_sv18 True err 1.07e-14)
+  minimum depth over all 1975 evaluations: 249.
+  => +47 cx and +56 u3 over the banked 249/520/536 are absorbed at UNCHANGED
+     depth 249.  cx per layer 520/249 = 2.09 -> 567/249 = 2.28, against the
+     leader's 561/137 = 4.09.
+
+FINAL (re-measured at the end of the session, from the file)
+  cpev_best.qasm opt2: width 18 depth 249 cx 520 u3 536 density 0.352
+                       verify_sv18 True err 4.18e-15
+  cpev_best.qasm opt3: width 18 depth 249 cx 520 u3 536 density 0.352
+  Nothing below 249 was produced, so cpew_best.qasm was NOT created and the
+  banked best stays cpev_best.qasm 249 / 520.
+
+TOTALS this session: 9471 shaped evaluations in the alpha sweep, 3671 at
+alpha=+1000, 1975 in the four-variable search, 900 in the greedy ILS, 3150 in
+the launching-point experiment, 800+800 in the plateau walks, 114 in the
+gadget-mode sweep, 30 repaired host hops (25 evaluations each = 750),
+259 in the probe -- about 21,900 evaluations of the true-metric objective.
+
+WHAT THE SHAPING BOUGHT (measured)
+  alpha = +300 on J = depth - alpha*density is the right sign and magnitude:
+  it raises the share of evaluations that stay on the depth plateau from 8.3%
+  (alpha = 0) to 53.3%, and it is the only setting that finds equal-depth
+  states with a GROWN gate count (862 such evaluations against 0 at alpha = 0
+  and 1 at alpha = -300).  Negative alpha is worse than zero on both counts
+  except for plateau residency (18.8%).
+
+WHAT BLOCKS < 249 (single measured number)
+  Gate growth is absorbed but never converted into parallelism: the densest
+  depth-249 state reachable grew the circuit by +47 cx and +56 u3 (520/536 ->
+  567/592, density 0.3516 -> 0.3851) with the depth UNCHANGED at 249, and its
+  cx per layer is 2.28 against the leader's 4.09.  Every move that grows the
+  gate set further, or that hosts a whole wiring even after a 25-evaluation
+  re-timing repair (best 258, +9 layers), raises the depth.  The circuit has
+  632 of 1056 gates at zero slack (59.8%) and only 1.32 free-|0> wires on
+  average (0 free wires at 170 of 422 op positions), so the added gates land
+  in existing slack rather than shortening any critical path.
