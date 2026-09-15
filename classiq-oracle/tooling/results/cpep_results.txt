@@ -1,0 +1,85 @@
+=== CP-EP : affine-coset-indicator cover -> real circuit ===
+BASELINE carried in: cpen_best.qasm (width 18, opt2 depth 258, 520 cx,
+verify_sv18 PASS err 6.11e-15).  Leaderboard 1st 142/557, 2nd 166/348.
+
+MEASURED (cpep_cost.py) cost of one codim-m term = C^(m-1)Z on m form wires
+with 6 clean ancillas available, best over qiskit 2.4 mcx syntheses,
+transpile(basis=u3,cx, opt=2):
+  m     3   4   5   6   7   8   9  10  11  12
+  depth 10  22  36  44  54  54  56  60  64  72
+  cx     6  12  18  24  30  36  42  48  54  60
+  best method: m=3 noaux_v24, m=4,5 1clean_kg24, m>=6 2clean_kg24.
+  cx(m) = 6*(m-2) exactly for every m in 3..12.
+
+MEASURED (cpep_cover.py, vectorized beam search reproducing cpeo_coset):
+  objective 2|RnC|-|C| (cpeo's), beam 16, maxcodim 12 -> 36 terms,
+    sumcodim 292, C^kZ cx 1320.
+  objective gain - lam*cx(codim), beam 32:
+    lam 0.02/0.05/0.1 -> 34 terms, sumcodim 270, C^kZ cx 1212  (best found)
+    lam 0.2 / 0.5 / 1.0 / 2.0 -> stall with residual 1 / 17 / 43 / 103
+  objective gain/cx(codim) ("ratio", favours low codim), beam 8/16/32/64 ->
+    stall with residual 147 / 20 / 9 / 6 after 57/69/77/70 terms
+    (cx already 2172-2880 at the stall).
+=> cover cx floor found by search: 1212 for the C^(m-1)Z gates alone.
+
+MEASURED (structural, cpep_analyze.py) on the 34-term/270-codim cover:
+  270 form instances, 214 DISTINCT linear forms.
+  pairwise shared (form,side) pairs between terms: max 2, mean 0.18.
+  distinct-form popcount histogram 1:9 2:19 3:30 4:33 5:39 6:27 7:20 8:20
+    9:12 10:4 12:1  (mean weight 5.1)
+=> the "shared linear forms / shared AND prefixes across terms" lever is
+   absent in this structure: consecutive terms need an essentially full
+   change of basis of the 12 data wires.
+
+EXACTNESS NOTE (algebraic, verified below): |F| = 1097 is odd, so the ANF
+degree-12 coefficient of F is 1.  A codim-m coset indicator is a product of
+m affine forms, degree <= m.  Hence ANY XOR-of-coset-indicator representation
+of F must contain an odd number (>= 1) of codim-12 terms.  A codim-12 coset
+in GF(2)^12 is a single point, so >= 1 C^11Z (measured 72 depth / 60 cx) is
+mandatory in this structure, and no max-codim cap below 12 can ever be exact.
+
+MEASURED (cpep_build.py) real 18-wire circuit from the 34-term cover:
+  data wires 0-11 host the forms under in-place invertible GF(2) maps
+  (PMH CNOT synthesis per basis change), C^(m-1)Z per term with clean
+  ancillas 12-17, final map back to the identity basis.
+  naive term order, e_i completion : linear-layer cx 1845,
+    opt2 depth 2803, cx 3057, u3 1713.
+  verify_sv18 on that circuit: PASS err 2.35e-14 (structure + build correct).
+
+MEASURED (cpep_build2.py) same cover, basis-preserving completion (each term
+keeps the maximum number of current wire-forms) + greedy term ordering over
+the commuting terms:
+  seed 0 : linear cx 1060, opt2 depth 2314, cx 2270, u3 1708
+           verify_sv18 PASS err 1.91e-14
+  seed 1 : linear cx 1109, opt2 depth 2320, cx 2319, u3 1710
+  seed 7 : linear cx 1165, opt2 depth 2377, cx 2377, u3 1712
+  best real circuit from this structure: depth 2314 / 2270 cx (exact);
+           opt3 identical (depth 2314, cx 2270).
+  Baseline for comparison: cpen_best.qasm depth 258 / 520 cx.
+
+MEASURED (cpep_pairs.py) whether the commutation of the 34 terms buys any
+scheduling freedom on 18 wires.  Two terms can be in flight at the same time
+only if their form sets fit one wire assignment.
+  union of the two form sets: min 7, mean 15.7, max 22 (12 data wires).
+  pairs whose union is INDEPENDENT (hostable as rows of one invertible
+  in-place map of the data wires): 1 / 561, and still 1 / 561 at a wire
+  budget of 14, 16 or 18.
+  pairs by size alone (ignoring independence): 79 / 561 at 12 wires,
+  186 at 14, 323 at 16, 462 at 18 -- but the dependent extras then need
+  ancilla copies, competing with the 2 ancillas each C^(m-1)Z needs as
+  AND scratch.
+  sum of the measured C^(m-1)Z depths over the cover = 1762, and with
+  1 / 561 overlappable pairs that sum is a hard depth floor for the
+  structure, against the 258 already banked.
+=> the brief's premise "all 34 terms commute, so they can be overlapped
+   freely" is void at the wire level: the terms commute as phase operators
+   but their implementations all contend for the same 12 data wires, each
+   needing an essentially disjoint basis, so they run strictly serially.
+
+CONCLUSION (measured): the affine-coset-indicator structure costs
+2270 cx / depth 2314 exact at 18 wires, i.e. 4.4x the cx and 9.0x the depth
+of the banked 258 / 520.  Its own floors -- 1212 cx for the C^(m-1)Z gates
+alone (best over the objective sweep), 1762 depth from non-overlappable
+terms, 1 mandatory C^11Z (72 depth / 60 cx) forced by |F| = 1097 odd --
+are each already above the 150 target.  Structure closed; no improvement
+over 258 written, cpep_best.qasm not created.
