@@ -1,0 +1,105 @@
+=== CP-ER : liveness-first synthesis of F (peak live <= 6 as a HARD constraint) ===
+BASELINE carried in: cpen_best.qasm (width 18, opt2 depth 258, 520 cx,
+verify_sv18 PASS err 6.11e-15). Leaderboard 1st 137/561.
+Task: AND count free (<= ~58), AND-depth <= 19, peak live <= 6.
+
+MEASURED (cper_struct.py) truth-table facts re-confirmed: |F| = 1097,
+886 ANF monomials, max degree 12 (deg-12 coefficient = 1),
+11 distinct x-cofactors, 11 distinct y-cofactors, GF(2) rank 10.
+
+ASSUMPTION (brief): a straight-line program exists whose 6 live ancilla
+values, together with the 12 raw wires, span F (F reachable as ONE value
+at peak live <= 6).
+MEASURED (cper_beam.py, beam 6, 500 candidate ANDs/step, operands = any
+XOR of 2 elements of {12 raw, <=6 live} and complements; score = EXACT
+d(F, span(raw u live)) by Walsh-Hadamard RM(1,12) decoding):
+  step   1   2   3   4   5   6   7   8  9..23
+  d    827 759 653 637 621 611 607 603 603 (frozen)
+  nand   1   2   3   4   5   6   8  10 12..40
+  (d starts at 1097 = |F|.)
+=> freezes at residual 603 of 4096 after 8 ANDs.  From step 7 every step
+   must uncompute a register to free a slot and no replacement improves d.
+   "F as one value at peak live 6" is closed for this search.
+
+ASSUMPTION (brief): phase accumulation removes the "F must be one value"
+limit, so a liveness-first cover of F by products of AVAILABLE forms
+(affine in the 12 raw wires, plus any live register values) reaches an
+exact representation at peak live <= 6 with few ANDs.
+MEASURED (cper_cover.py, greedy term refinement, beam 12 over (form,side),
+objective 2|R n C| - |C|, residual-point-seeded fallback when the free
+greedy gain goes <= 0; C^(m-1)Z cost table from cpep_cost.py):
+  EXACT cover reached, residual 0, in 40 terms.
+  codims [3,4,5,5,6,6,6,6,8,8,7,7,8,8,8,7,7,8,9,9,8,8,9,9,8,9,10,9,9,10,
+          10,10,10,10,10,10,10,10,10,12]  sum 326
+  peak live 2 (the two clean ancillas each C^(m-1)Z needs)
+  AND executions sum 2*(m-2) = 492   (= 246 forward ANDs)
+  model depth (sum of measured C^(m-1)Z depths) 2106, C^kZ cx 1476
+  registers actually chosen by the greedy as factors: 0 of 326 instances
+  shared factors between terms: max 3, mean 0.22
+  (cpeo/cpep's linear-only cover: 34 terms / sum codim 270-280; this run
+   is the same structure with the nonlinear-register lever added, and the
+   greedy never took a register factor.)
+
+MEASURED (derived from the above, at the brief's own Margolus model):
+  492 AND executions on 6 ancillas, at most 6 concurrent Margolus targets
+  -> serial AND-depth floor 492/6 = 82 AND levels = 574 depth layers.
+  Against the brief's budget: 58 forward ANDs and AND-depth 19.
+  Achieved triple at the hard peak-live-6 constraint:
+    (forward ANDs, AND-depth, peak live) = (246, ~492 serial / >=82 at
+    perfect 6-way parallelism, 2).
+
+MEASURED (cpen_search_11.pkl, the op list behind cpen_best.qasm):
+  422 ops = 184 x, 112 cx, 94 ccx, 12 c3x, 12 c3x_dg, 7 cz, 1 ccz.
+  118 Toffoli-class nonlinear ops = 59 forward ccx + 12 forward c3x
+  (c3x = 2 ANDs) -> 71 forward ANDs.
+  The circuit has exactly 6 ancillas, so its peak ANCILLA-live is <= 6 by
+  construction; intermediates above that live on data wires.
+=> cpen_best.qasm is ALREADY a peak-live-<=6 construction with 71 forward
+   ANDs, i.e. inside the brief's 58-ANDs-ish band.  The from-scratch
+   liveness-first synthesis of this session lands at 246 forward ANDs,
+   3.5x worse, at 2106 model depth vs the banked 258 real depth.
+
+MEASURED (transpile opt2 of cpen_best.qasm) wire load:
+  depth 258, 520 cx, 580 u3, 18 wires.
+  per-wire touches q0..q17:
+   56 52 72 141 93 81 66 51 66 73 71 86 | 108 119 123 116 117 129
+  max 141 on q3 (confirms the brief's number).
+  ancilla touches (q12-q17) 712; data touches (q0-q11) 908; total 1620.
+  capacity at depth 137 = 18*137 = 2466 (ancillas 822, data 1644).
+=> 1620 of 2466 slots would fit inside a depth-137 envelope; only q3's 141
+   exceeds 137.  Capacity is not what holds the circuit at 258.
+
+ASSUMPTION (brief's "deep, narrow DAG"): the cover terms collapse into a
+shared prefix TREE, so a register chain realises every prefix for free and
+the AND count is the number of trie edges, not the sum of codims.
+MEASURED (cper_tree.py, terms inserted longest-first, each term's factors
+ordered to follow the deepest existing trie path):
+  sum of codims 326 -> trie EDGES 310, trie depth 12.
+  Sharing recovers 16 of 326 factor instances (5%).
+  A 6-register DFS walk of that trie costs 2 ANDs per edge = 620 AND
+  executions and 14*310 = 4340 strictly serial Margolus layers,
+  i.e. WORSE than the C^(m-1)Z emission of the same cover (492 executions,
+  2106 model depth).
+=> the prefix-tree lever does not exist in this function: consecutive terms
+   need essentially disjoint factor sets (confirms cpep's max 2 / mean 0.18
+   shared (form,side) pairs, here max 3 / mean 0.22).
+
+RE-MEASURED (insurance, unchanged): cpen_best.qasm opt2 258 / 520 cx / 580
+u3, opt3 258 / 520 cx, verify_sv18 PASS err 6.11e-15.  Nothing below 258
+was produced this session, so cper_best.qasm was not created.
+
+CONCLUSION (measured) of CP-ER:
+  Best triple reached under the HARD peak-live-<=6 constraint, synthesised
+  from scratch: (forward ANDs, AND-depth, peak live) = (246, 492, 2).
+  Brief's budget was (58, 19, 6).  Miss: 4.2x on ANDs, 26x on AND-depth.
+  Model depth of that construction 2106 (cpep measured the same structure
+  at real opt2 depth 2314, exact).
+  The single number that blocks it: 492 AND EXECUTIONS.  Even at perfect
+  6-way parallelism on the 6 ancillas that is 82 AND levels = 574 depth
+  layers, already 2.2x the banked 258 and 4.2x the 137 target.
+  Independent finding: cpen_best.qasm ALREADY satisfies peak ancilla-live
+  <= 6 (it has exactly 6 ancillas) at 71 forward ANDs -- inside the brief's
+  ~58-AND band -- because it hosts intermediates on data wires.  The
+  liveness constraint is therefore not an unexploited lever; it is already
+  saturated by the banked circuit, and re-synthesising for it from scratch
+  costs 3.5x more ANDs (246 vs 71).
