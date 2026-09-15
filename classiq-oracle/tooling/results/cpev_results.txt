@@ -1,0 +1,172 @@
+=== CP-EV : gadget dissolution, atom-level joint re-synthesis (density objective) ===
+BASELINE carried in: cpen_best.qasm width 18, opt2 258 / 520 cx / 580 u3,
+verify_sv18 PASS err 6.11e-15.  Leader 137 / 561.
+density = (2*cx + u3) / (width * depth).
+
+BASELINE RE-MEASURED (cpev_base.py, transpile basis u3/cx)
+  cpen_best.qasm opt2: width 18 depth 258 cx 520 u3 580 density 0.349
+                       verify_sv18 True err 6.11e-15
+  cpen_best.qasm opt3: width 18 depth 258 cx 520 u3 580 density 0.349
+
+ASSUMPTION: gadget boundaries can be dissolved by emitting the banked 422-op
+list in exact Clifford+T and running a published atom-level global rewriter
+(Nam-Ross-Su-Childs-Maslov, as implemented in pyzx 0.10.6 basic_optimization:
+Hadamard reduction, 1q/2q gate cancellation, rotation merging across the whole
+circuit), then re-timing with the cpej atom commutation scheduler.
+RESULT: TRUE.
+  cpev_ct.py  op list -> Clifford+T (opt_level 0): 551 cx, 302 h, 288 t,
+     287 tdg, 184 x; tcount 575; that circuit -> u3/cx opt2 = 278 / 520,
+     verify_sv18 True err 6.12e-15.
+  pyzx basic_optimization: tcount 575 -> 511.
+  pyzx output transpiled straight to u3/cx opt2: depth 313 cx 520 u3 536
+     density 0.280 (WORSE than 258 -- pyzx minimises gate count, not depth).
+  pyzx output through the cpej atom pipeline (cpev_pipe.py: transpile opt2,
+     u3 -> min-atom Rz/Rx split, exact commutation DAG, merge-aware list
+     schedule + 6 reverse-polish passes):
+     width 18 depth 254 cx 520 u3 540 density 0.346  opt2 = opt3
+     verify_sv18 True err 9.38e-15  -> WRITTEN cpev_best.qasm
+  Control: the same pipeline on cpen_best.qasm reproduces 258 / 520 exactly.
+
+MEASURED (cpev_zx2.py) battery of pyzx 0.10.6 global rewrites on the same
+Clifford+T emission, each scored THROUGH the atom pipeline (opt2 = opt3):
+  variant                     depth  cx    u3    density  tcount  verify
+  basic_optimization           254   520   540   0.346     511    PASS 9.4e-15
+  basic_optimization do_swaps  254   520   540   0.346     511    PASS
+  basic_optimization x3        254   520   540   0.346     511    PASS
+  teleport_reduce + basic      254   520   540   0.346     511    PASS
+  teleport_reduce alone        260   520   578   0.346     575    PASS
+  phase_block_optimize        1199  2191  1466   0.271     509    PASS
+  full_optimize               1185  2054  1352   0.256     509    PASS
+  clifford_simp + extract      496   856   674   0.267     511    PASS
+  full_reduce + extract + basic 783 1387   726   0.248     507    PASS
+  full_reduce + extract         972  1484  1080   0.231     507    FAIL (err 2,
+                                   extraction leaves the ancillas dirty)
+=> only the circuit-level rewriter (basic_optimization) helps; every
+   graph-level ZX reduction lowers tcount by 2-4 and pays 240-930 layers in
+   extraction.
+
+MEASURED (cpev_sat.py) exact CP-SAT re-timing of the 254 circuit's atom set
+(min-atom Rz/Rx split, 1600 atoms, exact commutation DAG, merge-aware layer
+model -- the same model cpej used):
+  merge-aware lower bound 249, heuristic schedule 254, T = 253 INFEASIBLE (1 s).
+=> 254 is the OPTIMUM of that gate set; further depth needs a different gate
+   set, not a different schedule.
+
+MEASURED (cpev_obj2.py) the composite objective, 0.4 s per evaluation:
+  op list -> ops_to_qc -> transpile to Clifford+T -> pyzx basic_optimization
+  -> atom pipeline (transpile u3/cx opt2, min-atom split, commutation
+  schedule + reverse polish).
+  banked 422-op list, no swaps:            254 / 520   (with pyzx)
+  same, pyzx stage removed:                260 / 520
+  Clifford+T transpile level 1 / 2 / 3:    254 / 520 each (level 0 identical)
+=> the pyzx stage is worth 6 layers on this op list; the Clifford+T
+   translation level is worth 0.
+
+ASSUMPTION: which gadgets become ADJACENT ON A SHARED WIRE decides how much
+the atom-level rewriter can fuse, so the op ORDER (a topological order of the
+op DAG) and the control WIRING are now first-class search variables against
+this new objective -- they were previously searched only against the old
+op-model objective, where all 92,667 reorders scored the same.
+RESULT: true, the objective moves.  cpev_search.py, joint ILS over
+(randomised-priority op order, 58 control-swap bits):
+  seed 11: 254 -> 252 / 521 after 29 evaluations (13 s), verify_sv18 PASS
+           err 9.1e-15, density 0.349  -> WRITTEN cpev_best.qasm
+  3 independent ILS chains (seeds 21/22/23), 0.4 s per evaluation, ~600
+  evaluations each in 5 min, all candidates verified with verify_sv18:
+    seed 21 -> 250 / 524  density 0.353  PASS err 4.29e-15
+    seed 22 -> 251 / 520  density 0.349  PASS err 4.85e-15
+    seed 23 -> 249 / 524 u3 541 density 0.355  PASS err 4.34e-15
+  -> cpev_best.qasm = 249 / 524, opt2 = opt3, density 0.355.
+
+MEASURED (cpev_prof.py) profile of the two circuits, ASAP layering of the
+opt2 transpile:
+  cpen_best.qasm 258: 227 layers carry a cx, 31 pure-u3 layers,
+    cx/layer histogram {0:31,1:79,2:60,3:43,4:35,5:8,6:2}, mean 2.02,
+    per-wire touches max 135..141 (q3 141) -> congestion LB 141, 258/141 = 1.83
+  cpev_best.qasm 249: 221 layers carry a cx, 28 pure-u3 layers,
+    cx/layer histogram {0:28,1:68,2:58,3:52,4:37,5:4,6:2}, mean 2.09,
+    per-wire touches max 135 (q3) -> congestion LB 135, 249/135 = 1.84
+  density 0.349 -> 0.352.
+
+MEASURED (cpev_loop.py) iterating the two stages against each other
+(atom re-schedule -> re-emit as rz/h/cx -> pyzx basic_optimization -> repeat):
+  from the 249 circuit: rounds 0..3 all measure 249 / 520, u3 536/537.
+=> the banked circuit is a JOINT FIXED POINT of the Nam-style rewriter and
+   the atom scheduler; neither stage has anything left for the other.
+
+MEASURED (cpev_host.py) whole-wiring clean-host sweep re-run against the NEW
+objective (every occurrence of one nonlinear wiring replaced by
+G(ctrls,w); cx(w,t); G^-1(ctrls,w) on a host wire w, exact):
+  843 (wiring, host) moves tried from the 249 state, best 249 / 520.
+=> none improves; the same result cpen measured at the op-model objective
+   holds at the atom-level objective.
+
+MEASURED (cpev_obj2.py) the objective on the other whole-circuit op lists in
+the repo:  cpen_search_11.pkl (422 ops) 254 / 520 ; cpen_start.pkl (418) and
+cpdp_best.pkl (418) 260 / 516 each.
+
+MEASURED (cpev_jloop.py) 275 random-restart jittered pyzx<->schedule loops
+from the 249 circuit: best 249.  Three ILS chains (cpev_search.py, seeds
+21/22/23) ran 1800-2800 evaluations each: all three reach 249 and none goes
+below it.
+
+MEASURED (cpev_sat.py) exact CP-SAT re-timing of the 249 circuit's atom set
+(1586 atoms, min-atom Rz/Rx split): merge-aware LB 247, heuristic 249,
+T = 248 INFEASIBLE (1 s).  => 249 is the OPTIMUM of that gate set.
+
+MEASURED (gate-level accounting of the fusion stage, the whole 422-op stream
+in one pass, no gadget boundaries respected):
+  Clifford+T emission before pyzx: 1612 gates
+      551 cx, 302 h, 288 t, 287 tdg, 184 x ; T-count 575
+  after pyzx basic_optimization : 1267 gates
+      493 cx, 216 h, 523 rz, 27 cz, 7 z, 1 x ; T-count 511
+  deltas: 86 Hadamards removed (these are exactly the gadget-boundary H's of
+  the 118 relative-phase Toffolis), 345 gates removed in total, two-qubit
+  gates 551 -> 520 (493 cx + 27 cz), T-count -64.
+=> the boundaries of the RCCX / RC3X gadgets are physically gone in the
+   emitted stream; what the metric then sees is 520 two-qubit gates and 536
+   merged 1q gates against the banked 520 / 580.
+
+MEASURED (cpev_search2.py / cpev_search3.py / cpev_rsched.py) attempts to get
+below 249, all from the 249 state, all against the same verified objective:
+  cpev_search2 (looser acceptance, restarts from best) seeds 31/32:
+      4739 and 1000 evaluations, best 249.
+  cpev_search3 (each evaluation runs the jittered pyzx<->schedule loop, so
+      fusion and re-timing iterate INSIDE the objective) seed 41:
+      928 evaluations, best 249.
+  cpev_rsched (randomised Rz/Rx atom-split modes + jittered schedules of the
+      249 circuit itself), 5975 evaluations: best 249 / 520.
+=> ~10,000 evaluations across four different search designs; 249 is the
+   attractor of every one of them.
+
+FINAL (cpev_best.qasm, re-read from the file)
+  single qreg q[18], gate set {cx, u3} only
+  opt2: width 18 depth 249 cx 520 u3 536 density 0.352 verify_sv18 True
+        err 4.18e-15
+  opt3: width 18 depth 249 cx 520 u3 536 density 0.352  (identical)
+  221 layers carry a cx, 28 pure-u3 layers, cx/layer {0:28,1:68,2:58,3:52,
+  4:37,5:4,6:2} mean 2.09, per-wire touches max 135 (q3) -> 249 / 135 = 1.84.
+  Previous bank: cpen_best.qasm 258 / 520 / 580, density 0.349.
+
+WHERE THE 9 LAYERS CAME FROM (measured, additive)
+  258 / 260  : starting points, both measured through the atom pipeline --
+               cpen_best.qasm 258, the same 422-op list re-emitted through
+               ops_to_qc 260 (the banked qasm was a luckier emission of it);
+  260 -> 254 : atom-level fusion of the whole stream at once (pyzx
+               basic_optimization = Nam-Ross-Su-Childs-Maslov: Hadamard
+               reduction, 1q/2q cancellation, rotation merging across all 118
+               gadget boundaries) -- 86 H, 31 two-qubit gates and 64 T gates
+               removed;
+  254 -> 249 : choosing the op ORDER and the control WIRING so that more
+               gadget boundaries are fusible (joint ILS, 0.4 s/evaluation).
+  Both stages are needed: without the fusion stage the same search objective
+  measures 260; without the search the fusion alone measures 254.
+
+WHAT BLOCKS < 249 (single measured number)
+  CP-SAT proves T = 248 INFEASIBLE for the atom set of the 249 circuit
+  (1586 atoms, merge-aware LB 247), and the pyzx<->schedule iteration is at a
+  fixed point (rounds 0..3 all 249 / 520), so no re-timing and no further
+  atom-level rewrite of THIS gate set exists.  The gate set itself is held by
+  the op list: cpes measured its real-metric floor at 174 and its
+  unlimited-register real depth at 209, and every op-list move tried here
+  (843 clean-host moves, 58 control-swap bits, ~10,000 op orders) leaves 249.
