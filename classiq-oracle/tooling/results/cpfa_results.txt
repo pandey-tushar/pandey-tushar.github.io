@@ -1,0 +1,73 @@
+CP-FA/FB/FC: the set-valued wire model -- ground truth, refutation, and the
+              2.17x that the whole gap actually consists of
+================================================================================
+
+GROUND TRUTH (cpfa_exact.py).  Exact symbolic replay of the banked op list:
+wire state = (affine mask over 12 raw bits, const, frozenset of node values),
+tracked THROUGH the ops, never decomposed.  0 unidentified AND-products, so
+the trace is sound.
+  wire node-set size histogram : {0:1123, 1:758, 2:172, 3:41, 4:30}
+  max node values on one wire  : 4
+  max distinct live values     : 25   (on 18 wires)     mean live 8.8
+  node location changes        : 38
+  distinct wires a node occupies: {1:45, 2:5, 3:5, 5:2}  -> 45/57 never move
+  data->data cx (base mixing)  : 53      total cx in list: 112
+=> SET-VALUEDNESS IS THE ESSENTIAL FREEDOM, as suspected: 25 live values only
+   fit on 18 wires by stacking up to 4 per wire.  That is exactly the cap of 1
+   that made cpez_park unable to represent the banked list.
+   CORRECTION to cpfa_trace.py's first pass: it reported 613 relocations from
+   a GREEDY mask decomposition, which attributes the same wire value
+   differently at different steps.  The exact figure is 38.  Relocation is
+   rare, not dominant; the earlier number was an artifact of the method.
+
+THE SET-VALUED CP-SAT (cpfb_set.py) IS REFUTED BY ITS OWN VALIDATION IN 7s.
+T=26 (where the banked list demonstrably lives) comes back INFEASIBLE.
+Two errors, the second fatal to the formulation:
+  1. operands with one raw bit were forced onto that data wire, but the trace
+     shows 53 base-mixing cx -- they can be assembled anywhere;
+  2. each node was given ONE wire.  Reading operand {i} needs a wire whose
+     live set is exactly {i}; reading {i,j} needs a wire whose live set is
+     exactly {i,j}; so i must exist on TWO wires at once.  Node values are
+     COPIED by cx.  One-wire-per-node is self-contradictory.
+Repairing (2) breaks it the other way: if copies are free, any operand set is
+realisable on a spare wire and the model returns the trivial T=12.
+=> THE CONTENT OF THE SET-VALUED MODEL IS CX ASSEMBLY COST.  A capacity-style
+   pebble model, one-valued or set-valued, cannot express this problem: the
+   binding resource is routing TIME, not wires.  That is now true of three
+   models built this session (cpet abstract, cpez_park, cpfb_set).
+
+WHAT THE GAP ACTUALLY IS (cpfb_why.py) -- the useful result:
+  banked list's longest NONLINEAR chain (SSA)   : 26
+  value DAG's requirement (6 levels + 6 mirror) : 12      ratio 2.17x
+  26 x 7 layers/gadget = 182 of the measured 211 SSA critical path.
+Classifying all 26 edges of that chain:
+   9  genuine value-DAG dependencies
+   5  compute/uncompute pairs of the SAME node (n7,n22,n31,n47,n56) - genuine
+  11  DIFFERENT nodes serialised ONLY because they share a wire
+      (q12,q3,q0,q14,q5,q7,q8,q9,q17 - ancillas and data wires alike)
+=> the 2.17x is wire sharing.  Break the 11 and the chain is 15 -> ~105 layers.
+
+WHY IT CANNOT BE BROKEN (cpfb_slack.py, cpfc_rehome.py, cpfc_data.py):
+  free wires at each artifact INSTANT      : min 2, max 14, mean 8.0, none zero
+  ancilla residencies                      : 30, length min 2 max 184 mean 63
+                                             (op list is 422 long; 1887 slots)
+  free wires at the START of a residency   : mean 10.4
+  free wires ACROSS a WHOLE residency      : mean 1.63
+=> INSTANTANEOUS SLACK IS NOT INTERVAL SLACK.  A rehome needs a wire free for
+   the whole residency, and residencies run 15% of the list each.
+  legal ancilla->ancilla rehomes           : 3 of 30 residencies
+  candidate rehomes to any untouched wire  : 49
+  of those EXACT (4096-input phase replay) : 7   (42 change the function --
+     renaming ancilla w -> data wire j turns the carried value from n_i into
+     x_j ^ n_i, and only an operand that wants x_j too survives it)
+  rehomes that LOWER the depth             : 0   (best is depth-neutral)
+
+CONCLUSION: no depth improvement.  249 / 520 stands.
+Established: set-valuedness is the freedom the banked list relies on (4 per
+wire, 25 live); the gap to the DAG floor is 2.17x and consists of 11
+wire-sharing edges on the critical chain; and those cannot be removed by
+re-assignment because no wire is free across a full residency.  The only
+remaining way to free wires is to SHORTEN residencies, i.e. recompute more
+(the T=24 / 180-toggle direction), which needs the operand-assembly wires
+that 18 does not have.  That is the same wall cpey reached from the other
+side, now with the mechanism named.
