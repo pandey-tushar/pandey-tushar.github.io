@@ -1,0 +1,60 @@
+CP-FD/FE: shortening residencies -- a split alone is provably a no-op, and
+           compounding it with a rehome is worse
+================================================================================
+Premise (from cpfa/cpfb): the critical chain is 26 against a DAG floor of 12,
+and 11 of its edges are different nodes serialised only by sharing a wire.
+Wires cannot be reassigned because no wire is free across a whole residency
+(interval slack 1.63 vs instantaneous 10.4).  So: shorten the residencies.
+
+MEASURED (cpfd_gaps.py) where the slack is:
+  ancilla residencies 30, length min 2 max 184 mean 63 (op list is 422 long)
+  Splitting needs the node recomputable at the re-entry point.  Level-0 nodes
+  have purely affine operands, so they recompute with nothing live.
+  level-0 nodes with a consumer gap >= 15 ops : 13
+  largest: n28 gap 49, n9 gap 46, n49 gap 41, n48 gap 37, n23/n12/n11 gap 30
+  total freeable op-slots from level-0 splits : 425 of 1887 (22.5%)
+  n9 and n11 are exactly two of the critical chain's artifact nodes.
+
+MEASURED (cpfd_split.py) splitting at the gap endpoints, verified with
+cpae_core.sim_exact (real gate matrices -- the 4096-bit mask replay does NOT
+check the Margolus relative phase, which moving an uncompute can break):
+  20 candidates: 5 EXACT and all DEPTH-NEUTRAL (+0), 0 improving,
+  15 rejected because the affine operands are not on any wire at the
+  insertion point (the data wires are carrying accumulations there).
+
+MEASURED (cpfd_multi.py) greedy accumulation, scanning every insertion point
+inside each gap, then an order ILS on the enlarged gate set:
+  8 splits taken, op list 422 -> 438, depth 254 -> 254, cx 520 -> 520,
+  after 300s of order ILS: still 254 / 520, exact.
+  cx is IDENTICAL across all 8 rounds.
+=> A SPLIT ALONE IS A NO-OP.  The inserted uncompute/recompute pair brackets
+   a window in which nothing touches that wire, so it is an identity and the
+   pyzx/transpile pipeline simply cancels it.  Freeing wire time buys nothing
+   unless something moves INTO the freed window.
+   (Bug worth recording: the greedy had no dedup and re-split n23 eight times,
+   because each split leaves a sub-gap that is again the largest candidate.
+   With the pairs being cancelled anyway this did not change the measurement.)
+
+MEASURED (cpfe_comp.py) the compound move that the above implies -- split a
+level-0 node out of wire w across [a_j,b_j] AND rehome critical-chain node j
+from its wire v into w, ancilla->ancilla so both bases are 0 and the rename
+is value-exact:
+  legality needs w occupied by EXACTLY ONE node over the whole window, and
+  that node level-0, and no op in the window touching both v and w.
+  compound moves tried 15 | exact 2 | that LOWER depth 0
+    n7  q12->q14 (split n3 out) : depth 274  (+20)
+    n6  q17->q14 (split n3 out) : depth 298  (+44)
+=> the recompute lands on the critical path and costs more than the broken
+   serial edge saves.
+
+CONCLUSION: residency shortening is exhausted as a LOCAL transformation.
+Splits are no-ops; compounded with a rehome they are legal in 2 of 170 wire
+pairs and both are much worse.  Together with cpey (host moves: 0 of 843
+lower depth) and cpfc (rehomes: 0 of 49), every local move on the banked op
+list has now been enumerated and none improves it.  The banked list is at a
+strong local optimum; the 2.17x gap to the DAG floor needs a DIFFERENT op
+list, i.e. solving the allocation problem well -- which is the thing that has
+defeated cpet's abstract model, cpez_park, cpfb_set and the cpez greedy
+emitter in turn.
+
+249 / 520 stands.
