@@ -1,0 +1,209 @@
+=== CP-EX : nonlinear cost reduction (RCCX-equivalents) + ancilla occupancy ===
+TRUE metric: transpile(basis_gates=['u3','cx'], optimization_level=2) then
+qc.depth(); width <= 18; verify18.verify_sv18 bound 1e-10.
+Baseline carried in: cpev_best.qasm width 18 depth 249 cx 520 u3 536.
+
+RE-VERIFY OF THE GOVERNING ARITHMETIC (cpex_probe.py / cpex_touch.py)
+  cpen_search_11.pkl 422 ops = 184 x, 112 cx, 94 ccx, 12 c3x, 12 c3x_dg,
+    7 cz, 1 ccz.  RCCX-equivalents (ccx 1, c3x/c3x_dg 2) = 142.
+    projected floor 7*142/6 = 165.7   (brief said 143 -> 167; reproduced)
+  cpev_best.qasm opt2: depth 249 cx 520 u3 536, per-wire touches
+    [54,47,72,135,90,79,66,45,63,63,68,77 | 109,113,125,118,120,132]
+    data touches 859 (28.7% of 12*249), ancilla touches 717 (48.0% of 6*249).
+  => the "48% ancilla occupancy" of the brief IS the ancilla TOUCH share
+     717/(6*249).  Max per-wire touch 135 (q3, a DATA wire); max ancilla
+     touch 132.  Congestion lower bound of this realization = 135.
+
+VALUE DAG RE-MEASURED (cpet_vdag.py on cpen_search_11.pkl)
+  57 distinct AND nodes, 45 arity-2 + 12 arity-3, AND-depth 6,
+  forward RCCX-equivalents 45*1 + 12*2 = 69; banked total 142.
+  4 node-DISJOINT cones: T1 n0..n7 (8 nodes), T2 n8..n22 (15),
+  T3 n48..n56 (9), T4 n23..n47 (25).
+  Phase, after factoring a*b ^ a*c = a*(b^c) (cpeu_dag.simplify_phases):
+    T1 = (n0^n4) * n7
+    T2 = n13 * (x2^x3^n15^n22) * (1^y5^n20)
+    T3 = (1^x5^n51) * (1^y4^n52^n56)
+    T4 = n34 * (1^x5^n35^n45^n46^n47)
+
+OBJECTIVE (1) -- RE-FACTORING, ALL CHECKED ON THE 4096-BIT TRUTH TABLES
+(cpex_fact.py census + cpex_refac.py verification; phase XOR == F, 1097 px, EXACT)
+  census of pairwise products over all 57 nodes: 77 distinct, exactly 4 shared
+  by two nodes:  (n5,n11) (n29,n30) (n32,n33) (n6,n12).
+  verified identities:
+    m := y5*(1^y4)  [new node];  n6 == m*(y2^y3);  n12 == m*x5
+    n5  == n11*(1^y3)      n29 == n30*(1^x2)      n32 == n33*(1^y2)
+    n49 == (x1^n9)*x3      n54 == (y0^n11)*(1^y5)
+    n7  == (y3^n5)*n6   -> T1 = CCZ(n0^n4, y3^n5, n6), n7 not needed
+    n34 == n25*n27      -> T4 = CCZ(n25, n27, 1^x5^n35^n45^n46^n47)
+  FORWARD RCCX-EQUIVALENT LEDGER
+    banked DAG                                   69
+    +m, n6->ccx, n12->ccx, n29->ccx, n32->ccx,
+    n7 dissolved, n34 dissolved                  64   total 128  floor 149.3
+    + n5, n49, n54 via n11 / n9 (cross-cone)     61   total 122  floor 142.3
+  => OBJECTIVE (1) IS MET AS A DAG: 64 forward / 128 total (floor 149.3),
+     61 / 122 (floor 142.3) if n9 and n11 are shared across cones.
+  Remaining arity-3 nodes after the re-factoring: n40 n41 n42 n46 n47 (5);
+  none of their pairwise products equals any node value or any other node's
+  pairwise product, so no further arity reduction exists in this DAG.
+
+OBJECTIVE (1) REALISED IN THE 18-WIRE OP LIST -- MEASURED, ONE OF TEN
+  (cpex_edit.py, exact 4096-input replay + cpev objective, opt2=opt3)
+  baseline op list, identity order, no swaps : 422 ops, 142 equiv, obj 254/520
+  n7 dissolved -> ccz(16,17,15) (ops 27,28,29 -> 1 op):
+                                               420 ops, 140 equiv, obj 257/519
+                                               exact, err 7.8e-15
+  the same dissolution of n56 (ops 387,388,389) is NOT exact (wire 12 is not
+  |0> there: it carries 1^y4^n52), replay mismatch != 0 -> rejected.
+  The other eight re-factorings each need the shared value (n30, n33, m, n9,
+  n11) ALONE on a wire at the moment of the AND, while the banked list hosts
+  every one of them XORed onto a data wire; at their op positions the free-|0>
+  wire list is [] or [16] (cpex_view.py, ops 183-201), so none can be applied
+  without one more standalone wire for the whole lifetime of that value.
+
+OBJECTIVE (2) -- WHERE THE ANCILLA SLOTS GO (cpex_hold.py, op model with the
+measured per-wire touch profiles; op-model depth 328 for the banked list)
+  ancilla slots 6*328 = 1968:  TOUCHED 830, HELD-BUT-IDLE 986 (50.1%),
+  genuinely FREE 152 (7.7%).
+  => the ancillas are not idle-and-free, they are idle-and-OCCUPIED.  Raising
+     touch occupancy means shortening value lifetimes, not filling free slots.
+
+MEASURED (cpex_life.py) every one of the 57 nodes has a perfectly NESTED
+lifetime already (write, all reads, write); the waste is single-read values
+held across a long nest, e.g.
+  n0 span 52 ops, 1 read;  n13 span 76, 1 read;  n34 span 96, 5 reads;
+  n23 span 188, 8 reads;   n25 span 178, 4 reads.
+  sum over nodes of (lifetime - read window) = 1555 op positions.
+
+MEASURED (cpex_jit.py) direct minimisation of ancilla idle-hold over op orders
+(rsched priorities on the standard DAG, 100,119 orders, 240 s, seed 1):
+  identity          idle-hold 981  op-depth 326
+  best              idle-hold 959  op-depth 323
+  => op ORDER alone moves the idle-hold by 2.2%.  Just-in-time production is
+     not reachable by re-ordering this op list.
+
+MEASURED (cpex_life.py + by hand) why not: the early uncompute of a value
+needs the value's own operands back, and they are hosted ON DATA WIRES that
+the nest has already overwritten.  Example, cone T1: n1 lives on wire 13 as
+x3^n1 and is read only at ops 15 and 41; freeing wire 13 after op 15 requires
+x3 alone on some wire, but op 15 has just replaced wire 3 by x3^n2.  The same
+blocks n2, n3.  Early uncompute is therefore a RECOMPUTATION trade
+(+2 RCCX-equivalents per value), i.e. objective (2) is paid for in objective
+(1) currency.
+
+MEASURED (cpex_conf.py) why the four cones run SERIALLY (39 + 74 + 132 + 43
+op-model layers, whole list 278 through ops_to_qc):
+  wires WRITTEN by each cone: T1 9 data + 6 ancillas, T2 12 + 6, T4 12 + 6,
+  T3 9 data + 6 ancillas.  Every one of the 6 cone pairs shares 7 to 12
+  written DATA wires AND all 6 ancillas.
+  peak simultaneously-live ancillas inside each cone: 6, 6, 6, 6.
+  => no two cones can overlap: they collide on the data wires they use for
+     operand assembly, not only on the ancillas.  Reads commute, writes do
+     not, and at 6 ancillas no cone can assemble its operands without writing
+     data wires (consistent with cpeu: the accumulator emitter's first
+     feasible width for the whole DAG is 36).
+
+NEW SEARCH VARIABLE 1 -- RELAXED DEPENDENCE DAG (cpex_rdag.py)
+  ASSUMPTION: every op writes t ^= g(controls), so two writes to the same wire
+  commute unless a reader sits between them; cpen_fast.dag (used by every
+  search in this project) adds a WAW edge for every consecutive write pair.
+  Correct relaxed model, per wire: maximal alternating groups W* R* W* R* ... ,
+  every event edged from every member of the PREVIOUS group only.
+  MEASURED:
+    strict DAG 1133 edges.
+    FULLY relaxed (nonlinear writes commute too): 1498 edges, but 0 of 60
+      random schedules are exact -- permutation mismatch 0, phase error 2.0:
+      the RCCX/RC3X RELATIVE PHASE does not commute with another write on its
+      own target.  So nonlinear writes to a shared target must stay ordered.
+    SAFE relaxation (only x/cx writes commute with each other and with
+      nonlinear writes on the same target): 1664 edges, identity order EXACT
+      (err 7.8e-15), objective 254 / 520 -- same as the strict identity order.
+
+NEW SEARCH VARIABLE 2 -- FULL 3-CONTROL PERMUTATION OF EVERY c3x WIRING
+  (cpex_search2.py).  RC3X per-wire touches are 1 / 2 / 3 / 13, so which
+  control sits in which slot is a timing variable; previous searches only
+  swapped controls 1 and 2 (cpev_obj2.build).  12 distinct c3x wirings x 6
+  permutations; verified exact on all 4096 inputs for a random assignment
+  (err 8.0e-15, mismatch 0).
+
+SEARCH RUNS (all against the true metric through the cpev pipeline:
+ops -> Clifford+T -> pyzx basic_optimization -> cpej atom re-timing, opt2=opt3)
+  strict DAG, n7-dissolved list (140 equiv), seed 51 : start 257, best 254
+  relaxed DAG, n7-dissolved list, seed 62            : start 257, best 254
+  relaxed DAG, banked list, seed 61                  : start 254, 249 at it 275 (88 s)
+  => the n7 dissolution (-2 RCCX-equivalents) costs 5 layers and never
+     recovers them: the two RCCX it removes sit on wire 12, which is otherwise
+     free, so they were not on the critical path, while the CZ -> CCZ that
+     replaces them is 7 layers longer on wires that are.
+     MEASURED CONSEQUENCE: at width 18 removing RCCX-equivalents off the
+     critical path does not reduce depth.
+
+CLEAN-GADGET RELAXATION (cpex_rdag2.py + cpex_prof.py + cpex_obj4.py)
+  ASSUMPTION: a clean gadget has no relative phase, so making a wiring clean
+  lets its writes commute with every other write on that target and unlocks
+  the full relaxation (e.g. lets a cone's tail interleave with the next cone's
+  head on the 6 shared ancillas).
+  MEASURED per-wire touch profiles of the clean gadgets (transpile u3/cx opt2):
+    ccxC / ccxZ depth 11, target wire touched in layers 1..9
+    c3xC / c3xZ depth 28, target wire touched in layers 1,13..28
+  MEASURED: with every wiring clean the fully relaxed schedule IS exact
+    (err 8.0e-15, mismatch 0) -- the relaxation is sound.
+  MEASURED cost through the true objective (relaxed DAG + list schedule):
+    no clean wiring                       422 ops  obj 254 / 520
+    32 "seam" wirings clean (the wirings
+      that share a write group with another
+      nonlinear op, i.e. the cone seams)  422 ops  obj 552 / 838
+    all 57 wirings clean                  422 ops  obj 801 / 1088
+    single-clean-key sweep over all 57 keys: min 254, median 258, max 312;
+      no single key goes below the 254 base.
+  => the commutation the relative phase forbids can be bought, but 4 extra
+     layers and 3 extra cx per ccx (15 and 8 per c3x) cost far more than the
+     overlap it unlocks.
+
+MEASURED (structure of the forbidden commutations, cpex_rdag.py census)
+  217 per-wire WRITE groups; only 26 contain two or more nonlinear writes, and
+  10 of those 26 straddle a cone boundary.  Those 10 are the only places where
+  a relaxation could let two cones overlap on an ancilla.
+
+SEARCH TOTALS THIS SESSION (all against the true metric, opt2 = opt3, every
+improving candidate replay-checked on all 4096 inputs)
+  seed 51  strict DAG,  n7-dissolved list, 2400 evals : best 254 / 519
+  seed 62  relaxed DAG, n7-dissolved list,  600 evals : best 254 / 521
+  seed 61  relaxed DAG, banked list,       4200 evals : best 249 / 520
+  seed 71  relaxed DAG + c3x permutations, 6000 evals : best 249 / 522
+  seed 72  relaxed DAG + c3x permutations, 1000 evals : best 251 / 520
+  seed 81  relaxed DAG + c3x perms, WARM START from the 249 state
+           (cpev_search_s23.pkl),          4800 evals : best 249 / 520
+  seed 91  same warm start, second chain,  2200 evals : best 250 / 526
+  plus 57 single-clean-key evaluations, 3 whole-mode-map evaluations,
+  100,119 idle-hold-objective orders.  About 21,000 true-metric evaluations.
+  Nothing below 249 was produced, so cpex_best.qasm was NOT created and the
+  banked best stays cpev_best.qasm 249 / 520.
+  The warm start is informative: replaying the 249 state's priority vector
+  through the RELAXED dag gives 251, and the chain climbs back to 249 and
+  stops -- 249 is the attractor of the enlarged move space as well.
+
+FINAL (re-measured from the file at the end of the session)
+  cpev_best.qasm opt2: width 18 depth 249 cx 520 u3 536 density 0.352
+                       verify_sv18 True err 4.1792922574362515e-15
+  cpev_best.qasm opt3: width 18 depth 249 cx 520 u3 536   (identical)
+  RCCX-equivalents 142, ancilla touch occupancy 717 / 1494 = 48.0%,
+  projected floor 7*142/6 = 165.7, max per-wire touches 135 (q3).
+
+WHAT BLOCKS < 249 (single measured number, and which objective it breaks)
+  It breaks objective (1) -> objective (2) coupling, and the number is:
+  removing RCCX-equivalents RAISES the depth.  The one re-factoring that is
+  applicable inside the 18-wire op list (n7 dissolved into CCZ, 142 -> 140
+  equivalents, 520 -> 519 cx, exact err 7.8e-15) measures 257 against 254 at
+  the identity order, and two independent ILS chains launched from it
+  (3000 true-metric evaluations) plateau at 254 while the same searches on the
+  unreduced list reach 249.  The two RCCX it deletes sit on wire 12, which is
+  free at that point and therefore off the critical path.
+  The other NINE verified re-factorings (which would take the DAG to 64
+  forward / 128 total, floor 149.3) cannot be applied at all: each needs the
+  shared value (n30, n33, m = y5*(1^y4), n9, n11) alone on a wire at the
+  moment of its AND, and the ancilla budget has 152 free slots out of 1968
+  (7.7%) -- 986 slots (50.1%) are idle but HELD by values whose early
+  uncompute would itself cost 2 equivalents each.
+  So at width 18 objective (1) and objective (2) are the same budget: every
+  RCCX-equivalent removed costs an ancilla lifetime, and every ancilla
+  lifetime freed costs RCCX-equivalents.
