@@ -1,0 +1,76 @@
+CP-EZ: the accumulation-aware physical pebble model -- built, run, REFUTED
+================================================================================
+Goal: model the game neither existing pebble model captures -- a wire carries
+an XOR-accumulation of node values, a toggle targets any wire, an operand is
+free when some wire's value already equals it -- and find the minimum makespan
+at 18 physical wires.  depth ~= 5.3*T (249/45 banked, 127/24 wide).
+
+MEASURED (cpez_struct.py) the structure the trick depends on:
+  operands total 143 : 47 are a bare raw bit, 24 are exactly x_j ^ n_k,
+  29 carry no raw bit at all, 41 carry >1 raw bit.
+  => 71 of 143 operands (50%) need NO assembly if node placement is right.
+  nodes whose EVERY consumer carries a raw bit: 33 / 57
+  peak live node values in a level-order forward pass: 29  (18 wires exist)
+
+THE ACCUMULATION CEILING (cpez_feas.py), checked against cpet's K=18/T=24:
+A node parked on data wire j is readable ONLY by operands containing x_j, so k
+may park on j only if j is in EVERY operand consuming k.
+  nodes parkable on SOME data wire: 33 / 57
+  common-raw-bit count histogram: {0:24, 1:22, 2:6, 3:4, 5:1}
+  => 24 of 57 nodes are consumed by at least one operand carrying no raw bit,
+     and can NEVER park on a data wire.
+  At the T=24 schedule's peak (t=9): 17 live, 6 parkable, 11 needing a clean
+  ancilla against 6 available -- deficit +5.  T=24 is not parkable at 18 wires.
+
+MEASURED (cpez_emit.py) a greedy 18-wire accumulation emitter: does not work,
+for a STRUCTURAL reason, not a coding one.  Once wire j holds x_j ^ n_k, the
+two cannot be separated without a second copy of one of them, so restoring a
+clean x_j means uncomputing n_k, which needs ITS operands, which needs freeing
+other wires -- eviction recurses without bound.  That recursion IS the pebbling
+problem; a greedy will not out-search whatever produced the banked list.
+Fixed along the way (all real bugs, none sufficient): choose the toggle target
+BEFORE assembling operands (eviction must run while data wires are clean); pin
+an operand's nodes against eviction by nested computes; order operand assembly
+so a host raw bit is not still needed as a source by a later operand.
+
+MEASURED (cpez_cap.py) minimum makespan at K=18 abstract registers with a
+toggle cap of 118 (the banked list's no-recomputation regime):
+  T=12/14/16/18/20 -> INFEASIBLE ;  T=24..40 -> UNKNOWN at 120s
+  => even allowing recomputation up to 118 toggles, K=18 needs T >= 22.
+
+MEASURED (cpez_park.py) THE MODEL ITSELF, 18 physical wires:
+  wires 0-11 carry x_j plus at most one parked node value (allowed only on a
+  raw bit common to every consumer); wires 12-17 clean, any value; at most one
+  live node value per wire per step.
+  T=24 -> INFEASIBLE (9s)      T=36 -> INFEASIBLE (286s)
+  T=28 -> INFEASIBLE (28s)     T=40 -> UNKNOWN    (301s)
+  T=32 -> INFEASIBLE (90s)     T=45 -> UNKNOWN    (301s)
+  T=50 -> UNKNOWN (301s)       T=56 -> OPTIMAL, 224 toggles (156s)
+
+THE MODEL IS REFUTED BY ITS OWN VALIDATION TEST.
+The banked op list is a real, exactly-verified solution at T=45 with 118
+toggles and depth 249.  This model cannot represent it: T=45 does not even
+come back feasible, and the best it finds is T=56 with 224 toggles, i.e. a
+predicted depth of ~296 against a reality of 249.  A model that excludes a
+solution known to exist is not a bound on anything, so the T=32/36 INFEASIBLE
+results say nothing about the machine -- they are facts about the restriction.
+
+WHY IT IS TOO STRICT (the actionable residue):
+  1. It allows ONE node value per wire.  cpet_calib measured the banked list
+     holding 23 live values on 18 wires, so real accumulation stacks SEVERAL
+     node values on one wire (x_j ^ n_k ^ n_m), readable whenever an operand
+     wants exactly that XOR.
+  2. It fixes a node's wire for the node's whole lifetime; real schedules
+     relocate a value between consumers.
+  3. It demands the parking raw bit be common to EVERY consumer, when only the
+     consumers during that particular residence matter.
+A correct model has to let a wire hold a SET of node values.  That is a
+different and much larger model than the one built here.
+
+CONCLUSION: this line produced no depth improvement.  249 / 520 stands.
+What it did establish, with numbers:
+  - the budget decomposition (cpey): DAG floor 132, +79 pebbling, +32
+    scheduling, +6 transpile = 249, so wire scarcity is worth <= 32 layers;
+  - the accumulation ceiling: 24 of 57 nodes can never live on a data wire;
+  - and that the "missing model" I proposed is a worse description of the
+    machine than the banked list already is.
