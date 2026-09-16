@@ -1,0 +1,33 @@
+CP-FG working notes (session of Sep 16) -- to be folded into cpfg_results.txt
+- cpfg_model.py  monolithic time-first CP-SAT.  First 3 runs VOID: XOR encoding bug
+  (AddBoolXOr with an extra constant 1 inverted propagation).  Fixed; verified on a
+  6-node instance (OPTIMAL 3s, exact replay).  Corrected model: UNKNOWN at 900s even
+  for the loose cap-3 pin (T=23).  Scale, not soundness.
+- cpfg_step.py   one-step constructive solver, 7 revisions.  Purity invariant too
+  strong (freezes 12 wires); span invariant (CX never changes span, only a target
+  consumes its wire) is the exact one.  Greedy across steps collapses to 1 node/step
+  after step 0: the deadlock is ORDER (retire raw bits before parking on them),
+  invisible to one-step lookahead.
+- cpfg_window.py / cpfg_cms.py  layered-CX window models.  Ladder: 8 nodes/2 steps SAT
+  6.6s, same 8 nodes/4 steps TIMEOUT -> difficulty scales with free CX layers, not
+  tightness.  The arbitrary CX network is the symmetric swamp.
+- cpfg_asm.py    ASSEMBLY-BASED encoding: content changes only by an assembly for a
+  read (<=2 sources, optional undo), free X, or a node bit landing.  Ladder: 6/1 1s,
+  8/2 3-6s, 8/4 8-15s, 12/3 23s (sometimes timeout ~40s).  Exact replay + contents
+  match PASS after fixing (a) const-bit source semantics + emission order
+  x,cx,toffoli,undo, (b) Toffoli targets may not be assembly sources in-step.
+- Span invariant in-model (lambda per future operand, 69 XORs): CryptoMiniSat OOMs
+  (14 GB) on it in every form -- native XORs, chained XORs, or CNF (it recovers XORs
+  and runs Gauss).  Switched solve backend to CaDiCaL (pysat).
+- Driver bug found: span targets must treat in-window node bits as "present iff
+  fired" (skipped nodes made every future operand mentioning them unsatisfiable).
+- Sliding windows (commit 1 of 2 modelled steps) with a lookahead witness (each
+  modelled step fires >= 1 compute node), the span invariant enforced at the
+  committed boundary AND the window end, in-body uncompute of dead nodes as
+  optional Toffolis (target must hold the bit), assembly with n sources, phase
+  assembly as a separate final solve without undo, and a committed-step
+  objective (F = 1, 2, ... fires in step 0 until UNSAT).
+- cpfg_test.py: 9-node sub-DAG end-to-end test (driver -> exact replay ->
+  transpile).  PASS: 4 committed steps, 2 uncomputes, depth 59 / 85 CX.
+  Every one of the last eight bugs was found by this test in <3 min instead of
+  by a 15-60 min full run.
