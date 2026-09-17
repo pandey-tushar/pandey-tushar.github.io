@@ -1,0 +1,37 @@
+CP-FJ: junk-tolerant hosting (Sep 17)
+
+Question: can the temporal phase-span solver absorb the junk left by
+dirty Toffoli targets, so that wires need not be clean and the register
+starvation of the pebbling/episode family disappears?
+
+1. Prerequisite test (cpfj_prune.py): strip the 8 phase gates of the 249
+   list, delete x / cx ops (alone or with their mirror partner) greedily,
+   keep only deletions that leave the classical action the identity AND
+   leave F in the temporal phase span.
+   - of 1440 tried deletions 802 keep the identity, 85 of those keep F in
+     the span (junk absorbed);  414 -> 334 ops (80 gates gone, mostly X).
+   - depth unchanged: transpile opt2 277/278, cpen_emit 258 vs 258 for the
+     original list.  The chain is Toffoli-bound; junk absorption at the
+     phase level is real but buys no depth.
+
+2. Constructive test (cpfj_dirty.py): compile a term cone with every
+   Toffoli target chosen as the least-busy wire not among its controls,
+   no in-body uncompute (values stack), CX assembly of operand forms,
+   exact mirror, term forms assembled at the body end, solver picks
+   z/cz/ccz over the whole timeline (deg 3 at the body end).
+   - stacking onto a DEAD node's wire: absorbed (term 0: 30/30 seeds
+     solve, opt2 78 / 88 CX; term 2: 30/30, opt2 64 / 93 CX).
+   - stacking onto a raw data wire that is still read purely later:
+     never absorbed (junk compounds through the levels).  Hence data
+     wires are legal targets only under the both-or-neither rule, i.e.
+     exactly the hosting the clean executor already had.
+   - stacking onto a NEEDED node's wire: never absorbed.  Terms 1 and 3
+     need it: live-needed peak 11 (term 1) and 19 (term 3) against 6
+     ancillas, with either height-first or register-minimising DFS order
+     -> 0/30 seeds solve (constant residual 137 / 225); joint 4-term
+     compile 0/30.
+
+Conclusion: junk tolerance adds no register capacity.  Without
+recomputation the live cut of terms 1 and 3 exceeds the 6 ancillas; with
+recomputation the family is the measured 2-10x worse executor (cpfi
+notes).  Nothing in this direction reaches 150.  249 / 520 stands.
