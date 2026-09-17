@@ -1,0 +1,32 @@
+cpfm: one-wire-per-function layout, measured (step 1)
+=====================================================
+
+Design tested: rank-10 form F = sum c_i(x) b_i(y); every function on its own
+wire (data wires as accumulators holding raw ^ f, or ancillas), cube pieces
+(products of literals), literals of dirtied wires only through cached
+products on scratch ancillas, mirror by daggers.  One side = 9 wires.
+
+Cube covers (gate units: 1 for <=3 literals, 2 for 4-5, 3 for 6):
+  x functions: 4 4 4 6 7 8 9 12 12 15   total 81
+  y functions: 2 4 5 6 6 6 6 8 8 11     total 62
+
+Exhaustive layouts (all target tuples, all orders), exact contents replay:
+  side  functions  feasible layouts   best depth (both directions)  data-wire accumulators
+  x     2          18                 104 (16 mcx, exact)           1 of 2
+  x     3          0                  -                             -
+  y     2          47                 74  (10 mcx, exact)           up to 2
+  y     3          72                 262 (28 mcx; replay flag false: eviction path bug, immaterial)
+Random search with 3-7 functions per side: no feasible layout (fails: key
+needs dirty literal / no scratch).
+
+Why: once a data wire is dirtied, every later gate that reads that literal
+must find it inside a product already held on scratch, and 5-6 literal cubes
+need a different product each.  With 3 free wires per side there is room for
+at most two live functions plus one scratch, so a 10-term factorisation runs
+in five sequential waves.  Two-function waves measured at 74-104 layers each
+give 400-500 total.  This is the same wall as the chains: the 6 raw bits of a
+side must stay readable, leaving 3 workspace wires whatever their role.
+
+Conclusion: no layout that keeps raw literals pure reaches 150.  What remains
+is intentional dirty algebra (wire contents that are sums/products used as
+they are), which the 249 circuit's AND graph partly does.
