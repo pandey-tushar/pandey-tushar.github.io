@@ -1,0 +1,31 @@
+cpfn: offline gate count for the fold/hold affine-piece family
+=============================================================
+
+Model: side function = XOR of affine-subspace pieces; a piece of codim k is
+either folded (CCZ(key, form, partner wire), key = codim k-1 superset held on
+an ancilla) or held (accumulated onto the function's wire by rccx(key, form)
+or rc3x(key, form, form)).  Keys are shared and chained (one gate per extra
+form).  Units = Toffoli-type gates over both directions: keys and held pieces
+count twice (mirror), folded CCZs once.  Per pair only one side may fold.
+
+Depth reading: with all nonlinear gates on the 6 ancillas at 7 layers each,
+depth ~ 7 * units / 6 + 12.  Leader 129 <-> ~100 units.  Target 150 <-> ~118.
+The existing 57-AND design is 114 units on this scale.
+
+Results (greedy cost-aware cover, per-pair fold/hold choice):
+  basis           units   note
+  pair            134     10 distinct columns / y classes
+  even            144     odd-weight functions XORed together; bigger pieces cost more than the points saved
+  diff            148
+  corner-x/-y     210-222 19/20 thresholds, not rank-minimal
+  local search over elementary basis changes (3 seeds x 48 steps, ~60 s/step):
+                  125 / 132 / 133
+
+Conclusion: the affine-piece family, even with phase-level folding, shared
+keys and basis search, needs ~125 nonlinear gate units, above the 114 of the
+57-AND graph we already have and well above the ~100 the leader implies.  Gate
+count of the existing graph was never the problem; its packing (2.2 layers per
+gate vs 0.6) is.  Next candidate: XOR-AND circuit search with ANDs accumulated
+onto any wire (data wires included), scored by the co-live residual of the
+column space in the span of contents and pairwise products; beam search with
+lookahead (QuSynth-style), one side at a time.
