@@ -31,3 +31,17 @@ Next lever if pursued: no accumulation wire at all - one cz per
 (x-piece, y-piece) pair (about 60 cz, the board's count) with pieces spread
 over many target wires, which needs in-place hosting of pieces on raw
 wires and solver-placed cancellation gates.
+
+Step 1b (Sep 17, "try it": per-piece cz, spread targets):
+- Occupancy re-weighted cover: 110/106 gates per side, 218 assembly CX;
+  joined exact (5.3e-14).  Transpiled per-wire loads sum 3623 -> floor
+  201 layers at 100% packing (max wire load 636).  Spreading targets can
+  only lift packing, so the affine/interval family cannot go below ~200.
+- Threshold family (corner form, 68 cz): shared LSB-first chain tries
+  need 44 (x) and 50 (y) RCCX per direction -> 188 RCCX + 68 CZ, floor 123
+  layers.  This matches the board's 614 CX (185 RCCX + ~60 CZ) and 129
+  depth almost exactly, so it is very likely the leader's structure.
+  Obstacle: a shared trie keeps up to 5 chain values live per side; with
+  3 ancillas per side one threshold at a time fits (c3 folded into one
+  gate, c4, c5, level 6 folded into a ccz), and walking the 68 corners
+  then re-activates thresholds ~69 times (~7 gates each, ~480 RCCX).

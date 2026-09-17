@@ -43,7 +43,28 @@ def all_affine():
     return out
 
 
-def piece_cost(forms, A):
+def wl_forms(forms):
+    return sum(4 * (bin(eq).count('1') - 1) for eq, c in forms)
+
+
+def piece_cost(forms, A, wl=True):
+    if not wl: return piece_cost0(forms, A)
+    m = len(forms)
+    if A is not None and all(f in forms for f in A):
+        rest = [f for f in forms if f not in A]
+        r = len(rest)
+        if r <= 1: return 10 + wl_forms(rest)
+        if r == 2: return 19 + wl_forms(rest)
+        if r <= 4: return 19 + 19 + 2 * wl_forms(rest)      # V + mcx + unV
+        return 999
+    if m <= 2: return 10 + wl_forms(forms)
+    if m == 3: return 19 + wl_forms(forms)
+    if m <= 5: return 2 * 19 + 10 + 2 * wl_forms(forms)
+    if A is None: return 3 * 19 + 2 * 10 + 2 * wl_forms(forms)
+    return 999
+
+
+def piece_cost0(forms, A):
     """gate count of one piece given the group's A forms (set of (eq,c)) or None.
     scratch wires: V_W always; A_W too when the group has no A."""
     m = len(forms)
@@ -69,7 +90,7 @@ def cover(target, AFF, A=None, maxpieces=12):
             gain = w0 - bin(rem ^ mask).count('1')
             if gain <= 0: continue
             c = piece_cost(forms, A)
-            if c >= 99: continue
+            if c >= 99 and c != 999 or c >= 999: continue
             score = gain / c
             if best is None or score > best[0]: best = (score, mask, forms)
         if best is None: return None
