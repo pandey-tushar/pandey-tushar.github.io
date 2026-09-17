@@ -1,0 +1,47 @@
+cpfl: phase-tracking / gate-moving pass on the 249 circuit (cpev_best.qasm)
+=========================================================================
+
+Question: can a CX + phase-gate view (track phases through CX like a Pauli
+frame, move and cancel gates) take the verified 249 / 520 CX circuit under 150?
+
+Facts measured
+--------------
+1. Walsh support of the image: 4096 of 4096.  A circuit of CX and phase
+   gates only would need one rotation per parity, so nonlinear gates are
+   unavoidable; the pure CX+phase form is out.
+
+2. The transpiled 249 circuit is Clifford+T: 520 CX, 536 u3 of which 304
+   are diagonal (all multiples of pi/4, 511 T-type) and 232 are H-like.
+
+3. pyzx phase-polynomial passes (cpfl_zx.py; round trip verified exact on a
+   5-wire RCCX chain, err 2e-15):
+     basic_optimization      520 CX -> 520 CX, tcount 511 -> 511
+     phase_block_optimize    520 CX -> 2156 CX, tcount 511 -> 509
+     full_optimize (TODD)    520 CX -> 2009 CX, tcount 511 -> 509
+   No phase merges exist (2 of 511) and no local CX cancellations exist.
+   The block optimisers' own CX resynthesis is count-blind and quadruples CX.
+
+4. Critical path of the 249 circuit (cpfl_crit.py):
+     critical gates 632 of 1056 (335 CX, 179 diagonal, 118 H-like)
+     layers with a single critical gate: 16 of 249
+   The depth is a broad front of parallel chains, not one thin path.
+
+5. Phase relocation: a diagonal phase on parity p may move to any other
+   place where parity p is present on a wire.  Parity tracking over the
+   whole circuit: 0 of the 179 critical diagonal phases have their parity
+   present anywhere else.  Nothing can be relocated.
+
+6. Bounds if phases were free anyway:
+     all 304 diagonal phases deleted, ASAP depth        196
+     CX skeleton alone (no u3 at all), ASAP depth       148
+   Even with every phase gate costing nothing the circuit is 196 deep, and
+   the CX dependency skeleton by itself is 148.
+
+Conclusion
+----------
+Manual gate moving on the 249 circuit gains 0 layers: there is nothing to
+merge, nothing to cancel, nothing to relocate, and the CX skeleton alone is
+already at the 150 target.  Sub-150 requires a different circuit (fewer
+serial nonlinear steps), not a rearranged one.  Phase tracking remains a
+finishing tool for whatever design comes next, worth at most the diagonal
+share of that design's critical path.
