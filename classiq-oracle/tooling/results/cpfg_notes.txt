@@ -21,13 +21,3 @@ CP-FG working notes (session of Sep 16) -- to be folded into cpfg_results.txt
   and runs Gauss).  Switched solve backend to CaDiCaL (pysat).
 - Driver bug found: span targets must treat in-window node bits as "present iff
   fired" (skipped nodes made every future operand mentioning them unsatisfiable).
-- Sliding windows (commit 1 of 2 modelled steps) with a lookahead witness (each
-  modelled step fires >= 1 compute node), the span invariant enforced at the
-  committed boundary AND the window end, in-body uncompute of dead nodes as
-  optional Toffolis (target must hold the bit), assembly with n sources, phase
-  assembly as a separate final solve without undo, and a committed-step
-  objective (F = 1, 2, ... fires in step 0 until UNSAT).
-- cpfg_test.py: 9-node sub-DAG end-to-end test (driver -> exact replay ->
-  transpile).  PASS: 4 committed steps, 2 uncomputes, depth 59 / 85 CX.
-  Every one of the last eight bugs was found by this test in <3 min instead of
-  by a 15-60 min full run.

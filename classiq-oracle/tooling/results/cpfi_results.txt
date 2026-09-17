@@ -1,0 +1,31 @@
+CP-FH / CP-FI (Sep 17): depth-only attack on the 57-node streaming oracle -- MEASURED, NEGATIVE.
+
+Facts established (all exact, replay + statevector):
+- cpen_search_11 (the 249/520 list) is a streaming circuit: 8 phase gates interleaved, in-body
+  uncompute, products written in place on data wires.  model_depth 242, touch-load per wire
+  avg 93 / max 141, so its gate content packed at the board leader's density would be ~110.
+  Its critical chain is the 8 sequential phase episodes (13-16 host wires each).
+- The 4 simplified phase terms have DISJOINT cones (8, 15, 9, 25 nodes; levels up to 2/3/2/5),
+  every cone reads all 12 raw bits.
+- cpfh_core.py: contents-as-truth-tables model; cpfi_span.py: temporal phase span solver
+  (for an op list whose classical action is the identity, choose z/cz/ccz insertions over the
+  whole timeline by GF(2) elimination so the phase is exactly F).  Validated: strips the 249
+  list's 8 phase gates and re-finds an exact 6-gate placement, sim_exact 8e-15.
+- Nested-rank (CP-CJ) seed: its 3-bit group functions are unbalanced cubes (weights 1-3), so
+  they can never be hosted in place on the group's own wires; basis freedom leaves 0-2 of 4-6
+  balanced.  Cube-level bilinear form: 57 cubes, 134 CZ legs, ~420 Margolus before sharing.
+- Reader-compatible data-wire hosting (every reader of n_k also reads x_w, k's own operands
+  do not): term 3 12 nodes, term 1 6, term 2 4, term 0 none.
+- cpfi_plan.py / cpfi_pairs.py: exact A*/Dijkstra reversible pebbling per episode with
+  recomputation, register budget A, and hosting modes (temporal safety inside the plan).
+  Minimal budgets: term 0 A=4, term 1 A=5, term 2 A=3; term 3 (25 nodes) not plannable exactly,
+  its 5 bilinear pairs need A=4,6,5,6,3.  Sum of quotas >> 6 ancillas: at most one or two
+  episodes can run at a time.
+- cpfi_joint.py / cpfi_exec*.py / cpfi_pairs.py executor: exact contents, CX assembly of
+  operand forms (backtracking targets, GF(2) fallback for 7-9 constituent forms), lazy
+  un-assembly of pure-raw forms, quotas + admission control.  Results: term 0 alone opt2 71
+  (old segment 19); term 1 alone at A=5: 84 RCCX + 288 CX, opt2 504 (old segment 49); term-0
+  pairs 114; all 19 pairs jointly: deadlocks on cross-episode data-wire waits, no circuit.
+Conclusion: with 6 ancillas the pebbling/episode family is register-starved; recomputation and
+assembly overhead make every variant 2-10x WORSE than the 249 list, so it cannot approach 150.
+The board's 129 @ 614 CX is not reproduced by any structure derived here.  249/520 stands.

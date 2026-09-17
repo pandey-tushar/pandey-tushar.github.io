@@ -42,7 +42,7 @@ def build(cont0, nodes, Tw, readers=3, nogoods=(), pending=None, final_terms=Non
             for j in range(nsrc):
                 for s in range(NW):
                     sel[t, w, j, s] = S[j][s]
-                    if s == w or (t == 0 and s in lock0): m.clause([-S[j][s]])
+                    if s == w: m.clause([-S[j][s]])
                     for j2 in range(j): m.clause([-S[j][s], -S[j2][s]])     # distinct sources
                     m.imp(S[j][s], asm[t, w]); cxlits.append(S[j][s])
                 m.atmost(S[j], 1)
@@ -64,12 +64,24 @@ def build(cont0, nodes, Tw, readers=3, nogoods=(), pending=None, final_terms=Non
                 m.xor(lits, False)                              # r = c ^ D (^ xf)
                 K = B(); m.clause([-K, D]); m.clause([-K, undo[t, w]]); m.clause([K, -D, -undo[t, w]])
                 r[t][w][b] = (rv, K)
-    # source wires are not assembly targets in the same step (CX layer semantics)
+    # a wire may be BOTH an assembly source and an assembly target in a step:
+    # sources are read at start-of-step values, so a wire's outgoing CXs are
+    # emitted before its incoming ones.  Forbid 2-cycles (w<-s and s<-w) and
+    # propagate undo: if w is undone and its source s was itself assembled,
+    # s must be undone too (undo is emitted in exact reverse order).
     for t in range(T1):
         for w in range(NW):
             for s in range(NW):
-                if s != w:
-                    for j in range(nsrc): m.imp(sel[t, w, j, s], -asm[t, s])
+                if s == w: continue
+                for j in range(nsrc):
+                    for j2 in range(nsrc):
+                        m.clause([-sel[t, w, j, s], -sel[t, s, j2, w]])
+                        for s2 in range(NW):
+                            if s2 != s and s2 != w:
+                                for j3 in range(nsrc):
+                                    m.clause([-sel[t, w, j, s], -asm[t, s], -sel[t, s, j2, s2], -asm[t, s2]])
+                                break
+                    m.clause([-undo[t, w], -sel[t, w, j, s], -asm[t, s], undo[t, s]])
     def RV(t, w, b): return r[t][w][b][0]
     fire = {}; tgt = {}; rd = {}; ft = {}; rdt = {}; skip = {}
     for k, (e, lst, optional) in nodes.items():
@@ -189,9 +201,19 @@ def build(cont0, nodes, Tw, readers=3, nogoods=(), pending=None, final_terms=Non
                         want = 0
                 m.xor_cnf(terms, bool(want))
     fin = c[T1]
+    # in-window uncompute ordering: after every in-window consumer has fired
+    for k in nodes:
+        if not isinstance(k, tuple): continue
+        u = k[1]
+        for v in M.succ[u]:
+            if v in nodes:
+                for t in range(Tw):
+                    if (k, t) in fire:
+                        early = [fire[v, tv] for tv in range(t) if (v, tv) in fire]
+                        m.clause([-fire[k, t]] + early)
     # committed-step yield: at least min_fire0 compute nodes fire in step 0
     if min_fire0 > 0:
-        lits0 = [fire[k, 0] for (k, t) in fire if t == 0 and not isinstance(k, tuple)]
+        lits0 = [fire[k, 0] for (k, t) in fire if t == 0]          # compute or uncompute = progress
         if len(lits0) < min_fire0: m.clause([-m.T])
         else: m.atleast(lits0, min_fire0)
     # LOOKAHEAD WITNESS: each listed step must fire at least one compute node,
@@ -203,11 +225,12 @@ def build(cont0, nodes, Tw, readers=3, nogoods=(), pending=None, final_terms=Non
             m.imp(alldone0, fire[k, 0] if (k, 0) in fire else -alldone0)
         if len(comp) < n_remaining: m.clause([-alldone0])
         for ts_ in fire_steps:
-            lits = [fire[k, t] for (k, t) in fire if t == ts_ and not isinstance(k, tuple)]
+            lits = [fire[k, t] for (k, t) in fire if t == ts_]      # compute OR uncompute = progress
             m.clause(lits + [alldone0])
     # DEADLOCK GUARD: at least min_free wires must end REDUNDANT (content in the
     # span of the other 17 wires), so the next window has somewhere to fire.
     if min_free > 0:
+        fin = c[span_at[0]] if span_at else c[T1]      # at the committed boundary
         red = []
         for w in range(NW):
             rw = B(); red.append(rw)
@@ -237,14 +260,23 @@ def decode(sol, V, commit=None):
     steps = range(Tw + 1) if commit is None else range(commit)
     for t in steps:
         pre = []; post = []
-        for w in range(NW):
-            if sol.Value(V['xf'][t, w]): pre.append(('x', w))
+        xs = [('x', w) for w in range(NW) if sol.Value(V['xf'][t, w])]
+        asm_of = {}
         for w in range(NW):
             if sol.Value(V['asm'][t, w]):
-                srcs = [s for j in range(V['nsrc']) for s in range(NW) if sol.Value(V['sel'][t, w, j, s])]
-                for s in srcs: pre.append(('cx', s, w))
-                if sol.Value(V['undo'][t, w]):
-                    for s in srcs: post.append(('cx', s, w))
+                asm_of[w] = [s for j in range(V['nsrc']) for s in range(NW) if sol.Value(V['sel'][t, w, j, s])]
+        # order: a wire that is a source of another assembled wire must be assembled AFTER it
+        order = []; left = dict(asm_of)
+        while left:
+            ready_w = [w for w in left if not any(w in srcs for v, srcs in left.items() if v != w)]
+            if not ready_w: raise RuntimeError('assembly cycle at step %d: %s' % (t, left))
+            w = ready_w[0]; order.append(w); del left[w]
+        for w in order:
+            for s in asm_of[w]: pre.append(('cx', s, w))
+        for w in reversed(order):
+            if sol.Value(V['undo'][t, w]):
+                for s in reversed(asm_of[w]): post.append(('cx', s, w))
+        pre = xs + pre
         body += pre
         if t < Tw:
             for k in V['nodes']:

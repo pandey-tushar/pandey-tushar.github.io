@@ -24,42 +24,69 @@ def solve_with_skips(cont, nodes, W, pending, final_terms, nogoods, maxskip, tli
     return (A.Sol(sol), V), 'SAT %.1fs' % (time.time() - t0)
 
 
-def run(cap=6, W=2, slack=1, tlimit=240, tighten=2, verbose=True, min_free=0, ckpt=True, slide=1):
+def diagnose(cont, done, pending, nodes, W, rem_ops, slide=1, tl=120):
+    """on a failed window: which constraint makes even one fire impossible?"""
+    nrem = sum(1 for k in range(NN) if k not in done)
+    base = dict(span_ops=rem_ops, done_nodes=done, pending=pending, fire_steps=tuple(range(W)),
+                n_remaining=nrem, span_at=(slide, W + 1), min_fire0=1)
+    for tag, ov, nd in [('full', {}, nodes), ('no witness', dict(fire_steps=()), nodes),
+                        ('no span', dict(span_ops=()), nodes), ('span end only', dict(span_at=None), nodes),
+                        ('no pending', dict(pending=None), nodes),
+                        ('no uncompute keys', {}, {k: v for k, v in nodes.items() if not isinstance(k, tuple)}),
+                        ('no span, no witness', dict(span_ops=(), fire_steps=()), nodes)]:
+        kw = dict(base); kw.update(ov)
+        r = A.build(cont, nd, W, **kw)
+        if r is None: print('    diag %-20s -> build None' % tag, flush=True); continue
+        m, V = r; t0 = time.time(); sat, sol = m.solve(tlimit=tl)
+        extra = ''
+        if sat:
+            wb, fired, newc, ph = A.decode(A.Sol(sol), V, commit=slide); extra = ' step0 %s' % sorted(fired, key=str)
+        print('    diag %-20s -> %s %.0fs%s' % (tag, sat, time.time() - t0, extra), flush=True)
+
+
+def run(cap=6, W=2, slack=1, tlimit=240, tighten=2, verbose=True, min_free=0, ckpt=True, slide=1, order=None):
     center, Tls = M.list_schedule(cap)
-    if verbose: print('list schedule cap %d -> %d steps; W %d slack %d' % (cap, Tls, W, slack), flush=True)
+    if order == 'banked':
+        # node ids are the banked list's compute order (cpet_vdag assigns ids by
+        # first appearance); `cap` nodes per step along that order
+        center = {k: k // cap for k in range(NN)}; Tls = max(center.values()) + 1
+    if verbose: print('schedule %s cap %d -> %d steps; W %d slack %d' % (order or 'list', cap, Tls, W, slack), flush=True)
     cont = list(RAW); done = set(); body = []; pending = {}; t0 = 0
     import os
-    ck = 'cpfg_drive_ckpt_c%d_w%d_s%d_f%d.pkl' % (cap, W, slack, min_free)
+    ck = 'cpfg_drive_ckpt_%s_c%d_w%d_s%d_f%d.pkl' % (order or 'list', cap, W, slack, min_free)
     if ckpt and os.path.exists(ck):
         st = pickle.load(open(ck, 'rb'))
         cont, done, body, pending, t0, center = st['cont'], st['done'], st['body'], st['pending'], st['t0'], st['center']
         if verbose: print('resumed from checkpoint: t0=%d done %d/%d' % (t0, len(done), NN), flush=True)
+    stack = []; backtracks = 0; max_backtracks = 30; nogoods_stack = []; Wnext = W
     while len(done) < NN:
+        nogoods_here = nogoods_stack; nogoods_stack = []
+        Wc = Wnext; Wnext = W
         nodes = {}
         for k in range(NN):
             if k in done: continue
             e, l = max(center[k] - slack, 0), center[k] + slack
             e = max(e, t0)
-            if e <= t0 + W - dur[k]:
-                optional = l > t0 + W - dur[k]
-                nodes[k] = (e - t0, min(l, t0 + W - dur[k]) - t0, optional)
+            if e <= t0 + Wc - dur[k]:
+                optional = l > t0 + Wc - dur[k]
+                nodes[k] = (e - t0, min(l, t0 + Wc - dur[k]) - t0, optional)
         if not nodes:
             t0 += 1; continue
         phfeed = {j for tm in TERMS for o in tm for j in range(NN) if (o >> (12 + j)) & 1}
         for u in sorted(done):
             if u in phfeed or dur[u] == 2: continue
-            if all(v in done for v in M.succ[u]) and any((cont[w] >> (12 + u)) & 1 for w in range(NW)):
-                nodes[('u', u)] = (0, W - 1, True)
+            if all(v in done or v in nodes for v in M.succ[u]) and any((cont[w] >> (12 + u)) & 1 for w in range(NW)):
+                nodes[('u', u)] = (0, Wc - 1, True)
         rem_ops = [o for k in range(NN) if k not in done for o in N[k]] + [o for tm in TERMS for o in tm]
         final = None
 
-        def attempt(maxskip, cxmax=None, tl=tlimit, min_fire0=0):
+        def attempt(maxskip, cxmax=None, tl=tlimit, min_fire0=0, min_free_=None):
             # lookahead witness: the uncommitted steps must each fire something if
             # more nodes than this step can hold remain
             nrem = sum(1 for k in range(NN) if k not in done)
-            fs = tuple(range(0, W))          # committed step AND lookahead steps must each fire
-            return solve_with_skips(cont, nodes, W, pending, final, [], maxskip, tl, cxmax=cxmax,
-                                    span_ops=rem_ops, done_nodes=done, min_free=min_free, fire_steps=fs, n_remaining=nrem, span_at=(slide, W + 1), min_fire0=min_fire0)
+            fs = tuple(range(0, Wc))          # committed step AND lookahead steps must each fire
+            return solve_with_skips(cont, nodes, Wc, pending, final, list(nogoods_here), maxskip, tl, cxmax=cxmax,
+                                    span_ops=rem_ops, done_nodes=done, min_free=(min_free if min_free_ is None else min_free_), fire_steps=fs, n_remaining=nrem, span_at=(slide, Wc + 1), min_fire0=min_fire0)
         # EASY -> HARD on the COMMITTED step: all nodes optional, then require
         # >= F fires in step 0 for F = 1, 2, ... until UNSAT/timeout
         for k in list(nodes): nodes[k] = (nodes[k][0], nodes[k][1], True)
@@ -70,7 +97,24 @@ def run(cap=6, W=2, slack=1, tlimit=240, tighten=2, verbose=True, min_free=0, ck
             if res is None: break
             best = (res, F); F += 1
             if F > 9: break
-        if best is None: print('window failed'); return None
+        if best is None:
+            if stack and backtracks < max_backtracks:
+                # retreat one step: forbid the previous step's exact target choice
+                prev = stack.pop(); backtracks += 1
+                cont, done, pending, t0, center = prev['cont'], set(prev['done']), dict(prev['pending']), prev['t0'], dict(prev['center'])
+                del body[prev['body_len']:]
+                nogoods_stack = prev['nogoods'] + [prev['choice']]
+                Wnext = min(W + 2, prev['W'] + 1)         # deeper lookahead on the retry
+                if verbose: print('  BACKTRACK #%d to t0=%d (forbid %s, W=%d)' % (backtracks, t0, prev['choice'], Wnext), flush=True)
+                continue
+            pickle.dump(dict(cont=cont, done=done, pending=pending, t0=t0, center=center, nodes=nodes), open('cpfg_stall_state.pkl', 'wb'))
+            print('window failed (state dumped); diagnosing...', flush=True)
+            diagnose(cont, done, pending, nodes, Wc, rem_ops, slide=slide); return None
+        (s, V), F = best
+        for mf in (2, 1):                    # tie-break: keep wires free at the committed boundary
+            resf, msgf = attempt(maxskip, min_fire0=F, tl=min(tlimit, 120), min_free_=mf)
+            if verbose: print('    min_free %d -> %s' % (mf, msgf), flush=True)
+            if resf is not None: best = (resf, F); break
         (s, V), F = best; F -= 0
         wb, fired, newc, ph = A.decode(s, V, commit=slide)
         fired_all = dict(fired)
@@ -94,6 +138,9 @@ def run(cap=6, W=2, slack=1, tlimit=240, tighten=2, verbose=True, min_free=0, ck
         if not fired and not unc:
             pickle.dump(dict(cont=cont, done=done, pending=pending, t0=t0, center=center, nodes=nodes), open('cpfg_stall_state.pkl', 'wb'))
             print('  STALL: no node placeable at t0=%d (state dumped)' % t0, flush=True); return None
+        stack.append(dict(cont=list(cont), done=set(done), pending=dict(pending), t0=t0, center=dict(center),
+                          body_len=len(body), nogoods=list(nogoods_here), W=Wc,
+                          choice=[(k, tw) for k, (tt, tw, rs) in fired_all.items()]))
         for k in fired: done.add(k)
         for k in nodes:
             if not isinstance(k, tuple) and k not in fired: center[k] = max(center[k], t0 + slide)
@@ -123,13 +170,15 @@ def run(cap=6, W=2, slack=1, tlimit=240, tighten=2, verbose=True, min_free=0, ck
 
 if __name__ == '__main__':
     cap = int(sys.argv[1]) if len(sys.argv) > 1 else 6
-    W = int(sys.argv[2]) if len(sys.argv) > 2 else 3
+    W = int(sys.argv[2]) if len(sys.argv) > 2 else 2
     slack = int(sys.argv[3]) if len(sys.argv) > 3 else 1
-    tl = float(sys.argv[4]) if len(sys.argv) > 4 else 240
-    t0 = time.time(); r = run(cap, W, slack, tl)
+    tl = float(sys.argv[4]) if len(sys.argv) > 4 else 300
+    mf = int(sys.argv[5]) if len(sys.argv) > 5 else 0
+    order = sys.argv[6] if len(sys.argv) > 6 else None
+    t0 = time.time(); r = run(cap, W, slack, tl, min_free=mf, order=order)
     print('total %.0fs' % (time.time() - t0), flush=True)
     if r:
         body, ph, T = r
-        pickle.dump((body, ph), open('cpfg_drive_c%d_w%d_s%d.pkl' % (cap, W, slack), 'wb'))
+        pickle.dump((body, ph), open('cpfg_drive_%s_c%d_w%d_s%d.pkl' % (order or 'list', cap, W, slack), 'wb'))
         import cpfg_eval as E
         E.evaluate(body, ph, sv=True)
