@@ -1,0 +1,33 @@
+CP-FK: rank-10 factorisation (Sep 17)
+
+Facts (exact):
+- GF(2) rank of the 64x64 image with the x|y split is 10 (best of all 462
+  bipartitions of the 12 bits; a 4|8 split gives 9 with 8-bit factors).
+  F = sum_{i=1..10} c_i(x) b_i(y); the c_i are the 10 distinct nonzero image
+  columns (interval combinations in x), the b_i the y-classes of equal
+  columns.  Two nested groups of 5 on each side.
+- Corner form: F = sum over 68 corners (p,q) of [x>=p][y>=q]; 19 x- and 20
+  y-thresholds.  68 matches the ~60 CZ read off the board's 614 CX.
+
+Step 1 (per-side synthesis, 9 wires: 6 raw + 3 ancillas R/A/V):
+- walk search with coverage objective (cpfk_side.py): 50-60 Toffolis per
+  side, and the joint solver fails because a_i and b_i are never co-live.
+- literal-product piece compiler (cpfk_pieces.py): 186 / 230 gates per
+  side for both directions.
+- affine-subspace piece compiler (cpfk_affine.py): every increment is an
+  XOR of affine-subspace indicators, each one multi-controlled gate on
+  CX-assembled forms; accumulation on R inside each group, groups undone
+  with dagger gates.  110 gates per side for both directions (55 per
+  direction, 2/3 of them RC3X) + ~190 assembly CX per side.
+  Joined (cpfk_join.py): exact (sim_exact 4.7e-14, phase mismatch 0),
+  1218 CX, opt2 depth 1003, commutation pipeline 969.
+  Per-wire gate load: the accumulation wire R carries 447 and the scratch
+  wire V 580 transpiled gates on the x side (486 / 558 on y): every
+  product funnels through 2-3 ancilla wires, so depth >= 580 whatever the
+  schedule.
+Verdict: gate count is near the 50-per-direction budget but the design is
+register-serialised; go/no-go on depth failed (needs <= 110 per side).
+Next lever if pursued: no accumulation wire at all - one cz per
+(x-piece, y-piece) pair (about 60 cz, the board's count) with pieces spread
+over many target wires, which needs in-place hosting of pieces on raw
+wires and solver-placed cancellation gates.
