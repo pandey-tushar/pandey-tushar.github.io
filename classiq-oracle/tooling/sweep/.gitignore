@@ -1,0 +1,6 @@
+out/
+logs/
+results.csv
+__pycache__/
+*.pyc
+*.pkl
