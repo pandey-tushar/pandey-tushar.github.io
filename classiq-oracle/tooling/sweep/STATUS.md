@@ -51,3 +51,12 @@ Next: hand-build the y prep from the formulas, then measure the disk core.
   setups covers 8/11 (x) and 6/10 (y) functions, but reading them needs
   25-30 products, so degree is the wrong proxy.
 - x|y is the minimum-rank 6|6 bit split (rank 10; all others >= 12).
+
+## Exact multiplicative complexity of the y targets (cptb_xag.py)
+
+W1 = 2, W2 = 3, W0 = 3 ANDs (proved minimal).  V3 >= 4 and W3 >= 4 (k=3
+UNSAT; k=4 undecided in 10 min).  Staged SAT (cptb_ychain.py, resumable,
+ckpt/) reached W2+W1+W0 in 6 levels; V3 on top of that state timed out at
+2 levels (30 min).  Hand V3 = ~y4 MAJ(y5, y3, q) ^ y4 ~y5 M needs ~9-10 ANDs
+and >= 3 clean temporaries, which the 9 y wires do not have without a
+mid-stream uncompute.
