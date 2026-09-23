@@ -118,3 +118,37 @@ if __name__ == '__main__':
     qc = ops_to_qc(full)
     print('forward depth/cx', real_depth(ops_to_qc(fwd)), ' full depth/cx', real_depth(qc))
     print('check vs disk core (err, leak)', check(qc, core_target()))
+
+
+def sched_ops(s):
+    """round schedule (ylin / y) -> local y op list"""
+    yops = []
+    for lins, row in zip(s['ylin'], s['y']):
+        yops += [('cx', a, b) for a, b in lins]
+        for a, pa, b, pb, t in row:
+            yops += ([('x', a)] if pa else []) + ([('x', b)] if pb else []) + [('ccx', a, b, t)] + \
+                    ([('x', a)] if pa else []) + ([('x', b)] if pb else [])
+    return yops
+
+
+def load_ychain(outdir, nstages):
+    """concatenate the staged y prep saved by cptb_ychain.py"""
+    import os, pickle
+    yops = []
+    for k in range(nstages):
+        s, _, _ = pickle.load(open(os.path.join(outdir, 'cptb_ychain_stage%d.pkl' % k), 'rb'))
+        yops += sched_ops(s)
+    return yops
+
+
+def measure(yops):
+    """build, verify exactly (classical phase sim + statevector), measure depth"""
+    from cptb_csim import phase_table
+    fwd, full = build(yops)
+    tab = phase_table(fwd, 18)
+    mism = int((tab != core_target()).sum())
+    qc = ops_to_qc(full)
+    d = real_depth(qc)
+    print('disk core: phase mismatches %d  forward depth/cx %s  full depth/cx %s' % (mism, real_depth(ops_to_qc(fwd)), d))
+    print('statevector (err, leak):', check(qc, core_target()))
+    return d
