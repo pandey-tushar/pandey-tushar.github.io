@@ -12,6 +12,7 @@ def folded():
     nx3 = b(3) ^ ALL
     return [b(0) ^ nx3, b(1) ^ nx3, b(2) ^ nx3, b(3) ^ b(4), b(4), b(5), 0, 0, 0]
 R, to, maxsel = int(sys.argv[1]), float(sys.argv[2]), int(sys.argv[3])
+to = None if to <= 0 else to            # 0 = no timeout (blocking wait; watcher kills)
 pairs = logo_pairs(); xi = folded(); yi = init_tables()
 e = Enc(); encode(R, 3, pairs, xi, yi, e, maxsel=maxsel)
 print('R=%d maxsel=%d vars %d clauses %d' % (R, maxsel, e.pool.top, len(e.cl)), flush=True)
