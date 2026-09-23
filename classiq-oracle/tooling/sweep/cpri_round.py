@@ -110,6 +110,13 @@ def encode(R, G, pairs, xinit, yinit, e, maxsel=3, L=0, only=None):
                             e.cl.append([-lact[l], -ldst[l][w], -ldst[l2][w]])
                     if l:
                         e.cl.append([-lact[l], lact[l - 1]])
+                # no wire is both a CX source and a CX target in one level:
+                # the level is then a well-defined invertible map in any order
+                for l in range(L):
+                    for l2 in range(L):
+                        if l2 != l:
+                            for w in range(NW):
+                                e.cl.append([-lact[l], -lact[l2], -lsrc[l][w], -ldst[l2][w]])
                 Wn = {}
                 for w in range(NW):
                     Wn[w] = []

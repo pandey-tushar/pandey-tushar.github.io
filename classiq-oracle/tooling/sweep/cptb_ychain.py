@@ -71,7 +71,11 @@ def main():
             res = st if isinstance(st, str) else 'UNSAT'
             log(dict(key, timeout=to, result=res, secs=round(time.time() - t0)))
             print('stage %d (+%s) R=%d -> %s %.0fs' % (k, name, R, res, time.time() - t0), flush=True)
-            if st == 'SAT':
+            if st == 'SAT':                        # replay gate by gate; targets must be on wires
+                end = endstate(s, state)
+                miss = [t[0] for t in tg if not any(((v ^ (ALL if p else 0)) ^ t[1]) & t[2] == 0 for v in end for p in (0, 1))]
+                if miss:
+                    raise RuntimeError('replay check failed, missing %s' % miss)
                 print('  lins', s['ylin']); print('  gates', s['y'], flush=True)
                 pickle.dump((s, state, done + [name]), open(f, 'wb'))
                 state = endstate(s, state); done.append(name); total += R

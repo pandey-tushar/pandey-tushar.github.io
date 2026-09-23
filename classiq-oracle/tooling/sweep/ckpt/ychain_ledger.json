@@ -18,7 +18,7 @@
   "G": 3,
   "L": 2,
   "timeout": 600,
-  "result": "SAT",
+  "result": "invalid(cx-order bug)",
   "secs": 4
  },
  {
@@ -29,7 +29,7 @@
   "G": 3,
   "L": 2,
   "timeout": 600,
-  "result": "SAT",
+  "result": "invalid(cx-order bug)",
   "secs": 13
  },
  {
@@ -73,7 +73,7 @@
   "G": 4,
   "L": 3,
   "timeout": 1800,
-  "result": "SAT",
+  "result": "invalid(cx-order bug)",
   "secs": 21
  },
  {
@@ -117,7 +117,7 @@
   "G": 4,
   "L": 3,
   "timeout": 1800,
-  "result": "SAT",
+  "result": "invalid(cx-cycle bug)",
   "secs": 6
  },
  {
@@ -128,7 +128,18 @@
   "G": 4,
   "L": 3,
   "timeout": 1800,
-  "result": "SAT",
+  "result": "invalid(cx-cycle bug)",
   "secs": 495
+ },
+ {
+  "order": "P1-W2-W1-W0",
+  "stage": 1,
+  "target": "W2",
+  "R": 2,
+  "G": 4,
+  "L": 3,
+  "timeout": 1800,
+  "result": "SAT",
+  "secs": 20
  }
 ]

@@ -34,10 +34,10 @@ def locate(w, names):
         if n not in out: raise RuntimeError('%s not on a wire' % n)
     return out
 
-def build(order):
+def build(order, upto=None):
     tag = '-'.join(order)
     p2 = []
-    for k in range(1, len(order)):
+    for k in range(1, upto or len(order)):
         s, _, _ = pickle.load(open(os.path.join(HERE, 'ckpt', 'ychain_%s_stage%d.pkl' % (tag, k)), 'rb'))
         p2 += sched_ops(s)
     st0 = list(init_tables()); st0[8] = V3
