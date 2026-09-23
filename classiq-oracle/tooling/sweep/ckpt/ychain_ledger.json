@@ -42,5 +42,38 @@
   "timeout": 600,
   "result": "timeout",
   "secs": 600
+ },
+ {
+  "order": "V3-W2-W1-W0-W3",
+  "stage": 0,
+  "target": "V3",
+  "R": 3,
+  "G": 3,
+  "L": 2,
+  "timeout": 600,
+  "result": "timeout",
+  "secs": 600
+ },
+ {
+  "order": "W2-W1-W0-V3-W3",
+  "stage": 2,
+  "target": "W0",
+  "R": 3,
+  "G": 3,
+  "L": 2,
+  "timeout": 600,
+  "result": "timeout",
+  "secs": 600
+ },
+ {
+  "order": "W2-W1-W0-V3-W3",
+  "stage": 2,
+  "target": "W0",
+  "R": 2,
+  "G": 4,
+  "L": 3,
+  "timeout": 1800,
+  "result": "SAT",
+  "secs": 21
  }
 ]

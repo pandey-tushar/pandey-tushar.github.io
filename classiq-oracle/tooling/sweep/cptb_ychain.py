@@ -40,9 +40,13 @@ def main():
     tag = '-'.join(order)
     lpath = os.path.join(ck, 'ychain_ledger.json')
     ledger = json.load(open(lpath)) if os.path.exists(lpath) else []
-    def log(rec):
-        ledger.append(rec); json.dump(ledger, open(lpath, 'w'), indent=1)
+    def log(rec):                              # re-read: several runs share the ledger
+        cur = json.load(open(lpath)) if os.path.exists(lpath) else []
+        cur.append(rec); json.dump(cur, open(lpath + '.tmp', 'w'), indent=1)
+        os.replace(lpath + '.tmp', lpath); ledger.append(rec)
     byname = {t[0]: t for t in TG}
+    import cptb_yprep as Y            # extra target: exact valid rows (V3 = VAL ^ W3)
+    byname['VAL'] = ('VAL', Y.V3 | Y.W3, ALL)
     state = init_tables(); done = []; total = 0
     for k, name in enumerate(order):
         f = os.path.join(ck, 'ychain_%s_stage%d.pkl' % (tag, k))
