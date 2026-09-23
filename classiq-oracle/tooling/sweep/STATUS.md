@@ -60,3 +60,12 @@ ckpt/) reached W2+W1+W0 in 6 levels; V3 on top of that state timed out at
 2 levels (30 min).  Hand V3 = ~y4 MAJ(y5, y3, q) ^ y4 ~y5 M needs ~9-10 ANDs
 and >= 3 clean temporaries, which the 9 y wires do not have without a
 mid-stream uncompute.
+
+## Measured: disk core, complete build (cptb_full1.py)
+
+Phase 1 (hand V3 + E4*W3, one local uncompute) + phase 2 (W2/W1/W0, 6 levels,
+fixed encoder, replay-checked) + comparator chain + one mirror.
+Exact: 0 phase mismatches; statevector err 1.2e-16, leak 3e-31.
+Depth: forward 216, FULL 409 / 348 CX -- disks only, before rectangles.
+DEAD by the >200 rule; worse than the 249 submission.  The y prep (phase 1
+serial accumulation into one wire + 6 phase-2 levels) dominates.
