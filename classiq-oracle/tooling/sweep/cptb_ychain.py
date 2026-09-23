@@ -48,7 +48,12 @@ def main():
     import cptb_yprep as Y            # extra target: exact valid rows (V3 = VAL ^ W3)
     byname['VAL'] = ('VAL', Y.V3 | Y.W3, ALL)
     state = init_tables(); done = []; total = 0
+    if order[0] == 'P1':              # start after cptb_phase1: raw y + V3 on local wire 8
+        import cptb_yprep as Y
+        state = list(state); state[8] = Y.V3; done = ['V3']
     for k, name in enumerate(order):
+        if name == 'P1':
+            continue
         f = os.path.join(ck, 'ychain_%s_stage%d.pkl' % (tag, k))
         if os.path.exists(f):                       # resume
             s, _, names = pickle.load(open(f, 'rb'))
