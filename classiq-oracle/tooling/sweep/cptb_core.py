@@ -131,12 +131,12 @@ def sched_ops(s):
     return yops
 
 
-def load_ychain(outdir, nstages):
-    """concatenate the staged y prep saved by cptb_ychain.py"""
+def load_ychain(ckdir, order):
+    """concatenate the staged y prep saved by cptb_ychain.py (resumable ckpt)"""
     import os, pickle
-    yops = []
-    for k in range(nstages):
-        s, _, _ = pickle.load(open(os.path.join(outdir, 'cptb_ychain_stage%d.pkl' % k), 'rb'))
+    tag = '-'.join(order); yops = []
+    for k in range(len(order)):
+        s, _, _ = pickle.load(open(os.path.join(ckdir, 'ychain_%s_stage%d.pkl' % (tag, k)), 'rb'))
         yops += sched_ops(s)
     return yops
 
