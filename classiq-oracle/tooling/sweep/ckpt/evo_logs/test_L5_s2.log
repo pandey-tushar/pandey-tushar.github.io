@@ -1,0 +1,43 @@
+planted target: wire 3, ones 2048, nonlinearity 1792 (logo 1097)
+[evo_test_L5_s2] start fitness 2048 / 4096
+[2026-09-24 20:08:56] evo_test_L5_s2     13s  fit 3072/4096  iters 462878  (35510/s)  gates cx 27 tof 14
+[2026-09-24 20:09:06] evo_test_L5_s2     23s  fit 3072/4096  iters 1110350  (47678/s)  gates cx 23 tof 15
+[2026-09-24 20:09:17] evo_test_L5_s2     34s  fit 3072/4096  iters 1743911  (52050/s)  gates cx 25 tof 13
+[2026-09-24 20:09:31] evo_test_L5_s2     48s  fit 3072/4096  iters 2691169  (55676/s)  gates cx 28 tof 13
+[2026-09-24 20:09:42] evo_test_L5_s2     59s  fit 3072/4096  iters 3340096  (57036/s)  gates cx 23 tof 13
+[2026-09-24 20:09:56] evo_test_L5_s2     73s  fit 3072/4096  iters 4253678  (57997/s)  gates cx 25 tof 11
+[2026-09-24 20:10:07] evo_test_L5_s2     83s  fit 3072/4096  iters 4882182  (58474/s)  gates cx 23 tof 13
+[2026-09-24 20:10:21] evo_test_L5_s2     98s  fit 3072/4096  iters 5884125  (60043/s)  gates cx 26 tof 15
+[2026-09-24 20:10:32] evo_test_L5_s2    109s  fit 3072/4096  iters 6572788  (60354/s)  gates cx 26 tof 12
+[2026-09-24 20:10:46] evo_test_L5_s2    123s  fit 3072/4096  iters 7479444  (60928/s)  gates cx 30 tof 10
+[2026-09-24 20:10:57] evo_test_L5_s2    134s  fit 3072/4096  iters 8173421  (61028/s)  gates cx 30 tof 13
+[2026-09-24 20:11:12] evo_test_L5_s2    149s  fit 3072/4096  iters 9122383  (61366/s)  gates cx 26 tof 10
+[2026-09-24 20:11:27] evo_test_L5_s2    164s  fit 3072/4096  iters 10090228  (61638/s)  gates cx 26 tof 11
+[2026-09-24 20:11:42] evo_test_L5_s2    178s  fit 3072/4096  iters 11061051  (61981/s)  gates cx 29 tof 15
+[2026-09-24 20:11:52] evo_test_L5_s2    189s  fit 3072/4096  iters 11727339  (62151/s)  gates cx 25 tof 13
+[2026-09-24 20:12:07] evo_test_L5_s2    204s  fit 3072/4096  iters 12706573  (62333/s)  gates cx 24 tof 12
+[2026-09-24 20:12:17] evo_test_L5_s2    214s  fit 3072/4096  iters 13343590  (62385/s)  gates cx 25 tof 15
+[2026-09-24 20:12:31] evo_test_L5_s2    228s  fit 3072/4096  iters 14295071  (62606/s)  gates cx 26 tof 15
+[2026-09-24 20:12:41] evo_test_L5_s2    238s  fit 3072/4096  iters 14956960  (62743/s)  gates cx 24 tof 14
+[2026-09-24 20:12:52] evo_test_L5_s2    249s  fit 3072/4096  iters 15674757  (62980/s)  gates cx 25 tof 13
+[2026-09-24 20:13:02] evo_test_L5_s2    259s  fit 3072/4096  iters 16302092  (62969/s)  gates cx 24 tof 15
+[2026-09-24 20:13:12] evo_test_L5_s2    269s  fit 3072/4096  iters 16926066  (62928/s)  gates cx 29 tof 15
+[2026-09-24 20:13:26] evo_test_L5_s2    283s  fit 3072/4096  iters 17929298  (63269/s)  gates cx 27 tof 10
+[2026-09-24 20:13:41] evo_test_L5_s2    298s  fit 3584/4096  iters 18999272  (63690/s)  gates cx 28 tof 17
+[2026-09-24 20:13:51] evo_test_L5_s2    308s  fit 3584/4096  iters 19722761  (63953/s)  gates cx 23 tof 17
+[2026-09-24 20:14:02] evo_test_L5_s2    319s  fit 3584/4096  iters 20429345  (64101/s)  gates cx 28 tof 15
+[2026-09-24 20:14:17] evo_test_L5_s2    333s  fit 3584/4096  iters 21486880  (64448/s)  gates cx 27 tof 11
+[2026-09-24 20:14:32] evo_test_L5_s2    349s  fit 3584/4096  iters 22547284  (64642/s)  gates cx 29 tof 15
+[2026-09-24 20:14:46] evo_test_L5_s2    363s  fit 3584/4096  iters 23631890  (65135/s)  gates cx 28 tof 16
+[2026-09-24 20:14:57] evo_test_L5_s2    374s  fit 3584/4096  iters 24436533  (65402/s)  gates cx 31 tof 12
+[2026-09-24 20:15:12] evo_test_L5_s2    388s  fit 3584/4096  iters 25524936  (65712/s)  gates cx 28 tof 14
+[2026-09-24 20:15:22] evo_test_L5_s2    399s  fit 3584/4096  iters 26256727  (65885/s)  gates cx 29 tof 16
+[2026-09-24 20:15:32] evo_test_L5_s2    409s  fit 3584/4096  iters 26959066  (65931/s)  gates cx 26 tof 14
+[2026-09-24 20:15:47] evo_test_L5_s2    424s  fit 3584/4096  iters 27978874  (66053/s)  gates cx 28 tof 16
+[2026-09-24 20:15:57] evo_test_L5_s2    434s  fit 3584/4096  iters 28701601  (66192/s)  gates cx 28 tof 13
+[2026-09-24 20:16:12] evo_test_L5_s2    449s  fit 3584/4096  iters 29766930  (66309/s)  gates cx 27 tof 14
+[2026-09-24 20:16:22] evo_test_L5_s2    459s  fit 3584/4096  iters 30467132  (66373/s)  gates cx 26 tof 12
+[2026-09-24 20:16:37] evo_test_L5_s2    474s  fit 3584/4096  iters 31517533  (66532/s)  gates cx 30 tof 14
+[2026-09-24 20:16:47] evo_test_L5_s2    484s  fit 3584/4096  iters 32234422  (66633/s)  gates cx 27 tof 15
+[2026-09-24 20:16:47] evo_test_L5_s2    484s  fit 4096/4096  iters 32270475  (66638/s)  gates cx 30 tof 14
+[evo_test_L5_s2] final fit 4096 / 4096  readout (1, -1, 0, 0)

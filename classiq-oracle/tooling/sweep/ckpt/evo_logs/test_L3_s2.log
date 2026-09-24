@@ -1,0 +1,5 @@
+planted target: wire 1, ones 2048, nonlinearity 1536 (logo 1097)
+[evo_test_L3_s2] start fitness 2304 / 4096
+[2026-09-24 20:08:55] evo_test_L3_s2     12s  fit 3136/4096  iters 492144  (40470/s)  gates cx 16 tof 8
+[2026-09-24 20:08:56] evo_test_L3_s2     13s  fit 4096/4096  iters 583162  (44117/s)  gates cx 17 tof 9
+[evo_test_L3_s2] final fit 4096 / 4096  readout (0, -1, 0, 0)
