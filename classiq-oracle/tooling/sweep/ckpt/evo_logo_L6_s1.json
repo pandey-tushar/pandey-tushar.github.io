@@ -1,1 +1,1 @@
-{"tag": "evo_logo_L6_s1", "best": 3783, "current": 3783, "restarts": 0, "iters": 1947516, "elapsed_s": 60, "evals_per_s": 32232, "cx": 33, "tof": 19, "utc": "2026-09-24 20:45:25"}
+{"tag": "evo_logo_L6_s1", "best": 3859, "current": 3807, "restarts": 5, "iters": 42734490, "elapsed_s": 1201, "evals_per_s": 35573, "cx": 33, "tof": 24, "utc": "2026-09-24 21:04:26"}
