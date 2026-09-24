@@ -205,25 +205,35 @@ if __name__ == '__main__':
             w, int(unpack(F).sum()), nl[w], 2048 - int(np.abs(walsh(unpack(logo_bits()))).max()) // 2), flush=True)
     else:
         F = logo_bits()
-    cx = -np.ones((L, NW), dtype=np.int64); tf = -np.ones((L, NW, 4), dtype=np.int64)
-    st = states(cx, tf, L); tmp = st.copy()
-    fit = fitness(st[-1], F)[0]
-    t0 = time.time(); total = 0; last = t0; chunk = 2000
-    print('[%s] start fitness %d / 4096' % (tag, fit), flush=True)
+    RESTART = float(os.environ.get('RESTART', '90'))    # s without improvement -> fresh start
+    def fresh():
+        cx = -np.ones((L, NW), dtype=np.int64); tf = -np.ones((L, NW, 4), dtype=np.int64)
+        st = states(cx, tf, L)
+        return cx, tf, st, st.copy(), fitness(st[-1], F)[0]
+    cx, tf, st, tmp, fit = fresh()
+    best = (fit, cx.copy(), tf.copy()); nrs = 0
+    t0 = time.time(); total = 0; last = t0; chunk = 2000; t_imp = t0; fit_prev = fit
+    print('[%s] start fitness %d / 4096  restart after %.0fs without gain' % (tag, fit, RESTART), flush=True)
     while True:
         c0 = time.time()
         fit, acc, n = run(cx, tf, L, F, st, tmp, chunk, fit, 0.1, int(rng.integers(1 << 30)))
         total += n; now = time.time()
         if now - c0 > 0: chunk = max(200, int(chunk * min(4.0, (PEVERY / 2) / (now - c0))))
-        if now - last >= PEVERY or fit == 4096 or now - t0 > minutes * 60:
+        if fit > fit_prev: t_imp = now; fit_prev = fit
+        if fit > best[0]: best = (fit, cx.copy(), tf.copy())
+        done = best[0] == 4096 or now - t0 > minutes * 60
+        if now - last >= PEVERY or done:
             last = now
-            gates = int((cx >= 0).sum()), int((tf[:, :, 0] >= 0).sum())
-            rec = dict(tag=tag, fit=int(fit), iters=total, elapsed_s=round(now - t0),
-                       evals_per_s=round(total / (now - t0)), cx=gates[0], tof=gates[1],
-                       utc=time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(now)))
-            print('[%s] %s  %5ds  fit %4d/4096  iters %d  (%d/s)  gates cx %d tof %d' %
-                  (rec['utc'], tag, rec['elapsed_s'], fit, total, rec['evals_per_s'], *gates), flush=True)
-            np.savez('ckpt/%s.npz' % tag, cx=cx, tf=tf, F=F, L=L)
+            gates = int((best[1] >= 0).sum()), int((best[2][:, :, 0] >= 0).sum())
+            rec = dict(tag=tag, best=int(best[0]), current=int(fit), restarts=nrs, iters=total,
+                       elapsed_s=round(now - t0), evals_per_s=round(total / (now - t0)),
+                       cx=gates[0], tof=gates[1], utc=time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(now)))
+            print('[%s] %s  %5ds  best %4d/4096  current %4d  restarts %d  iters %d  (%d/s)  best gates cx %d tof %d' %
+                  (rec['utc'], tag, rec['elapsed_s'], best[0], fit, nrs, total, rec['evals_per_s'], *gates), flush=True)
+            np.savez('ckpt/%s.npz' % tag, cx=best[1], tf=best[2], F=F, L=L)
             json.dump(rec, open('ckpt/%s.json' % tag, 'w'))
-            if fit == 4096 or now - t0 > minutes * 60: break
-    print('[%s] final fit %d / 4096  readout %s' % (tag, fit, fitness(st[-1], F)[1:]), flush=True)
+            if done: break
+        if now - t_imp > RESTART:
+            cx, tf, st, tmp, fit = fresh(); nrs += 1; t_imp = now; fit_prev = fit
+    S = states(best[1], best[2], L)[-1]
+    print('[%s] final best %d / 4096  readout %s  restarts %d' % (tag, best[0], fitness(S, F)[1:], nrs), flush=True)
