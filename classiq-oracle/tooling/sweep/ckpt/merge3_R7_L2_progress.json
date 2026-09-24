@@ -1,0 +1,12 @@
+{
+ "tag": "merge3 R=7 L=2",
+ "status": "running",
+ "elapsed_s": 11,
+ "chunks": 1,
+ "conflicts": 20038,
+ "decisions": 348257,
+ "restarts": 140,
+ "propagations": 12546093,
+ "conf_per_s": 1811,
+ "utc": "2026-09-24 17:28:28"
+}
