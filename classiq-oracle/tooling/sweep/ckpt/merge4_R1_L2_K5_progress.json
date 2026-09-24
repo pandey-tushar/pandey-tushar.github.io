@@ -1,0 +1,12 @@
+{
+ "tag": "merge4 R=1 L=2 K=5",
+ "status": "UNSAT",
+ "elapsed_s": 3,
+ "chunks": 2,
+ "conflicts": 34904,
+ "decisions": 288666,
+ "restarts": 682,
+ "propagations": 20044836,
+ "conf_per_s": 13720,
+ "utc": "2026-09-24 18:45:06"
+}

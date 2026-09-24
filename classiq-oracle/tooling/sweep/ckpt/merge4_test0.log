@@ -1,0 +1,7 @@
+classes 110  products 115  readouts 6  options per readout [10]  KMAX 5
+R=1 vars 28239 clauses 791900
+R=1 -> UNSAT  3s
+R=2 vars 52415 clauses 1577740
+R=2 -> SAT  68s
+check: phase == readout-0 product exactly, identity True
+chosen: 5-class diagonal ((5,17,15,12,14)); diagonal alone real depth/cx (56, 30) via qiskit DiagonalGate
