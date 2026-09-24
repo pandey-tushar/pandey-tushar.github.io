@@ -13,12 +13,17 @@ import cptd_merge3 as M
 
 NW, LCX, CXC = 18, 2, 0.3
 HADD = int(os.environ.get('HADD', '1'))   # 1 = additive score, 0 = max-distance
+LOOK = int(os.environ.get('LOOK', '1'))   # two-step lookahead (free a wire + compute)
+XCOPY = float(os.environ.get('XCOPY', '0.05'))  # prob. of offering a non-improving copy
+FOCUS = float(os.environ.get('FOCUS', '0'))  # >0: focus mode, weight of the other readouts
 ZW = float(os.environ.get('ZW', '0.1'))   # reward per free (zero) wire
 
 
 def setup():
     ops, C, vals, prods, reads = M.extract()
     xor, P, pt = M.tables(C, vals, prods)
+    if os.environ.get('READS'):
+        reads = [reads[int(k)] for k in os.environ['READS'].split(',')]
     rcls = [tuple(C[M.key(v)] for v in vs) for _, vs in reads]
     init = [C[M.key(((np.arange(4096) >> w) & 1).astype(np.uint8))] for w in range(NW)]
     return C, vals, P, pt, xor, reads, rcls, init
@@ -63,7 +68,25 @@ class Model:
         d = self.cost(set(st)) if HADD else self.dist(set(st))
         z = self.init[NW - 1]          # zero class (ancilla start)
         agg = sum if HADD else max
-        return sum(agg(d[c] for c in self.rcls[k]) for k in pend) - ZW * sum(1 for c in st if c == z)
+        per = [agg(d[c] for c in self.rcls[k]) for k in pend]
+        if FOCUS and per:          # chase only the cheapest pending readout; others add a small term
+            return min(per) + FOCUS * sum(per) + 100 * len(per) - ZW * sum(1 for c in st if c == z)
+        return sum(per) - ZW * sum(1 for c in st if c == z)
+
+
+def best_next(m, st, pend):
+    """score after the best single Toffoli move into a zero wire (lookahead)"""
+    z = m.init[NW - 1]; best = m.score(st, pend)
+    for w in range(NW):
+        if st[w] != z: continue
+        for j, (cs, _, _) in enumerate(m.P):
+            r = m.pt[j, z]
+            if r < 0 or r == z: continue
+            if not all(any(st[u] == c and u != w for u in range(NW)) for c in cs): continue
+            s2 = list(st); s2[w] = r
+            best = min(best, m.score(s2, pend))
+        break                      # zero wires are interchangeable
+    return best
 
 
 def fire(m, st, pend, s, rds):
@@ -87,10 +110,13 @@ def cx_layer(m, st, pend, rng, topk):
                 if r < 0 or r == st[tw]: continue
                 s2 = list(st); s2[tw] = r
                 sc = m.score(s2, pend)
-                if sc < base: cands.append((sc, sw, tw, r))
+                # copies into a zero wire do not pay off at once (they protect a class that is
+                # then transformed in place): allow them with probability XCOPY
+                if sc < base or (r == st[sw] and st[tw] == m.init[NW - 1] and rng.random() < XCOPY):
+                    cands.append((sc, sw, tw, r))
         if not cands: return moves, st
         cands.sort(); sc, sw, tw, r = rng.choice(cands[:topk])
-        moves.append((sw, tw)); busy |= {sw, tw}; st[tw] = r; base = sc
+        moves.append((sw, tw)); busy |= {sw, tw}; st[tw] = r; base = m.score(st, pend)
 
 
 def tof_layer(m, st, pend, rng, topk, explore):
@@ -112,12 +138,14 @@ def tof_layer(m, st, pend, rng, topk, explore):
                 if len(cw) != len(cs): continue
                 s2 = list(st); s2[w] = r
                 sc = m.score(s2, pend)
+                if LOOK and r == m.init[NW - 1]:
+                    sc = best_next(m, s2, pend)      # free a wire: judge by free + next compute
                 if sc < base or (explore and rng.random() < explore):
                     cands.append((sc, w, j, r, tuple(cw)))
         if not cands: return moves, st
         cands.sort(); sc, w, j, r, cw = rng.choice(cands[:topk])
         moves.append((w, j)); busy |= {w} | set(cw); written.add(w); st[w] = r
-        base = min(base, sc)
+        base = m.score(st, pend)
 
 
 def run(beam, expand, seed, maxr=24):
@@ -138,7 +166,7 @@ def run(beam, expand, seed, maxr=24):
                 mv, st = tof_layer(m, st, pend, rng, 3, 0.02)
                 fire(m, st, pend, K * R, rds)
                 nxt.append(dict(st=st, pend=pend, layers=node['layers'] + [(cxl, mv)], rds=rds,
-                                sc=m.score(st, pend)))
+                                sc=best_next(m, st, pend) if LOOK else m.score(st, pend)))
         done = [n for n in nxt if not n['pend']]
         if done:
             return R, done, m
