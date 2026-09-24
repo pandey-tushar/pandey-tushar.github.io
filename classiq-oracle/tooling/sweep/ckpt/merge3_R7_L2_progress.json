@@ -1,12 +1,12 @@
 {
  "tag": "merge3 R=7 L=2",
  "status": "running",
- "elapsed_s": 4698,
- "chunks": 16,
- "conflicts": 13148841,
- "decisions": 198137111,
- "restarts": 342928,
- "propagations": 11347359889,
- "conf_per_s": 2799,
- "utc": "2026-09-24 18:46:35"
+ "elapsed_s": 8406,
+ "chunks": 28,
+ "conflicts": 18816135,
+ "decisions": 313896575,
+ "restarts": 527873,
+ "propagations": 17307118355,
+ "conf_per_s": 2239,
+ "utc": "2026-09-24 19:48:22"
 }

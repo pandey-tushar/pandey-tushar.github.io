@@ -1,0 +1,8 @@
+g over 5 classes, needed parities 31
+m=0 ancillas: CX layers 28 (fwd 14)  real depth/cx (38, 48)  check (err, offdiag) (6.250957690576445e-16, 0.0)  1s
+m=1 ancillas: CX layers 24 (fwd 12)  real depth/cx (32, 54)  check (err, offdiag) (7.768900386311905e-16, 0.0)  1s
+m=2 ancillas: CX layers 20 (fwd 10)  real depth/cx (28, 52)  check (err, offdiag) (7.968128954418186e-16, 0.0)  1s
+m=3 ancillas: CX layers 18 (fwd 9)  real depth/cx (25, 58)  check (err, offdiag) (7.761324955237299e-16, 0.0)  1s
+m=4 ancillas: CX layers 18 (fwd 9)  real depth/cx (25, 58)  check (err, offdiag) (1.31632136064938e-15, 0.0)  2s
+m=5 ancillas: CX layers 16 (fwd 8)  real depth/cx (23, 62)  check (err, offdiag) (6.750160830642726e-16, 0.0)  3s
+m=6 ancillas: CX layers 16 (fwd 8)  real depth/cx (23, 64)  check (err, offdiag) (8.520075308777025e-16, 0.0)  9s
