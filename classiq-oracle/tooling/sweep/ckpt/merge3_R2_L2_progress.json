@@ -1,0 +1,12 @@
+{
+ "tag": "merge3 R=2 L=2",
+ "status": "UNSAT",
+ "elapsed_s": 40,
+ "chunks": 6,
+ "conflicts": 344405,
+ "decisions": 3858079,
+ "restarts": 9870,
+ "propagations": 236734143,
+ "conf_per_s": 8572,
+ "utc": "2026-09-24 17:27:57"
+}

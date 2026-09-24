@@ -204,7 +204,13 @@ if __name__ == '__main__':
             print('R=%d cached %s' % (R, done[str(R)]['res']), flush=True); continue
         e = encode(R, C, vals, P, pt, xor, reads)
         print('R=%d vars %d clauses %d' % (R, e.pool.top, len(e.cl)), flush=True)
-        t0 = time.time(); res = solve(e.cl, None); dt = time.time() - t0
+        t0 = time.time()
+        if os.environ.get('PSOLVE'):          # live progress lines + ckpt/merge3_R<R>_L<L>_progress.json
+            from cptd_psolve import solve as psolve
+            res = psolve(e.cl, 'merge3 R=%d L=%d' % (R, LCX), 'ckpt/merge3_R%d_L%d_progress.json' % (R, LCX))
+        else:
+            res = solve(e.cl, None)
+        dt = time.time() - t0
         tag = 'SAT' if isinstance(res, list) else ('UNSAT' if res is None or res is False else str(res))
         print('R=%d -> %s  %.0fs' % (R, tag, dt), flush=True)
         ledger_set(kk, dict(res=tag, sec=round(dt)))
