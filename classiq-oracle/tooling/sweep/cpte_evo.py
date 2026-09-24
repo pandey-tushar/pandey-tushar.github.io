@@ -95,6 +95,40 @@ def fitness(S, F):
 
 
 @nb.njit(cache=True)
+def fitness3(S, F):
+    """best readout = ANY Boolean function of 3 final wires (a diagonal on 3
+    wires); covers 1- and 2-wire readouts.  returns (fit, a, b, c, 0)"""
+    ONES = np.uint64(0xFFFFFFFFFFFFFFFF)
+    M = np.empty(NWORD, dtype=np.uint64)
+    best = 0; ba = 0; bb = 1; bc = 2
+    for a in range(NW):
+        for b in range(a + 1, NW):
+            for c in range(b + 1, NW):
+                sc = 0
+                for p in range(4):
+                    ma = ONES if p & 1 else np.uint64(0)
+                    mb = ONES if p & 2 else np.uint64(0)
+                    nM = 0; nMF = 0; n1 = 0; n1F = 0
+                    for k in range(NWORD):
+                        m = (S[a, k] ^ ma) & (S[b, k] ^ mb)
+                        mf = m & F[k]
+                        nM += popc(m); nMF += popc(mf)
+                        n1 += popc(m & S[c, k]); n1F += popc(mf & S[c, k])
+                    n0 = nM - n1; n0F = nMF - n1F
+                    sc += max(n1F, n1 - n1F) + max(n0F, n0 - n0F)
+                if sc > best:
+                    best = sc; ba = a; bb = b; bc = c
+    return best, ba, bb, bc, 0
+
+
+@nb.njit(cache=True)
+def fit_k(S, F, K):
+    if K == 3:
+        return fitness3(S, F)
+    return fitness(S, F)
+
+
+@nb.njit(cache=True)
 def evaluate_from(st, cx, tf, L, li):
     for j in range(li, 2 * L):
         layer(st[j], st[j + 1], cx, tf, j // 2, j % 2)
@@ -118,7 +152,7 @@ def clear_conflicts(cx, tf, l, t, wires):
 
 
 @nb.njit(cache=True)
-def run(cx, tf, L, F, st, tmp, iters, fit0, pnone, seed):
+def run(cx, tf, L, F, st, tmp, iters, fit0, pnone, seed, K=2):
     np.random.seed(seed)
     fit = fit0; acc = 0
     ccx = cx.copy(); ctf = tf.copy()
@@ -146,7 +180,7 @@ def run(cx, tf, L, F, st, tmp, iters, fit0, pnone, seed):
         li = 2 * l + t
         tmp[li] = st[li]
         evaluate_from(tmp, ccx, ctf, L, li)
-        f = fitness(tmp[2 * L], F)[0]
+        f = fit_k(tmp[2 * L], F, K)[0]
         if f >= fit:
             if f > fit: acc += 1
             fit = f
@@ -205,18 +239,20 @@ if __name__ == '__main__':
             w, int(unpack(F).sum()), nl[w], 2048 - int(np.abs(walsh(unpack(logo_bits()))).max()) // 2), flush=True)
     else:
         F = logo_bits()
+    K = int(os.environ.get('FITK', '2'))                # 2: 1-2 wire readout, 3: any fn of 3 wires
+    tag += '_k%d' % K if K != 2 else ''
     RESTART = float(os.environ.get('RESTART', '90'))    # s without improvement -> fresh start
     def fresh():
         cx = -np.ones((L, NW), dtype=np.int64); tf = -np.ones((L, NW, 4), dtype=np.int64)
         st = states(cx, tf, L)
-        return cx, tf, st, st.copy(), fitness(st[-1], F)[0]
+        return cx, tf, st, st.copy(), fit_k(st[-1], F, K)[0]
     cx, tf, st, tmp, fit = fresh()
     best = (fit, cx.copy(), tf.copy()); nrs = 0
     t0 = time.time(); total = 0; last = t0; chunk = 2000; t_imp = t0; fit_prev = fit
     print('[%s] start fitness %d / 4096  restart after %.0fs without gain' % (tag, fit, RESTART), flush=True)
     while True:
         c0 = time.time()
-        fit, acc, n = run(cx, tf, L, F, st, tmp, chunk, fit, 0.1, int(rng.integers(1 << 30)))
+        fit, acc, n = run(cx, tf, L, F, st, tmp, chunk, fit, 0.1, int(rng.integers(1 << 30)), K)
         total += n; now = time.time()
         if now - c0 > 0: chunk = max(200, int(chunk * min(4.0, (PEVERY / 2) / (now - c0))))
         if fit > fit_prev: t_imp = now; fit_prev = fit
@@ -236,4 +272,4 @@ if __name__ == '__main__':
         if now - t_imp > RESTART:
             cx, tf, st, tmp, fit = fresh(); nrs += 1; t_imp = now; fit_prev = fit
     S = states(best[1], best[2], L)[-1]
-    print('[%s] final best %d / 4096  readout %s  restarts %d' % (tag, best[0], fitness(S, F)[1:], nrs), flush=True)
+    print('[%s] final best %d / 4096  readout %s  restarts %d' % (tag, best[0], fit_k(S, F, K)[1:], nrs), flush=True)
