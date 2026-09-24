@@ -1,0 +1,11 @@
+o1 real depth/cx (276, 522)  classical (0, True)
+  read@31 wire 15: drop ops 23,32, 1 reads -> 2, max degree 3  -> real (284, 522)  (0s)
+  read@31 wire 12: drop ops 29,33, 1 reads -> 1, max degree 3  -> real (280, 521)  (0s)
+  read@260 wire 5: drop ops 257,261, 1 reads -> 2, max degree 4  -> real (294, 524)  (0s)
+  read@264 wire 4: drop ops 255,265, 1 reads -> 2, max degree 4  -> real (282, 524)  (1s)
+  read@388 wire 13: drop ops 380,389, 1 reads -> 2, max degree 3  -> real (283, 522)  (1s)
+  read@388 wire 12: drop ops 387,390, 1 reads -> 2, max degree 3  -> real (284, 522)  (1s)
+final depth/cx (276, 522)  sv (1.0445049978630459e-14, 1.8600636210378364e-31)  12s
+position scan (read@31 wire 12, all 7 legal positions): 280/521 each
+cpev_pipe (249 atom pipeline): o1 261/522; read@31 w12 263/521; read@264 w4 266/524
+verdict: every legal rotation-readout unfold of o1 is worse (plain +4..+18, pipe +2..+5)
