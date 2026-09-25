@@ -1,0 +1,16 @@
+[sched_R10_L2_s1] classes 110 products 115 readouts 6  R 10 LCX 2  start score 1794.1
+[2026-09-25 02:12:25] sched_R10_L2_s1    12s  best 1699.37  fired 0/6 [-1, -1, -1, -1, -1, -1]  current 1699.38  restarts 0  iters 122092  exact None
+[2026-09-25 02:12:40] sched_R10_L2_s1    27s  best 1699.37  fired 0/6 [-1, -1, -1, -1, -1, -1]  current 1700.98  restarts 0  iters 283485  exact None
+[2026-09-25 02:12:55] sched_R10_L2_s1    42s  best 1699.18  fired 0/6 [-1, -1, -1, -1, -1, -1]  current 1700.28  restarts 0  iters 445671  exact None
+[2026-09-25 02:13:06] sched_R10_L2_s1    52s  best 1699.18  fired 0/6 [-1, -1, -1, -1, -1, -1]  current 1699.38  restarts 0  iters 546686  exact None
+[2026-09-25 02:13:16] sched_R10_L2_s1    62s  best 1699.18  fired 0/6 [-1, -1, -1, -1, -1, -1]  current 1700.38  restarts 0  iters 647464  exact None
+[2026-09-25 02:13:30] sched_R10_L2_s1    77s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1598.98  restarts 0  iters 797708  exact None
+[2026-09-25 02:13:45] sched_R10_L2_s1    92s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1598.98  restarts 0  iters 952844  exact None
+[2026-09-25 02:14:00] sched_R10_L2_s1   107s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1598.08  restarts 0  iters 1109357  exact None
+[2026-09-25 02:14:10] sched_R10_L2_s1   117s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1599.88  restarts 0  iters 1214219  exact None
+[2026-09-25 02:14:20] sched_R10_L2_s1   127s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1598.09  restarts 0  iters 1318424  exact None
+[2026-09-25 02:14:31] sched_R10_L2_s1   137s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1598.09  restarts 0  iters 1422679  exact None
+[2026-09-25 02:14:46] sched_R10_L2_s1   152s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1598.08  restarts 0  iters 1574111  exact None
+[2026-09-25 02:15:01] sched_R10_L2_s1   167s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1599.88  restarts 0  iters 1722482  exact None
+[2026-09-25 02:15:16] sched_R10_L2_s1   182s  best 1597.97  fired 1/6 [-1, -1, 30, -1, -1, -1]  current 1600.98  restarts 0  iters 1874272  exact None
+[sched_R10_L2_s1] final best score 1597.97  exact real depth/cx None

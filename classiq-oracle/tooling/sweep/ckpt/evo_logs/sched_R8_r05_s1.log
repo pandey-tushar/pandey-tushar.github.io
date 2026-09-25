@@ -1,0 +1,16 @@
+[sched_R8_L2_s1_r05] classes 110 products 115 readouts 2  R 8 LCX 2  start score 1218.2
+[2026-09-25 02:15:50] sched_R8_L2_s1_r05    12s  best 1107.46  fired 1/2 [-1, 21]  current 1108.37  restarts 0  iters 40438  exact None
+[2026-09-25 02:16:04] sched_R8_L2_s1_r05    26s  best 1107.46  fired 1/2 [-1, 21]  current 1108.27  restarts 0  iters 237701  exact None
+[2026-09-25 02:16:19] sched_R8_L2_s1_r05    41s  best 1107.26  fired 1/2 [-1, 24]  current 1108.27  restarts 0  iters 437176  exact None
+[2026-09-25 02:16:34] sched_R8_L2_s1_r05    56s  best 1107.17  fired 1/2 [-1, 21]  current 1108.87  restarts 0  iters 645150  exact None
+[2026-09-25 02:16:44] sched_R8_L2_s1_r05    66s  best 1107.17  fired 1/2 [-1, 21]  current 1109.26  restarts 0  iters 787299  exact None
+[2026-09-25 02:16:59] sched_R8_L2_s1_r05    81s  best 1107.17  fired 1/2 [-1, 21]  current 1109.26  restarts 0  iters 1010448  exact None
+[2026-09-25 02:17:09] sched_R8_L2_s1_r05    91s  best 1106.36  fired 1/2 [-1, 24]  current 1107.26  restarts 0  iters 1157335  exact None
+[2026-09-25 02:17:24] sched_R8_L2_s1_r05   106s  best 1106.05  fired 1/2 [-1, 24]  current 1109.17  restarts 0  iters 1371541  exact None
+[2026-09-25 02:17:39] sched_R8_L2_s1_r05   121s  best 1106.05  fired 1/2 [-1, 24]  current 1106.65  restarts 0  iters 1589023  exact None
+[2026-09-25 02:17:49] sched_R8_L2_s1_r05   131s  best 1106.05  fired 1/2 [-1, 24]  current 1109.16  restarts 0  iters 1730240  exact None
+[2026-09-25 02:18:04] sched_R8_L2_s1_r05   146s  best 1106.05  fired 1/2 [-1, 24]  current 1107.36  restarts 0  iters 1947903  exact None
+[2026-09-25 02:18:14] sched_R8_L2_s1_r05   156s  best 1106.05  fired 1/2 [-1, 24]  current 1108.36  restarts 0  iters 2100204  exact None
+[2026-09-25 02:18:29] sched_R8_L2_s1_r05   171s  best 1106.05  fired 1/2 [-1, 24]  current 1108.37  restarts 0  iters 2335689  exact None
+[2026-09-25 02:18:39] sched_R8_L2_s1_r05   181s  best 1106.05  fired 1/2 [-1, 24]  current 1107.98  restarts 0  iters 2494951  exact None
+[sched_R8_L2_s1_r05] final best score 1106.05  exact real depth/cx None

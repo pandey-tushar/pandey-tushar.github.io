@@ -1,0 +1,18 @@
+[sched_R6_L2_s1_r5] classes 110 products 115 readouts 1  R 6 LCX 2  start score 1109.0
+   complete: score 61.41  model depth 60  classical mism 0 identity True  real depth/cx (87, 115)
+   complete: score 45.28  model depth 56  classical mism 0 identity True  real depth/cx (75, 99)
+   complete: score 38.21  model depth 54  classical mism 0 identity True  real depth/cx (65, 89)
+[2026-09-25 02:19:15] sched_R6_L2_s1_r5    11s  best 38.21  fired 1/1 [12]  current 41.33  restarts 0  iters 371903  exact [65, 89]
+[2026-09-25 02:19:26] sched_R6_L2_s1_r5    21s  best 38.21  fired 1/1 [12]  current 40.30  restarts 0  iters 845109  exact [65, 89]
+   complete: score 31.21  model depth 46  classical mism 0 identity True  real depth/cx (61, 85)
+   complete: score 30.25  model depth 46  classical mism 0 identity True  real depth/cx (57, 93)
+[2026-09-25 02:19:40] sched_R6_L2_s1_r5    35s  best 30.25  fired 1/1 [9]  current 35.35  restarts 0  iters 1554908  exact [57, 93]
+[2026-09-25 02:19:55] sched_R6_L2_s1_r5    50s  best 30.25  fired 1/1 [9]  current 34.38  restarts 0  iters 2374813  exact [57, 93]
+[2026-09-25 02:20:10] sched_R6_L2_s1_r5    65s  best 30.25  fired 1/1 [9]  current 34.34  restarts 0  iters 3205752  exact [57, 93]
+[2026-09-25 02:20:25] sched_R6_L2_s1_r5    80s  best 30.25  fired 1/1 [9]  current 35.39  restarts 0  iters 4026475  exact [57, 93]
+[2026-09-25 02:20:35] sched_R6_L2_s1_r5    90s  best 30.25  fired 1/1 [9]  current 35.31  restarts 0  iters 4583457  exact [57, 93]
+[2026-09-25 02:20:50] sched_R6_L2_s1_r5   105s  best 30.25  fired 1/1 [9]  current 33.32  restarts 0  iters 5437342  exact [57, 93]
+   complete: score 30.23  model depth 46  classical mism 0 identity True  real depth/cx (59, 89)
+[2026-09-25 02:21:00] sched_R6_L2_s1_r5   115s  best 30.23  fired 1/1 [9]  current 32.26  restarts 0  iters 6017919  exact [57, 93]
+[2026-09-25 02:21:10] sched_R6_L2_s1_r5   125s  best 30.23  fired 1/1 [9]  current 34.35  restarts 0  iters 6600258  exact [57, 93]
+[sched_R6_L2_s1_r5] final best score 30.23  exact real depth/cx (57, 93)

@@ -1,0 +1,3 @@
+[sched_R8_L2_s3_r05] classes 110 products 115 readouts 2  R 8 LCX 2  start score 1218.2
+[2026-09-25 02:21:43] sched_R8_L2_s3_r05    15s  best 1106.46  fired 1/2 [21, -1]  current 1106.97  restarts 0  iters 217047  exact None
+[2026-09-25 02:21:58] sched_R8_L2_s3_r05    30s  best 1106.46  fired 1/2 [21, -1]  current 1106.87  restarts 0  iters 439146  exact None

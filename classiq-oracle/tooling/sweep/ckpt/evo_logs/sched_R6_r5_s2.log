@@ -1,0 +1,21 @@
+[sched_R6_L2_s2_r5] classes 110 products 115 readouts 1  R 6 LCX 2  start score 1109.0
+   complete: score 51.41  model depth 58  classical mism 0 identity True  real depth/cx (67, 117)
+   complete: score 41.35  model depth 54  classical mism 0 identity True  real depth/cx (73, 103)
+   complete: score 33.27  model depth 46  classical mism 0 identity True  real depth/cx (57, 93)
+   complete: score 32.27  model depth 46  classical mism 0 identity True  real depth/cx (57, 87)
+   complete: score 32.25  model depth 46  classical mism 0 identity True  real depth/cx (59, 91)
+[2026-09-25 02:19:17] sched_R6_L2_s2_r5    12s  best 32.25  fired 1/1 [18]  current 33.35  restarts 0  iters 404223  exact [57, 87]
+   complete: score 31.26  model depth 46  classical mism 0 identity True  real depth/cx (59, 87)
+[2026-09-25 02:19:27] sched_R6_L2_s2_r5    22s  best 31.26  fired 1/1 [18]  current 32.29  restarts 0  iters 744584  exact [57, 87]
+   complete: score 31.25  model depth 46  classical mism 0 identity True  real depth/cx (57, 89)
+   complete: score 31.24  model depth 46  classical mism 0 identity True  real depth/cx (57, 85)
+[2026-09-25 02:19:42] sched_R6_L2_s2_r5    38s  best 31.24  fired 1/1 [18]  current 32.30  restarts 0  iters 1242069  exact [57, 85]
+   complete: score 31.23  model depth 46  classical mism 0 identity True  real depth/cx (57, 85)
+[2026-09-25 02:19:57] sched_R6_L2_s2_r5    52s  best 31.23  fired 1/1 [18]  current 32.29  restarts 0  iters 1749074  exact [57, 85]
+[2026-09-25 02:20:07] sched_R6_L2_s2_r5    63s  best 31.23  fired 1/1 [18]  current 32.31  restarts 0  iters 2089977  exact [57, 85]
+[2026-09-25 02:20:22] sched_R6_L2_s2_r5    77s  best 31.23  fired 1/1 [18]  current 32.30  restarts 0  iters 2588553  exact [57, 85]
+[2026-09-25 02:20:32] sched_R6_L2_s2_r5    88s  best 31.23  fired 1/1 [18]  current 32.26  restarts 0  iters 2932066  exact [57, 85]
+[2026-09-25 02:20:47] sched_R6_L2_s2_r5   102s  best 31.23  fired 1/1 [18]  current 33.33  restarts 0  iters 3428788  exact [57, 85]
+[2026-09-25 02:21:02] sched_R6_L2_s2_r5   118s  best 31.23  fired 1/1 [18]  current 32.29  restarts 0  iters 3937892  exact [57, 85]
+[2026-09-25 02:21:07] sched_R6_L2_s2_r5   122s  best 31.23  fired 1/1 [18]  current 33.35  restarts 0  iters 4105781  exact [57, 85]
+[sched_R6_L2_s2_r5] final best score 31.23  exact real depth/cx (57, 85)
