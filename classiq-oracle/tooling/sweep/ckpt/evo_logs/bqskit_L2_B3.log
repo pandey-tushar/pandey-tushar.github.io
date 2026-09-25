@@ -1,0 +1,45 @@
+[bqskit_L2_B3] source gates 1056  depth(bqskit) 249
+[04:21:21] Setting the random seed to 1.
+[04:21:21] Extracting measurements from circuit.
+[04:21:21] Retargeting multi-qudit gates.
+[04:21:36] Mapping circuit.
+[04:21:36] Placed qudits on [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+[04:21:36] Found layout: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], new placement: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+[04:21:36] Finished routing with layout: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+[04:21:36] Retargeting multi-qudit gates.
+[04:21:50] Attempting to delete gates.
+[04:22:01] Upper bound on error is 5.88418203051333e-15.
+[04:22:01] Restoring measurements to circuit.
+[04:22:03] Pass: ContainsInstruction - 0.01669 (ms)
+[04:22:03] Pass: UnitarySynthesis - 0.00930 (ms)
+[04:22:03] Pass: HighLevelSynthesis - 0.00763 (ms)
+[04:22:03] Pass: BasisTranslator - 0.03338 (ms)
+[04:22:03] Pass: ElidePermutations - 0.00787 (ms)
+[04:22:03] Pass: RemoveDiagonalGatesBeforeMeasure - 0.01335 (ms)
+[04:22:03] Pass: RemoveIdentityEquivalent - 0.12088 (ms)
+[04:22:03] Pass: InverseCancellation - 0.16832 (ms)
+[04:22:03] Pass: ContractIdleWiresInControlFlow - 0.00381 (ms)
+[04:22:03] Pass: CommutativeCancellation - 0.65303 (ms)
+[04:22:03] Pass: ConsolidateBlocks - 2.26688 (ms)
+[04:22:03] Pass: Split2QUnitaries - 0.00596 (ms)
+[04:22:03] Pass: UnitarySynthesis - 0.00834 (ms)
+[04:22:03] Pass: HighLevelSynthesis - 0.00620 (ms)
+[04:22:03] Pass: BasisTranslator - 0.16236 (ms)
+[04:22:03] Pass: ConsolidateBlocks - 2.74062 (ms)
+[04:22:03] Pass: UnitarySynthesis - 0.00811 (ms)
+[04:22:03] Pass: Size - 0.01621 (ms)
+[04:22:03] Pass: Depth - 0.17834 (ms)
+[04:22:03] Pass: FixedPoint - 0.01311 (ms)
+[04:22:03] Pass: FixedPoint - 0.00501 (ms)
+[04:22:03] Pass: RemoveIdentityEquivalent - 0.08392 (ms)
+[04:22:03] Pass: Optimize1qGatesDecomposition - 0.35596 (ms)
+[04:22:03] Pass: CommutativeCancellation - 0.58532 (ms)
+[04:22:03] Pass: ContractIdleWiresInControlFlow - 0.00358 (ms)
+[04:22:03] Pass: GatesInBasis - 0.04816 (ms)
+[04:22:03] Pass: Size - 0.00429 (ms)
+[04:22:03] Pass: Depth - 0.11516 (ms)
+[04:22:03] Pass: FixedPoint - 0.00787 (ms)
+[04:22:03] Pass: FixedPoint - 0.00405 (ms)
+[04:22:03] Pass: ContainsInstruction - 0.00739 (ms)
+[04:22:03] Total Transpile Time - 27.88115 (ms)
+[bqskit_L2_B3] result depth 249 cx 520  err 7.01e-14 leak 3.56e-27  exact True  49s

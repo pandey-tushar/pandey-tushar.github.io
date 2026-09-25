@@ -1,0 +1,8 @@
+source ../cpev_best.qasm: depth 249 cx 520
+fullpeephole         it 0: depth 250 cx 520  err 1.1e-14 leak 1.7e-29  exact True  (16s)
+fullpeephole_noswap  it 0: depth 250 cx 520  err 1.1e-14 leak 1.7e-29  exact True  (16s)
+peephole2q           it 0: depth 250 cx 520  err 1.1e-14 leak 1.7e-29  exact True  (5s)
+clifford_kak         it 0: depth 250 cx 520  err 9.9e-15 leak 1.7e-29  exact True  (5s)
+commute_red          it 0: depth 250 cx 520  err 1.2e-14 leak 1.2e-29  exact True  (5s)
+zx                   it 0: failed Predicate requirements are not satisfied: GateSetPredicate:{ CX Z CZ Rx H X Rz SWAP Output noop Input }
+best: depth 249 cx 520  (source)

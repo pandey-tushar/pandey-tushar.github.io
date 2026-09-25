@@ -1,0 +1,63 @@
+{
+ "source": [
+  249,
+  520
+ ],
+ "best": [
+  249,
+  520,
+  "source"
+ ],
+ "runs": [
+  {
+   "seq": "fullpeephole",
+   "it": 0,
+   "depth": 250,
+   "cx": 520,
+   "err": 1.1058568136821949e-14,
+   "leak": 1.654537276482276e-29,
+   "exact": true,
+   "sec": 16.3
+  },
+  {
+   "seq": "fullpeephole_noswap",
+   "it": 0,
+   "depth": 250,
+   "cx": 520,
+   "err": 1.1058568136821949e-14,
+   "leak": 1.654537276482276e-29,
+   "exact": true,
+   "sec": 15.5
+  },
+  {
+   "seq": "peephole2q",
+   "it": 0,
+   "depth": 250,
+   "cx": 520,
+   "err": 1.1058568136821949e-14,
+   "leak": 1.654537276482276e-29,
+   "exact": true,
+   "sec": 4.9
+  },
+  {
+   "seq": "clifford_kak",
+   "it": 0,
+   "depth": 250,
+   "cx": 520,
+   "err": 9.88453040087104e-15,
+   "leak": 1.6997840031426965e-29,
+   "exact": true,
+   "sec": 5.2
+  },
+  {
+   "seq": "commute_red",
+   "it": 0,
+   "depth": 250,
+   "cx": 520,
+   "err": 1.1591880422543037e-14,
+   "leak": 1.2170762794765094e-29,
+   "exact": true,
+   "sec": 4.7
+  }
+ ]
+}

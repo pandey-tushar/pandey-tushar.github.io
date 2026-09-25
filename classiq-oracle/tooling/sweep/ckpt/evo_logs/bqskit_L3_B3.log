@@ -1,0 +1,18 @@
+[bqskit_L3_B3] source gates 1056  depth(bqskit) 249
+[04:22:37] Setting the random seed to 1.
+[04:22:37] Extracting measurements from circuit.
+[04:22:37] Retargeting multi-qudit gates.
+[04:22:51] Mapping circuit.
+[04:22:51] Placed qudits on [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+[04:22:51] Found layout: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], new placement: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+[04:22:51] Finished routing with layout: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+[04:22:51] Retargeting multi-qudit gates.
+[04:23:04] Resynthesizing blocks.
+/usr/local/lib/python3.11/dist-packages/bqskit/passes/synthesis/leap.py:358: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  m, y_int, _, _, _ = linregress(best_layers, best_dists)
+/usr/local/lib/python3.11/dist-packages/bqskit/passes/synthesis/leap.py:358: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  m, y_int, _, _, _ = linregress(best_layers, best_dists)
+/usr/local/lib/python3.11/dist-packages/bqskit/passes/synthesis/leap.py:358: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  m, y_int, _, _, _ = linregress(best_layers, best_dists)
+/usr/local/lib/python3.11/dist-packages/bqskit/passes/synthesis/leap.py:358: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
+  m, y_int, _, _, _ = linregress(best_layers, best_dists)
