@@ -45,3 +45,15 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
   annealed peak 11 (s12) / 12 (s13) simultaneous against 6 ancillas.
   Binding constraint of the whole-F XAG route at 18 wires: peak 11 register
   values vs 6, before any recomputation cost.
+- CP-TV mapper v3 (cptv_map.py): in-place hosting on data wires only (exact
+  hyperplane rule, protecting future operands, ancilla contents and operands
+  of every still-live value), clean ancillas as registers, farthest-next-use
+  clearing by re-running the Toffoli, recomputation of lost signals solved by
+  GF(2) algebra, temporary operand forming on ancillas with undo.
+  On the four annealed dd_mc (66 AND) states: no complete mapping.  Stops at
+  AND step 5-58 after 12-31 Toffolis (recompute 0-7, clear 4-13): all six
+  ancillas hold values still needed, in-place hosting applies to 3 of the
+  first 10 ANDs, and the missing directions are locked behind hosted values
+  whose recomputation needs a free ancilla (cascade).  Traced state at the
+  s1 failure: ancillas n0 n1 n56 n2 n3 n4, data wires 6/7/10 hosting n3,
+  n0^n56, n0^n56^n57.
