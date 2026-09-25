@@ -1,0 +1,38 @@
+[qrank s2] start deficiency weight 1261  rank 299
+   level 1 slot 1: deficiency 1089  (0s)
+   level 1 slot 2: deficiency 875  (0s)
+   level 1 slot 3: deficiency 775  (1s)
+   level 1 slot 4: deficiency 761  (1s)
+   level 1 slot 5: deficiency 757  (1s)
+[qrank s2] level 1  best deficiency 757  beam [757]  gates 5  1s
+   level 2 slot 1: deficiency 715  (2s)
+   level 2 slot 2: deficiency 623  (2s)
+   level 2 slot 3: deficiency 589  (2s)
+   level 2 slot 4: deficiency 533  (2s)
+   level 2 slot 5: deficiency 515  (3s)
+[qrank s2] level 2  best deficiency 515  beam [515]  gates 10  3s
+   level 3 slot 1: deficiency 495  (3s)
+   level 3 slot 2: deficiency 475  (4s)
+   level 3 slot 3: deficiency 459  (4s)
+   level 3 slot 4: deficiency 453  (5s)
+[qrank s2] level 3  best deficiency 453  beam [453]  gates 14  5s
+   level 4 slot 1: deficiency 437  (5s)
+   level 4 slot 2: deficiency 429  (6s)
+   level 4 slot 3: deficiency 389  (6s)
+   level 4 slot 4: deficiency 369  (7s)
+   level 4 slot 5: deficiency 353  (7s)
+[qrank s2] level 4  best deficiency 353  beam [353]  gates 19  8s
+   level 5 slot 1: deficiency 349  (8s)
+[qrank s2] level 5  best deficiency 349  beam [349]  gates 20  9s
+[qrank s2] level 6  best deficiency 349  beam [349]  gates 20  9s
+   level 7 slot 1: deficiency 347  (10s)
+[qrank s2] level 7  best deficiency 347  beam [347]  gates 21  11s
+[qrank s2] level 8  best deficiency 347  beam [347]  gates 21  11s
+[qrank s2] level 9  best deficiency 347  beam [347]  gates 21  12s
+[qrank s2] level 10  best deficiency 347  beam [347]  gates 21  12s
+[qrank s2] level 11  best deficiency 347  beam [347]  gates 21  13s
+[qrank s2] level 12  best deficiency 347  beam [347]  gates 21  13s
+[qrank s2] level 13  best deficiency 347  beam [347]  gates 21  14s
+[qrank s2] level 14  best deficiency 347  beam [347]  gates 21  14s
+[qrank s2] level 15  best deficiency 347  beam [347]  gates 21  15s
+[qrank s2] level 16  best deficiency 347  beam [347]  gates 21  16s

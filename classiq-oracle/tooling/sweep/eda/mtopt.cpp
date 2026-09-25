@@ -9,6 +9,8 @@
 #include <mockturtle/algorithms/xag_resub_withDC.hpp>
 #include <mockturtle/algorithms/simulation.hpp>
 #include <mockturtle/io/write_verilog.hpp>
+#include <mockturtle/io/verilog_reader.hpp>
+#include <lorina/verilog.hpp>
 #include <mockturtle/networks/xag.hpp>
 #include <mockturtle/views/depth_view.hpp>
 #include <mockturtle/views/fanout_view.hpp>
@@ -61,6 +63,11 @@ int main(int argc, char** argv)
   std::ifstream in(argv[1]);
   int rounds = std::stoi(argv[3]);
   xag_network x;
+  std::string fn = argv[1];
+  bool isv = fn.size() > 2 && fn.substr(fn.size() - 2) == ".v";
+  if (isv) {
+    if (lorina::read_verilog(fn, verilog_reader(x)) != lorina::return_code::success) { std::cout << "[fail] verilog read\n"; return 1; }
+  } else {
   std::vector<sig> pis;
   for (int i = 0; i < 12; ++i) pis.push_back(x.create_pi());
   std::vector<sig> terms;
@@ -73,6 +80,7 @@ int main(int argc, char** argv)
     terms.push_back(tree(x, lits, true));
   }
   x.create_po(tree(x, terms, false));
+  }
   x = cleanup_dangling(x);
   auto tt0 = simulate<kitty::dynamic_truth_table>(x, default_simulator<kitty::dynamic_truth_table>(12));
   auto t0 = std::chrono::steady_clock::now();
