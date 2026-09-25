@@ -70,3 +70,16 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
 - Guided MCTS (sampling by softmax of that statistic, BETA 1 / 2): planted L5
   best deficiency 1060 / 1208 in 5 min (4 it/s); logo L6 BETA 2: 949 after
   5 min (stopped).
+- CP-TY arbitrary-angle phase stage (cpty_walsh.py: OMP over all 2^18 parities
+  of the wire values via one 18-bit Walsh transform per term; real angles, no
+  2pi wrap).  Planted product-of-4 targets: exact at K 15 / 7.  Logo: no prefix
+  exact K 4095; random L1 residual@400 6.53; random L2 residual@400 6.93 /
+  6.33, @3200 0.026 / 0.013.  Greedy prefix (cpty_greedy.py) residual@200
+  9.18 -> 7.66 after 3 Toffolis; residual@400 6.99 -> 5.42 after 3.
+  XAG cut (cpty_cut.py; 6 dependency-closed ANDs of dd_mc / dd_flat / mc_d10 /
+  es_d4 on the ancillas): best es_d4 set, residual@400 4.10, exact at K 3890.
+  Depth ~100 needs exact at K ~400: not reached.
+- Guided MCTS logo L6 (BETA 1, 2 h): deficiency 961 plateau.
+- Conditionally-clean hosting (cptz_cond.py; n hosted as ~c^n when every
+  consumer partner m implies c): register values 41 / 39, hostable 9 / 11,
+  register pressure peak still 11 / 11 (s12 / s13) against 6.
