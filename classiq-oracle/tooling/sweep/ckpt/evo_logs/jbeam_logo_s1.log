@@ -1,0 +1,13 @@
+[jbeam_logo_s1] target ANF terms 886  root score 864  BEAM 16 RAND 60 GREEDY 4 SAMPLE 60
+[jbeam_logo_s1] level 1  best 826  beam [826, 839, 847, 852, 855, 856]  1s
+   level 2: expanded 10/16 nodes, best child so far 730  12s
+[jbeam_logo_s1] level 2  best 730  beam [730, 732, 733, 742, 749, 765]  18s
+   level 3: expanded 10/16 nodes, best child so far 621  29s
+[jbeam_logo_s1] level 3  best 621  beam [621, 621, 624, 627, 632, 637]  35s
+   level 4: expanded 13/16 nodes, best child so far 572  45s
+[jbeam_logo_s1] level 4  best 572  beam [572, 583, 587, 587, 593, 596]  48s
+[jbeam_logo_s1] level 5  best 555  beam [555, 560, 571, 572, 574, 576]  56s
+[jbeam_logo_s1] level 6  best 553  beam [553, 553, 556, 558, 559, 560]  64s
+[jbeam_logo_s1] level 7  best 552  beam [552, 552, 553, 553, 553, 553]  70s
+[jbeam_logo_s1] level 8  best 548  beam [548, 549, 550, 552, 552, 553]  76s
+[jbeam_logo_s1] level 9  best 547  beam [547, 548, 548, 548, 548, 549]  81s

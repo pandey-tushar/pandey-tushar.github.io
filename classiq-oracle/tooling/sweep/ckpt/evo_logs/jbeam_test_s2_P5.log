@@ -1,0 +1,21 @@
+[jbeam_test_s2] planted: 5 levels, 30 Toffolis
+[jbeam_test_s2] target ANF terms 193  root score 117  BEAM 16 RAND 60 GREEDY 4 SAMPLE 60
+[jbeam_test_s2] level 1  best 80  beam [80, 93, 94, 113, 113, 115]  2s
+   level 2: expanded 6/16 nodes, best child so far 76  13s
+   level 2: expanded 11/16 nodes, best child so far 59  23s
+[jbeam_test_s2] level 2  best 59  beam [59, 74, 76, 77, 77, 78]  33s
+   level 3: expanded 7/16 nodes, best child so far 54  44s
+   level 3: expanded 14/16 nodes, best child so far 54  55s
+[jbeam_test_s2] level 3  best 54  beam [54, 57, 59, 60, 63, 65]  57s
+   level 4: expanded 8/16 nodes, best child so far 53  68s
+   level 4: expanded 16/16 nodes, best child so far 53  79s
+[jbeam_test_s2] level 4  best 53  beam [53, 55, 57, 60, 61, 61]  79s
+   level 5: expanded 9/16 nodes, best child so far 58  89s
+   level 5: expanded 16/16 nodes, best child so far 58  100s
+[jbeam_test_s2] level 5  best 58  beam [58, 58, 59, 60, 60, 61]  100s
+   level 6: expanded 9/16 nodes, best child so far 57  111s
+[jbeam_test_s2] level 6  best 57  beam [57, 58, 59, 59, 60, 61]  119s
+   level 7: expanded 9/16 nodes, best child so far 55  130s
+[jbeam_test_s2] level 7  best 55  beam [55, 55, 57, 58, 59, 59]  139s
+   level 8: expanded 9/16 nodes, best child so far 56  149s
+[jbeam_test_s2] level 8  best 56  beam [56, 56, 57, 57, 58, 58]  157s

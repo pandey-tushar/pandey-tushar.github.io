@@ -197,7 +197,14 @@ def workspace(L):
 
 
 if __name__ == '__main__':
-    Fv = permute_bits(logo_bits())
+    if os.environ.get('BASIS'):              # target f'(u) = F(A u ^ c) (affine input basis; CX/X network added at emission)
+        import pickle
+        from cptk_basis import fprime
+        bd = pickle.load(open(os.environ['BASIS'], 'rb'))
+        Fv = permute_bits(E.pack(fprime(bd['cols'], bd['c'])))
+        print('basis %s: %d ANF monomials' % (os.environ['BASIS'], bd['n']), flush=True)
+    else:
+        Fv = permute_bits(logo_bits())
     if ANF: moebius(Fv)
     if sys.argv[1] == 'test':                 # planted: XOR of random features of a random L-level circuit
         import cpth_emit as EM

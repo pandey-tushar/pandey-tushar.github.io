@@ -1,0 +1,5 @@
+[basis s2] it 43535  cur 292  best 292  10s
+[basis s2] it 86906  cur 292  best 292  20s
+[basis s2] it 131349  cur 292  best 292  30s
+[basis s2] it 176701  cur 292  best 292  40s
+[basis s2] final best 292 monomials  cols [1, 2, 15, 10, 3792, 1713, 64, 128, 256, 512, 1152, 2048] c 7

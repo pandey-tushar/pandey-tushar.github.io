@@ -1,0 +1,20 @@
+[jbeam_logo_s2] target ANF terms 886  root score 864  BEAM 32 RAND 40 GREEDY 3 SAMPLE 60
+[jbeam_logo_s2] level 1  best 782  beam [782, 824, 858, 859, 860, 862]  1s
+   level 2: expanded 11/32 nodes, best child so far 727  11s
+   level 2: expanded 25/32 nodes, best child so far 727  22s
+[jbeam_logo_s2] level 2  best 727  beam [727, 730, 752, 764, 765, 769]  27s
+   level 3: expanded 10/32 nodes, best child so far 671  37s
+   level 3: expanded 20/32 nodes, best child so far 654  48s
+   level 3: expanded 31/32 nodes, best child so far 654  58s
+[jbeam_logo_s2] level 3  best 654  beam [654, 665, 671, 674, 679, 679]  60s
+   level 4: expanded 12/32 nodes, best child so far 608  70s
+   level 4: expanded 26/32 nodes, best child so far 608  80s
+[jbeam_logo_s2] level 4  best 608  beam [608, 610, 611, 616, 620, 621]  86s
+   level 5: expanded 21/32 nodes, best child so far 594  96s
+[jbeam_logo_s2] level 5  best 594  beam [594, 599, 602, 603, 606, 607]  102s
+   level 6: expanded 23/32 nodes, best child so far 565  112s
+[jbeam_logo_s2] level 6  best 565  beam [565, 566, 580, 587, 593, 593]  115s
+   level 7: expanded 25/32 nodes, best child so far 547  125s
+[jbeam_logo_s2] level 7  best 547  beam [547, 565, 565, 566, 567, 568]  127s
+   level 8: expanded 28/32 nodes, best child so far 557  138s
+[jbeam_logo_s2] level 8  best 557  beam [557, 562, 564, 564, 565, 566]  139s

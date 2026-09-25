@@ -1,0 +1,5 @@
+[basis s1] it 44186  cur 310  best 310  10s
+[basis s1] it 86994  cur 286  best 286  20s
+[basis s1] it 132161  cur 286  best 286  30s
+[basis s1] it 176892  cur 286  best 286  40s
+[basis s1] final best 286 monomials  cols [1, 2, 28, 16, 26, 108, 64, 192, 256, 3613, 1024, 3100] c 9

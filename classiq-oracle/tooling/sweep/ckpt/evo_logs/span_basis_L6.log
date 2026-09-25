@@ -1,0 +1,8 @@
+basis ckpt/basis_s1.pkl: 286 ANF monomials
+[span_L6_s76_c1_z3_basis] start fitness 3824 / 4096  (CZ layer 3, LCX 1, TEMP 1.00, MAXMUT 3, KICK 8 gates after 60s stuck)
+[2026-09-25 10:38:02] span_L6_s76_c1_z3_basis     13s  best 3845/4096  current 3825  kicks 0  iters 9635 (739/s)  best: cx 30 tof 18
+[2026-09-25 10:38:17] span_L6_s76_c1_z3_basis     28s  best 3856/4096  current 3836  kicks 0  iters 43701 (1562/s)  best: cx 29 tof 17
+[2026-09-25 10:38:27] span_L6_s76_c1_z3_basis     38s  best 3856/4096  current 3846  kicks 0  iters 68157 (1791/s)  best: cx 29 tof 17
+[2026-09-25 10:38:37] span_L6_s76_c1_z3_basis     48s  best 3856/4096  current 3841  kicks 0  iters 90679 (1882/s)  best: cx 29 tof 17
+[2026-09-25 10:38:52] span_L6_s76_c1_z3_basis     63s  best 3856/4096  current 3835  kicks 0  iters 125124 (1988/s)  best: cx 29 tof 17
+[2026-09-25 10:39:02] span_L6_s76_c1_z3_basis     73s  best 3856/4096  current 3831  kicks 0  iters 147745 (2023/s)  best: cx 29 tof 17
