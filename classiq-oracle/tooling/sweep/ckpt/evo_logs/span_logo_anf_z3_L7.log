@@ -1,0 +1,10 @@
+[span_L7_s51_c1_z3_anf] start fitness 3232 / 4096  (CZ layer 3, LCX 1, TEMP 1.00, MAXMUT 3, KICK 8 gates after 60s stuck)
+[2026-09-25 06:55:25] span_L7_s51_c1_z3_anf     12s  best 3526/4096  current 3526  kicks 0  iters 10400 (860/s)  best: cx 40 tof 22
+[2026-09-25 06:55:40] span_L7_s51_c1_z3_anf     27s  best 3564/4096  current 3560  kicks 0  iters 51879 (1920/s)  best: cx 39 tof 29
+[2026-09-25 06:55:50] span_L7_s51_c1_z3_anf     37s  best 3567/4096  current 3563  kicks 0  iters 78954 (2121/s)  best: cx 40 tof 26
+[2026-09-25 06:56:00] span_L7_s51_c1_z3_anf     48s  best 3572/4096  current 3571  kicks 0  iters 106087 (2233/s)  best: cx 38 tof 26
+[2026-09-25 06:56:15] span_L7_s51_c1_z3_anf     62s  best 3583/4096  current 3581  kicks 0  iters 144341 (2310/s)  best: cx 43 tof 30
+[2026-09-25 06:56:25] span_L7_s51_c1_z3_anf     73s  best 3583/4096  current 3581  kicks 0  iters 169211 (2333/s)  best: cx 43 tof 30
+[2026-09-25 06:56:36] span_L7_s51_c1_z3_anf     83s  best 3584/4096  current 3583  kicks 0  iters 193690 (2341/s)  best: cx 39 tof 29
+[2026-09-25 06:56:51] span_L7_s51_c1_z3_anf     98s  best 3585/4096  current 3583  kicks 0  iters 230296 (2350/s)  best: cx 35 tof 29
+[2026-09-25 06:57:06] span_L7_s51_c1_z3_anf    113s  best 3585/4096  current 3580  kicks 0  iters 265482 (2352/s)  best: cx 35 tof 29

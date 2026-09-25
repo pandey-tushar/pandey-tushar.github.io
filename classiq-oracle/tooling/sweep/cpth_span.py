@@ -201,12 +201,13 @@ if __name__ == '__main__':
     if ANF: moebius(Fv)
     if sys.argv[1] == 'test':                 # planted: XOR of random features of a random L-level circuit
         import cpth_emit as EM
-        Lp = int(sys.argv[2]); rng0 = np.random.default_rng(5000 + int(sys.argv[3]))
+        Lp = int(os.environ.get('PLANT_L', sys.argv[2])); rng0 = np.random.default_rng(5000 + int(sys.argv[3]))
         tcx, ttf = E.random_genome(Lp, rng0, float(os.environ.get('DENS', '0.6')))
         tst = E.states(tcx, ttf, Lp)
         rows, lab = EM.features(tst, ttf, Lp * P, P, CZ)
         tv = np.zeros(NWORD, dtype=np.uint64)
         for i, l in enumerate(lab):
+            if l[0] == 'ccz' or (l[0] == 'cz' and l[3] != Lp * P): continue      # planted: no cubic / mid-stream terms
             if (l[0] == 'tof' and rng0.random() < 0.5) or (l[0] != 'tof' and rng0.random() < 0.05): tv ^= rows[i]
         Fv = permute_bits(tv)
         if ANF: moebius(Fv)
