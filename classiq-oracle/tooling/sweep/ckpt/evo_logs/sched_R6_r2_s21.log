@@ -1,0 +1,12 @@
+[sched_R6_L2_s21_r2] classes 110 products 115 readouts 1  R 6 LCX 2  start score 1106.3
+   complete: score 41.28  model depth 44  classical mism 0 identity True  real depth/cx (59, 55)
+   complete: score 34.29  model depth 44  classical mism 0 identity True  real depth/cx (59, 71)
+   complete: score 32.28  model depth 44  classical mism 0 identity True  real depth/cx (61, 67)
+   complete: score 32.25  model depth 46  classical mism 0 identity True  real depth/cx (55, 57)
+[2026-09-25 04:01:21] sched_R6_L2_s21_r2    11s  best 32.25  fired 1/1 [12]  current 35.37  restarts 0  iters 496541  exact [55, 57]
+   complete: score 32.24  model depth 42  classical mism 0 identity True  real depth/cx (57, 63)
+[2026-09-25 04:01:31] sched_R6_L2_s21_r2    21s  best 32.24  fired 1/1 [12]  current 37.47  restarts 0  iters 950283  exact [55, 57]
+[2026-09-25 04:01:41] sched_R6_L2_s21_r2    32s  best 32.24  fired 1/1 [12]  current 36.30  restarts 0  iters 1421328  exact [55, 57]
+   complete: score 32.23  model depth 42  classical mism 0 identity True  real depth/cx (55, 57)
+   complete: score 31.22  model depth 42  classical mism 0 identity True  real depth/cx (55, 53)
+[2026-09-25 04:01:51] sched_R6_L2_s21_r2    42s  best 31.22  fired 1/1 [12]  current 36.36  restarts 0  iters 1878145  exact [55, 53]
