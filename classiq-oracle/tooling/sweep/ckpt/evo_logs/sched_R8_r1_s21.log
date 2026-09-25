@@ -2,3 +2,76 @@
 [2026-09-25 04:01:21] sched_R8_L2_s21_r1    11s  best 1109.58  fired 0/1 [-1]  current 1113.67  restarts 0  iters 125717  exact None
 [2026-09-25 04:01:31] sched_R8_L2_s21_r1    21s  best 1102.68  fired 0/1 [-1]  current 1102.69  restarts 0  iters 233226  exact None
 [2026-09-25 04:01:46] sched_R8_L2_s21_r1    36s  best 1102.68  fired 0/1 [-1]  current 1103.99  restarts 0  iters 396174  exact None
+[2026-09-25 04:02:01] sched_R8_L2_s21_r1    52s  best 1102.68  fired 0/1 [-1]  current 1104.29  restarts 0  iters 563449  exact None
+[2026-09-25 04:02:15] sched_R8_L2_s21_r1    66s  best 1102.68  fired 0/1 [-1]  current 1104.99  restarts 0  iters 723279  exact None
+[2026-09-25 04:02:26] sched_R8_L2_s21_r1    76s  best 1102.68  fired 0/1 [-1]  current 1108.18  restarts 0  iters 836249  exact None
+[2026-09-25 04:02:41] sched_R8_L2_s21_r1    91s  best 1102.68  fired 0/1 [-1]  current 1108.57  restarts 0  iters 1005643  exact None
+[2026-09-25 04:02:51] sched_R8_L2_s21_r1   102s  best 1102.68  fired 0/1 [-1]  current 1103.98  restarts 0  iters 1116477  exact None
+[2026-09-25 04:03:06] sched_R8_L2_s21_r1   116s  best 1102.68  fired 0/1 [-1]  current 1107.89  restarts 0  iters 1282656  exact None
+[2026-09-25 04:03:16] sched_R8_L2_s21_r1   126s  best 1102.68  fired 0/1 [-1]  current 1108.19  restarts 0  iters 1397144  exact None
+[2026-09-25 04:03:31] sched_R8_L2_s21_r1   141s  best 1102.68  fired 0/1 [-1]  current 1108.48  restarts 0  iters 1565544  exact None
+[2026-09-25 04:03:41] sched_R8_L2_s21_r1   151s  best 1102.68  fired 0/1 [-1]  current 1103.70  restarts 0  iters 1680944  exact None
+[2026-09-25 04:03:56] sched_R8_L2_s21_r1   167s  best 1102.68  fired 0/1 [-1]  current 1108.28  restarts 1  iters 1847369  exact None
+[2026-09-25 04:04:11] sched_R8_L2_s21_r1   181s  best 1102.68  fired 0/1 [-1]  current 1106.59  restarts 1  iters 2008139  exact None
+[2026-09-25 04:04:21] sched_R8_L2_s21_r1   192s  best 1102.68  fired 0/1 [-1]  current 1106.30  restarts 1  iters 2119548  exact None
+[2026-09-25 04:04:36] sched_R8_L2_s21_r1   206s  best 1102.68  fired 0/1 [-1]  current 1106.99  restarts 1  iters 2283929  exact None
+[2026-09-25 04:04:46] sched_R8_L2_s21_r1   217s  best 1102.68  fired 0/1 [-1]  current 1110.09  restarts 1  iters 2389631  exact None
+[2026-09-25 04:05:01] sched_R8_L2_s21_r1   232s  best 1102.68  fired 0/1 [-1]  current 1108.89  restarts 1  iters 2549739  exact None
+[2026-09-25 04:05:11] sched_R8_L2_s21_r1   242s  best 1102.68  fired 0/1 [-1]  current 1107.39  restarts 1  iters 2659195  exact None
+[2026-09-25 04:05:21] sched_R8_L2_s21_r1   252s  best 1102.68  fired 0/1 [-1]  current 1108.29  restarts 1  iters 2769601  exact None
+[2026-09-25 04:05:36] sched_R8_L2_s21_r1   266s  best 1102.68  fired 0/1 [-1]  current 1105.00  restarts 1  iters 2932444  exact None
+[2026-09-25 04:05:51] sched_R8_L2_s21_r1   282s  best 1102.68  fired 0/1 [-1]  current 1110.78  restarts 2  iters 3103241  exact None
+[2026-09-25 04:06:05] sched_R8_L2_s21_r1   296s  best 1102.68  fired 0/1 [-1]  current 1104.68  restarts 2  iters 3267320  exact None
+[2026-09-25 04:06:16] sched_R8_L2_s21_r1   306s  best 1102.38  fired 0/1 [-1]  current 1102.69  restarts 2  iters 3383412  exact None
+[2026-09-25 04:06:26] sched_R8_L2_s21_r1   316s  best 1102.38  fired 0/1 [-1]  current 1102.69  restarts 2  iters 3497863  exact None
+[2026-09-25 04:06:36] sched_R8_L2_s21_r1   327s  best 1102.38  fired 0/1 [-1]  current 1107.28  restarts 2  iters 3609853  exact None
+[2026-09-25 04:06:51] sched_R8_L2_s21_r1   342s  best 1102.38  fired 0/1 [-1]  current 1102.69  restarts 2  iters 3769430  exact None
+[2026-09-25 04:07:01] sched_R8_L2_s21_r1   352s  best 1102.38  fired 0/1 [-1]  current 1107.49  restarts 2  iters 3879599  exact None
+[2026-09-25 04:07:11] sched_R8_L2_s21_r1   362s  best 1102.38  fired 0/1 [-1]  current 1106.58  restarts 2  iters 3988176  exact None
+[2026-09-25 04:07:26] sched_R8_L2_s21_r1   377s  best 1102.38  fired 0/1 [-1]  current 1103.99  restarts 2  iters 4148907  exact None
+[2026-09-25 04:07:41] sched_R8_L2_s21_r1   391s  best 1102.38  fired 0/1 [-1]  current 1102.69  restarts 2  iters 4314920  exact None
+[2026-09-25 04:07:56] sched_R8_L2_s21_r1   406s  best 1102.38  fired 0/1 [-1]  current 1104.30  restarts 2  iters 4486087  exact None
+[2026-09-25 04:08:06] sched_R8_L2_s21_r1   416s  best 1102.38  fired 0/1 [-1]  current 1104.39  restarts 2  iters 4598910  exact None
+[2026-09-25 04:08:21] sched_R8_L2_s21_r1   432s  best 1102.38  fired 0/1 [-1]  current 1110.19  restarts 3  iters 4769391  exact None
+[2026-09-25 04:08:31] sched_R8_L2_s21_r1   442s  best 1102.38  fired 0/1 [-1]  current 1111.18  restarts 3  iters 4880727  exact None
+[2026-09-25 04:08:46] sched_R8_L2_s21_r1   457s  best 1102.38  fired 0/1 [-1]  current 1112.67  restarts 3  iters 5038827  exact None
+[2026-09-25 04:08:56] sched_R8_L2_s21_r1   467s  best 1102.38  fired 0/1 [-1]  current 1108.89  restarts 3  iters 5146393  exact None
+[2026-09-25 04:09:11] sched_R8_L2_s21_r1   482s  best 1102.38  fired 0/1 [-1]  current 1104.98  restarts 3  iters 5312592  exact None
+[2026-09-25 04:09:26] sched_R8_L2_s21_r1   496s  best 1101.38  fired 0/1 [-1]  current 1101.69  restarts 3  iters 5479494  exact None
+[2026-09-25 04:09:36] sched_R8_L2_s21_r1   507s  best 1101.38  fired 0/1 [-1]  current 1101.69  restarts 3  iters 5594504  exact None
+[2026-09-25 04:09:51] sched_R8_L2_s21_r1   522s  best 1101.38  fired 0/1 [-1]  current 1102.69  restarts 3  iters 5764633  exact None
+[2026-09-25 04:10:01] sched_R8_L2_s21_r1   532s  best 1101.38  fired 0/1 [-1]  current 1101.68  restarts 3  iters 5879522  exact None
+[2026-09-25 04:10:16] sched_R8_L2_s21_r1   547s  best 1101.38  fired 0/1 [-1]  current 1103.98  restarts 3  iters 6052974  exact None
+   complete: score 78.82  model depth 99  classical mism 0 identity True  real depth/cx (113, 188)
+   complete: score 77.83  model depth 99  classical mism 0 identity True  real depth/cx (125, 196)
+[2026-09-25 04:10:30] sched_R8_L2_s21_r1   560s  best 77.83  fired 1/1 [24]  current 78.89  restarts 3  iters 6243018  exact [113, 188]
+[2026-09-25 04:10:40] sched_R8_L2_s21_r1   570s  best 77.83  fired 1/1 [24]  current 78.88  restarts 3  iters 6402834  exact [113, 188]
+   complete: score 77.81  model depth 99  classical mism 0 identity True  real depth/cx (113, 194)
+[2026-09-25 04:10:55] sched_R8_L2_s21_r1   585s  best 77.81  fired 1/1 [24]  current 78.87  restarts 3  iters 6642005  exact [113, 188]
+[2026-09-25 04:11:09] sched_R8_L2_s21_r1   600s  best 77.81  fired 1/1 [24]  current 78.86  restarts 3  iters 6880224  exact [113, 188]
+[2026-09-25 04:11:25] sched_R8_L2_s21_r1   615s  best 77.81  fired 1/1 [24]  current 78.91  restarts 3  iters 7132748  exact [113, 188]
+   complete: score 77.79  model depth 99  classical mism 0 identity True  real depth/cx (113, 194)
+[2026-09-25 04:11:40] sched_R8_L2_s21_r1   630s  best 77.79  fired 1/1 [24]  current 78.90  restarts 3  iters 7373278  exact [113, 188]
+[2026-09-25 04:11:55] sched_R8_L2_s21_r1   645s  best 77.79  fired 1/1 [24]  current 78.90  restarts 3  iters 7616498  exact [113, 188]
+[2026-09-25 04:12:10] sched_R8_L2_s21_r1   660s  best 77.79  fired 1/1 [24]  current 78.90  restarts 3  iters 7861343  exact [113, 188]
+[2026-09-25 04:12:24] sched_R8_L2_s21_r1   675s  best 77.79  fired 1/1 [24]  current 78.91  restarts 3  iters 8106352  exact [113, 188]
+[2026-09-25 04:12:35] sched_R8_L2_s21_r1   685s  best 77.79  fired 1/1 [24]  current 78.91  restarts 3  iters 8269596  exact [113, 188]
+[2026-09-25 04:12:49] sched_R8_L2_s21_r1   700s  best 77.79  fired 1/1 [24]  current 78.90  restarts 3  iters 8515602  exact [113, 188]
+[2026-09-25 04:12:59] sched_R8_L2_s21_r1   710s  best 77.79  fired 1/1 [24]  current 78.90  restarts 3  iters 8680483  exact [113, 188]
+[2026-09-25 04:13:10] sched_R8_L2_s21_r1   720s  best 77.79  fired 1/1 [24]  current 78.88  restarts 3  iters 8846035  exact [113, 188]
+[2026-09-25 04:13:25] sched_R8_L2_s21_r1   735s  best 77.79  fired 1/1 [24]  current 78.90  restarts 3  iters 9089772  exact [113, 188]
+[2026-09-25 04:13:41] sched_R8_L2_s21_r1   752s  best 77.79  fired 1/1 [24]  current 1101.69  restarts 4  iters 9336043  exact [113, 188]
+[2026-09-25 04:13:51] sched_R8_L2_s21_r1   762s  best 77.79  fired 1/1 [24]  current 1103.68  restarts 4  iters 9461712  exact [113, 188]
+[2026-09-25 04:14:06] sched_R8_L2_s21_r1   777s  best 77.79  fired 1/1 [24]  current 1102.69  restarts 4  iters 9651744  exact [113, 188]
+[2026-09-25 04:14:16] sched_R8_L2_s21_r1   787s  best 77.79  fired 1/1 [24]  current 1101.69  restarts 4  iters 9777533  exact [113, 188]
+[2026-09-25 04:14:26] sched_R8_L2_s21_r1   797s  best 77.79  fired 1/1 [24]  current 1102.99  restarts 4  iters 9902469  exact [113, 188]
+[2026-09-25 04:14:41] sched_R8_L2_s21_r1   812s  best 77.79  fired 1/1 [24]  current 1101.68  restarts 4  iters 10082487  exact [113, 188]
+[2026-09-25 04:14:51] sched_R8_L2_s21_r1   822s  best 77.79  fired 1/1 [24]  current 1101.68  restarts 4  iters 10205292  exact [113, 188]
+[2026-09-25 04:15:06] sched_R8_L2_s21_r1   837s  best 77.79  fired 1/1 [24]  current 1102.69  restarts 4  iters 10383648  exact [113, 188]
+[2026-09-25 04:15:16] sched_R8_L2_s21_r1   847s  best 77.79  fired 1/1 [24]  current 1102.69  restarts 4  iters 10503014  exact [113, 188]
+[2026-09-25 04:15:26] sched_R8_L2_s21_r1   857s  best 77.79  fired 1/1 [24]  current 1101.69  restarts 4  iters 10619235  exact [113, 188]
+[2026-09-25 04:15:37] sched_R8_L2_s21_r1   867s  best 77.79  fired 1/1 [24]  current 1101.68  restarts 4  iters 10735875  exact [113, 188]
+[2026-09-25 04:15:51] sched_R8_L2_s21_r1   882s  best 77.79  fired 1/1 [24]  current 1103.98  restarts 5  iters 10913078  exact [113, 188]
+[2026-09-25 04:16:01] sched_R8_L2_s21_r1   892s  best 77.79  fired 1/1 [24]  current 1102.38  restarts 5  iters 11034289  exact [113, 188]
+[2026-09-25 04:16:12] sched_R8_L2_s21_r1   902s  best 77.79  fired 1/1 [24]  current 1102.68  restarts 5  iters 11151535  exact [113, 188]
+[sched_R8_L2_s21_r1] final best score 77.79  exact real depth/cx (113, 188)
