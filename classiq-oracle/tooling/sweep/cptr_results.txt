@@ -14,3 +14,14 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
   exact iff sum a_k p_k == 4F mod 8.  Random circuits: L4/1CX 63 forms, L4/6CX
   228, L6/8CX 437, L8/10CX 706 forms: all not solvable (full Z8 column rank,
   inconsistent rows 1331-1417); GF(2) rank 37-61.
+- DD variable-order width search (551 random orders, greedy S/P/N types): best
+  linear width 23 (160 ANDs); starting order 26 (89 ANDs).  None <= 18.
+- Variational step 1 (cptt_vqa.py / cptt_step1.py): 6 data + 2 anc, random
+  all-to-all CX matchings on all 8 wires every layer, u3 everywhere, adjoint
+  gradient (checked vs finite differences, 5e-11), L-BFGS.  Loss 0 = exact.
+    L4  (120 params, ~depth 9):  planted 3.4e-14 (1 of 2 starts) | random f 0.864
+    L8  (216, ~17):  planted 0.984 | random f 0.789
+    L15 (384, ~31):  planted 0.971 | random f 0.511
+    L30 (744, ~61):  planted 0.944 | random f 0.944
+  Planted targets (known exact solutions in the same skeleton) are not
+  recovered from L8 on; loss floor ~0.5-0.95 for the random 6-bit oracle.

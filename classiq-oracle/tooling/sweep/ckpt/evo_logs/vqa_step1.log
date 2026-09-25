@@ -1,0 +1,24 @@
+  L4 planted start 0: loss 3.375e-14 iters 433 38s
+  L4 planted start 1: loss 7.866e-01 iters 3000 219s
+  L4 random-f start 0: loss 8.643e-01 iters 151 9s
+  L4 random-f start 1: loss 8.805e-01 iters 178 9s
+  L4 random-f start 2: loss 9.239e-01 iters 550 32s
+L 4 (params 120, transpiled depth ~9): planted best 3.375e-14 | random diagonal f best 8.643e-01
+  L8 planted start 0: loss 9.839e-01 iters 332 24s
+  L8 planted start 1: loss 9.842e-01 iters 543 39s
+  L8 random-f start 0: loss 7.885e-01 iters 999 73s
+  L8 random-f start 1: loss 9.043e-01 iters 448 34s
+  L8 random-f start 2: loss 9.500e-01 iters 509 37s
+L 8 (params 216, transpiled depth ~17): planted best 9.839e-01 | random diagonal f best 7.885e-01
+  L15 planted start 0: loss 9.708e-01 iters 711 79s
+  L15 planted start 1: loss 9.717e-01 iters 993 112s
+  L15 random-f start 0: loss 9.718e-01 iters 554 62s
+  L15 random-f start 1: loss 9.696e-01 iters 1081 121s
+  L15 random-f start 2: loss 5.109e-01 iters 1470 159s
+L 15 (params 384, transpiled depth ~31): planted best 9.708e-01 | random diagonal f best 5.109e-01
+  L30 planted start 0: loss 9.437e-01 iters 1950 351s
+  L30 planted start 1: loss 9.435e-01 iters 1520 279s
+  L30 random-f start 0: loss 9.443e-01 iters 1737 319s
+  L30 random-f start 1: loss 9.444e-01 iters 1162 209s
+  L30 random-f start 2: loss 9.452e-01 iters 1469 270s
+L 30 (params 744, transpiled depth ~61): planted best 9.435e-01 | random diagonal f best 9.443e-01
