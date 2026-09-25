@@ -89,3 +89,7 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
   Cut s3 (dd_mc/mc_d10/dd_flat): best mc_d10 set, residual@400 4.48, exact
   K 3076.  Greedy s3 (3 levels, KP 400): residual@400 4.01 after 16 Toffolis
   (running).
+- Toggle-bracket hosting (rule D), analysed, not built: t ^= (X1^X2)*L2 needs L2
+  formable both before and after n is hosted; when both operands carry values
+  hosted at different times the cross term X1*Y2 needs X1 after it is gone.
+  Most dd_mc ANDs have two such operands.
