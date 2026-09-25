@@ -1,0 +1,19 @@
+[span_L5_s1_c1_z1] start fitness 2999 / 4096  (CZ layer 1, LCX 1)
+[2026-09-25 04:47:56] span_L5_s1_c1_z1     13s  best 3657/4096  current 3657  restarts 0  iters 179015 (13949/s)  best: cx 25 tof 13
+[2026-09-25 04:48:07] span_L5_s1_c1_z1     23s  best 3749/4096  current 3749  restarts 0  iters 534434 (22868/s)  best: cx 25 tof 15
+[2026-09-25 04:48:17] span_L5_s1_c1_z1     34s  best 3777/4096  current 3777  restarts 0  iters 850708 (25134/s)  best: cx 31 tof 16
+[2026-09-25 04:48:32] span_L5_s1_c1_z1     48s  best 3793/4096  current 3793  restarts 0  iters 1283946 (26535/s)  best: cx 27 tof 18
+[2026-09-25 04:48:42] span_L5_s1_c1_z1     58s  best 3797/4096  current 3797  restarts 0  iters 1601974 (27423/s)  best: cx 28 tof 18
+[2026-09-25 04:48:56] span_L5_s1_c1_z1     73s  best 3797/4096  current 3797  restarts 0  iters 2080116 (28507/s)  best: cx 28 tof 18
+[2026-09-25 04:49:07] span_L5_s1_c1_z1     84s  best 3797/4096  current 3797  restarts 0  iters 2422956 (28955/s)  best: cx 28 tof 18
+[2026-09-25 04:49:21] span_L5_s1_c1_z1     98s  best 3797/4096  current 3797  restarts 0  iters 2877786 (29301/s)  best: cx 28 tof 18
+[2026-09-25 04:49:32] span_L5_s1_c1_z1    108s  best 3797/4096  current 3797  restarts 0  iters 3213716 (29658/s)  best: cx 28 tof 18
+[2026-09-25 04:49:42] span_L5_s1_c1_z1    119s  best 3809/4096  current 3809  restarts 0  iters 3539145 (29815/s)  best: cx 29 tof 18
+[2026-09-25 04:49:55] span_L5_s1_c1_z1    132s  best 3815/4096  current 3815  restarts 0  iters 3777593 (28605/s)  best: cx 31 tof 18
+[2026-09-25 04:50:07] span_L5_s1_c1_z1    144s  best 3815/4096  current 3815  restarts 0  iters 4164370 (28851/s)  best: cx 31 tof 18
+[2026-09-25 04:50:22] span_L5_s1_c1_z1    159s  best 3815/4096  current 3815  restarts 0  iters 4503407 (28364/s)  best: cx 31 tof 18
+[2026-09-25 04:50:32] span_L5_s1_c1_z1    169s  best 3815/4096  current 3815  restarts 0  iters 4682254 (27739/s)  best: cx 31 tof 18
+[2026-09-25 04:50:44] span_L5_s1_c1_z1    181s  best 3815/4096  current 3815  restarts 0  iters 5067313 (27979/s)  best: cx 31 tof 18
+[2026-09-25 04:50:54] span_L5_s1_c1_z1    191s  best 3815/4096  current 3815  restarts 0  iters 5421906 (28336/s)  best: cx 31 tof 18
+[2026-09-25 04:51:09] span_L5_s1_c1_z1    206s  best 3815/4096  current 3815  restarts 0  iters 5925567 (28751/s)  best: cx 31 tof 18
+[2026-09-25 04:51:24] span_L5_s1_c1_z1    221s  best 3815/4096  current 3815  restarts 0  iters 6447023 (29146/s)  best: cx 31 tof 18
