@@ -19,6 +19,8 @@ import numba as nb
 
 NW, NWORD = 18, 64
 PEVERY = float(os.environ.get('PEVERY', '10'))
+LCX = int(os.environ.get('LCX', '1'))      # CX layers per level
+P = LCX + 1                                  # layers per level; layer j is Toffoli iff j % P == P-1
 
 
 def init_state():
@@ -129,9 +131,9 @@ def fit_k(S, F, K):
 
 
 @nb.njit(cache=True)
-def evaluate_from(st, cx, tf, L, li):
-    for j in range(li, 2 * L):
-        layer(st[j], st[j + 1], cx, tf, j // 2, j % 2)
+def evaluate_from(st, cx, tf, T, li, P):
+    for j in range(li, T):
+        layer(st[j], st[j + 1], cx, tf, j, 1 if j % P == P - 1 else 0)
 
 
 @nb.njit(cache=True)
@@ -152,13 +154,13 @@ def clear_conflicts(cx, tf, l, t, wires):
 
 
 @nb.njit(cache=True)
-def run(cx, tf, L, F, st, tmp, iters, fit0, pnone, seed, K=2):
+def run(cx, tf, T, F, st, tmp, iters, fit0, pnone, seed, K, P):
     np.random.seed(seed)
     fit = fit0; acc = 0
     ccx = cx.copy(); ctf = tf.copy()
     for it in range(iters):
         ccx[:] = cx; ctf[:] = tf
-        l = np.random.randint(L); t = np.random.randint(2); w = np.random.randint(NW)
+        l = np.random.randint(T); t = 1 if l % P == P - 1 else 0; w = np.random.randint(NW)
         if np.random.random() < pnone:
             if t == 0: ccx[l, w] = -1
             else: ctf[l, w, 0] = -1
@@ -177,15 +179,15 @@ def run(cx, tf, L, F, st, tmp, iters, fit0, pnone, seed, K=2):
             clear_conflicts(ccx, ctf, l, 1, wires)
             ctf[l, w, 0] = a; ctf[l, w, 1] = b
             ctf[l, w, 2] = np.random.randint(2); ctf[l, w, 3] = np.random.randint(2)
-        li = 2 * l + t
+        li = l
         tmp[li] = st[li]
-        evaluate_from(tmp, ccx, ctf, L, li)
-        f = fit_k(tmp[2 * L], F, K)[0]
+        evaluate_from(tmp, ccx, ctf, T, li, P)
+        f = fit_k(tmp[T], F, K)[0]
         if f >= fit:
             if f > fit: acc += 1
             fit = f
             cx[:] = ccx; tf[:] = ctf
-            for j in range(li + 1, 2 * L + 1):
+            for j in range(li + 1, T + 1):
                 st[j] = tmp[j]
         if fit == 4096:
             return fit, acc, it + 1
@@ -193,9 +195,9 @@ def run(cx, tf, L, F, st, tmp, iters, fit0, pnone, seed, K=2):
 
 
 def random_genome(L, rng, dens=0.8):
-    cx = -np.ones((L, NW), dtype=np.int64); tf = -np.ones((L, NW, 4), dtype=np.int64)
-    for l in range(L):
-        for t in range(2):
+    cx, tf = empty(L)
+    for l in range(L * P):
+        for t in [1 if l % P == P - 1 else 0]:
             perm = list(rng.permutation(NW)); used = set()
             for w in perm:
                 if w in used or rng.random() > dens: continue
@@ -209,9 +211,13 @@ def random_genome(L, rng, dens=0.8):
     return cx, tf
 
 
+def empty(L):
+    return -np.ones((L * P, NW), dtype=np.int64), -np.ones((L * P, NW, 4), dtype=np.int64)
+
+
 def states(cx, tf, L):
-    st = np.zeros((2 * L + 1, NW, NWORD), dtype=np.uint64); st[0] = init_state()
-    evaluate_from(st, cx, tf, L, 0)
+    st = np.zeros((L * P + 1, NW, NWORD), dtype=np.uint64); st[0] = init_state()
+    evaluate_from(st, cx, tf, L * P, 0, P)
     return st
 
 
@@ -224,7 +230,7 @@ def logo_bits():
 if __name__ == '__main__':
     mode, L, seed, minutes = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), float(sys.argv[4])
     rng = np.random.default_rng(seed)
-    tag = 'evo_%s_L%d_s%d' % (mode, L, seed)
+    tag = 'evo_%s_L%d_s%d' % (mode, L, seed) + ('_c%d' % LCX if LCX != 1 else '')
     os.makedirs('ckpt', exist_ok=True)
     if mode == 'test':
         # planted target: final value of a dense random L-level circuit, most balanced nonlinear wire
@@ -243,7 +249,7 @@ if __name__ == '__main__':
     tag += '_k%d' % K if K != 2 else ''
     RESTART = float(os.environ.get('RESTART', '90'))    # s without improvement -> fresh start
     def fresh():
-        cx = -np.ones((L, NW), dtype=np.int64); tf = -np.ones((L, NW, 4), dtype=np.int64)
+        cx, tf = empty(L)
         st = states(cx, tf, L)
         return cx, tf, st, st.copy(), fit_k(st[-1], F, K)[0]
     cx, tf, st, tmp, fit = fresh()
@@ -252,7 +258,7 @@ if __name__ == '__main__':
     print('[%s] start fitness %d / 4096  restart after %.0fs without gain' % (tag, fit, RESTART), flush=True)
     while True:
         c0 = time.time()
-        fit, acc, n = run(cx, tf, L, F, st, tmp, chunk, fit, 0.1, int(rng.integers(1 << 30)), K)
+        fit, acc, n = run(cx, tf, L * P, F, st, tmp, chunk, fit, 0.1, int(rng.integers(1 << 30)), K, P)
         total += n; now = time.time()
         if now - c0 > 0: chunk = max(200, int(chunk * min(4.0, (PEVERY / 2) / (now - c0))))
         if fit > fit_prev: t_imp = now; fit_prev = fit

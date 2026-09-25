@@ -19,12 +19,11 @@ IMM = float(os.environ.get('IMM', '0.1'))
 def climb(cx, tf, L, F, K, steps, rng):
     st = E.states(cx, tf, L); tmp = st.copy()
     f0 = E.fit_k(st[-1], F, K)[0]
-    f, _, _ = E.run(cx, tf, L, F, st, tmp, steps, f0, 0.1, int(rng.integers(1 << 30)), K)
+    f, _, _ = E.run(cx, tf, L * E.P, F, st, tmp, steps, f0, 0.1, int(rng.integers(1 << 30)), K, E.P)
     return f
 
 
-def empty(L):
-    return -np.ones((L, E.NW), dtype=np.int64), -np.ones((L, E.NW, 4), dtype=np.int64)
+empty = E.empty
 
 
 if __name__ == '__main__':
@@ -56,7 +55,8 @@ if __name__ == '__main__':
             cx, tf = empty(L)
             for l in range(L):
                 p = par[rng.integers(2)]
-                cx[l] = p[1][l]; tf[l] = p[2][l]
+                sl = slice(l * E.P, (l + 1) * E.P)
+                cx[sl] = p[1][sl]; tf[sl] = p[2][sl]
             f = climb(cx, tf, L, F, K, LOCAL, rng)
         nchild += 1
         worst = min(range(POP), key=lambda i: pop[i][0])
