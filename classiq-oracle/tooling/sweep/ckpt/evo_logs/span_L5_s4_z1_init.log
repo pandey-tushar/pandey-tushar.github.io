@@ -17,3 +17,11 @@
 [2026-09-25 04:51:05] span_L5_s4_c1_z1    202s  best 3907/4096  current 3771  restarts 1  iters 7158384 (35489/s)  best: cx 25 tof 22
 [2026-09-25 04:51:15] span_L5_s4_c1_z1    212s  best 3907/4096  current 3771  restarts 1  iters 7493361 (35377/s)  best: cx 25 tof 22
 [2026-09-25 04:51:30] span_L5_s4_c1_z1    227s  best 3907/4096  current 3771  restarts 1  iters 8005862 (35321/s)  best: cx 25 tof 22
+[2026-09-25 04:51:40] span_L5_s4_c1_z1    237s  best 3907/4096  current 3771  restarts 1  iters 8346233 (35236/s)  best: cx 25 tof 22
+[2026-09-25 04:51:50] span_L5_s4_c1_z1    247s  best 3907/4096  current 3771  restarts 1  iters 8681447 (35165/s)  best: cx 25 tof 22
+[2026-09-25 04:52:05] span_L5_s4_c1_z1    262s  best 3907/4096  current 3771  restarts 1  iters 9179177 (35078/s)  best: cx 25 tof 22
+[2026-09-25 04:52:15] span_L5_s4_c1_z1    272s  best 3907/4096  current 3771  restarts 1  iters 9518473 (35033/s)  best: cx 25 tof 22
+[2026-09-25 04:52:31] span_L5_s4_c1_z1    287s  best 3907/4096  current 3771  restarts 1  iters 10031718 (34916/s)  best: cx 25 tof 22
+[2026-09-25 04:52:42] span_L5_s4_c1_z1    299s  best 3907/4096  current 3771  restarts 1  iters 10323978 (34546/s)  best: cx 25 tof 22
+[2026-09-25 04:52:52] span_L5_s4_c1_z1    309s  best 3907/4096  current 3771  restarts 1  iters 10561627 (34196/s)  best: cx 25 tof 22
+[2026-09-25 04:53:05] span_L5_s4_c1_z1    322s  best 3907/4096  current 3771  restarts 1  iters 10975625 (34078/s)  best: cx 25 tof 22

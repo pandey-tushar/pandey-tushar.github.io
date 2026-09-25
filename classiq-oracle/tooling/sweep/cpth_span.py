@@ -22,7 +22,7 @@ from cpte_evo import NW, NWORD, popc, evaluate_from, clear_conflicts, init_state
 PEVERY = float(os.environ.get('PEVERY', '10'))
 CZ = int(os.environ.get('CZ', '1'))
 P = E.P
-RESTART = float(os.environ.get('RESTART', '150'))
+RESTART = float(os.environ.get('RESTART', '60'))   # s without gain -> kick
 PERM = np.random.default_rng(12345).permutation(4096)     # fixed bit order for pivots
 
 
@@ -92,42 +92,62 @@ def fitness(st, tf, T, P, Fv, cz, feats, basis, pw, pb):
 
 
 @nb.njit(cache=True)
-def run(cx, tf, T, Fv, st, tmp, iters, fit0, pnone, seed, P, cz, feats, basis, pw, pb):
+def mutate(ccx, ctf, T, P, pnone):
+    l = np.random.randint(T); t = 1 if l % P == P - 1 else 0; w = np.random.randint(NW)
+    if np.random.random() < pnone:
+        if t == 0: ccx[l, w] = -1
+        else: ctf[l, w, 0] = -1
+    elif t == 0:
+        s = np.random.randint(NW - 1); s = s + 1 if s >= w else s
+        wires = [w, s]
+        clear_conflicts(ccx, ctf, l, 0, wires)
+        ccx[l, w] = s
+    else:
+        a = np.random.randint(NW - 1); a = a + 1 if a >= w else a
+        b = np.random.randint(NW - 2)
+        lo = min(a, w); hi = max(a, w)
+        if b >= lo: b += 1
+        if b >= hi: b += 1
+        wires = [w, a, b]
+        clear_conflicts(ccx, ctf, l, 1, wires)
+        ctf[l, w, 0] = a; ctf[l, w, 1] = b
+        ctf[l, w, 2] = np.random.randint(2); ctf[l, w, 3] = np.random.randint(2)
+    return l
+
+
+@nb.njit(cache=True)
+def run(cx, tf, T, Fv, st, tmp, iters, fit0, pnone, seed, P, cz, feats, basis, pw, pb,
+        temp, maxmut, bcx, btf, bfit):
+    """annealing at temperature temp (temp=0: plain neutral drift); 1..maxmut gates
+    per move; best genome kept in bcx/btf.  returns (fit, best fit, iters)"""
     np.random.seed(seed)
     fit = fit0
     ccx = cx.copy(); ctf = tf.copy()
     for it in range(iters):
         ccx[:] = cx; ctf[:] = tf
-        l = np.random.randint(T); t = 1 if l % P == P - 1 else 0; w = np.random.randint(NW)
-        if np.random.random() < pnone:
-            if t == 0: ccx[l, w] = -1
-            else: ctf[l, w, 0] = -1
-        elif t == 0:
-            s = np.random.randint(NW - 1); s = s + 1 if s >= w else s
-            wires = [w, s]
-            clear_conflicts(ccx, ctf, l, 0, wires)
-            ccx[l, w] = s
-        else:
-            a = np.random.randint(NW - 1); a = a + 1 if a >= w else a
-            b = np.random.randint(NW - 2)
-            lo = min(a, w); hi = max(a, w)
-            if b >= lo: b += 1
-            if b >= hi: b += 1
-            wires = [w, a, b]
-            clear_conflicts(ccx, ctf, l, 1, wires)
-            ctf[l, w, 0] = a; ctf[l, w, 1] = b
-            ctf[l, w, 2] = np.random.randint(2); ctf[l, w, 3] = np.random.randint(2)
+        nm = 1 + np.random.randint(maxmut)
+        l = T
+        for _ in range(nm):
+            l = min(l, mutate(ccx, ctf, T, P, pnone))
         tmp[l] = st[l]
         evaluate_from(tmp, ccx, ctf, T, l, P)
         f = fitness(tmp, ctf, T, P, Fv, cz, feats, basis, pw, pb)
-        if f >= fit:
+        if f >= fit or (temp > 0 and np.random.random() < np.exp((f - fit) / temp)):
             fit = f
             cx[:] = ccx; tf[:] = ctf
             for j in range(l + 1, T + 1):
                 st[j] = tmp[j]
-        if fit == 4096:
-            return fit, it + 1
-    return fit, iters
+            if fit > bfit:
+                bfit = fit; bcx[:] = cx; btf[:] = tf
+                if fit == 4096:
+                    return fit, bfit, it + 1
+    return fit, bfit, iters
+
+
+@nb.njit(cache=True)
+def kick(cx, tf, T, P, k):
+    for _ in range(k):
+        mutate(cx, tf, T, P, 0.2)
 
 
 def pinit():
@@ -160,7 +180,7 @@ if __name__ == '__main__':
         sys.exit(0)
     L, seed, minutes = int(sys.argv[2]), int(sys.argv[3]), float(sys.argv[4])
     rng = np.random.default_rng(seed)
-    tag = 'span_L%d_s%d_c%d_z%d' % (L, seed, E.LCX, CZ)
+    tag = 'span_L%d_s%d_c%d_z%d' % (L, seed, E.LCX, CZ) + os.environ.get('TAG', '')
     os.makedirs('ckpt', exist_ok=True)
     ws = workspace(L); T = L * P
     def fresh():
@@ -171,27 +191,33 @@ if __name__ == '__main__':
     if os.environ.get('INIT'):
         d = np.load(os.environ['INIT']); cx, tf = d['cx'].copy(), d['tf'].copy()
         st = states(cx, tf, L); tmp = st.copy(); fit = fitness(st, tf, T, P, Fv, CZ, *ws)
-    best = (fit, cx.copy(), tf.copy()); nrs = 0
+    TEMP = float(os.environ.get('TEMP', '2.0')); MAXMUT = int(os.environ.get('MAXMUT', '3'))
+    KICK = int(os.environ.get('KICK', '8'))
+    bcx, btf = cx.copy(), tf.copy(); bfit = fit; nrs = 0
     t0 = time.time(); last = t0; total = 0; chunk = 200; t_imp = t0; fit_prev = fit
-    print('[%s] start fitness %d / 4096  (CZ layer %d, LCX %d)' % (tag, fit, CZ, E.LCX), flush=True)
+    print('[%s] start fitness %d / 4096  (CZ layer %d, LCX %d, TEMP %.2f, MAXMUT %d, KICK %d gates after %.0fs stuck)' %
+          (tag, fit, CZ, E.LCX, TEMP, MAXMUT, KICK, RESTART), flush=True)
     while True:
         c0 = time.time()
-        fit, n = run(cx, tf, T, Fv, st, tmp, chunk, fit, 0.1, int(rng.integers(1 << 30)), P, CZ, *ws)
+        fit, bf2, n = run(cx, tf, T, Fv, st, tmp, chunk, fit, 0.1, int(rng.integers(1 << 30)), P, CZ, *ws,
+                          TEMP, MAXMUT, bcx, btf, bfit)
         total += n; now = time.time()
         if now - c0 > 0: chunk = max(20, int(chunk * min(4.0, (PEVERY / 2) / (now - c0))))
-        if fit > fit_prev: t_imp = now; fit_prev = fit
-        if fit > best[0]: best = (fit, cx.copy(), tf.copy())
-        done = best[0] == 4096 or now - t0 > minutes * 60
+        if bf2 > bfit: t_imp = now; bfit = bf2
+        done = bfit == 4096 or now - t0 > minutes * 60
         if now - last >= PEVERY or done:
             last = now
-            g = int((best[1] >= 0).sum()), int((best[2][:, :, 0] >= 0).sum())
-            rec = dict(tag=tag, best=int(best[0]), current=int(fit), restarts=nrs, iters=total,
+            g = int((bcx >= 0).sum()), int((btf[:, :, 0] >= 0).sum())
+            rec = dict(tag=tag, best=int(bfit), current=int(fit), kicks=nrs, iters=total,
                        elapsed_s=round(now - t0), cx=g[0], tof=g[1], utc=time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(now)))
-            print('[%s] %s  %5ds  best %4d/4096  current %4d  restarts %d  iters %d (%d/s)  best: cx %d tof %d' %
-                  (rec['utc'], tag, rec['elapsed_s'], best[0], fit, nrs, total, total / max(now - t0, 1e-9), *g), flush=True)
-            np.savez('ckpt/%s.npz' % tag, cx=best[1], tf=best[2], L=L)
+            print('[%s] %s  %5ds  best %4d/4096  current %4d  kicks %d  iters %d (%d/s)  best: cx %d tof %d' %
+                  (rec['utc'], tag, rec['elapsed_s'], bfit, fit, nrs, total, total / max(now - t0, 1e-9), *g), flush=True)
+            np.savez('ckpt/%s.npz' % tag, cx=bcx, tf=btf, L=L)
             json.dump(rec, open('ckpt/%s.json' % tag, 'w'))
             if done: break
-        if now - t_imp > RESTART:
-            cx, tf, st, tmp, fit = fresh(); nrs += 1; t_imp = now; fit_prev = fit
+        if now - t_imp > RESTART:                # iterated local search: kick the best, keep climbing
+            cx, tf = bcx.copy(), btf.copy(); kick(cx, tf, T, P, KICK)
+            st = states(cx, tf, L); tmp = st.copy(); fit = fitness(st, tf, T, P, Fv, CZ, *ws)
+            nrs += 1; t_imp = now
+    best = (bfit, bcx, btf)
     print('[%s] final best %d / 4096' % (tag, best[0]), flush=True)
