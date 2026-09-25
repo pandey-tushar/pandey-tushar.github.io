@@ -1,1 +1,1 @@
-{"tag": "sched_R8_L2_s3_r05", "best_score": 1106.462, "current": 1106.867, "fired": [21, -1], "restarts": 0, "iters": 439146, "best_real": null, "elapsed_s": 30, "utc": "2026-09-25 02:21:58"}
+{"tag": "sched_R8_L2_s3_r05", "best_score": 1104.354, "current": 1104.36, "fired": [-1, 24], "restarts": 4, "iters": 8674114, "best_real": null, "elapsed_s": 600, "utc": "2026-09-25 02:31:28"}
