@@ -11,3 +11,4 @@ basis ckpt/basis_s1.pkl: 286 ANF monomials
 [2026-09-25 11:26:07] span_L5_s92_c1_z3_basislong    112s  best 3852/4096  current 3823  kicks 1  iters 239803 (2131/s)  best: cx 27 tof 13
 [2026-09-25 11:26:17] span_L5_s92_c1_z3_basislong    123s  best 3852/4096  current 3840  kicks 1  iters 262838 (2142/s)  best: cx 27 tof 13
 [2026-09-25 11:26:27] span_L5_s92_c1_z3_basislong    133s  best 3852/4096  current 3829  kicks 1  iters 284837 (2144/s)  best: cx 27 tof 13
+[2026-09-25 11:26:42] span_L5_s92_c1_z3_basislong    148s  best 3852/4096  current 3829  kicks 1  iters 318063 (2150/s)  best: cx 27 tof 13
