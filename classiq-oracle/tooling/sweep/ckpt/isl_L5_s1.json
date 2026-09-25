@@ -1,1 +1,1 @@
-{"tag": "isl_L5_s1", "best": 3735, "islands": [3735, 3713, 3683, 3669, 3653, 3623], "migrations": 0, "restarts": 0, "iters": 1211376, "elapsed_s": 37, "utc": "2026-09-25 00:53:32"}
+{"tag": "isl_L5_s1", "best": 3735, "islands": [3735, 3713, 3689, 3683, 3653, 3623], "migrations": 0, "restarts": 0, "iters": 1625595, "elapsed_s": 49, "utc": "2026-09-25 00:53:45"}
