@@ -73,3 +73,7 @@
 [qrank s6] level 10  best deficiency 53  beam [53, 53, 53, 53]  gates 15  268s
 [qrank s6] level 11  best deficiency 53  beam [53, 53, 53, 53]  gates 15  284s
 [qrank s6] level 12  best deficiency 53  beam [53, 53, 53, 53]  gates 15  300s
+[qrank s6] level 13  best deficiency 53  beam [53, 53, 53, 53]  gates 15  315s
+[qrank s6] level 14  best deficiency 53  beam [53, 53, 53, 53]  gates 15  331s
+[qrank s6] level 15  best deficiency 53  beam [53, 53, 53, 53]  gates 15  346s
+[qrank s6] level 16  best deficiency 53  beam [53, 53, 53, 53]  gates 15  361s

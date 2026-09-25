@@ -1,0 +1,37 @@
+[start]  ANDs 233  AND-depth 4  gates 291  0.000105031s  [pareto]
+  [depth-rw]  ANDs 233  AND-depth 4  gates 291  0.00134765s
+  [mc-rw]  ANDs 214  AND-depth 5  gates 281  0.452438s  [pareto]
+[round 1] pareto: d4:233 d5:214
+  [depth-rw]  ANDs 215  AND-depth 4  gates 282  0.45342s  [pareto]
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.553789s  [pareto]
+[round 2] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.554735s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.583684s
+[round 3] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.584201s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.613229s
+[round 4] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.613785s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.641181s
+[round 5] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.641877s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.665952s
+[round 6] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.666414s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.691892s
+[round 7] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.692431s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.726985s
+[round 8] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.727822s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.766245s
+[round 9] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.767076s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.790165s
+[round 10] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.79066s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.813476s
+[round 11] pareto: d4:215 d5:209
+  [depth-rw]  ANDs 210  AND-depth 5  gates 277  0.813997s
+  [mc-rw]  ANDs 209  AND-depth 5  gates 276  0.836605s
+[round 12] pareto: d4:215 d5:209

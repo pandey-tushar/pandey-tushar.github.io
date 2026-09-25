@@ -1,0 +1,16 @@
+CP-TR (Sep 25) whole-F XAG route and rotation-phase model
+- Stopped: span_basislong L5 s91/s92 (plateau 3901/4096 for >1 h); qrank_degL_s9
+  plateau deficiency 75 from level 5 to 16.
+- AND-depth/AND-count Pareto (mtdepth: algebraic depth rewriting with AND-only
+  depth + MC cut rewriting), from dd_mc.v (66 ANDs, depth 12):
+  d12:66  d11:75  d10:76.  From the 59-cube ESOP (460 ANDs, depth 4):
+  d4:215  d5:209.
+- XAG -> circuit mapper (cptr_map.py, exact by construction, in-place targets
+  allowed when every still-needed form stays in the wire span): dd_mc.v fails
+  at AND level 2 (no feasible target).
+- Linear width (rank of still-needed operand forms, must be <= 18), cptr_width.py:
+  dd_mc 66 ANDs -> 29; dd_flat 89 -> 26; mc_d10 76 -> 35; ESOP-MC d4 215 -> 48.
+- Rotation-phase model (cpts_z8.py): Rz(pi a/4) on any wire value at any time,
+  exact iff sum a_k p_k == 4F mod 8.  Random circuits: L4/1CX 63 forms, L4/6CX
+  228, L6/8CX 437, L8/10CX 706 forms: all not solvable (full Z8 column rank,
+  inconsistent rows 1331-1417); GF(2) rank 37-61.
