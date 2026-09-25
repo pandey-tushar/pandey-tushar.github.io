@@ -102,12 +102,18 @@ def fitness(st, tf, T, P, Fv, cz, feats, basis, pw, pb):
                 for k in range(NWORD): feats[nf, k] = st[j + 1, w, k] ^ st[j, w, k]
                 nf += 1
     if cz:                                    # cz=1: pairs at the turnaround; cz=2: pairs at every Toffoli state
-        s0 = 0 if cz == 2 else T
+        s0 = 0 if cz == 2 else T          # cz=3: pairs + triples at the turnaround
         for s in range(s0, T + 1, P):
             if cz == 2 and s != T and s % P != 0: continue
             for a in range(NW):
                 for b in range(a + 1, NW):
                     for k in range(NWORD): feats[nf, k] = st[s, a, k] & st[s, b, k]
+                    nf += 1
+    if cz == 3:                               # triples at the turnaround (cubic phase layer)
+        for a in range(NW):
+            for b in range(a + 1, NW):
+                for c in range(b + 1, NW):
+                    for k in range(NWORD): feats[nf, k] = st[T, a, k] & st[T, b, k] & st[T, c, k]
                     nf += 1
     if ANF:
         for i in range(nf): moebius(feats[i])
@@ -185,7 +191,7 @@ def states(cx, tf, L):
 
 
 def workspace(L):
-    nmax = 1 + 12 + L * NW * P + NW * NW * (L + 2)
+    nmax = 1 + 12 + L * NW * P + NW * NW * (L + 2) + 816
     return (np.zeros((nmax, NWORD), dtype=np.uint64), np.zeros((nmax, NWORD), dtype=np.uint64),
             np.zeros(nmax, dtype=np.int64), np.zeros(nmax, dtype=np.int64))
 

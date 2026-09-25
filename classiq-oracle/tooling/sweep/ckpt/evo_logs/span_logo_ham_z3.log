@@ -1,0 +1,7 @@
+[span_L5_s32_c1_z3_ham] start fitness 2999 / 4096  (CZ layer 3, LCX 1, TEMP 1.00, MAXMUT 3, KICK 8 gates after 60s stuck)
+[2026-09-25 05:38:46] span_L5_s32_c1_z3_ham     13s  best 3801/4096  current 3801  kicks 0  iters 40779 (3027/s)  best: cx 33 tof 15
+[2026-09-25 05:38:57] span_L5_s32_c1_z3_ham     24s  best 3801/4096  current 3801  kicks 0  iters 116384 (4883/s)  best: cx 33 tof 15
+[2026-09-25 05:39:08] span_L5_s32_c1_z3_ham     35s  best 3853/4096  current 3853  kicks 0  iters 189449 (5452/s)  best: cx 29 tof 16
+[2026-09-25 05:39:22] span_L5_s32_c1_z3_ham     49s  best 3873/4096  current 3873  kicks 0  iters 283706 (5732/s)  best: cx 27 tof 15
+[2026-09-25 05:39:33] span_L5_s32_c1_z3_ham     60s  best 3877/4096  current 3877  kicks 0  iters 347105 (5790/s)  best: cx 28 tof 14
+[2026-09-25 05:39:43] span_L5_s32_c1_z3_ham     70s  best 3877/4096  current 3877  kicks 0  iters 406267 (5806/s)  best: cx 28 tof 14
