@@ -1,1 +1,4 @@
 wgreedy_s*.pkl
+wcut_s*.pkl
+mcts_*.pkl
+wgreedy_s*_init.pkl

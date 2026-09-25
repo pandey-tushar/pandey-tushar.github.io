@@ -22,10 +22,16 @@ def score(args):
 if __name__ == '__main__':
     seed, LV, NC, KP = map(int, sys.argv[1:5]); rng = random.Random(seed)
     seq = []; t0 = time.time()
+    import os
+    if os.environ.get('INIT'): seq = pickle.load(open(os.environ['INIT'], 'rb'))['seq']
+    NP = int(os.environ.get('NP', '1'))
     base = score((seq, KP)); print('[wg s%d] empty prefix residual@%d %.3f' % (seed, KP, base), flush=True)
-    with Pool(4) as pool:
-        for lv in range(LV):
+    with Pool(NP) as pool:
+        done_lv = seq.count('end')
+        for lv in range(done_lv, LV):
+            cur = seq[len(seq) - seq[::-1].index('end'):] if 'end' in seq else list(seq)
             used = set()
+            for c in cur: used |= {c[0], c[1], c[4]}
             for slot in range(6):
                 cands = []
                 for _ in range(NC):
