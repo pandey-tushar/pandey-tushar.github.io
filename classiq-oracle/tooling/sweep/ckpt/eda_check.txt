@@ -1,0 +1,7 @@
+Check A (tweedledum 1.2.0, already installed):
+  exorcism ESOP of F: 59 cubes; literals per cube hist [0,0,0,2,1,4,2,7,6,9,12,13,3]
+  XAG from ESOP: 310 gates, after optimize 271; simulate == F (exact)
+  xag_synth (only BennettStrategy in this build): 171 qubits (158 ancillae), td depth 85
+  -> no qubit-constrained (pebbling) compile available in this build
+Check B (cpte_esop.py): FPRM best 500 terms; PSDKRO best 72 terms (16 orders)
+  exorcism 59 cubes, 519 literals total -> ~43 cubes per data wire on average
