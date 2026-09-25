@@ -1,0 +1,9 @@
+start: weighted high-degree cost 3328  monomials 886  max degree 12  (gates per step 2772, BEAM 6)
+layer  1  best cost (1720, 418, 12)  gates in layer 4  beam [1720, 2016, 2025, 2079]  4s
+layer  2  best cost (1077, 264, 12)  gates in layer 3  beam [1077, 1189, 1353, 1353, 1355]  21s
+layer  3  best cost (830, 205, 12)  gates in layer 3  beam [830, 862, 894, 901, 923]  44s
+layer  4  best cost (683, 183, 12)  gates in layer 3  beam [683, 721, 733, 739, 745]  68s
+layer  5  best cost (625, 175, 12)  gates in layer 3  beam [625, 630, 634, 638, 656]  90s
+layer  6  best cost (578, 155, 12)  gates in layer 3  beam [578, 583, 583, 591, 593]  114s
+layer  7  best cost (538, 155, 12)  gates in layer 3  beam [538, 544, 544, 546, 546]  137s
+layer  8  best cost (515, 137, 12)  gates in layer 2  beam [515, 516, 516, 518, 518]  159s

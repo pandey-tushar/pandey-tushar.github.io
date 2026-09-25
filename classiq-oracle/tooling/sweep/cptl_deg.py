@@ -64,6 +64,40 @@ if __name__ == '__main__':
     c0 = cost(F)
     print('start: weighted high-degree cost %d  monomials %d  max degree %d  (gates per step %d, BEAM %d)' %
           (c0[0], c0[1], c0[2], len(G), BEAM), flush=True)
+    if os.environ.get('LAYER'):               # layer mode: each step = one layer of disjoint gates
+        LB = int(os.environ.get('LBEAM', '6'))
+        beam = [(c0, F, [])]; t0 = time.time()
+        for s in range(steps):
+            cand = []
+            for (c, tbl, seq) in beam:
+                for trial in range(LB):
+                    used = set(); t2 = tbl; cur = c; lay = []
+                    while True:
+                        opts = [g for g in G if not ({g[1], g[2], g[5]} - {-1}) & used and not (g[0] == 'cx' and {g[1], g[2]} & used)]
+                        if not opts: break
+                        sc = []
+                        for g in opts:
+                            nt = apply(t2, g); sc.append((cost(nt), rng.random(), g, nt))
+                        sc.sort(key=lambda z: (z[0], z[1]))
+                        k = min(len(sc) - 1, int(rng.integers(3)) if trial else 0)
+                        cc, _, g, nt = sc[k]
+                        if cc >= cur: break
+                        t2, cur = nt, cc; lay.append(g)
+                        used |= ({g[1], g[2], g[5]} - {-1}) if g[0] == 'tof' else {g[1], g[2]}
+                    cand.append((cur, rng.random(), t2, seq + [lay]))
+            cand.sort(key=lambda z: (z[0], z[1]))
+            nb, seen = [], set()
+            for c, _, nt, seq in cand:
+                key = nt.tobytes()
+                if key in seen: continue
+                seen.add(key); nb.append((c, nt, seq))
+                if len(nb) == BEAM: break
+            beam = nb
+            print('layer %2d  best cost %s  gates in layer %d  beam %s  %.0fs' % (s + 1, beam[0][0], len(beam[0][2][-1]),
+                  [b[0][0] for b in beam[:5]], time.time() - t0), flush=True)
+            pickle.dump(dict(layers=beam[0][2], cost=beam[0][0]), open('ckpt/degL_s%d.pkl' % seed, 'wb'))
+            np.save('ckpt/degL_s%d_target.npy' % seed, beam[0][1])
+        sys.exit(0)
     beam = [(c0, F, [])]; t0 = time.time(); best = beam[0]
     for s in range(steps):
         cand = []

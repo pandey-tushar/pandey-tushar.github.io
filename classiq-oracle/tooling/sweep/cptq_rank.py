@@ -92,6 +92,8 @@ if __name__ == '__main__':
     if os.environ.get('BASIS'):               # target f'(u) = F(A u ^ c); data wires hold u (CX/X network at emission)
         from cptk_basis import fprime
         bd = pickle.load(open(os.environ['BASIS'], 'rb')); Fv = E.pack(fprime(bd['cols'], bd['c']))
+    if os.environ.get('TARGET'):              # target table (.npy uint8[4096]) in the current data coordinates
+        Fv = E.pack(np.load(os.environ['TARGET']).astype(np.uint8))
     S0 = E.init_state()
     prods0 = [np.full(NWORD, ONES)] + [S0[i].copy() for i in range(12)]
     basis = np.zeros((4096, NWORD), dtype=np.uint64); piv = np.zeros(4096, dtype=np.int64)

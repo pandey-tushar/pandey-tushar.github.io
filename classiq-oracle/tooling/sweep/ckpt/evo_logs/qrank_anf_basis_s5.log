@@ -51,3 +51,62 @@
    level 3 slot 2: deficiency 232  (120s)
    level 3 slot 3: deficiency 228  (122s)
 [qrank s5] level 3  best deficiency 218  beam [218, 221, 222, 227]  gates 12  124s
+   level 4 slot 1: deficiency 217  (126s)
+   level 4 slot 2: deficiency 216  (128s)
+   level 4 slot 1: deficiency 219  (134s)
+   level 4 slot 2: deficiency 216  (136s)
+   level 4 slot 1: deficiency 219  (140s)
+   level 4 slot 2: deficiency 217  (142s)
+   level 4 slot 3: deficiency 215  (144s)
+   level 4 slot 4: deficiency 213  (146s)
+   level 4 slot 1: deficiency 220  (149s)
+   level 4 slot 2: deficiency 219  (151s)
+   level 4 slot 1: deficiency 221  (155s)
+   level 4 slot 2: deficiency 220  (157s)
+   level 4 slot 3: deficiency 219  (159s)
+   level 4 slot 1: deficiency 222  (163s)
+   level 4 slot 2: deficiency 220  (165s)
+   level 4 slot 3: deficiency 219  (167s)
+   level 4 slot 1: deficiency 225  (171s)
+   level 4 slot 2: deficiency 223  (173s)
+[qrank s5] level 4  best deficiency 213  beam [213, 216, 216, 218]  gates 17  175s
+   level 5 slot 1: deficiency 212  (179s)
+   level 5 slot 1: deficiency 213  (183s)
+   level 5 slot 1: deficiency 213  (186s)
+   level 5 slot 1: deficiency 217  (194s)
+   level 5 slot 2: deficiency 215  (196s)
+   level 5 slot 3: deficiency 213  (198s)
+   level 5 slot 4: deficiency 212  (200s)
+[qrank s5] level 5  best deficiency 212  beam [212, 212, 213, 213]  gates 18  204s
+   level 6 slot 1: deficiency 211  (206s)
+   level 6 slot 2: deficiency 210  (208s)
+   level 6 slot 1: deficiency 211  (212s)
+   level 6 slot 2: deficiency 210  (214s)
+   level 6 slot 1: deficiency 211  (222s)
+   level 6 slot 1: deficiency 211  (228s)
+   level 6 slot 2: deficiency 210  (230s)
+[qrank s5] level 6  best deficiency 210  beam [210, 210, 210, 211]  gates 20  233s
+   level 7 slot 1: deficiency 209  (243s)
+   level 7 slot 1: deficiency 209  (247s)
+   level 7 slot 2: deficiency 207  (249s)
+   level 7 slot 1: deficiency 210  (252s)
+   level 7 slot 2: deficiency 208  (254s)
+   level 7 slot 1: deficiency 210  (258s)
+[qrank s5] level 7  best deficiency 207  beam [207, 208, 209, 210]  gates 19  260s
+   level 8 slot 1: deficiency 206  (262s)
+   level 8 slot 1: deficiency 207  (270s)
+   level 8 slot 2: deficiency 206  (272s)
+   level 8 slot 1: deficiency 208  (278s)
+[qrank s5] level 8  best deficiency 206  beam [206, 206, 207, 208]  gates 20  284s
+   level 9 slot 1: deficiency 206  (297s)
+   level 9 slot 1: deficiency 207  (300s)
+[qrank s5] level 9  best deficiency 206  beam [206, 206, 206, 206]  gates 20  305s
+   level 10 slot 1: deficiency 205  (317s)
+   level 10 slot 1: deficiency 205  (321s)
+[qrank s5] level 10  best deficiency 205  beam [205, 205, 206, 206]  gates 23  325s
+[qrank s5] level 11  best deficiency 205  beam [205, 205, 205, 205]  gates 23  342s
+[qrank s5] level 12  best deficiency 205  beam [205, 205, 205, 205]  gates 23  358s
+[qrank s5] level 13  best deficiency 205  beam [205, 205, 205, 205]  gates 23  374s
+[qrank s5] level 14  best deficiency 205  beam [205, 205, 205, 205]  gates 23  390s
+[qrank s5] level 15  best deficiency 205  beam [205, 205, 205, 205]  gates 23  406s
+[qrank s5] level 16  best deficiency 205  beam [205, 205, 205, 205]  gates 23  422s
