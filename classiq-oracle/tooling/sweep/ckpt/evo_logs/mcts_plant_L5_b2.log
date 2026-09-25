@@ -1,0 +1,32 @@
+planted target: 30 Toffolis, weight 1984
+planted solution deficiency (sanity, must be 0): 0
+[mcts plant_L5_s2_b2]   10s  it 39 (4/s)  best deficiency 1388  root kids 14
+[mcts plant_L5_s2_b2]   20s  it 78 (4/s)  best deficiency 1208  root kids 19
+[mcts plant_L5_s2_b2]   31s  it 117 (4/s)  best deficiency 1208  root kids 23
+[mcts plant_L5_s2_b2]   41s  it 157 (4/s)  best deficiency 1208  root kids 26
+[mcts plant_L5_s2_b2]   51s  it 196 (4/s)  best deficiency 1208  root kids 29
+[mcts plant_L5_s2_b2]   61s  it 236 (4/s)  best deficiency 1208  root kids 32
+[mcts plant_L5_s2_b2]   71s  it 277 (4/s)  best deficiency 1208  root kids 35
+[mcts plant_L5_s2_b2]   81s  it 317 (4/s)  best deficiency 1208  root kids 37
+[mcts plant_L5_s2_b2]   91s  it 359 (4/s)  best deficiency 1208  root kids 39
+[mcts plant_L5_s2_b2]  101s  it 398 (4/s)  best deficiency 1208  root kids 41
+[mcts plant_L5_s2_b2]  112s  it 440 (4/s)  best deficiency 1208  root kids 43
+[mcts plant_L5_s2_b2]  122s  it 480 (4/s)  best deficiency 1208  root kids 45
+[mcts plant_L5_s2_b2]  132s  it 521 (4/s)  best deficiency 1208  root kids 47
+[mcts plant_L5_s2_b2]  142s  it 561 (4/s)  best deficiency 1208  root kids 49
+[mcts plant_L5_s2_b2]  152s  it 605 (4/s)  best deficiency 1208  root kids 51
+[mcts plant_L5_s2_b2]  162s  it 645 (4/s)  best deficiency 1208  root kids 52
+[mcts plant_L5_s2_b2]  172s  it 683 (4/s)  best deficiency 1208  root kids 54
+[mcts plant_L5_s2_b2]  183s  it 722 (4/s)  best deficiency 1208  root kids 55
+[mcts plant_L5_s2_b2]  193s  it 764 (4/s)  best deficiency 1208  root kids 57
+[mcts plant_L5_s2_b2]  203s  it 803 (4/s)  best deficiency 1208  root kids 58
+[mcts plant_L5_s2_b2]  213s  it 844 (4/s)  best deficiency 1208  root kids 60
+[mcts plant_L5_s2_b2]  223s  it 883 (4/s)  best deficiency 1208  root kids 61
+[mcts plant_L5_s2_b2]  233s  it 924 (4/s)  best deficiency 1208  root kids 62
+[mcts plant_L5_s2_b2]  243s  it 966 (4/s)  best deficiency 1208  root kids 64
+[mcts plant_L5_s2_b2]  254s  it 1009 (4/s)  best deficiency 1208  root kids 65
+[mcts plant_L5_s2_b2]  264s  it 1050 (4/s)  best deficiency 1208  root kids 66
+[mcts plant_L5_s2_b2]  274s  it 1090 (4/s)  best deficiency 1208  root kids 68
+[mcts plant_L5_s2_b2]  284s  it 1131 (4/s)  best deficiency 1208  root kids 69
+[mcts plant_L5_s2_b2]  294s  it 1174 (4/s)  best deficiency 1208  root kids 70
+[mcts plant_L5_s2_b2] final best deficiency 1208

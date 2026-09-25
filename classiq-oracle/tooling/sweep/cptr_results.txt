@@ -57,3 +57,16 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
   whose recomputation needs a free ancilla (cascade).  Traced state at the
   s1 failure: ancillas n0 n1 n56 n2 n3 n4, data wires 6/7/10 hosting n3,
   n0^n56, n0^n56^n57.
+- CP-TW MCTS (cptw_mcts.py; UCT + progressive widening over Toffoli placements,
+  budget LV levels x <= 6 disjoint Toffolis, reward = -deficiency vs the span of
+  products + final pairs/triples).  Planted L3: exact at 267 iterations.
+  Planted L5 (known exact solution): best deficiency 1156 after 136k rollouts
+  (uniform sampling, 470/s).
+- CP-TX learned-guidance signal (cptx_signal*.py, 400 / 150 planted L5
+  targets): held-out AUC for identifying the planted Toffolis from the target
+  truth table: level 1 0.80 (best single statistic: fraction of ANF monomials
+  containing both inputs, 0.78); level 2 0.66; level 3 0.57 (residual ANF
+  instead of raw: 0.66 / 0.57, no change).
+- Guided MCTS (sampling by softmax of that statistic, BETA 1 / 2): planted L5
+  best deficiency 1060 / 1208 in 5 min (4 it/s); logo L6 BETA 2: 949 after
+  5 min (stopped).
