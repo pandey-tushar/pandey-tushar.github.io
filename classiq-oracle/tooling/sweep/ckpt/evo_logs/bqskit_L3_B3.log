@@ -16,3 +16,11 @@
   m, y_int, _, _, _ = linregress(best_layers, best_dists)
 /usr/local/lib/python3.11/dist-packages/bqskit/passes/synthesis/leap.py:358: SmallSampleWarning: One or more sample arguments is too small; all returned values will be NaN. See documentation for sample size requirements.
   m, y_int, _, _, _ = linregress(best_layers, best_dists)
+[04:24:19] Resynthesizing blocks.
+[04:25:34] Retargeting single-qudit gates.
+[04:25:37] Attempting to delete gates.
+[04:25:47] Attempting to delete gates.
+[04:25:57] Upper bound on error is 3.8968828164342995e-14.
+[04:25:57] Restoring measurements to circuit.
+[bqskit_L3_B3] bqskit output gates 1058  {CNOTGate: 519, U3Gate: 539}
+[bqskit_L3_B3] result depth 251 cx 519  err 1.69e-11 leak 1.39e-22  exact True  211s
