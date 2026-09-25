@@ -1,0 +1,9 @@
+planted target: 26 Toffolis in the source circuit, weight 2048
+[span_L5_s2_c1_z1_anfplant] start fitness 3714 / 4096  (CZ layer 1, LCX 1, TEMP 1.00, MAXMUT 3, KICK 8 gates after 60s stuck)
+[2026-09-25 05:27:40] span_L5_s2_c1_z1_anfplant     13s  best 3793/4096  current 3789  kicks 0  iters 42484 (3274/s)  best: cx 31 tof 22
+[2026-09-25 05:27:50] span_L5_s2_c1_z1_anfplant     23s  best 3818/4096  current 3817  kicks 0  iters 126353 (5424/s)  best: cx 29 tof 21
+[2026-09-25 05:28:05] span_L5_s2_c1_z1_anfplant     38s  best 3820/4096  current 3811  kicks 0  iters 247847 (6489/s)  best: cx 31 tof 20
+[2026-09-25 05:28:15] span_L5_s2_c1_z1_anfplant     49s  best 3827/4096  current 3821  kicks 0  iters 329529 (6792/s)  best: cx 28 tof 23
+[2026-09-25 05:28:30] span_L5_s2_c1_z1_anfplant     63s  best 3827/4096  current 3818  kicks 0  iters 451643 (7154/s)  best: cx 28 tof 23
+[2026-09-25 05:28:45] span_L5_s2_c1_z1_anfplant     78s  best 3827/4096  current 3817  kicks 0  iters 578308 (7414/s)  best: cx 28 tof 23
+[2026-09-25 05:28:55] span_L5_s2_c1_z1_anfplant     88s  best 3827/4096  current 3819  kicks 0  iters 661945 (7499/s)  best: cx 28 tof 23

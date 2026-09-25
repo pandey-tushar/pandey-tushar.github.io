@@ -23,7 +23,8 @@ PEVERY = float(os.environ.get('PEVERY', '10'))
 CZ = int(os.environ.get('CZ', '1'))
 P = E.P
 RESTART = float(os.environ.get('RESTART', '60'))   # s without gain -> kick
-PERM = np.random.default_rng(12345).permutation(4096)     # fixed bit order for pivots
+ANF = int(os.environ.get('ANF', '0'))      # 1: pursuit on ANF coefficients (Moebius domain)
+PERM = np.arange(4096) if ANF else np.random.default_rng(12345).permutation(4096)
 
 
 def permute_bits(v):
@@ -67,6 +68,23 @@ def span_dist(feats, nf, Fv, basis, pw, pb):
     return cur
 
 
+MASKS = np.array([0xAAAAAAAAAAAAAAAA, 0xCCCCCCCCCCCCCCCC, 0xF0F0F0F0F0F0F0F0,
+                  0xFF00FF00FF00FF00, 0xFFFF0000FFFF0000, 0xFFFFFFFF00000000], dtype=np.uint64)
+
+
+@nb.njit(cache=True)
+def moebius(r):
+    """in place: truth table (bit i of the 4096-vector = F(i)) -> ANF coefficients"""
+    for v in range(6):
+        s = np.uint64(1 << v); m = MASKS[v]
+        for k in range(NWORD):
+            r[k] ^= (r[k] << s) & m
+    for v in range(6):
+        d = 1 << v
+        for k in range(NWORD):
+            if k & d: r[k] ^= r[k ^ d]
+
+
 @nb.njit(cache=True)
 def fitness(st, tf, T, P, Fv, cz, feats, basis, pw, pb):
     """st: states in PERMUTED bit order.  returns 4096 - dist bound"""
@@ -83,11 +101,16 @@ def fitness(st, tf, T, P, Fv, cz, feats, basis, pw, pb):
             if tf[j, w, 0] >= 0:
                 for k in range(NWORD): feats[nf, k] = st[j + 1, w, k] ^ st[j, w, k]
                 nf += 1
-    if cz:
-        for a in range(NW):
-            for b in range(a + 1, NW):
-                for k in range(NWORD): feats[nf, k] = st[T, a, k] & st[T, b, k]
-                nf += 1
+    if cz:                                    # cz=1: pairs at the turnaround; cz=2: pairs at every Toffoli state
+        s0 = 0 if cz == 2 else T
+        for s in range(s0, T + 1, P):
+            if cz == 2 and s != T and s % P != 0: continue
+            for a in range(NW):
+                for b in range(a + 1, NW):
+                    for k in range(NWORD): feats[nf, k] = st[s, a, k] & st[s, b, k]
+                    nf += 1
+    if ANF:
+        for i in range(nf): moebius(feats[i])
     return 4096 - span_dist(feats, nf, Fv, basis, pw, pb)
 
 
@@ -162,13 +185,28 @@ def states(cx, tf, L):
 
 
 def workspace(L):
-    nmax = 1 + 12 + L * NW + NW * NW
+    nmax = 1 + 12 + L * NW * P + NW * NW * (L + 2)
     return (np.zeros((nmax, NWORD), dtype=np.uint64), np.zeros((nmax, NWORD), dtype=np.uint64),
             np.zeros(nmax, dtype=np.int64), np.zeros(nmax, dtype=np.int64))
 
 
 if __name__ == '__main__':
     Fv = permute_bits(logo_bits())
+    if ANF: moebius(Fv)
+    if sys.argv[1] == 'test':                 # planted: XOR of random features of a random L-level circuit
+        import cpth_emit as EM
+        Lp = int(sys.argv[2]); rng0 = np.random.default_rng(5000 + int(sys.argv[3]))
+        tcx, ttf = E.random_genome(Lp, rng0, float(os.environ.get('DENS', '0.6')))
+        tst = E.states(tcx, ttf, Lp)
+        rows, lab = EM.features(tst, ttf, Lp * P, P, CZ)
+        tv = np.zeros(NWORD, dtype=np.uint64)
+        for i, l in enumerate(lab):
+            if (l[0] == 'tof' and rng0.random() < 0.5) or (l[0] != 'tof' and rng0.random() < 0.05): tv ^= rows[i]
+        Fv = permute_bits(tv)
+        if ANF: moebius(Fv)
+        print('planted target: %d Toffolis in the source circuit, weight %d' %
+              (int((ttf[:, :, 0] >= 0).sum()), int(sum(bin(int(t)).count('1') for t in tv))), flush=True)
+        sys.argv[1] = 'logo'
     if sys.argv[1] == 'check':
         for f in sys.argv[2:]:
             d = np.load(f); cx, tf, L = d['cx'], d['tf'], int(d['L'])
