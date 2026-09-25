@@ -25,3 +25,9 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
     L30 (744, ~61):  planted 0.944 | random f 0.944
   Planted targets (known exact solutions in the same skeleton) are not
   recovered from L8 on; loss floor ~0.5-0.95 for the random 6-bit oracle.
+- RCCX relative phase (qiskit Operator): RCCX = D * CCX, D on (a,b,t_after):
+  ab!t -> -i, abt -> +i, a!bt -> -1 (controls a,b); swapping controls moves the
+  -1 to !abt.  Forward with one control order, mirror with the other: net
+  phase (-1)^(t'(a^b)) per Toffoli at zero depth.  Added to the qrank
+  checkpoints s1-s9: span rank +0..+2, deficiency unchanged except s4
+  987 -> 979.  No gain.
