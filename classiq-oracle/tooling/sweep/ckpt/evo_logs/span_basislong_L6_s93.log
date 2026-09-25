@@ -1,3 +1,13 @@
 basis ckpt/basis_s1.pkl: 286 ANF monomials
 [span_L6_s93_c1_z3_basislong] start fitness 3824 / 4096  (CZ layer 3, LCX 1, TEMP 2.00, MAXMUT 3, KICK 8 gates after 60s stuck)
 [2026-09-25 11:24:26] span_L6_s93_c1_z3_basislong     11s  best 3832/4096  current 3811  kicks 0  iters 30380 (2693/s)  best: cx 26 tof 13
+[2026-09-25 11:24:36] span_L6_s93_c1_z3_basislong     22s  best 3832/4096  current 3816  kicks 0  iters 57020 (2647/s)  best: cx 26 tof 13
+[2026-09-25 11:24:51] span_L6_s93_c1_z3_basislong     36s  best 3837/4096  current 3813  kicks 0  iters 97969 (2696/s)  best: cx 26 tof 15
+[2026-09-25 11:25:01] span_L6_s93_c1_z3_basislong     46s  best 3837/4096  current 3820  kicks 0  iters 125682 (2709/s)  best: cx 26 tof 15
+[2026-09-25 11:25:11] span_L6_s93_c1_z3_basislong     56s  best 3837/4096  current 3811  kicks 0  iters 152271 (2698/s)  best: cx 26 tof 15
+[2026-09-25 11:25:26] span_L6_s93_c1_z3_basislong     71s  best 3837/4096  current 3812  kicks 0  iters 193306 (2706/s)  best: cx 26 tof 15
+[2026-09-25 11:25:36] span_L6_s93_c1_z3_basislong     82s  best 3837/4096  current 3811  kicks 0  iters 218796 (2683/s)  best: cx 26 tof 15
+[2026-09-25 11:25:51] span_L6_s93_c1_z3_basislong     97s  best 3837/4096  current 3824  kicks 1  iters 258196 (2675/s)  best: cx 26 tof 15
+[2026-09-25 11:26:01] span_L6_s93_c1_z3_basislong    107s  best 3837/4096  current 3811  kicks 1  iters 285214 (2677/s)  best: cx 26 tof 15
+[2026-09-25 11:26:11] span_L6_s93_c1_z3_basislong    117s  best 3837/4096  current 3818  kicks 1  iters 312267 (2679/s)  best: cx 26 tof 15
+[2026-09-25 11:26:26] span_L6_s93_c1_z3_basislong    132s  best 3837/4096  current 3813  kicks 1  iters 352507 (2679/s)  best: cx 26 tof 15
