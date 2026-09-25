@@ -16,6 +16,44 @@ import numba as nb
 import cpte_evo as E
 from cpte_evo import NW, NWORD, popc
 from cptn_prefix import insert, member
+from cpth_span import moebius
+
+ANFD = int(os.environ.get('ANFD', '0'))       # 1: work on ANF coefficients, pivot = highest-degree monomial
+_deg = np.array([bin(i).count('1') for i in range(4096)])
+ORDER = np.array(sorted(range(4096), key=lambda i: (-_deg[i], i)), dtype=np.int64)   # scan order for pivots
+
+
+@nb.njit(cache=True)
+def insert_o(basis, piv, nb_, v, order):
+    r = v.copy()
+    for j in range(nb_):
+        w = piv[j] >> 6; b = piv[j] & 63
+        if (r[w] >> np.uint64(b)) & np.uint64(1):
+            for k in range(NWORD): r[k] ^= basis[j, k]
+    for q in order:
+        if (r[q >> 6] >> np.uint64(q & 63)) & np.uint64(1):
+            for kk in range(NWORD): basis[nb_, kk] = r[kk]
+            piv[nb_] = q
+            return nb_ + 1
+    return nb_
+
+
+@nb.njit(cache=True)
+def turn_basis_anf(S, prods, npr, basis, piv, order):
+    nb_ = 0
+    tmp = np.empty(NWORD, dtype=np.uint64)
+    for i in range(npr):
+        for k in range(NWORD): tmp[k] = prods[i, k]
+        moebius(tmp); nb_ = insert_o(basis, piv, nb_, tmp, order)
+    n = S.shape[0]
+    for a in range(n):
+        for b in range(a + 1, n):
+            for k in range(NWORD): tmp[k] = S[a, k] & S[b, k]
+            moebius(tmp); nb_ = insert_o(basis, piv, nb_, tmp, order)
+            for c in range(b + 1, n):
+                for k in range(NWORD): tmp[k] = S[a, k] & S[b, k] & S[c, k]
+                moebius(tmp); nb_ = insert_o(basis, piv, nb_, tmp, order)
+    return nb_
 
 ONES = np.uint64(0xFFFFFFFFFFFFFFFF)
 
@@ -38,6 +76,10 @@ def turn_basis(S, prods, npr, basis, piv):
 
 
 def deficiency(S, prods, Fv, basis, piv):
+    if ANFD:
+        nb_ = turn_basis_anf(S, np.array(prods), len(prods), basis, piv, ORDER)
+        fa = Fv.copy(); moebius(fa)
+        return member(basis, piv, nb_, fa), nb_
     nb_ = turn_basis(S, np.array(prods), len(prods), basis, piv)
     return member(basis, piv, nb_, Fv), nb_
 
@@ -47,6 +89,9 @@ if __name__ == '__main__':
     NC = int(os.environ.get('NC', '120'))          # candidates sampled per AND
     rng = np.random.default_rng(seed)
     Fv = E.logo_bits()
+    if os.environ.get('BASIS'):               # target f'(u) = F(A u ^ c); data wires hold u (CX/X network at emission)
+        from cptk_basis import fprime
+        bd = pickle.load(open(os.environ['BASIS'], 'rb')); Fv = E.pack(fprime(bd['cols'], bd['c']))
     S0 = E.init_state()
     prods0 = [np.full(NWORD, ONES)] + [S0[i].copy() for i in range(12)]
     basis = np.zeros((4096, NWORD), dtype=np.uint64); piv = np.zeros(4096, dtype=np.int64)

@@ -108,3 +108,18 @@
 [qrank s3] level 9  best deficiency 251  beam [251, 261, 261, 261]  gates 22  121s
    level 10 slot 1: deficiency 249  (122s)
    level 10 slot 1: deficiency 249  (124s)
+[qrank s3] level 10  best deficiency 249  beam [249, 249, 261, 261]  gates 23  131s
+   level 11 slot 1: deficiency 245  (134s)
+   level 11 slot 1: deficiency 247  (136s)
+   level 11 slot 1: deficiency 245  (138s)
+   level 11 slot 1: deficiency 251  (140s)
+   level 11 slot 1: deficiency 251  (143s)
+[qrank s3] level 11  best deficiency 245  beam [245, 245, 247, 249]  gates 24  145s
+   level 12 slot 1: deficiency 243  (148s)
+   level 12 slot 1: deficiency 243  (150s)
+   level 12 slot 1: deficiency 243  (153s)
+[qrank s3] level 12  best deficiency 243  beam [243, 243, 243, 245]  gates 25  157s
+[qrank s3] level 13  best deficiency 243  beam [243, 243, 243, 243]  gates 25  165s
+[qrank s3] level 14  best deficiency 243  beam [243, 243, 243, 243]  gates 25  174s
+[qrank s3] level 15  best deficiency 243  beam [243, 243, 243, 243]  gates 25  183s
+[qrank s3] level 16  best deficiency 243  beam [243, 243, 243, 243]  gates 25  191s
