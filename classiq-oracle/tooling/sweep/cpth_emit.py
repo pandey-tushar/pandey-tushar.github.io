@@ -26,9 +26,36 @@ def features(st, tf, T, P, cz):
         for w in range(NW):
             if tf[j, w, 0] >= 0: rows.append(st[j + 1, w] ^ st[j, w]); lab.append(('tof', j, w))
     if cz:
+        s0 = 0 if cz == 2 else T
+        for s in range(s0, T + 1, P):
+            for a in range(NW):
+                for b in range(a + 1, NW): rows.append(st[s, a] & st[s, b]); lab.append(('cz', a, b, s))
+    if cz == 3:
         for a in range(NW):
-            for b in range(a + 1, NW): rows.append(st[T, a] & st[T, b]); lab.append(('cz', a, b))
+            for b in range(a + 1, NW):
+                for c in range(b + 1, NW): rows.append(st[T, a] & st[T, b] & st[T, c]); lab.append(('ccz', a, b, c))
     return np.array(rows), lab
+
+
+def solve_exact(rows, Fv):
+    """exact GF(2) solve: F as XOR of feature rows (returns selected indices or None)"""
+    bits = lambda v: ((v[:, None] >> np.arange(64, dtype=np.uint64)) & np.uint64(1)).astype(np.uint8).reshape(-1)
+    A = np.array([bits(r) for r in rows], dtype=np.uint8).T          # 4096 x nf
+    b = bits(Fv).copy(); nf = A.shape[1]
+    M = np.concatenate([A, b[:, None], np.eye(4096, dtype=np.uint8)[:, :0]], axis=1)
+    piv = []; r = 0
+    for c in range(nf):
+        nz = np.nonzero(M[r:, c])[0]
+        if len(nz) == 0: continue
+        p = r + nz[0]
+        if p != r: M[[r, p]] = M[[p, r]]
+        o = np.nonzero(M[:, c])[0]; o = o[o != r]; M[o] ^= M[r]
+        piv.append(c); r += 1
+        if r == 4096: break
+    if M[r:, nf].any(): return None
+    x = np.zeros(nf, dtype=np.uint8)
+    for i, c in enumerate(piv): x[c] = M[i, nf]
+    return [i for i in range(nf) if x[i]]
 
 
 def pursuit(rows, Fv):
@@ -48,10 +75,16 @@ def emit(cx, tf, L, sel, lab):
     zt = {}
     for i in sel:
         if lab[i][0] == 'tof': zt[(lab[i][1], lab[i][2])] = 1
+    turn = [('cz', lab[i][1], lab[i][2]) for i in sel if lab[i][0] == 'cz' and lab[i][3] == T]
+    turn += [('ccz', lab[i][1], lab[i][2], lab[i][3]) for i in sel if lab[i][0] == 'ccz']
+    mid = {}
+    for i in sel:
+        if lab[i][0] == 'cz' and lab[i][3] != T: mid.setdefault(lab[i][3], []).append(('cz', lab[i][1], lab[i][2]))
     fwd, pre = [], []
     for i in sel:
         if lab[i][0] == 'x': pre.append(('z', lab[i][1]))
     for j in range(T):
+        fwd += mid.get(j, [])
         if j % P != P - 1:
             for w in range(NW):
                 if cx[j, w] >= 0: fwd.append(('cx', int(cx[j, w]), w))
@@ -66,8 +99,7 @@ def emit(cx, tf, L, sel, lab):
                 fwd.append(('ccx', int(a), int(b), w))
                 fwd += [('x', q) for q in fl]
                 if (j, w) in zt: fwd.append(('z', w))
-    turn = [('cz', lab[i][1], lab[i][2]) for i in sel if lab[i][0] == 'cz']
-    perm = [o for o in fwd if o[0] != 'z']
+    perm = [o for o in fwd if o[0] not in ('z', 'cz')]
     return pre + fwd + turn + mirror(perm)
 
 
@@ -82,6 +114,7 @@ def replay(ops, F):
             elif k == 'cx': s = s ^ (b(q[0]) << q[1])
             elif k.startswith('ccx'): s = s ^ ((b(q[0]) & b(q[1])) << q[2])
             elif k == 'cz': ph ^= b(q[0]) & b(q[1])
+            elif k == 'ccz': ph ^= b(q[0]) & b(q[1]) & b(q[2])
     return int((ph != F).sum()), bool((s == np.arange(4096)).all())
 
 
@@ -91,9 +124,9 @@ if __name__ == '__main__':
     st = E.states(cx, tf, L)                      # natural bit order
     rows, lab = features(st, tf, T, P, S.CZ)
     Fv = E.logo_bits()
-    dist, sel = pursuit(rows, Fv)
-    print('pursuit distance %d  features used %d' % (dist, len(sel)))
-    if dist: sys.exit(1)
+    sel = solve_exact(rows, Fv)
+    if sel is None: print('F not in the feature span'); sys.exit(1)
+    print('exact: features used %d' % len(sel))
     ops = emit(cx, tf, L, sel, lab)
     F = fvec(SHAPES['LOGO']).astype(np.int64)
     mism, ident = replay(ops, F)
