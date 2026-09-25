@@ -1,0 +1,15 @@
+basis ckpt/basis_s1.pkl: 286 ANF monomials
+init from ckpt/span_L5_s75_c1_z3_basis.npz (10 layers, frozen)  fitness 3900
+[span_L8_s81_c1_z3_stage] start fitness 3900 / 4096  (CZ layer 3, LCX 1, TEMP 1.00, MAXMUT 3, KICK 8 gates after 60s stuck)
+[2026-09-25 11:10:32] span_L8_s81_c1_z3_stage     10s  best 3902/4096  current 3901  kicks 0  iters 740 (73/s)  best: cx 39 tof 23
+[2026-09-25 11:10:44] span_L8_s81_c1_z3_stage     22s  best 3903/4096  current 3901  kicks 0  iters 9200 (411/s)  best: cx 40 tof 26
+[2026-09-25 11:10:54] span_L8_s81_c1_z3_stage     33s  best 3903/4096  current 3901  kicks 0  iters 15991 (490/s)  best: cx 40 tof 26
+[2026-09-25 11:11:04] span_L8_s81_c1_z3_stage     43s  best 3903/4096  current 3901  kicks 0  iters 22650 (531/s)  best: cx 40 tof 26
+[2026-09-25 11:11:19] span_L8_s81_c1_z3_stage     57s  best 3903/4096  current 3901  kicks 0  iters 32894 (572/s)  best: cx 40 tof 26
+[2026-09-25 11:11:29] span_L8_s81_c1_z3_stage     68s  best 3904/4096  current 3901  kicks 0  iters 39639 (585/s)  best: cx 39 tof 24
+[2026-09-25 11:11:44] span_L8_s81_c1_z3_stage     82s  best 3904/4096  current 3901  kicks 0  iters 49615 (601/s)  best: cx 39 tof 24
+[2026-09-25 11:11:54] span_L8_s81_c1_z3_stage     93s  best 3904/4096  current 3897  kicks 0  iters 56443 (610/s)  best: cx 39 tof 24
+[2026-09-25 11:12:04] span_L8_s81_c1_z3_stage    103s  best 3904/4096  current 3901  kicks 0  iters 63243 (616/s)  best: cx 39 tof 24
+[2026-09-25 11:12:14] span_L8_s81_c1_z3_stage    113s  best 3904/4096  current 3901  kicks 0  iters 69939 (620/s)  best: cx 39 tof 24
+[2026-09-25 11:12:25] span_L8_s81_c1_z3_stage    123s  best 3904/4096  current 3901  kicks 0  iters 76507 (622/s)  best: cx 39 tof 24
+[2026-09-25 11:12:35] span_L8_s81_c1_z3_stage    133s  best 3904/4096  current 3901  kicks 1  iters 82947 (623/s)  best: cx 39 tof 24

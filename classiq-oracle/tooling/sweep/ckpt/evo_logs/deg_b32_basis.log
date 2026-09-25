@@ -1,0 +1,9 @@
+start: weighted high-degree cost 1263  monomials 286  max degree 12  (gates per step 2772, BEAM 32)
+step  1  best cost (1148, 250, 12)  beam costs [1148, 1158, 1213, 1220, 1228]  0s
+step  2  best cost (1074, 232, 12)  beam costs [1074, 1079, 1098, 1101, 1104]  17s
+step  3  best cost (1009, 218, 12)  beam costs [1009, 1011, 1023, 1024, 1029]  33s
+step  4  best cost (941, 216, 12)  beam costs [941, 949, 951, 952, 955]  50s
+step  5  best cost (892, 194, 12)  beam costs [892, 892, 892, 894, 894]  65s
+step  6  best cost (822, 188, 12)  beam costs [822, 824, 842, 842, 842]  82s
+step  7  best cost (778, 190, 12)  beam costs [778, 779, 780, 781, 782]  97s
+step  8  best cost (751, 174, 12)  beam costs [751, 751, 751, 752, 752]  114s

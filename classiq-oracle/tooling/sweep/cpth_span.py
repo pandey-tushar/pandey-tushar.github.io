@@ -86,7 +86,7 @@ def moebius(r):
 
 
 @nb.njit(cache=True)
-def fitness(st, tf, T, P, Fv, cz, feats, basis, pw, pb):
+def fitness(st, tf, T, P, Fv, cz, feats, basis, pw, pb, fzs=0):
     """st: states in PERMUTED bit order.  returns 4096 - dist bound"""
     ONES = np.uint64(0xFFFFFFFFFFFFFFFF)
     nf = 0
@@ -109,6 +109,14 @@ def fitness(st, tf, T, P, Fv, cz, feats, basis, pw, pb):
                 for b in range(a + 1, NW):
                     for k in range(NWORD): feats[nf, k] = st[s, a, k] & st[s, b, k]
                     nf += 1
+    if cz == 3 and fzs > 0:                   # stage boundary: pairs + triples there too (mid-stream phase layer)
+        for a in range(NW):
+            for b in range(a + 1, NW):
+                for k in range(NWORD): feats[nf, k] = st[fzs, a, k] & st[fzs, b, k]
+                nf += 1
+                for c in range(b + 1, NW):
+                    for k in range(NWORD): feats[nf, k] = st[fzs, a, k] & st[fzs, b, k] & st[fzs, c, k]
+                    nf += 1
     if cz == 3:                               # triples at the turnaround (cubic phase layer)
         for a in range(NW):
             for b in range(a + 1, NW):
@@ -121,8 +129,8 @@ def fitness(st, tf, T, P, Fv, cz, feats, basis, pw, pb):
 
 
 @nb.njit(cache=True)
-def mutate(ccx, ctf, T, P, pnone):
-    l = np.random.randint(T); t = 1 if l % P == P - 1 else 0; w = np.random.randint(NW)
+def mutate(ccx, ctf, T, P, pnone, fz=0):
+    l = fz + np.random.randint(T - fz); t = 1 if l % P == P - 1 else 0; w = np.random.randint(NW)
     if np.random.random() < pnone:
         if t == 0: ccx[l, w] = -1
         else: ctf[l, w, 0] = -1
@@ -146,7 +154,7 @@ def mutate(ccx, ctf, T, P, pnone):
 
 @nb.njit(cache=True)
 def run(cx, tf, T, Fv, st, tmp, iters, fit0, pnone, seed, P, cz, feats, basis, pw, pb,
-        temp, maxmut, bcx, btf, bfit):
+        temp, maxmut, bcx, btf, bfit, fz=0):
     """annealing at temperature temp (temp=0: plain neutral drift); 1..maxmut gates
     per move; best genome kept in bcx/btf.  returns (fit, best fit, iters)"""
     np.random.seed(seed)
@@ -157,10 +165,10 @@ def run(cx, tf, T, Fv, st, tmp, iters, fit0, pnone, seed, P, cz, feats, basis, p
         nm = 1 + np.random.randint(maxmut)
         l = T
         for _ in range(nm):
-            l = min(l, mutate(ccx, ctf, T, P, pnone))
+            l = min(l, mutate(ccx, ctf, T, P, pnone, fz))
         tmp[l] = st[l]
         evaluate_from(tmp, ccx, ctf, T, l, P)
-        f = fitness(tmp, ctf, T, P, Fv, cz, feats, basis, pw, pb)
+        f = fitness(tmp, ctf, T, P, Fv, cz, feats, basis, pw, pb, fz)
         if f >= fit or (temp > 0 and np.random.random() < np.exp((f - fit) / temp)):
             fit = f
             cx[:] = ccx; tf[:] = ctf
@@ -174,9 +182,9 @@ def run(cx, tf, T, Fv, st, tmp, iters, fit0, pnone, seed, P, cz, feats, basis, p
 
 
 @nb.njit(cache=True)
-def kick(cx, tf, T, P, k):
+def kick(cx, tf, T, P, k, fz=0):
     for _ in range(k):
-        mutate(cx, tf, T, P, 0.2)
+        mutate(cx, tf, T, P, 0.2, fz)
 
 
 def pinit():
@@ -191,7 +199,7 @@ def states(cx, tf, L):
 
 
 def workspace(L):
-    nmax = 1 + 12 + L * NW * P + NW * NW * (L + 2) + 816
+    nmax = 1 + 12 + L * NW * P + NW * NW * (L + 2) + 2 * 816
     return (np.zeros((nmax, NWORD), dtype=np.uint64), np.zeros((nmax, NWORD), dtype=np.uint64),
             np.zeros(nmax, dtype=np.int64), np.zeros(nmax, dtype=np.int64))
 
@@ -235,14 +243,19 @@ if __name__ == '__main__':
     tag = 'span_L%d_s%d_c%d_z%d' % (L, seed, E.LCX, CZ) + os.environ.get('TAG', '')
     os.makedirs('ckpt', exist_ok=True)
     ws = workspace(L); T = L * P
+    FZ = 0
     def fresh():
         cx, tf = E.empty(L)
         st = states(cx, tf, L)
-        return cx, tf, st, st.copy(), fitness(st, tf, T, P, Fv, CZ, *ws)
+        return cx, tf, st, st.copy(), fitness(st, tf, T, P, Fv, CZ, *ws, FZ)
     cx, tf, st, tmp, fit = fresh()
-    if os.environ.get('INIT'):
-        d = np.load(os.environ['INIT']); cx, tf = d['cx'].copy(), d['tf'].copy()
-        st = states(cx, tf, L); tmp = st.copy(); fit = fitness(st, tf, T, P, Fv, CZ, *ws)
+    FZ = 0
+    if os.environ.get('INIT'):                # prefix genome; shorter ones are padded with empty levels
+        d = np.load(os.environ['INIT']); cx, tf = E.empty(L)
+        n0 = d['cx'].shape[0]; cx[:n0] = d['cx']; tf[:n0] = d['tf']
+        if os.environ.get('FREEZE'): FZ = n0      # frozen prefix: mutate only the appended levels
+        st = states(cx, tf, L); tmp = st.copy(); fit = fitness(st, tf, T, P, Fv, CZ, *ws, FZ)
+        print('init from %s (%d layers%s)  fitness %d' % (os.environ['INIT'], n0, ', frozen' if FZ else '', fit), flush=True)
     TEMP = float(os.environ.get('TEMP', '2.0')); MAXMUT = int(os.environ.get('MAXMUT', '3'))
     KICK = int(os.environ.get('KICK', '8'))
     bcx, btf = cx.copy(), tf.copy(); bfit = fit; nrs = 0
@@ -252,7 +265,7 @@ if __name__ == '__main__':
     while True:
         c0 = time.time()
         fit, bf2, n = run(cx, tf, T, Fv, st, tmp, chunk, fit, 0.1, int(rng.integers(1 << 30)), P, CZ, *ws,
-                          TEMP, MAXMUT, bcx, btf, bfit)
+                          TEMP, MAXMUT, bcx, btf, bfit, FZ)
         total += n; now = time.time()
         if now - c0 > 0: chunk = max(20, int(chunk * min(4.0, (PEVERY / 2) / (now - c0))))
         if bf2 > bfit: t_imp = now; bfit = bf2
@@ -268,8 +281,8 @@ if __name__ == '__main__':
             json.dump(rec, open('ckpt/%s.json' % tag, 'w'))
             if done: break
         if now - t_imp > RESTART:                # iterated local search: kick the best, keep climbing
-            cx, tf = bcx.copy(), btf.copy(); kick(cx, tf, T, P, KICK)
-            st = states(cx, tf, L); tmp = st.copy(); fit = fitness(st, tf, T, P, Fv, CZ, *ws)
+            cx, tf = bcx.copy(), btf.copy(); kick(cx, tf, T, P, KICK, FZ)
+            st = states(cx, tf, L); tmp = st.copy(); fit = fitness(st, tf, T, P, Fv, CZ, *ws, FZ)
             nrs += 1; t_imp = now
     best = (bfit, bcx, btf)
     print('[%s] final best %d / 4096' % (tag, best[0]), flush=True)

@@ -1,0 +1,8 @@
+planted target: 26 Toffolis in the source circuit, weight 2048
+init from ckpt/span_L5_s2_c1_z3_anfplant3b.npz (10 layers)  fitness 4065
+[span_L8_s2_c1_z3_pad] start fitness 4065 / 4096  (CZ layer 3, LCX 1, TEMP 1.00, MAXMUT 3, KICK 8 gates after 60s stuck)
+[2026-09-25 11:09:12] span_L8_s2_c1_z3_pad     11s  best 4065/4096  current 4065  kicks 0  iters 715 (65/s)  best: cx 26 tof 16
+[2026-09-25 11:09:26] span_L8_s2_c1_z3_pad     25s  best 4065/4096  current 4064  kicks 0  iters 6601 (265/s)  best: cx 26 tof 16
+[2026-09-25 11:09:41] span_L8_s2_c1_z3_pad     40s  best 4066/4096  current 4066  kicks 0  iters 13008 (328/s)  best: cx 30 tof 19
+[2026-09-25 11:09:56] span_L8_s2_c1_z3_pad     54s  best 4067/4096  current 4064  kicks 0  iters 19703 (361/s)  best: cx 28 tof 18
+[2026-09-25 11:10:06] span_L8_s2_c1_z3_pad     64s  best 4067/4096  current 4063  kicks 0  iters 24063 (373/s)  best: cx 28 tof 18

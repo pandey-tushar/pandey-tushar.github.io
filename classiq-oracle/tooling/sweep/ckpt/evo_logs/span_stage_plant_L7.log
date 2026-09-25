@@ -1,0 +1,14 @@
+planted target: 26 Toffolis in the source circuit, weight 2048
+init from ckpt/span_L5_s2_c1_z3_anfplant3b.npz (10 layers, frozen)  fitness 4065
+[span_L7_s2_c1_z3_stage] start fitness 4065 / 4096  (CZ layer 3, LCX 1, TEMP 1.00, MAXMUT 3, KICK 8 gates after 60s stuck)
+[2026-09-25 11:10:32] span_L7_s2_c1_z3_stage     10s  best 4071/4096  current 4071  kicks 0  iters 200 (19/s)  best: cx 34 tof 22
+[2026-09-25 11:10:45] span_L7_s2_c1_z3_stage     23s  best 4072/4096  current 4070  kicks 0  iters 2277 (97/s)  best: cx 37 tof 22
+[2026-09-25 11:10:55] span_L7_s2_c1_z3_stage     33s  best 4072/4096  current 4065  kicks 0  iters 3871 (115/s)  best: cx 37 tof 22
+[2026-09-25 11:11:10] span_L7_s2_c1_z3_stage     48s  best 4072/4096  current 4065  kicks 0  iters 6251 (129/s)  best: cx 37 tof 22
+[2026-09-25 11:11:25] span_L7_s2_c1_z3_stage     63s  best 4074/4096  current 4065  kicks 0  iters 8676 (136/s)  best: cx 35 tof 22
+[2026-09-25 11:11:35] span_L7_s2_c1_z3_stage     73s  best 4074/4096  current 4064  kicks 0  iters 10301 (140/s)  best: cx 35 tof 22
+[2026-09-25 11:11:50] span_L7_s2_c1_z3_stage     89s  best 4074/4096  current 4064  kicks 0  iters 12699 (143/s)  best: cx 35 tof 22
+[2026-09-25 11:12:05] span_L7_s2_c1_z3_stage    103s  best 4074/4096  current 4063  kicks 0  iters 15125 (146/s)  best: cx 35 tof 22
+[2026-09-25 11:12:15] span_L7_s2_c1_z3_stage    113s  best 4076/4096  current 4074  kicks 0  iters 16727 (147/s)  best: cx 35 tof 24
+[2026-09-25 11:12:25] span_L7_s2_c1_z3_stage    123s  best 4076/4096  current 4065  kicks 0  iters 18339 (148/s)  best: cx 35 tof 24
+[2026-09-25 11:12:35] span_L7_s2_c1_z3_stage    133s  best 4076/4096  current 4062  kicks 0  iters 19841 (148/s)  best: cx 35 tof 24
