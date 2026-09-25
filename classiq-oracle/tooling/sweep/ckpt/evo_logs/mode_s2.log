@@ -1,0 +1,2 @@
+[mode s2] source ../cpev_best.qasm: u3 536  baseline (min-atom modes) depth 249 cx 520
+[mode s2]    10s  it 47  accepted 47  current 249/520  best 249/520
