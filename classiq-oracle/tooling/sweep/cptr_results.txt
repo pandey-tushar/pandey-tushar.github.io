@@ -83,3 +83,9 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
 - Conditionally-clean hosting (cptz_cond.py; n hosted as ~c^n when every
   consumer partner m implies c): register values 41 / 39, hostable 9 / 11,
   register pressure peak still 11 / 11 (s12 / s13) against 6.
+- CP-TY long runs (exact K = parity terms for an exact phase stage; depth ~100
+  needs ~400):  greedy prefix s2 (8 Toffolis, 2 levels, KP 400): residual@400
+  4.25, exact K 3765.  Cut s2 (es_d4/es_d5): residual@400 4.14, exact K 3781.
+  Cut s3 (dd_mc/mc_d10/dd_flat): best mc_d10 set, residual@400 4.48, exact
+  K 3076.  Greedy s3 (3 levels, KP 400): residual@400 4.01 after 16 Toffolis
+  (running).
