@@ -294,6 +294,54 @@ def classical(ops, target):
     return int((ph != target).sum()), bool((s == np.arange(N)).all())
 
 
+def remap(g, perm):
+    """relabel ancilla wires 12..17 by perm (data wires fixed); CX sources remapped too"""
+    K_ = K; h = -np.ones_like(g)
+    mp = list(range(12)) + [12 + p for p in perm]
+    for j in range(g.shape[0]):
+        for w in range(NW):
+            x = g[j, w]
+            if x < 0: continue
+            h[j, mp[w]] = mp[x] if j % K_ != K_ - 1 else x
+    return h
+
+
+def seed_genome(spec, T, D, nc):
+    """SEEDS='a.pkl:off,b.pkl:off' (off in rounds): overlay single-readout genomes.
+    Tries every ancilla relabelling of each later seed and both overlay orders,
+    keeps the combination with the best score (fired readouts first)."""
+    import itertools
+    parts = []
+    for item in spec.split(','):
+        f, off = item.split(':')
+        d = pickle.load(open(f, 'rb')); assert d['LCX'] == LCX
+        gg = -np.ones((T, NW), dtype=np.int64); o = int(off) * K
+        n = min(d['g'].shape[0], T - o); gg[o:o + n] = d['g'][:n]
+        parts.append(gg)
+    best = None
+    perms = list(itertools.permutations(range(6)))
+    cands = [parts[0]]
+    for p in parts[1:]:
+        nxt = []
+        for base in cands:
+            scored = []
+            for perm in perms:
+                q = remap(p, perm)
+                for top, bot in ((q, base), (base, q)):
+                    g = np.where(top >= 0, top, bot)
+                    st, cw = decode_all(g, T, D)
+                    sc, fired = full_score(g, st, cw, T, D, nc)
+                    scored.append((sc, int((fired >= 0).sum()), g))
+            scored.sort(key=lambda t: t[0])
+            nxt += [t[2] for t in scored[:3]]
+            if best is None or scored[0][0] < best[0]: best = scored[0][:2]
+        cands = nxt
+    st, cw = decode_all(cands[0], T, D)
+    sc, fired = full_score(cands[0], st, cw, T, D, nc)
+    print('seed: score %.2f  fired %s' % (sc, [int(f) for f in fired]), flush=True)
+    return cands[0]
+
+
 if __name__ == '__main__':
     R, seed, minutes = int(sys.argv[1]), int(sys.argv[2]), float(sys.argv[3])
     T = R * K
@@ -308,14 +356,15 @@ if __name__ == '__main__':
     if full_F:
         assert np.array_equal(tgt, fvec(SHAPES['LOGO']).astype(np.int64)), 'readouts do not give F'
     rtag = ('_r' + os.environ['READS'].replace(',', '')) if os.environ.get('READS') else ''
-    tag = 'sched_R%d_L%d_s%d%s' % (R, LCX, seed, rtag)
+    tag = 'sched_R%d_L%d_s%d%s' % (R, LCX, seed, rtag) + ('_seeded' if os.environ.get('SEEDS') else '')
     os.makedirs('ckpt', exist_ok=True)
     rng = np.random.default_rng(seed)
     zc = int(D['init'][NW - 1])
     args = (T, K, nc, D['xor'], D['pt'], D['ctl'], D['ncl'], D['rc'], D['tj'], D['to'], D['tr'],
             D['co'], D['cd'], D['cr'], zc, LCX)
-    def fresh():
-        g = -np.ones((T, NW), dtype=np.int64)
+    seed_g = seed_genome(os.environ['SEEDS'], T, D, nc) if os.environ.get('SEEDS') else None
+    def fresh():                               # restarts go back to the seed when one is given
+        g = -np.ones((T, NW), dtype=np.int64) if seed_g is None else seed_g.copy()
         st, cw = decode_all(g, T, D)
         return g, st, cw, full_score(g, st, cw, T, D, nc)[0]
     g, st, cw, sc = fresh()

@@ -1,0 +1,3 @@
+seed: score 1109.23  fired [-1, 9]
+[sched_R8_L2_s13_r05_seeded] classes 110 products 115 readouts 2  R 8 LCX 2  start score 1109.2
+[2026-09-25 03:42:53] sched_R8_L2_s13_r05_seeded    15s  best 1106.05  fired 1/2 [-1, 21]  current 1108.27  restarts 0  iters 215928  exact None
