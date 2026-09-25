@@ -16,6 +16,8 @@
 #include <caterpillar/structures/stg_gate.hpp>
 #include <caterpillar/verification/circuit_to_logic_network.hpp>
 #include <mockturtle/networks/xag.hpp>
+#include <mockturtle/io/verilog_reader.hpp>
+#include <lorina/verilog.hpp>
 #include <mockturtle/algorithms/simulation.hpp>
 #include <mockturtle/algorithms/cleanup.hpp>
 #include <mockturtle/views/depth_view.hpp>
@@ -50,6 +52,11 @@ int main(int argc, char** argv)
   uint32_t peb = std::stoi(argv[3]), tmo = std::stoi(argv[4]);
   std::ifstream in(argv[1]);
   xag_network x;
+  std::string fn = argv[1];
+  if (fn.size() > 2 && fn.substr(fn.size() - 2) == ".v") {
+    auto r = lorina::read_verilog(fn, verilog_reader(x));
+    if (r != lorina::return_code::success) { std::cout << "[fail] verilog read\n"; return 1; }
+  } else {
   std::vector<sig> pis;
   for (int i = 0; i < 12; ++i) pis.push_back(x.create_pi());
   std::vector<sig> terms;
@@ -62,6 +69,7 @@ int main(int argc, char** argv)
     terms.push_back(tree(x, lits, true));
   }
   x.create_po(tree(x, terms, false));
+  }
   x = cleanup_dangling(x);
   depth_view dv{x};
   uint32_t nand = 0;
