@@ -31,3 +31,17 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
   phase (-1)^(t'(a^b)) per Toffoli at zero depth.  Added to the qrank
   checkpoints s1-s9: span rank +0..+2, deficiency unchanged except s4
   987 -> 979.  No gain.
+- CP-TU width-aware XAG annealing (cptu_width.py; moves: exact rewrite
+  A*B = A ^ A*(A^B) / B ^ B*(A^B) and dependency-respecting reorder; every
+  best state re-verified == F).  dd_mc 66 ANDs:
+    linear width (old metric) 29 -> 19 (20 min); dd_flat 89: 26 -> 23;
+    mc_d10 76: 35 -> 21.
+  Exact in-place condition (cptu_map.py, complete mapper): an AND n can be
+  hosted in place only if every later use of n comes as n ^ u with u outside
+  span(other needs, operands of n).  A value needed alone (u = 0) never
+  qualifies.  dd_mc under that condition: 34 of 60 in-place steps fail.
+  Register pressure (values that cannot go in place, live from creation to
+  last use, instant clearing assumed): 40 of 66 ANDs need a register;
+  annealed peak 11 (s12) / 12 (s13) simultaneous against 6 ancillas.
+  Binding constraint of the whole-F XAG route at 18 wires: peak 11 register
+  values vs 6, before any recomputation cost.
