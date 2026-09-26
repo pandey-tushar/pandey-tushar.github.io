@@ -136,3 +136,4 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
   30 s test, INIT sa2 L6R24 s2, BUDGET 120: deficiency 157 at est depth 118.
 - 18:31 UTC continuations (+15300 s): L6R24 s1 163 (16:17), L6R24 s2 143 (14:41), L7R30 s3 137 (18:16), L8R36 s4 101 (17:44).
 - 19:17 UTC continuations (+18070 s): L6R24 s1 163 (16:17), L6R24 s2 143 (14:41), L7R30 s3 137 (18:16), L8R36 s4 93 (18:44).
+- 19:55 UTC: killed L6R24 s1 (163, no improvement since 16:17). Launched cptz_sa3 L6 R40 s1, INIT sa2 L6R24 s2 best, BUDGET 120, CYCLE 30, no time limit. 40 s: deficiency 159 at est depth 121.
