@@ -104,3 +104,6 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - New: cptz_sa.py, simulated annealing on the same deficiency objective. Reduced test from the MCTS L8 best: 793 -> 565 in 18 s.
   Launched 4 h: SA L8 s1 (init MCTS L8), SA L8 s2 (empty init), SA L10 s3 (init MCTS L10).
 - Cut s4 (KP 800): best residual@800 2.118 after 9900 s (151 cuts).
+- 02:10 UTC (18 min): SA L8 s2 (empty init) best 139; SA L10 s3 (MCTS init) 167; SA L8 s1 (MCTS init) stuck 439 -> killed.
+  Cut s4 flat at 2.118 since 9800 s -> killed (phase-stage route needs K~400, measured ~3000+).
+  Launched SA L8 s4 and SA L10 s5, both empty init, 4 h.
