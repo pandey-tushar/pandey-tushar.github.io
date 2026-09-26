@@ -93,3 +93,7 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
   formable both before and after n is hosted; when both operands carry values
   hosted at different times the cross term X1*Y2 needs X1 after it is gone.
   Most dd_mc ANDs have two such operands.
+- Greedy prefix s3 final (12 Toffolis, 3 levels): residual@400 3.95, exact K 3706.
+- Mixed GF(2) + rotation stage (cptz_mixed.py): with the s2 prefix residual@200
+  6.695 -> 6.525 after 4 features (1 h); without prefix 9.184, no improving
+  feature from step 4.
