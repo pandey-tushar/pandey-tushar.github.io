@@ -5,3 +5,5 @@ __pycache__/
 *.pyc
 *.pkl
 !ckpt/*.pkl
+ckpt/sa_L*_s*.pkl
+ckpt/evo_logs/sa_L*_s*.log

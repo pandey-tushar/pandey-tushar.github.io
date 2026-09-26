@@ -97,3 +97,10 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
 - Mixed GF(2) + rotation stage (cptz_mixed.py): with the s2 prefix residual@200
   6.695 -> 6.525 after 4 features (1 h); without prefix 9.184, no improving
   feature from step 4.
+
+CP-TZ2 (Sep 26 ~01:50 UTC)
+- Mixed stage s1 (F xor GF(2) features, then parity stage): stalled, no improving feature from step 18 on; residual@200 stays 6.525. Killed.
+- MCTS logo L8 (8 levels, ~115 depth): best deficiency 793 after 6300 s (860k iterations). MCTS logo L10: 824 after 6300 s. Deeper budget scored worse -> search-limited, not budget-limited. Killed.
+- New: cptz_sa.py, simulated annealing on the same deficiency objective. Reduced test from the MCTS L8 best: 793 -> 565 in 18 s.
+  Launched 4 h: SA L8 s1 (init MCTS L8), SA L8 s2 (empty init), SA L10 s3 (init MCTS L10).
+- Cut s4 (KP 800): best residual@800 2.118 after 9900 s (151 cuts).
