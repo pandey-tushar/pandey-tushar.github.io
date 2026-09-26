@@ -130,3 +130,7 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 16:31 UTC continuations (+8120 s, 23-30M iterations each): L6R24 s1 211->163 (last improvement 16:17), L6R24 s2 151->143 (14:41), L7R30 s3 165->147 (15:40), L8R36 s4 103->103 (no improvement since 14:14).
 - 17:00 UTC continuations (+9860 s): L6R24 s1 163 (last improvement 16:17), L6R24 s2 143 (14:41), L7R30 s3 143 (16:41), L8R36 s4 103 (14:14).
 - 18:01 UTC continuations (+13500 s, 39-51M iterations each): L6R24 s1 163, L6R24 s2 143, L7R30 s3 143, L8R36 s4 101.
+- Logo symmetry check: flip rows 1586 mismatches, flip cols 1306, rot180 1430, transpose 1248, anti-transpose 1194; best XOR-translation c=1: 90 mismatches. ANF: 886 monomials, degree 12.
+- cptz_sa3.py: phase terms at every level (CZ/CCZ on the wire values after level l), free while they fit on wires idle in Toffoli layer l+1 (per-wire load model); turnaround terms charged. Cost = deficiency + PEN*max(0, depth-BUDGET).
+  Per-wire load applied to the sa2 L6R24 s2 best: est depth 216 with 16 extra random terms (sa2's own estimate assumed 9 disjoint CZ pairs per layer).
+  30 s test, INIT sa2 L6R24 s2, BUDGET 120: deficiency 157 at est depth 118.
