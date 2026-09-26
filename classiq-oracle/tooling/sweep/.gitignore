@@ -7,3 +7,5 @@ __pycache__/
 !ckpt/*.pkl
 ckpt/sa_L*_s*.pkl
 ckpt/evo_logs/sa_L*_s*.log
+ckpt/sa2_L*.pkl
+ckpt/evo_logs/sa2_L*.log

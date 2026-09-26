@@ -115,3 +115,9 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 09:05 UTC: level sweep finals: L14 s6 117, L20 s7 107. L10 KP=8 s8 117 @2.9 h; ILS L10 from 101: no improvement in 2.9 h.
   Measured: floor ~100-117 for L8..L20, independent of level count and of search variant.
   Added FINE (small moves: flip polarity, change one control or the target). Launched fine-move ILS from L10 s5 (101) and L20 s7 (107), 4 h.
+- 10:15 UTC: SA finals L10 KP=8 s8 107; ILS L10 s5 99 (best). Fine-move ILS @68 min: L10 101, L20 107 (no gain).
+  KEY MEASUREMENT: the cptw/cptz_sa objective is NOT depth-faithful. Its readout = ALL 153 pairs + 816 triples of final wires:
+  span rank 978 (L10 best) / 1015 (L20 best) of 4096. An exact hit could need hundreds of CZ/CCZ -> the "L8 ~115 depth" estimate was wrong.
+  Killed all cptz_sa runs.
+- New cptz_sa2.py: depth-faithful. Readout = explicit R CZ/CCZ terms + free single-wire Z; est. depth 14*LV + CCZ/CZ layers.
+  Reduced test L6 R24 (~117 depth if exact): 1097 -> 535 in 18 s. Launched 4 h: L6R24 s1, L6R24 s2, L7R30 s3, L8R36 s4.
