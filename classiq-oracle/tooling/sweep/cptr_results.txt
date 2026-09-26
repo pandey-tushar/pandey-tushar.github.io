@@ -124,3 +124,5 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 12:03 UTC (1.8 h, ~20-26M iterations each): depth-faithful SA best deficiency: L6R24 s1 283, L6R24 s2 257, L7R30 245, L8R36 183 (0 = exact).
 - 12:11 UTC (6940 s, 21-28M iterations each): L6R24 s1 271, L6R24 s2 257, L7R30 s3 187, L8R36 s4 175.
 - 13:14 UTC (10720 s, 33-43M iterations each): L6R24 s1 267, L6R24 s2 151, L7R30 s3 183, L8R36 s4 125.
+- cptz_sa2.py: MINUTES 0 = no time limit (stops only on exact); CYCLE=m = temperature cycles of m min, each restarting from the best state.
+  cptz_relay.sh: when each 4 h run ends, it continues from its checkpoint with MINUTES 0, CYCLE=30, T0=3 (log *_cont.log).

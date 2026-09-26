@@ -6,7 +6,8 @@ Span = {1, inputs, Toffoli products (Z-around-Toffoli), final wire values,
 the R readout terms}.  Objective = deficiency (weight of F reduced against the
 span; 0 = exact).  Moves: Toffoli moves as cptz_sa (incl. FINE), readout: swap
 one wire of a term / replace a term.
-Usage: python3 cptz_sa2.py LV R SEED MINUTES
+Usage: python3 cptz_sa2.py LV R SEED MINUTES   (MINUTES 0 = no limit, stops only on exact)
+CYCLE=m: temperature cycles of m minutes, each restarting from the best state.
 Best -> ckpt/sa2_L<LV>_R<R>_s<seed>.pkl"""
 import sys, os, time, math, pickle, random
 import numpy as np
@@ -81,9 +82,14 @@ c = score(cur, ro); best = (c, cur, ro)
 nccz = lambda ro: sum(len(t) == 3 for t in ro)
 dep = 14 * LV + 10 * math.ceil(nccz(ro) / 6) + 3 * math.ceil((R - nccz(ro)) / 9)
 print('[sa2 L%d R%d s%d] start deficiency %d   est. depth if exact ~%d' % (LV, R, seed, c, dep), flush=True)
+CYCLE = float(os.environ.get('CYCLE', '0')); cyc = 0
 T0 = float(os.environ.get('T0', '6')); t0 = last = time.time(); it = acc = 0
-while time.time() - t0 < minutes * 60:
-    it += 1; T = T0 * (1 - (time.time() - t0) / (minutes * 60)) + 0.3
+while minutes == 0 or time.time() - t0 < minutes * 60:
+    it += 1
+    if CYCLE:
+        ph = (time.time() - t0) / (CYCLE * 60); T = T0 * (1 - (ph % 1)) + 0.3
+        if int(ph) != cyc: cyc = int(ph); cur, ro, c = best[1], best[2], best[0]    # new cycle: restart from best
+    else: T = T0 * (1 - (time.time() - t0) / (minutes * 60)) + 0.3
     if R and rng.random() < 0.3: nl, nro = cur, mut_ro(ro)
     else: nl, nro = mut_levels(cur), ro
     nc = score(nl, nro)
