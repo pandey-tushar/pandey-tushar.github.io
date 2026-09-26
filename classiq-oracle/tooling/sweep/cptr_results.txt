@@ -126,3 +126,4 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 13:14 UTC (10720 s, 33-43M iterations each): L6R24 s1 267, L6R24 s2 151, L7R30 s3 183, L8R36 s4 125.
 - cptz_sa2.py: MINUTES 0 = no time limit (stops only on exact); CYCLE=m = temperature cycles of m min, each restarting from the best state.
   cptz_relay.sh: when each 4 h run ends, it continues from its checkpoint with MINUTES 0, CYCLE=30, T0=3 (log *_cont.log).
+- 14:15 UTC 4 h finals (depth-faithful SA): L6R24 s1 211, L6R24 s2 151, L7R30 s3 165, L8R36 s4 103. All four continued with no time limit (cptz_relay.sh) at 14:15.
