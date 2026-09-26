@@ -121,3 +121,4 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
   Killed all cptz_sa runs.
 - New cptz_sa2.py: depth-faithful. Readout = explicit R CZ/CCZ terms + free single-wire Z; est. depth 14*LV + CCZ/CZ layers.
   Reduced test L6 R24 (~117 depth if exact): 1097 -> 535 in 18 s. Launched 4 h: L6R24 s1, L6R24 s2, L7R30 s3, L8R36 s4.
+- 12:03 UTC (1.8 h, ~20-26M iterations each): depth-faithful SA best deficiency: L6R24 s1 283, L6R24 s2 257, L7R30 245, L8R36 183 (0 = exact).
