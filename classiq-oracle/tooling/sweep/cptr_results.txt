@@ -107,3 +107,5 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 02:10 UTC (18 min): SA L8 s2 (empty init) best 139; SA L10 s3 (MCTS init) 167; SA L8 s1 (MCTS init) stuck 439 -> killed.
   Cut s4 flat at 2.118 since 9800 s -> killed (phase-stage route needs K~400, measured ~3000+).
   Launched SA L8 s4 and SA L10 s5, both empty init, 4 h.
+- 05:05 UTC (~3 h): SA plateaus. L8 s2 133 (flat since 03:14), L8 s4 133, L10 s3 135, L10 s5 109. Far from 0.
+  Killed L8 s2 and L10 s3; launched SA L14 s6 and SA L20 s7 (4 h) to measure at which level count exact becomes reachable.
