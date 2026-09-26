@@ -48,15 +48,18 @@ def mutate(lv):
 if os.environ.get('INIT'): cur = to_levels(pickle.load(open(os.environ['INIT'], 'rb'))['seq'])
 else: cur = [[] for _ in range(LV)]
 c = -env.reward(to_seq(cur)); best = (c, cur)
+KP = int(os.environ.get('KP', '1')); REHEAT = int(os.environ.get('REHEAT', '0')); last_imp = 0
 T0 = float(os.environ.get('T0', '6')); t0 = last = time.time(); it = acc = 0
 print('[sa L%d s%d] start deficiency %d' % (LV, seed, c), flush=True)
 while time.time() - t0 < minutes * 60:
     it += 1; T = T0 * (1 - (time.time() - t0) / (minutes * 60)) + 0.3
-    nl = mutate(cur); nc = -env.reward(to_seq(nl))
+    cands = [mutate(cur) for _ in range(KP)]
+    sc = [-env.reward(to_seq(x)) for x in cands]; j = min(range(KP), key=sc.__getitem__); nl, nc = cands[j], sc[j]
+    if REHEAT and it - last_imp > REHEAT: cur, c = best[1], best[0]; last_imp = it
     if nc <= c or rng.random() < math.exp(-(nc - c) / T):
         cur, c = nl, nc; acc += 1
         if c < best[0]:
-            best = (c, cur); pickle.dump(dict(seq=to_seq(cur), reward=-c), open('ckpt/sa_L%d_s%d.pkl' % (LV, seed), 'wb'))
+            best = (c, cur); last_imp = it; pickle.dump(dict(seq=to_seq(cur), reward=-c), open('ckpt/sa_L%d_s%d%s.pkl' % (LV, seed, os.environ.get('TAG', '')), 'wb'))
             if c == 0: print('[sa] EXACT', flush=True); break
     if time.time() - last > 10:
         last = time.time()

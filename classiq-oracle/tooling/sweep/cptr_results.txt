@@ -109,3 +109,6 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
   Launched SA L8 s4 and SA L10 s5, both empty init, 4 h.
 - 05:05 UTC (~3 h): SA plateaus. L8 s2 133 (flat since 03:14), L8 s4 133, L10 s3 135, L10 s5 109. Far from 0.
   Killed L8 s2 and L10 s3; launched SA L14 s6 and SA L20 s7 (4 h) to measure at which level count exact becomes reachable.
+- 06:12 UTC: SA finals: L8 s4 131, L10 s5 101. Level sweep at 68 min: L14 s6 133, L20 s7 125 -> more levels do not lower the floor; search-limited.
+  cptz_sa.py: added KP (best-of-K proposals), REHEAT (return to best after N non-improving its), TAG.
+  Launched SA L10 s8 KP=8 (fresh) and ILS L10 from s5 best (T0=2, REHEAT=20000), 4 h.
