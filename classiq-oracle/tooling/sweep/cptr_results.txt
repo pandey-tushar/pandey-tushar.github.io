@@ -100,25 +100,26 @@ CP-TR (Sep 25) whole-F XAG route and rotation-phase model
 
 CP-TZ2 (Sep 26 ~01:50 UTC)
 - Mixed stage s1 (F xor GF(2) features, then parity stage): stalled, no improving feature from step 18 on; residual@200 stays 6.525. Killed.
-- MCTS logo L8 (8 levels, ~115 depth): best deficiency 793 after 6300 s (860k iterations). MCTS logo L10: 824 after 6300 s. Deeper budget scored worse -> search-limited, not budget-limited. Killed.
+- MCTS logo L8 (8 levels, ~115 depth): best deficiency 793 after 6300 s (860k iterations). MCTS logo L10: 824 after 6300 s. Killed.
 - New: cptz_sa.py, simulated annealing on the same deficiency objective. Reduced test from the MCTS L8 best: 793 -> 565 in 18 s.
   Launched 4 h: SA L8 s1 (init MCTS L8), SA L8 s2 (empty init), SA L10 s3 (init MCTS L10).
 - Cut s4 (KP 800): best residual@800 2.118 after 9900 s (151 cuts).
-- 02:10 UTC (18 min): SA L8 s2 (empty init) best 139; SA L10 s3 (MCTS init) 167; SA L8 s1 (MCTS init) stuck 439 -> killed.
-  Cut s4 flat at 2.118 since 9800 s -> killed (phase-stage route needs K~400, measured ~3000+).
+- 02:10 UTC (18 min): SA L8 s2 (empty init) best 139; SA L10 s3 (MCTS init) 167; SA L8 s1 (MCTS init) 439, unchanged from 02:08 -> killed.
+  Cut s4 2.118, unchanged from 9800 s to 11061 s -> killed. Depth ~100 requires exact at K~400; measured exact K 3076-4095 across all phase-stage runs.
   Launched SA L8 s4 and SA L10 s5, both empty init, 4 h.
-- 05:05 UTC (~3 h): SA plateaus. L8 s2 133 (flat since 03:14), L8 s4 133, L10 s3 135, L10 s5 109. Far from 0.
-  Killed L8 s2 and L10 s3; launched SA L14 s6 and SA L20 s7 (4 h) to measure at which level count exact becomes reachable.
-- 06:12 UTC: SA finals: L8 s4 131, L10 s5 101. Level sweep at 68 min: L14 s6 133, L20 s7 125 -> more levels do not lower the floor; search-limited.
+- 05:05 UTC (~3 h): SA best: L8 s2 133 (unchanged since 03:14), L8 s4 133, L10 s3 135, L10 s5 109.
+  Killed L8 s2 and L10 s3; launched SA L14 s6 and SA L20 s7 (4 h).
+- 06:12 UTC: SA finals: L8 s4 131, L10 s5 101. Level sweep at 68 min: L14 s6 133, L20 s7 125.
   cptz_sa.py: added KP (best-of-K proposals), REHEAT (return to best after N non-improving its), TAG.
   Launched SA L10 s8 KP=8 (fresh) and ILS L10 from s5 best (T0=2, REHEAT=20000), 4 h.
 - 09:05 UTC: level sweep finals: L14 s6 117, L20 s7 107. L10 KP=8 s8 117 @2.9 h; ILS L10 from 101: no improvement in 2.9 h.
-  Measured: floor ~100-117 for L8..L20, independent of level count and of search variant.
+  Best per level count: L8 131, L10 99, L14 117, L20 107.
   Added FINE (small moves: flip polarity, change one control or the target). Launched fine-move ILS from L10 s5 (101) and L20 s7 (107), 4 h.
-- 10:15 UTC: SA finals L10 KP=8 s8 107; ILS L10 s5 99 (best). Fine-move ILS @68 min: L10 101, L20 107 (no gain).
-  KEY MEASUREMENT: the cptw/cptz_sa objective is NOT depth-faithful. Its readout = ALL 153 pairs + 816 triples of final wires:
-  span rank 978 (L10 best) / 1015 (L20 best) of 4096. An exact hit could need hundreds of CZ/CCZ -> the "L8 ~115 depth" estimate was wrong.
+- 10:15 UTC: SA finals L10 KP=8 s8 107; ILS L10 s5 99 (best). Fine-move ILS @68 min: L10 101, L20 107 (unchanged from start values).
+  cptw/cptz_sa objective: readout = all 153 pairs + 816 triples of the 18 final wires, no gate cost charged.
+  Measured span rank 978 (L10 best, 48 Toffolis) / 1015 (L20 best, 87 Toffolis) of 4096. Depth estimates 14*LV exclude these readout gates.
   Killed all cptz_sa runs.
-- New cptz_sa2.py: depth-faithful. Readout = explicit R CZ/CCZ terms + free single-wire Z; est. depth 14*LV + CCZ/CZ layers.
+- New cptz_sa2.py: depth-faithful. Readout = explicit R CZ/CCZ terms + free single-wire Z; est. depth 14*LV + 10*ceil(nCCZ/6) + 3*ceil(nCZ/9).
   Reduced test L6 R24 (~117 depth if exact): 1097 -> 535 in 18 s. Launched 4 h: L6R24 s1, L6R24 s2, L7R30 s3, L8R36 s4.
 - 12:03 UTC (1.8 h, ~20-26M iterations each): depth-faithful SA best deficiency: L6R24 s1 283, L6R24 s2 257, L7R30 245, L8R36 183 (0 = exact).
+- 12:11 UTC (6940 s, 21-28M iterations each): L6R24 s1 271, L6R24 s2 257, L7R30 s3 187, L8R36 s4 175.
