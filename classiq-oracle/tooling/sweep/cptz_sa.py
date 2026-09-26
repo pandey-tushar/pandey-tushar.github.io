@@ -30,6 +30,17 @@ def to_seq(lv):
 
 def mutate(lv):
     lv = [list(l) for l in lv]; i = rng.randrange(LV); l = lv[i]; r = rng.random()
+    if FINE and l and rng.random() < FINE:
+        j = rng.randrange(len(l)); a, b, pa, pb, t = l[j]; used = set()
+        for g in l[:j] + l[j + 1:]: used |= {g[0], g[1], g[4]}
+        free = [w for w in range(18) if w not in used and w not in (a, b, t)]
+        m = rng.randrange(5)
+        if m == 0: pa ^= 1
+        elif m == 1: pb ^= 1
+        elif free and m == 2: a = rng.choice(free)
+        elif free and m == 3: b = rng.choice(free)
+        elif free: t = rng.choice(free)
+        l[j] = (a, b, pa, pb, t); return lv
     if l and r < 0.5:
         j = rng.randrange(len(l)); used = set()
         for g in l[:j] + l[j + 1:]: used |= {g[0], g[1], g[4]}
@@ -48,7 +59,7 @@ def mutate(lv):
 if os.environ.get('INIT'): cur = to_levels(pickle.load(open(os.environ['INIT'], 'rb'))['seq'])
 else: cur = [[] for _ in range(LV)]
 c = -env.reward(to_seq(cur)); best = (c, cur)
-KP = int(os.environ.get('KP', '1')); REHEAT = int(os.environ.get('REHEAT', '0')); last_imp = 0
+FINE = float(os.environ.get('FINE', '0')); KP = int(os.environ.get('KP', '1')); REHEAT = int(os.environ.get('REHEAT', '0')); last_imp = 0
 T0 = float(os.environ.get('T0', '6')); t0 = last = time.time(); it = acc = 0
 print('[sa L%d s%d] start deficiency %d' % (LV, seed, c), flush=True)
 while time.time() - t0 < minutes * 60:

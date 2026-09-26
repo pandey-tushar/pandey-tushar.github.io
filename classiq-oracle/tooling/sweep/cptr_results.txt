@@ -112,3 +112,6 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 06:12 UTC: SA finals: L8 s4 131, L10 s5 101. Level sweep at 68 min: L14 s6 133, L20 s7 125 -> more levels do not lower the floor; search-limited.
   cptz_sa.py: added KP (best-of-K proposals), REHEAT (return to best after N non-improving its), TAG.
   Launched SA L10 s8 KP=8 (fresh) and ILS L10 from s5 best (T0=2, REHEAT=20000), 4 h.
+- 09:05 UTC: level sweep finals: L14 s6 117, L20 s7 107. L10 KP=8 s8 117 @2.9 h; ILS L10 from 101: no improvement in 2.9 h.
+  Measured: floor ~100-117 for L8..L20, independent of level count and of search variant.
+  Added FINE (small moves: flip polarity, change one control or the target). Launched fine-move ILS from L10 s5 (101) and L20 s7 (107), 4 h.
