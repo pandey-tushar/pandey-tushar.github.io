@@ -134,3 +134,4 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - cptz_sa3.py: phase terms at every level (CZ/CCZ on the wire values after level l), free while they fit on wires idle in Toffoli layer l+1 (per-wire load model); turnaround terms charged. Cost = deficiency + PEN*max(0, depth-BUDGET).
   Per-wire load applied to the sa2 L6R24 s2 best: est depth 216 with 16 extra random terms (sa2's own estimate assumed 9 disjoint CZ pairs per layer).
   30 s test, INIT sa2 L6R24 s2, BUDGET 120: deficiency 157 at est depth 118.
+- 18:31 UTC continuations (+15300 s): L6R24 s1 163 (16:17), L6R24 s2 143 (14:41), L7R30 s3 137 (18:16), L8R36 s4 101 (17:44).
