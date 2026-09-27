@@ -1,0 +1,358 @@
+AND s0 y4 y3
+AND s1 s0 y2
+CX y2 y1
+CX y0 y1
+AND s2 y2 y0
+CX y0 y1
+CX y2 y1
+CX s3 s1
+CX s3 y2
+CX s3 y4
+CX s3 y5
+CX y3 y5
+AND s4 y3 s3
+CX y3 y5
+CX s5 s4
+CX s5 y0
+CX s5 y1
+CX s5 y2
+CX s2 y0
+AND s6 s2 s5
+CX s2 y0
+CX s7 s4
+CX s7 s6
+CX s7 y2
+CX s7 y3
+AND s8 s4 s7
+CX s9 s4
+CX s9 y1
+CX s9 y3
+CX s9 y5
+CX s10 s6
+CX s10 y0
+CX s10 y5
+AND s11 s9 s10
+CX s12 s0
+CX s12 s11
+CX s12 s8
+CX s13 s1
+CX s13 s4
+CX s13 s8
+CX s13 y2
+AND s14 s12 s13
+CX s15 s8
+CX s15 y2
+CX s15 y5
+CX s16 s2
+CX s16 s4
+CX s16 s8
+CX s16 y1
+AND s17 s15 s16
+CX s18 s11
+CX s18 s6
+CX s18 y2
+CX s18 y3
+CX s19 s0
+CX s19 s11
+CX s19 s8
+CX s19 y0
+CX s19 y4
+CX s19 y5
+AND s20 s18 s19
+CX s21 s2
+CX s21 s20
+CX s21 s4
+CX s21 s8
+CX s21 y0
+CX s21 y2
+CX s21 y5
+CX s22 y0
+CX s22 y1
+CX s22 y4
+AND s23 s21 s22
+X s24
+CX s24 s1
+CX s24 y5
+X s25
+CX s25 s0
+CX s25 s1
+CX s25 s14
+CX s25 s17
+CX s25 s20
+CX s25 s23
+CX s25 s6
+CX s25 s8
+X s26
+CX s26 s8
+CX s26 y4
+CX s26 y5
+CX s27 x1
+CX s27 x2
+CX s27 x5
+CX x1 x5
+AND s28 x1 s27
+CX x1 x5
+CX s29 s28
+CX s29 x0
+CX s29 x1
+CX s29 x2
+CX s29 x5
+CX s30 s28
+CX s30 x0
+CX s30 x1
+CX s30 x2
+CX s30 x3
+CX s30 x5
+AND s31 s29 s30
+CX s28 s31
+CX s31 x2
+AND s32 s28 s31
+CX s31 x2
+CX s28 s31
+CX s33 s32
+CX s33 x2
+CX s33 x3
+AND s34 x5 s33
+AND s35 s34 x4
+CX s35 x5
+AND s36 x5 s35
+CX s35 x5
+CX s37 s31
+CX s37 s36
+CX s37 x0
+CX s37 x3
+AND s38 s36 s37
+CX x1 x2
+AND s39 s38 x1
+CX x1 x2
+CX s40 s34
+CX s40 s36
+CX s40 s38
+CX s40 s39
+CX s41 s36
+CX s41 s38
+CX s41 x4
+AND s42 s40 s41
+CX s43 x1
+CX s43 x2
+CX s43 x3
+CX s43 x4
+CX s36 x4
+AND s44 s36 s43
+CX s36 x4
+CX s45 s44
+CX s45 x1
+CX s45 x3
+CX s39 x4
+AND s46 s39 s45
+CX s39 x4
+CX s47 s46
+CX s47 x2
+CX s47 x4
+CX s48 s42
+CX s48 s44
+CX s48 x1
+CX s48 x3
+AND s49 s47 s48
+CX s50 s28
+CX s50 s42
+CX s50 s44
+CX s50 x3
+CX s51 s44
+CX s51 x3
+CX s51 x5
+AND s52 s50 s51
+CX s53 s28
+CX s53 s32
+CX s53 s35
+CX s53 s36
+CX s53 s39
+CX s53 s49
+CX s53 x0
+CX s53 x2
+CX s53 x5
+CX s54 s31
+CX s54 s38
+CX s54 s39
+CX s54 s42
+CX s54 s52
+CX s54 x0
+CX s54 x1
+AND s55 s53 s54
+CX s56 s28
+CX s56 s32
+CX s56 s35
+CX s56 s38
+CX s56 s44
+CX s56 x1
+CX s57 s28
+CX s57 s31
+CX s57 s35
+CX s57 s36
+CX s57 s55
+CX s57 x1
+CX s57 x4
+AND s58 s56 s57
+CX s59 s36
+CX s59 s42
+CX s59 s44
+CX s59 s52
+CX s60 s31
+CX s60 s34
+CX s60 s35
+CX s60 s42
+CX s60 s52
+AND s61 s59 s60
+CX s62 s36
+CX s62 s38
+CX s62 s42
+CX s62 s49
+CX s62 s52
+CX s62 x0
+CX s62 x1
+CX s62 x2
+CX s63 s38
+CX s63 s39
+CX s63 s49
+CX s63 s52
+CX s63 x0
+CX s63 x1
+CX s63 x2
+CX s63 x4
+AND s64 s62 s63
+CX s34 x4
+CX s39 x0
+AND s65 s34 s39
+CX s39 x0
+CX s34 x4
+AND s66 s65 x0
+CX s67 s28
+CX s67 s31
+CX s67 s32
+CX s67 s35
+CX s67 s39
+CX s67 s46
+CX s67 s49
+CX s67 s52
+CX s67 s61
+CX s67 s64
+CX s67 s66
+CX s67 x0
+CX s67 x1
+CX s67 x2
+CX s67 x5
+CX s68 s28
+CX s68 s31
+CX s68 s32
+CX s68 s34
+CX s68 s35
+CX s68 s36
+CX s68 s38
+CX s68 s39
+CX s68 s44
+CX s68 s58
+CX s68 s61
+CX s68 s65
+CX s68 s66
+CX s68 x0
+CX s68 x1
+CX s68 x2
+CX s68 x5
+AND s69 s67 s68
+CX s70 s28
+CX s70 s35
+CX s70 s36
+CX s70 s42
+CX s70 s52
+CX s70 s55
+CX s70 s58
+CX s70 s64
+CX s70 x1
+CX s70 x3
+CX s70 x4
+CX s71 s32
+CX s71 s34
+CX s71 s38
+CX s71 s39
+CX s71 s42
+CX s71 s49
+CX s71 s52
+CX s71 s58
+CX s71 s61
+CX s71 s64
+CX s71 s65
+CX s71 s69
+CX s71 x0
+CX s71 x4
+CX s71 x5
+AND s72 s70 s71
+CX s73 s34
+CX s73 s36
+CX s73 s38
+CX s73 s72
+AND s74 s73 s31
+CX s75 s36
+CX s75 s38
+CX s75 s74
+CX s76 s38
+CX s76 s72
+CX s76 x5
+AND s77 s75 s76
+CX s78 s64
+CX s78 s66
+CX s78 x0
+CX s78 x4
+AND s79 s24 s78
+CX s80 s55
+CX s80 s58
+CX s80 s64
+CX s80 s69
+CX s80 s72
+CX s80 s74
+CX s80 s77
+CX s80 x1
+CX s80 x2
+CX s80 x3
+CX s80 x4
+CX s80 x5
+AND s81 s24 s80
+CX s39 s42
+AND s82 s24 s39
+CX s39 s42
+CX s83 s49
+CX s83 s52
+CX s83 s79
+CX s83 x1
+CX s83 x2
+CX s84 s28
+CX s84 s32
+CX s84 s49
+CX s84 s58
+CX s84 s61
+CX s84 s81
+CX s84 x2
+CX s84 x5
+CX s85 s35
+CX s85 s82
+CX s86 s14
+CX s86 s83
+CX s86 s85
+CX s26 s83
+AND s87 s26 s86
+CX s26 s83
+CX s88 s84
+CX s88 s85
+CX s88 s87
+CX s89 s14
+CX s89 s26
+CX s89 s83
+CX s89 s84
+AND s90 s88 s89
+CX s14 s83
+AND s91 s14 s25
+CX s14 s83
+CX s84 s91
+AND s92 s90 s84
+CX s84 s91
+X s93
+CZ s85^s87^s92 s93
