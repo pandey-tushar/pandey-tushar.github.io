@@ -16,3 +16,5 @@ ckpt/evo_logs/cpua_s*.log
 out/cpua_s*.qasm
 ckpt/sa4_L*.pkl
 ckpt/evo_logs/sa4_L*.log
+ckpt/evo_logs/width_cpdm48*.log
+ckpt/xagd/width_cpdm48*.pkl

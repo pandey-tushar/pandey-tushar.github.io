@@ -169,3 +169,9 @@ CP-UA (Sep 27 ~03:30 UTC)
 CP-UC (Sep 27 ~07:20 UTC)
 - Killed: sa2 L8 R36 s4 (80242 s, best 83, flat since 20:15 Sep 26); sa3 L6 R40 s1 (59952 s, best 137 at est depth 118); sa4 L8 R36 s4 (31881 s, best 83 = seed, never improved). sa2 L6 R24 s2 keeps running (best 127).
 - Re-read of the code-route record (cpee_results.txt, 536 lines, /home/user/classiq-challenge): design ledger 2*forward + phase stage 61; forward 52 at 143 wires -> 173 total exact (889 CX); 227 at 92 wires; 327 at 48. One-stage form at 18 wires needs 8 code slots + >= 4 scratch = 12 clean wires, 8 exist. Multi-instant stream fits 18 wires but needs ~50 value builds at 59-163 layers each; one CZ instant built and verified: 503 depth / 447 CX. Row classes 11 (largest 25), column classes 11 (largest 22): fibre 550 -> 10 separating dimensions.
+- Mod-64 translation of the image (x -> x+a, y -> y+b mod 64): ANF monomial count 886 -> 356 at shift (3,61) (360 at (2,61)); BDD size stays ~100 nodes (identity x,y order 96).
+
+CP-UD (Sep 27 ~08:00 UTC) width annealer on the 48-AND AND-depth-6 network
+- Leaderboard CX arithmetic: 575 = 96 x 6 = 2 x 48 full Toffolis; 563/573 within 2 Toffolis of it. The repo's whole-F XAG cpdm_wide.prog (CP-DM, L2/C1) has exactly 48 ANDs at AND-depth 6 and was never run through cptu_width.py (only dd_mc 66, dd_flat 89, mc_d10 76 were).
+- cpuc_prog2v.py: .prog (AND/CX/X/CZ) -> Verilog for cptr_map.parse; cpdm48.v = cpdm_wide.prog (48 ANDs, output form 19 bits; verify() == F asserted by the annealer). Linear width profile in file order: max 27.
+- Runs (30 min each, 3 cores): cptu_width.py cpdm48.v s1 (linear width), EXACT=2 s1 and s2 (register pressure: values that cannot go in place, peak overlap vs 6 ancillas). Start: linear 23; pressure peak 24 (s1) / 25 (s2).
