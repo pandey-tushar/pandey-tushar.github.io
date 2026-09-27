@@ -13,7 +13,8 @@ mirror.  Beam search on  score = gate cost + emitted cost + cost-to-go(P)
 - FREE * clean ancillas,  cost-to-go per monomial c(3) = CCZ, c(d) = CCZ +
 TOF*(d-3).  Costs are CX counts (TOF = one Margolus pair).
 Usage: python3 cpua_alg.py SEED [BEAM] [MAXSTEPS]
-Env: TOF (6) CXC (2) CZ (1) CCZ (6) FREE (3) NOISE (0.0)
+Env: TOF (6) CXC (2) CZ (1) CCZ (6) FREE (6) STALL (4) NOISE (0.0)
+untof u v t a b = free ancilla t (Toffoli u v -> t, w_u w_v == w_t) then tof a b -> t.
 Progress one line per step; checkpoint ckpt/cpua_s<seed>.pkl; exact circuits
 -> out/cpua_s<seed>_<n>.qasm with transpiled depth / CX printed."""
 import sys, os, time, pickle, random
@@ -22,7 +23,7 @@ import numpy as np
 NW, ND = 18, 12
 TOF = float(os.environ.get('TOF', '6')); CXC = float(os.environ.get('CXC', '2'))
 CZ = float(os.environ.get('CZ', '1')); CCZ = float(os.environ.get('CCZ', '6'))
-FREE = float(os.environ.get('FREE', '3')); NOISE = float(os.environ.get('NOISE', '0'))
+FREE = float(os.environ.get('FREE', '6')); STALL = int(os.environ.get('STALL', '4')); NOISE = float(os.environ.get('NOISE', '0'))
 MASK = (1 << 4096) - 1
 
 
@@ -110,7 +111,13 @@ def settle(P, W, emit_list, inst):
 def apply(st, step, emit3):
     """apply a step; emit3: emit degree-3 monomials on the changed wire first
     (dirty-target steps only).  Returns a new State or None if useless."""
-    kind = step[0]; W = list(st.W); P = set(st.P); emit = list(st.emit)
+    kind = step[0]
+    if kind == 'untof':
+        _, u, v, t, a, b = step
+        s1 = apply(st, ('tof', u, v, t), False)
+        assert s1.W[t] == 0
+        return apply(s1, ('tof', a, b, t), False)
+    W = list(st.W); P = set(st.P); emit = list(st.emit)
     gcost, ecost = st.gcost, st.ecost; inst = len(st.steps)
     if kind == 'tof':
         _, a, b, t = step; ab = (1 << a) | (1 << b); tb = 1 << t
@@ -156,6 +163,22 @@ def candidates(st):
         for t in dirty:
             if a != t: out.append((('cx', a, t), False)); out.append((('cx', a, t), True))
     for t in dirty: out.append((('x', t), False))
+    # composite: free an ancilla holding a product that two present wires reproduce, then store a new product there
+    for t in range(ND, NW):
+        if st.W[t] == 0: continue
+        uv = None
+        for i, u in enumerate(dirty):
+            for v in dirty[i + 1:]:
+                if u != t and v != t and st.W[u] & st.W[v] == st.W[t]: uv = (u, v); break
+            if uv: break
+        if not uv: continue
+        for i, a in enumerate(dirty):
+            for b in dirty[i + 1:]:
+                if t not in (a, b): out.append((('untof', uv[0], uv[1], t, a, b), False))
+    # no immediate undo of the previous affine step
+    if st.steps:
+        p = st.steps[-1]
+        out = [c for c in out if not (c[0][0] in ('x', 'cx') and c[0] == p)]
     return out
 
 
@@ -213,7 +236,7 @@ def main():
     print('[cpua s%d] ANF %d monomials, max degree %d' % (seed, len(P0), max(popcount(m) for m in P0)), flush=True)
     st0 = State(W0, P0, [], [], 0.0, 0.0, None)
     st0.P, ec = settle(st0.P, st0.W, st0.emit, 0); st0.ecost += ec
-    beam = [st0]; exact = []; t0 = time.time(); nex = 0; last = time.time()
+    beam = [st0]; exact = []; t0 = time.time(); nex = 0; last = time.time(); best_seen = float('inf'); stall = 0
     os.makedirs('ckpt', exist_ok=True)
     for step in range(1, MAXS + 1):
         pool = {}
@@ -247,6 +270,10 @@ def main():
             if len(beam) >= BEAM: break
         if not beam: break
         b = beam[0]
+        if b.score() >= best_seen - 1e-9: stall += 1
+        else: best_seen, stall = b.score(), 0
+        if stall >= STALL:
+            print('[cpua s%d] stalled %d steps, stop' % (seed, STALL), flush=True); break
         degs = {}
         for m in b.P: degs[popcount(m)] = degs.get(popcount(m), 0) + 1
         print('[cpua s%d] step %3d  best score %.0f  |P| %d degs %s  gates %.0f emitted %.0f clean %d  last %s  %ds'

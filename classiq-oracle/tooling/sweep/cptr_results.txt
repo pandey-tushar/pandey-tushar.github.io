@@ -149,7 +149,7 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 
 CP-UA (Sep 27 ~03:30 UTC)
 - Killed sa2 L10 R48 s10 (INIT = sa2 L8 best): 8600 s, 20.5M it, best 83 = seed value, no improvement.
-- Closure of the current SA prefixes (scratch closure.py): reduced weight of F against the span of Toffoli products + wires + all products of <= d wires.
+- Closure of the current SA prefixes (cpua_closure.py): reduced weight of F against the span of Toffoli products + wires + all products of <= d wires.
     sa2 L8 R36 s4 (39 Toffolis): d=2 rank 189 / 799;  d=3 rank 930 / 1165;  d=4 rank 2723 / 605.  Against its own 36 terms: 83.
     sa2 L6 R24 s2 (33 Toffolis): d=2 180 / 999;  d=3 890 / 1243;  d=4 2583 / 615.
     sa3 L6 R40 s1 (30 Toffolis): d=2 178 / 1443; d=3 921 / 1269; d=4 2817 / 525.
@@ -157,3 +157,7 @@ CP-UA (Sep 27 ~03:30 UTC)
 - Leaderboard CX counts vs 6 CX per Toffoli pair: 281 = 46.8 x 6, 319 = 53.2 x 6, 354 = 59 x 6, 306 = 51 x 6, 300 = 50 x 6, 326 = 54.3 x 6. Repo 47-AND XAG (cpdm_wide_tree): peak live 33 (CP-EH).
 - cpua_alg.py (algebraic in-place synthesis from the ANF, beam search; P = remaining phase polynomial in the current wire variables; steps tof/cx/x; degree <= 2 monomials emitted as Z/CZ at once, degree-3 kept as CCZ; exact iff P empty, then mirror; costs in CX counts): ANF 886 monomials degree 12.
     Test beam 2, 4 steps: |P| 886 -> 435 (X, CX, one Toffoli), 8 s.  Run s1 beam 8, 120 steps: started 03:25.
+- cpua_alg.py s1 beam 8: |P| 886 -> 172 (degrees 3..7, 10 of degree 7) at step 47, 78 CX of gates (6 Toffolis, 24 CX/X steps), 155 CX of emitted CZ/CCZ, 0 clean ancillas; then oscillation (X on wire 7 back and forth). Killed at step 51.
+- Added untof (free an ancilla whose product two present wires reproduce, then store a new product), no-undo rule, stall stop. s2 beam 4: same trajectory, |P| 172 at step 23, stalled, stopped at step 25 (210 s). At the stall no stored product is reproducible by two wires (CX steps changed the factor wires), so no ancilla can be freed.
+- Emission count at the stall: 131-159 CX worth of CZ/CCZ already emitted for 714 of 886 monomials; the remaining 172 monomials of degree 4-7 need further products. Any route that emits F monomial by monomial as CZ/CCZ over <= 6 stored products pays >= 10 depth per CCZ with <= 6 CCZ per layer on 18 wires.
+- Classiq SDK: not installed here, platform.classiq.io unreachable (HTTP 000). qmod_build12.py used classiq.synthesize with Constraints(max_width=18) in an earlier environment.
