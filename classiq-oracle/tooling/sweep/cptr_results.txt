@@ -183,3 +183,4 @@ CP-UE (Sep 27 ~15:00 UTC) in-place code transform, single global mirror, no inte
 - Verified: orbit (8,10) codes + phase terms reproduce the logo, 0/4096 mismatches (cpuc_code810.pkl). Code bits are degree 5-6 functions of 6 variables (16-34 ANF monomials each).
 - cpuc_inplace.py: level annealer on 9 wires, 64-bit truth tables, cost = 200 * mismatched code bits (best assignment of the 4 targets to distinct wires, complement free) + forward est depth (sa4 model). Reduced test y L7 s9 20 s: 2000 it/s, mismatch 85 -> 41 at depth 46.
 - Runs (30 min): x L10 s1, x L10 s2, y L7 s1. Target D <= 73 for total < 210.
+- Leaderboard top 10 (screenshot, Sep 27 later): 106/279, 109/503, 111/558, 114/497, 120/543, 121/324, 128/363, 128/405, 138/393, 148/670. 10th = 148, 5th = 120. Top entry 279 CX = 46.5 x 6.
