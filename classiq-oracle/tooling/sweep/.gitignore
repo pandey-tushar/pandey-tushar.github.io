@@ -14,3 +14,5 @@ ckpt/evo_logs/sa3_L*.log
 ckpt/cpua_s*.pkl
 ckpt/evo_logs/cpua_s*.log
 out/cpua_s*.qasm
+ckpt/sa4_L*.pkl
+ckpt/evo_logs/sa4_L*.log
