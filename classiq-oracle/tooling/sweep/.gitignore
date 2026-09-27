@@ -20,3 +20,4 @@ ckpt/evo_logs/width_cpdm48*.log
 ckpt/xagd/width_cpdm48*.pkl
 ckpt/evo_logs/inpl_*.log
 ckpt/inpl_*.pkl
+ckpt/seed_*.pkl
