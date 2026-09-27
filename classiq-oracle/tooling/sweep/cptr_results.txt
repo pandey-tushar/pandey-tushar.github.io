@@ -144,3 +144,5 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 00:47 UTC: no change since 23:51: sa3 L6R40 145@118 (23:48), sa2 L6R24 s2 133 (23:15), L7R30 137 (18:16), L8R36 83 (20:15).
 - 00:52 UTC: killed L7R30 s3 (137, no improvement since 18:16). Launched sa2 L10 R48 s10, INIT = L8R36 s4 best (83) padded with 2 empty levels + 12 random terms, CYCLE 30, T0 3, no time limit. Est. depth if exact ~180-200.
 - 01:41 UTC: sa3 L6R40 139@120 (01:16). sa2 L6R24 s2 133 (23:15), L8R36 83 (20:15), L10R48 s10 (51 min, 7.3M its) 83 = seed, no improvement.
+- Leaderboard top 10 (screenshot, Sep 27): depth/CX: 115/575, 117/497, 120/573, 124/319, 125/563, 128/281, 128/405, 148/670, 150/354, 158/693. All width 18. 10th place = 158; 5th = 125.
+  CX per depth layer: 5.0, 4.2, 4.8, 2.6, 4.5, 2.2, 3.2, 4.5, 2.4, 4.4. Ours (249/520): 2.1.
