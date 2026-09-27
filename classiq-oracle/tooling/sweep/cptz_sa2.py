@@ -77,6 +77,8 @@ def mut_ro(ro):
 
 if os.environ.get('INIT'):
     d0 = pickle.load(open(os.environ['INIT'], 'rb')); cur, ro = d0['levels'], d0['ro']
+    cur = [list(l) for l in cur[:LV]] + [[] for _ in range(LV - len(cur))]      # pad/truncate to LV levels
+    ro = list(ro[:R]) + [rand_term() for _ in range(R - len(ro))]
 else: cur, ro = [[] for _ in range(LV)], [rand_term() for _ in range(R)]
 c = score(cur, ro); best = (c, cur, ro)
 nccz = lambda ro: sum(len(t) == 3 for t in ro)
