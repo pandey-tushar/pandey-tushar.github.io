@@ -146,3 +146,14 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 01:41 UTC: sa3 L6R40 139@120 (01:16). sa2 L6R24 s2 133 (23:15), L8R36 83 (20:15), L10R48 s10 (51 min, 7.3M its) 83 = seed, no improvement.
 - Leaderboard top 10 (screenshot, Sep 27): depth/CX: 115/575, 117/497, 120/573, 124/319, 125/563, 128/281, 128/405, 148/670, 150/354, 158/693. All width 18. 10th place = 158; 5th = 125.
   CX per depth layer: 5.0, 4.2, 4.8, 2.6, 4.5, 2.2, 3.2, 4.5, 2.4, 4.4. Ours (249/520): 2.1.
+
+CP-UA (Sep 27 ~03:30 UTC)
+- Killed sa2 L10 R48 s10 (INIT = sa2 L8 best): 8600 s, 20.5M it, best 83 = seed value, no improvement.
+- Closure of the current SA prefixes (scratch closure.py): reduced weight of F against the span of Toffoli products + wires + all products of <= d wires.
+    sa2 L8 R36 s4 (39 Toffolis): d=2 rank 189 / 799;  d=3 rank 930 / 1165;  d=4 rank 2723 / 605.  Against its own 36 terms: 83.
+    sa2 L6 R24 s2 (33 Toffolis): d=2 180 / 999;  d=3 890 / 1243;  d=4 2583 / 615.
+    sa3 L6 R40 s1 (30 Toffolis): d=2 178 / 1443; d=3 921 / 1269; d=4 2817 / 525.
+  The reduced weight depends on the insertion order of the basis (superset spans give larger numbers); it is 0 iff F is in the span, and otherwise not a distance.
+- Leaderboard CX counts vs 6 CX per Toffoli pair: 281 = 46.8 x 6, 319 = 53.2 x 6, 354 = 59 x 6, 306 = 51 x 6, 300 = 50 x 6, 326 = 54.3 x 6. Repo 47-AND XAG (cpdm_wide_tree): peak live 33 (CP-EH).
+- cpua_alg.py (algebraic in-place synthesis from the ANF, beam search; P = remaining phase polynomial in the current wire variables; steps tof/cx/x; degree <= 2 monomials emitted as Z/CZ at once, degree-3 kept as CCZ; exact iff P empty, then mirror; costs in CX counts): ANF 886 monomials degree 12.
+    Test beam 2, 4 steps: |P| 886 -> 435 (X, CX, one Toffoli), 8 s.  Run s1 beam 8, 120 steps: started 03:25.
