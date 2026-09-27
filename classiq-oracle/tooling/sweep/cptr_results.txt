@@ -139,3 +139,6 @@ CP-TZ2 (Sep 26 ~01:50 UTC)
 - 19:55 UTC: killed L6R24 s1 (163, no improvement since 16:17). Launched cptz_sa3 L6 R40 s1, INIT sa2 L6R24 s2 best, BUDGET 120, CYCLE 30, no time limit. 40 s: deficiency 159 at est depth 121.
 - 23:10 UTC: sa3 L6R40 s1 (3.3 h, 21.7M its): best deficiency 147 at est depth 118 (21:47). sa2 continuations (+32081 s): L6R24 s2 136 (21:14), L7R30 s3 137 (18:16), L8R36 s4 83 (20:15).
 - 23:51 UTC: sa3 L6R40 s1 145 at est depth 118 (23:48). sa2: L6R24 s2 133 (23:15), L7R30 s3 137 (18:16), L8R36 s4 83 (20:15).
+- Paper arXiv 2603.12127 Appendix A: 3-bit DJ oracle reduced to CZ(q0,q1)·Z(q2) via its ANF q0q1+q2. Technique = one Z/CZ/CCZ per ANF monomial. Logo ANF: 886 monomials, degree 12 -> not applicable (MCZ costs, FACTS line 73).
+- Output-only ANDs (in Fo, no AND consumer) in annealed XAGs: 1 of 66 in each of width_dd_mc_x_s9/s12/s13. Pressure (excess, peak, fails): s12 (5,11,41), s13 (6,12,39), s9 (13,19,40).
+- 00:47 UTC: no change since 23:51: sa3 L6R40 145@118 (23:48), sa2 L6R24 s2 133 (23:15), L7R30 137 (18:16), L8R36 83 (20:15).
