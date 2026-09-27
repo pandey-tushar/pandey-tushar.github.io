@@ -18,3 +18,5 @@ ckpt/sa4_L*.pkl
 ckpt/evo_logs/sa4_L*.log
 ckpt/evo_logs/width_cpdm48*.log
 ckpt/xagd/width_cpdm48*.pkl
+ckpt/evo_logs/inpl_*.log
+ckpt/inpl_*.pkl
