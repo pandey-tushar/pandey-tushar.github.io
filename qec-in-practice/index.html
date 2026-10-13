@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quantum error correction in practice</title>
+<!-- the homepage's theme choice (tp-theme), settled before the first paint -->
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.theme = (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light") ? "light" : "dark";
+  }catch(e){ d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<main class="page">
+  <nav class="nav"><a href="../">Tushar Pandey</a></nav>
+  <h1>Quantum error correction in practice</h1>
+  <p class="lead">Four interactive lessons, from a single surface-code patch to teleporting a T state between logical qubits.</p>
+  <ol class="cards">
+    <li><a class="lcard" href="lesson.html?n=1"><span class="num">1</span><b>A surface code patch</b><span>Encoding |0&#10217;<sub>L</sub>, the eight checks, and what a single error does to them.</span></a></li>
+    <li><a class="lcard" href="lesson.html?n=2"><span class="num">2</span><b>Logical CNOT between two patches</b><span>Nine physical CNOTs between two patches make one logical CNOT and a Bell pair. Run it live in the browser.</span></a></li>
+    <li><a class="lcard" href="lesson.html?n=3"><span class="num">3</span><b>Preparing a T state</b><span>H and T on one qubit, then encoding: the resource state for a non-Clifford gate.</span></a></li>
+    <li><a class="lcard" href="lesson.html?n=4"><span class="num">4</span><b>Teleporting the T state</b><span>From patch A to patch C through a logical Bell pair on B and C.</span></a></li>
+  </ol>
+</main>
+</body>
+</html>

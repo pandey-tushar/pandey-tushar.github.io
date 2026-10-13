@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson</title>
+<!-- the homepage's theme choice (tp-theme), settled before the first paint -->
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.theme = (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light") ? "light" : "dark";
+  }catch(e){ d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="stylesheet" href="css/site.css">
+<script type="module" src="js/lesson.js"></script>
+</head>
+<body>
+<main class="page">
+  <nav class="nav"><a href="../">Tushar Pandey</a> <a href="index.html">All lessons</a> <a id="prev" href="#">&larr; Previous</a> <a id="next" href="#">Next &rarr;</a></nav>
+  <h1 id="lesson-title">Lesson</h1>
+  <p class="lead" id="lesson-intro"></p>
+
+  <div class="stage" id="stage">
+    <section class="panel player">
+      <h2 class="sr-only">Patches and gate layers</h2>
+      <svg id="patches" class="patches"></svg>
+      <p class="legend"><span class="sw sw-x"></span> X check <span class="sw sw-z"></span> Z check <span class="sw sw-fire"></span> fired <span class="sw sw-off"></span> undetermined <span class="sw sw-gate"></span> gate <span class="sw sw-log"></span> X<sub>L</sub>, Z<sub>L</sub> = +1</p>
+      <div class="controls">
+        <div class="timeline-head">
+          <button type="button" id="play" aria-pressed="false">Play</button>
+          <span id="where" class="where" aria-live="polite"></span>
+          <label id="inject-box" class="inject-box" hidden>Inject an error
+            <select id="inject-pick"><option value="">No error</option></select></label>
+        </div>
+        <input type="range" id="slider" class="slider" min="0" max="1" step="any" value="0" aria-label="Position in the circuit (steps)">
+        <div class="strip-scroll" id="strip-scroll"><div class="strip" id="strip"></div></div>
+        <p class="caption" id="caption" aria-live="polite"></p>
+      </div>
+      <div class="layer-text">
+        <p class="caption checkline" id="checkline"></p>
+        <div id="state" class="state"></div>
+        <div id="error-panel" class="error-panel"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel" id="circuit-box">
+    <h2>The ideal logical circuit</h2>
+    <div id="circuit" class="circuit"></div>
+  </section>
+
+  <section class="panel" id="live-box" hidden>
+    <h2>Run it live</h2>
+    <div id="live"></div>
+  </section>
+
+  <section class="panel">
+    <h2 id="results-head">Results</h2>
+    <div id="results"></div>
+  </section>
+</main>
+</body>
+</html>
