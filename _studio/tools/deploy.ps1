@@ -31,7 +31,8 @@ Copy-Tree "$studio\apps\illustrated\dist" "$repo\illustrated"
 if (Test-Path "$repo\hindi") { throw 'the Hindi edition must not be deployed' }
 
 # 4. everything the site links to must survive
-$must = @('CNAME','index.html','books.html','cv.html','qubit-dialogues.html',
+$must = @('CNAME','index.html','books.html','cv.html','research.html','qubit-dialogues.html',
+          'sitemap.xml','robots.txt',
           'og-home.png','og-book.png',
           'qubit-dialogues.pdf','an-unpolarized-life.pdf','illustrated.pdf',
           'Tushar_Pandey_Resume_AI.pdf','Tushar_Pandey_Resume_Quantum.pdf')

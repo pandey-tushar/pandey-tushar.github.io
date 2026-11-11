@@ -11,7 +11,15 @@
   gtag('js', new Date());
   gtag('config', 'G-DVPGC1C44Z');
 </script>
-<title>Tushar Pandey · Curriculum Vitæ</title>
+<title>Tushar Pandey, PhD · Curriculum Vitæ</title>
+<link rel="canonical" href="https://pandey-tushar.com/cv.html" />
+<meta property="og:title" content="Tushar Pandey, PhD · Curriculum Vitæ" />
+<meta property="og:description" content="Mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between." />
+<meta property="og:type" content="profile" />
+<meta property="og:url" content="https://pandey-tushar.com/cv.html" />
+<meta property="og:image" content="https://pandey-tushar.com/og-home.png" />
+<meta property="og:site_name" content="Tushar Pandey" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="description" content="Tushar Pandey: mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -143,7 +151,7 @@
 <body>
 
 <div class="bar">
-  <a href="index.html" aria-label="Back to site">&larr; Back to site</a>
+  <a href="/" aria-label="Back to site">&larr; Back to site</a>
   <span style="display:flex;gap:10px;flex-wrap:wrap">
     <a href="Tushar_Pandey_Resume_Quantum.pdf" download title="One-page ATS-friendly resume, quantum focus">R&eacute;sum&eacute; &middot; Quantum</a>
     <a href="Tushar_Pandey_Resume_AI.pdf" download title="One-page ATS-friendly resume, AI focus">R&eacute;sum&eacute; &middot; AI</a>
@@ -164,7 +172,7 @@
       <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
     </div>
 
-    <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: designing fault-tolerant error correction at Oak Ridge, inventing a test-time reasoning framework cited nineteen times in its first year, and building production machine-learning infrastructure at scale, while winning the discipline&rsquo;s hardest challenges along the way.</p>
+    <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: designing fault-tolerant error correction at Oak Ridge, inventing a test-time reasoning framework now running in production, and building LLM inference infrastructure that serves many tenants at scale and is being hardened for government-grade security, while winning the discipline&rsquo;s hardest challenges along the way.</p>
   </header>
 
   <section id="highlights"><h2>Selected Highlights</h2><div id="cv-hl"></div></section>
@@ -179,27 +187,32 @@
 
 <script>
 const highlights = [
-  {b:"Invented Adaptive Graph of Thoughts (AGoT)", r:", a test-time reasoning framework unifying chain, tree, and graph structures; nineteen citations in its first year, shipped to production.", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
+  {b:"Invented Adaptive Graph of Thoughts (AGoT)", r:", a test-time reasoning framework unifying chain, tree, and graph structures; shipped to production.", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
   {b:"Sole-authored a proof of the Bonahon–Wong–Yang volume conjecture", r:" for the four-puncture sphere; independent results at the frontier of quantum topology.", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
-  {b:"Built production multi-tenant LLM inference at scale", r:" at DataRobot; co-author of TokenGrid, a token-aware capacity scheduler for LLM serving.", link:"https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/", id:"DataRobot blog"},
+  {b:"Built production multi-tenant LLM inference at scale", r:" at DataRobot: co-author of TokenGrid, a token-aware capacity scheduler; now building disaggregated LLM serving and hardening the platform for government-grade deployments.", link:"https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/", id:"DataRobot blog"},
   {b:"Cut LLM fine-tuning cost by 99%", r:" at Agnostiq with a CPU-first, federated architecture that matched quality at a fraction of the spend."},
   {b:"Designed a fault-tolerant quantum error-correction pipeline", r:" for a non-abelian topological code, begun as an NSF-MSGI researcher at Oak Ridge National Laboratory; sole-authored in APL Quantum.", link:"https://doi.org/10.1063/5.0255351", id:"APL Quantum"},
   {b:"Won four first-place titles", r:" at the field&rsquo;s hardest challenges: the Global Industry Challenge at Quantum World Congress (600+ applicants, 50+ countries), IBM Quantum Developer Conference, MIT iQuHACK, and Q-Volution.", link:"https://www.quantumworldcongress.com/news/from-challenge-to-proof-2026-global-industry-challenge-winners", id:"QWC"},
 ];
 const experience = [
-  {y:"2026 – Present", r:"Senior Software Engineer", o:"DataRobot", n:"Production multi-tenant LLM inference infrastructure; certified Covalent for orchestrating GenAI and hybrid quantum–classical / HPC pipelines. (Software Developer II, 2025–26.)"},
+  {y:"2026 – Present", r:"Senior Software Engineer", o:"DataRobot", n:"Production multi-tenant LLM inference: co-authored TokenGrid, a token-aware capacity scheduler; now building disaggregated model serving, where each stage of inference scales on its own hardware, and hardening platform security to the bar set by government contracts. Certified Covalent for GenAI and hybrid quantum–classical / HPC pipelines. (Software Developer II, 2025–26.)"},
   {y:"2024 – 2025", r:"Research Software Engineer", o:"Agnostiq", n:"Invented and shipped AGoT; cut LLM fine-tuning cost 99% via a CPU-first federated architecture on the Covalent distributed-compute framework."},
   {y:"2019 – 2024", r:"Doctoral Researcher", o:"Texas A&M University", n:"Original quantum-topology results including a sole-authored conjecture proof; founded a Directed Reading Program and mentored 20+ students. Advisor: Prof. Tian Yang."},
   {y:"Summers 2021 & 2022", r:"Summer Researcher (NSF-MSGI)", o:"Oak Ridge National Laboratory", n:"Fault-tolerant quantum error correction for the doubled Semion model; topological phases of matter (APL Quantum, 2025)."},
 ];
 const research = [
-  {t:"Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures", m:"First author · test-time reasoning · 19 citations in year one", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
+  {t:"Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures", m:"First author · test-time reasoning for LLMs", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
   {t:"Topological Phases of Matter, Quantum Error Correction, and Topological Twists", m:"APL Quantum 2(3):031501 (2025) · sole author", link:"https://doi.org/10.1063/5.0255351", id:"DOI"},
   {t:"Efficient Variational Quantum Eigensolver Methodologies on Quantum Processors", m:"Physica Scripta (2026) · first author · VQE on hardware", link:"https://doi.org/10.1088/1402-4896/ae9e06", id:"DOI"},
+  {t:"Lifted Surgery for Non-Abelian Two-Block Group-Algebra Codes", m:"Sole author · qLDPC codes · fault-tolerant logic", link:"https://arxiv.org/abs/2610.05307", id:"arXiv:2610.05307"},
   {t:"Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel", m:"Sole author · qLDPC codes · quantum-advantage threshold assessment", link:"https://arxiv.org/pdf/2603.19062", id:"arXiv:2603.19062"},
   {t:"An Architectural Capacity Ceiling, Not a Barren Plateau: Why a Fixed-Encoding Variational Quantum Circuit Cannot Fit the Lorenz-63 Attractor", m:"Sole author · quantum machine learning", link:"https://arxiv.org/pdf/2604.23743", id:"arXiv:2604.23743"},
+  {t:"When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?", m:"IEEE Quantum Week (QCE 2026), QuBench workshop · sole author", link:"https://arxiv.org/abs/2607.09905", id:"arXiv:2607.09905"},
+  {t:"A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps", m:"Sole author · quantum reservoir computing", link:"https://arxiv.org/abs/2607.07978", id:"arXiv:2607.07978"},
+  {t:"Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline", m:"IEEE Dallas Circuits and Systems Conference (DCAS 2026) · sole author", link:"https://arxiv.org/abs/2605.05625", id:"arXiv:2605.05625"},
   {t:"Generalized Bonahon–Wong–Yang Volume Conjecture of Quantum Invariants of Surface Diffeomorphisms I: The Figure Eight Knot Complement", m:"Algebraic & Geometric Topology (accepted 2026) · with Ka Ho Wong · quantum topology", link:"https://arxiv.org/abs/2402.04483", id:"arXiv:2402.04483"},
   {t:"The Bonahon–Wong–Yang Volume Conjecture for the Four-Puncture Sphere", m:"Sole author · quantum topology", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
+  {t:"An Intermediate Conjecture Between Goldbach and Dubner: Every Even Number Is the Sum of a Prime and a Twin Prime", m:"Sole author · number theory", link:"https://arxiv.org/abs/2608.02381", id:"arXiv:2608.02381"},
 ];
 const recognition = [
   {b:"1st", r:"Global Industry Challenge, Quantum World Congress, 2026"},
@@ -215,10 +228,10 @@ const education = [
 ];
 const skills = {
   "Quantum":"Qiskit, PennyLane, Cirq; quantum error correction (surface, color, bivariate-bicycle, topological codes); VQE / QAOA / ADAPT-VQE; quantum machine learning",
-  "AI & Systems":"LLMs, agentic AI, test-time reasoning, model serving at scale, PyTorch; Docker, Kubernetes, CI/CD, AWS / Azure / GCP",
+  "AI & Systems":"LLMs, agentic AI, test-time reasoning, multi-tenant and disaggregated model serving, platform security, PyTorch; Docker, Kubernetes, CI/CD, AWS / Azure / GCP",
   "Mathematics":"Quantum topology, topological QFT, hyperbolic geometry, optimization, asymptotic analysis",
 };
-const leadership = 'Organizer, <a href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" target="_blank" rel="noopener">AMS 2025 Special Session on Quantum Error Correction</a> · Reviewer for Quantum Science and Technology and Physica Scripta · Invited talks at JMM, IBM Quantum Developer Conference, ICTP, ICERM, Yale, and UCSB · Mentored 20+ students.';
+const leadership = 'Organizer, <a href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" target="_blank" rel="noopener">AMS 2025 Special Session on Quantum Error Correction</a> · Reviewer for Quantum Science and Technology and Physica Scripta · Invited talks at JMM, IEEE Quantum Week, IBM Quantum Developer Conference, ICTP, ICERM, Yale, and UCSB · Mentored 20+ students.';
 
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 // allow pre-escaped entities (rsquo, ndash, amp) we wrote on purpose
@@ -237,7 +250,7 @@ document.getElementById("cv-exp").innerHTML = experience.map(e=>
 document.getElementById("cv-pubs").innerHTML = research.map(p=>{
   let lk = p.link?' &nbsp;<a class="lk" href="'+p.link+'" target="_blank" rel="noopener">'+safe(p.id)+' &#8599;</a>':'';
   return '<div class="pub"><span class="ttl">'+esc(p.t)+'</span><span class="meta">'+esc(p.m)+lk+'</span></div>';
-}).join("")+'<p class="more">Selected from 13+ publications and preprints across quantum topology, quantum error correction, and quantum machine learning.</p>';
+}).join("")+'<p class="more">Selected from 19 publications and preprints across quantum topology, quantum error correction, quantum machine learning, and number theory.</p>';
 
 document.getElementById("cv-rec").innerHTML = recognition.map(r=>
   '<span class="tag"><b>'+esc(r.b)+'</b> &nbsp;'+esc(r.r)+'</span>').join("");
