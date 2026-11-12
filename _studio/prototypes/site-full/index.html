@@ -630,7 +630,6 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
   font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
   color:var(--ink);border:1px solid var(--a22);
   background:color-mix(in srgb, var(--void) 72%, transparent);
-  -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
   transition:color .18s,border-color .18s,background-color .18s;
 }
 #lamp:hover,#lamp:focus-visible{color:var(--acc);border-color:var(--a40)}
@@ -1124,6 +1123,24 @@ function tp(i,j){
    on itself without ever being contractible */
 var LOOP = [[0,1],[1,1],[1,2],[2,2],[2,1],[3,1],[3,2],[4,2],[4,1],[5,1]];
 var SYN = Math.floor(rng(SEED + "/code")()*3); /* which pair of checks fired */
+/* The pair as plaquettes: one at (SA,SB), the other DI round the hole and DJ
+   round the tube from it, each at most two, which on five is the short way.
+   A click on this plate fires a new pair and lays the chain between them by
+   the shortest path, which for one pair is what a matching decoder returns. */
+var SA = SYN, SB = 1, DI = 2, DJ = 0, SYNN = 0, CT0 = 0;
+var CDRAW = 600, CHOLD = 350, CDUR = 1450;
+function ctp(s){
+  var ai = DI < 0 ? -DI : DI;
+  if (s <= ai) return tp(SA + .5 + (DI < 0 ? -s : s), SB + .5);
+  return tp(SA + .5 + DI, SB + .5 + (DJ < 0 ? ai - s : s - ai));
+}
+function syndrome(){
+  var r = rng(SEED + "/syndrome/" + (SYNN++)), n;
+  SA = Math.floor(r()*LK); SB = Math.floor(r()*LK);
+  do { DI = Math.floor(r()*5) - 2; DJ = Math.floor(r()*5) - 2; n = (DI<0?-DI:DI) + (DJ<0?-DJ:DJ); }
+  while (n < 1 || n > 3);
+  CT0 = performance.now();
+}
 /* each lattice edge is walked along the surface, so the strand lies on the
    torus instead of cutting the chord through it */
 var LPTS = (function(){
@@ -1205,8 +1222,14 @@ var FD = (function(){
    shapes and travels between them, so a morph is exact by construction rather
    than by resampling a curve, and a fifth shape costs one function.
    It also gives the object something a line could never have: it can be blown
-   apart and drawn back. */
-var PN = 5200;
+   apart and drawn back.
+   The count is settled once, here, because every array below is cut to it:
+   half as many on a touch screen or under the width NARROW switches at.
+   The cloud was tuned at 5200, so each point is drawn larger to keep its
+   weight: a little short of the full area of 5200/PN of those, because fewer
+   points overlap less and full area read as beads rather than a cloud. */
+var PN = (matchMedia("(pointer:coarse)").matches || window.innerWidth < 1250) ? 900 : 1800;
+var PK = Math.pow(5200/PN, .4);
 var PA = new Float64Array(PN*3), PB = new Float64Array(PN*3),
     PC = new Float64Array(PN*3), PD = new Float64Array(PN*3);
 var PHU = new Uint8Array(PN), PSZ = new Float32Array(PN);
@@ -1294,7 +1317,7 @@ var PLX = new Float64Array(PN), PLY = new Float64Array(PN), PLZ = new Float64Arr
     PD[i3+1] = sa*URAD*CPH - w*SPH + my*s*bwid;
     PD[i3+2] = sa*URAD*SPH + w*CPH + mz*s*bwid;
     PHU[k] = Math.floor(t*ARCS) % ARCS;
-    PSZ[k] = .55 + r3*r3*1.5;
+    PSZ[k] = (.55 + r3*r3*1.5)*PK;
     PLX[k] = PA[i3]; PLY[k] = PA[i3+1]; PLZ[k] = PA[i3+2];
   }
 })();
@@ -1452,16 +1475,50 @@ function buildLetters(){
 /* the displacement carried at each knot of the sheet, and how far it came:
    the distance is what the light is read off */
 var FDX = null, FDY = null, FDM = null;
+/* The sheet is bent by scroll, size, type and the object's place, none of
+   which a still page changes. So the cut paths are kept, and only re-cut when
+   one of those moves or the ring is crossing; a still frame just fills them. */
+var FBP = null, FGL = null, FKEY = "", FLM = null;
 function drawFabric(c, ocx, ocy, unit, e){
   if (!LMX) buildLetters();
+  if (SHOCKQ){ SHOCK = e; SHOCKQ = 0; }
+  var sw = e - SHOCK, ring = sw > 0 && sw < 1.6, lit = .30 + RETA*.70, NB = 7, bi;
+  var oy = window.pageYOffset;
+  var key = ocx + "," + ocy + "," + unit + "," + RETA + "," + oy + "," + VW + "," + VH;
+  if (ring || key !== FKEY || FLM !== LMX){
+    FKEY = ring ? "" : key; FLM = LMX;
+    cutFabric(ocx, ocy, unit, oy, ring ? sw : -1, NB);
+  }
+  c.save();
+  c.globalCompositeOperation = BLEND;
+  for (bi=1; bi<NB; bi++){
+    var t2 = bi/(NB-1);
+    /* The ramp is deliberately short at both ends. It ran the whole way to
+       magenta and to better than a tenth alpha, which made a deep well read
+       as a coloured pool sitting on the page rather than as the sheet itself
+       catching light. It now travels most of the way to violet and no
+       further, at about half the value: the difference across the sheet
+       should be noticed, not looked at. */
+    var col = mix(P.cyan, P.violet, t2*.72);
+    if (LIGHT) col = mix(col, P.white, .30);
+    c.fillStyle = A(col, (.016 + t2*t2*.055)*lit);
+    c.fill(FBP[bi]);
+  }
+  c.lineWidth = 1;
+  /* the weave is a ground, not a subject: it should be felt before it is
+     read, so it sits close to the threshold of visible in both themes */
+  c.strokeStyle = A(GRIDC, (LIGHT ? .085 : .055)*lit);
+  c.stroke(FGL);
+  c.restore();
+}
+function cutFabric(ocx, ocy, unit, oy, sw, NB){
   var step = Math.max(30, Math.round(VW/46));
   var cols = Math.ceil(VW/step) + 3, rows = Math.ceil(VH/step) + 3, n = cols*rows;
   if (!FDX || FDX.length < n){
     FDX = new Float64Array(n); FDY = new Float64Array(n); FDM = new Float64Array(n);
   }
   FDX.fill(0, 0, n); FDY.fill(0, 0, n);
-  if (SHOCKQ){ SHOCK = e; SHOCKQ = 0; }
-  var oy = window.pageYOffset, i, j, gx, gy, dx, dy, d, d2, pull, tp, idx;
+  var i, j, gx, gy, dx, dy, d, d2, pull, tp, idx;
 
   /* one mass laid into the sheet, and only into the knots it can reach: this
      is what makes a thousand letters affordable sixty times a second */
@@ -1497,8 +1554,7 @@ function drawFabric(c, ocx, ocy, unit, e){
   splat(ocx, ocy, om, om*3.4 + 90, .62);
 
   /* the whoosh leaves through the sheet as a ring */
-  var sw = e - SHOCK;
-  if (sw > 0 && sw < 1.6){
+  if (sw > 0){
     var swr = sw*900, fall = 1 - sw/1.6;
     for (j=0;j<rows;j++){
       gy = (j-1)*step;
@@ -1533,7 +1589,7 @@ function drawFabric(c, ocx, ocy, unit, e){
      all, so the fabric only glows where something heavy is standing on it.
      Cells are sorted into buckets and each bucket filled once: seven fills a
      frame rather than thirteen hundred. */
-  var NB = 7, bp = [], bi, inv = 1/cap, lit = .30 + RETA*.70;
+  var bp = [], bi, inv = 1/cap, gl = new Path2D();
   for (bi=0; bi<NB; bi++) bp.push(new Path2D());
   for (j=0;j<rows-1;j++) for (i=0;i<cols-1;i++){
     var ca = j*cols+i, cb = ca+1, cc = ca+cols+1, cd = ca+cols;
@@ -1548,43 +1604,21 @@ function drawFabric(c, ocx, ocy, unit, e){
     pth.lineTo(xa + FDX[cd], ya+step + FDY[cd]);
     pth.closePath();
   }
-
-  c.save();
-  c.globalCompositeOperation = BLEND;
-  for (bi=1; bi<NB; bi++){
-    var t2 = bi/(NB-1);
-    /* The ramp is deliberately short at both ends. It ran the whole way to
-       magenta and to better than a tenth alpha, which made a deep well read
-       as a coloured pool sitting on the page rather than as the sheet itself
-       catching light. It now travels most of the way to violet and no
-       further, at about half the value: the difference across the sheet
-       should be noticed, not looked at. */
-    var col = mix(P.cyan, P.violet, t2*.72);
-    if (LIGHT) col = mix(col, P.white, .30);
-    c.fillStyle = A(col, (.016 + t2*t2*.055)*lit);
-    c.fill(bp[bi]);
-  }
-  c.lineWidth = 1;
-  /* the weave is a ground, not a subject: it should be felt before it is
-     read, so it sits close to the threshold of visible in both themes */
-  c.strokeStyle = A(GRIDC, (LIGHT ? .085 : .055)*lit);
-  c.beginPath();
   for (j=0;j<rows;j++){
     gy = (j-1)*step;
     for (i=0;i<cols;i++){
       idx = j*cols + i; gx = (i-1)*step;
-      if (i) c.lineTo(gx+FDX[idx], gy+FDY[idx]); else c.moveTo(gx+FDX[idx], gy+FDY[idx]);
+      if (i) gl.lineTo(gx+FDX[idx], gy+FDY[idx]); else gl.moveTo(gx+FDX[idx], gy+FDY[idx]);
     }
   }
   for (i=0;i<cols;i++){
     gx = (i-1)*step;
     for (j=0;j<rows;j++){
       idx = j*cols + i; gy = (j-1)*step;
-      if (j) c.lineTo(gx+FDX[idx], gy+FDY[idx]); else c.moveTo(gx+FDX[idx], gy+FDY[idx]);
+      if (j) gl.lineTo(gx+FDX[idx], gy+FDY[idx]); else gl.moveTo(gx+FDX[idx], gy+FDY[idx]);
     }
   }
-  c.stroke();
-  c.restore();
+  FBP = bp; FGL = gl;
 }
 
 function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
@@ -1851,17 +1885,24 @@ function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
   /* --- what the code found, over the subject: two checks that fired, and
      the chain of corrections laid between them. --- */
   if (wB > .012){
-    var ci, ch = [], mr = unit*.0125, cp;
-    for (ci=0; ci<3; ci++){
-      cp = tp(SYN+ci+.5, 1.5); pj(cp[0],cp[1],cp[2]); ch.push(pjx, pjy);
+    /* a fresh pair is lit at once, its chain walked out from one to the other
+       over CDRAW, held, and then let down to the resting pair it now is */
+    var ci, ch = [], mr = unit*.0125, cw, ct = CT0 ? performance.now() - CT0 : -1;
+    var cn = (DI<0?-DI:DI) + (DJ<0?-DJ:DJ), cq = ct < 0 ? cn : cn*cl1(ct/CDRAW);
+    var hl = ct < 0 ? 0 : 1 - span(ct, CDRAW + CHOLD, CDUR), cm = Math.ceil(cq*8);
+    c.beginPath();
+    for (ci=0; ci<=cm; ci++){
+      cw = ctp(Math.min(ci/8, cq)); pj(cw[0],cw[1],cw[2]);
+      if (ci) c.lineTo(pjx,pjy); else c.moveTo(pjx,pjy);
     }
-    c.strokeStyle = A(P.cyan,.55*wB); c.lineWidth = 2.4;
-    c.beginPath(); c.moveTo(ch[0],ch[1]);
-    c.lineTo(ch[2],ch[3]); c.lineTo(ch[4],ch[5]);
+    if (hl > 0){ c.strokeStyle = A(P.cyan,.20*hl*wB); c.lineWidth = 7; c.stroke(); }
+    c.strokeStyle = A(P.cyan,(.55 + .40*hl)*wB); c.lineWidth = 2.4;
     c.stroke();
-    for (ci=0; ci<6; ci+=4){
+    cw = ctp(0); pj(cw[0],cw[1],cw[2]); ch.push(pjx, pjy);
+    cw = ctp(cn); pj(cw[0],cw[1],cw[2]); ch.push(pjx, pjy);
+    for (ci=0; ci<4; ci+=2){
       var ex = ch[ci], ey = ch[ci+1];
-      c.fillStyle = A(P.mag,.22*wB);
+      c.fillStyle = A(P.mag,(.22 + .25*hl)*wB);
       c.beginPath(); c.arc(ex,ey,mr*2.4,0,TAU); c.fill();
       c.strokeStyle = A(P.mag,.9*wB); c.lineWidth = 1.4;
       c.beginPath(); c.arc(ex,ey,mr,0,TAU); c.stroke();
@@ -2086,6 +2127,7 @@ function fire(px,py){
     if (d < bd){ bd = d; best = i; }
   }
   PI0 = best; PT0 = performance.now();
+  if (capI === 1) syndrome();   /* on the code, a click is a new pair of checks */
   blow();
   hush(); start();
 }
@@ -2276,13 +2318,14 @@ function telem(){
 /* `force` exists for the theme switch: the viewport has not changed, so the
    usual early return would leave the old sky painted under the new palette. */
 function size(force){
-  var d = Math.min(window.devicePixelRatio || 1, 2);
+  /* the object is light with no hard edge to it, and past 1.5 a phone was
+     paying nearly twice the fill for a sharpness nobody could see */
+  var d = Math.min(window.devicePixelRatio || 1, 1.5);
   if (!force && VW === sW && VH === sH && d === DPR) return false;
   sW = VW; sH = VH; DPR = d;
   cv.width = Math.round(VW*d); cv.height = Math.round(VH*d);
   ctx.setTransform(d,0,0,d,0,0);
-  /* the field is stars and washes, so it is cut at a lower rate than the
-     object and paid for once */
+  /* the field is stars and washes, cut at the same rate and paid for once */
   var df = Math.min(window.devicePixelRatio || 1, 1.5);
   cvF.width = Math.round(VW*df); cvF.height = Math.round(VH*df);
   ctxF.setTransform(df,0,0,df,0,0);
@@ -2328,13 +2371,14 @@ function loop(now){
   var p = prog(), y = window.pageYOffset;
   var pt = PT0 ? (now - PT0)/PDUR : -1;
   if (pt >= 1){ PT0 = 0; pt = -1; }
+  if (CT0 && now - CT0 >= CDUR) CT0 = 0;
   var st = ptv ? Math.min((now - ptv)/16.667, 3) : 1;
   ptv = now;
   ptStep = st;
   spin(now, st);
   var moving = Math.abs(p - lastP) > .0004 || y !== lastY;
-  /* a hand, a throw or a pulse gets every frame; the breath is content with half */
-  if (!moving && !live && pt < 0 && now - last < 32){ raf = requestAnimationFrame(loop); return; }
+  /* a hand, a throw, a pulse or a chain gets every frame; the breath is content with half */
+  if (!moving && !live && pt < 0 && !CT0 && now - last < 32){ raf = requestAnimationFrame(loop); return; }
   last = now; lastP = p; lastY = y;
   if (!t0) t0 = now;
   var e = (now - t0)/1000;
@@ -2466,7 +2510,7 @@ window.addEventListener("load", relayout);
 
 reduce.addEventListener && reduce.addEventListener("change", function(){
   lastP = -1; lastF = -1;
-  if (reduce.matches) { vYaw = 0; vPit = 0; PT0 = 0; stop(); still(); } else { ptv = 0; start(); }
+  if (reduce.matches) { vYaw = 0; vPit = 0; PT0 = 0; CT0 = 0; stop(); still(); } else { ptv = 0; start(); }
 });
 
 /* ---------- analytics, after the page is done painting ----------
