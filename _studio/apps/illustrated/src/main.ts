@@ -26,6 +26,10 @@ for (const [path, url] of Object.entries(built)) {
   if (m) posterFile.set(Number(m[1]), url);
 }
 
+/* index.html ships a plain summary for anything that runs no script (see
+   ../static.ts). This file builds the real page, so that copy goes. */
+document.getElementById('static-book')?.remove();
+
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.setAttribute('data-theme', 'dark');
 document.documentElement.dataset.motion = reduced ? 'reduce' : 'full';

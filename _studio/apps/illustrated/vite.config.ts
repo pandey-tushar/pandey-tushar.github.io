@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite';
 import { fileURLToPath } from 'node:url';
+import { staticBookPlugin } from './static';
 
 const at = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 
 export default defineConfig({
+  plugins: [staticBookPlugin()],
   /* relative asset paths so the build runs from any path or a file server.
      This edition is published under /illustrated/, and a relative base keeps
      that out of the build: the same dist serves from any subdirectory. */
