@@ -36,6 +36,7 @@ $must = @('CNAME','index.html','books.html','cv.html','research.html','qubit-dia
           'qec-in-practice\lesson-1.html','qec-in-practice\lesson-2.html',
           'qec-in-practice\lesson-3.html','qec-in-practice\lesson-4.html',
           'og-home.png','og-book.png',
+          'lib\three-r128.min.js','lib\katex\katex.min.css','lib\katex\fonts',
           'qubit-dialogues.pdf','an-unpolarized-life.pdf','illustrated.pdf',
           'Tushar_Pandey_Resume_AI.pdf','Tushar_Pandey_Resume_Quantum.pdf')
 $missing = $must | Where-Object { -not (Test-Path (Join-Path $repo $_)) }
