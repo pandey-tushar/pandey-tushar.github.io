@@ -4,13 +4,6 @@ import { phasesOf, drawStrip, fitPhaseLabels } from './strip.js';
 import { resultsHTML } from './results.js';
 
 
-const INFO = {
-  1: { title: 'A surface code patch', intro: 'Nine physical qubits in a 3 by 3 grid hold one logical qubit. An encoder spreads |0> over all nine, and eight checks (four X, four Z) watch for errors. Pick an error next to the Play button to see which checks fire.' },
-  2: { title: 'Logical CNOT between two patches', intro: 'Both patches use the encoder from lesson 1: A becomes |+>_L, B becomes |0>_L. Nine physical CNOTs, one between each pair of matching qubits, then act as one logical CNOT and leave a logical Bell pair.' },
-  3: { title: 'Preparing a T state', intro: 'H and T on q0 make the T state on one physical qubit; the encoder from lesson 1 carries it over as |T>_L. It is read in X (and Y): ideally 1 comes up in 14.6% of shots.' },
-  4: { title: 'Teleporting the T state', intro: 'Patch A holds |T>_L (lesson 3), B and C become a logical Bell pair (lesson 2), then a logical CNOT A to B and the readouts of A in X and B in Z teleport the T state to C, up to a Pauli fix applied to the measured bits.' },
-};
-
 // Single-error lookup table for the Z checks, copied from qec/code913.py: syndrome bits in stabilizer order -> qubit to flip.
 const Z_TABLE = { '0000': -1, '0010': 0, '1010': 1, '1000': 2, '0100': 3, '1100': 4, '0101': 7, '0001': 8 };
 
@@ -85,16 +78,9 @@ function teleportCircuit(root) {
 }
 
 async function main() {
-  const n = Math.min(4, Math.max(1, parseInt(new URLSearchParams(location.search).get('n'), 10) || 1));
+  // the page is written per lesson by _studio/tools/build-lessons.py, title and intro included
+  const n = Number(document.querySelector('main').dataset.lesson);
   const D = await (await fetch(`data/lesson${n}.json`)).json();
-  const info = INFO[n];
-  document.title = `Lesson ${n}: ${info.title}`;
-  document.getElementById('lesson-title').innerHTML = `Lesson ${n}: ${info.title}`;
-  document.getElementById('lesson-intro').innerHTML = stateHTML(info.intro);
-  document.getElementById('prev').hidden = n === 1;
-  document.getElementById('prev').href = `lesson.html?n=${n - 1}`;
-  document.getElementById('next').hidden = n === 4;
-  document.getElementById('next').href = `lesson.html?n=${n + 1}`;
 
   const svg = document.getElementById('patches');
   addEventListener('resize', () => fitPhaseLabels(stripEl));

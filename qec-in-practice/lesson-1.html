@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 1: A surface code patch · Quantum Error Correction in Practice</title>
+<meta name="description" content="Nine physical qubits in a 3 by 3 grid hold one logical qubit. An encoder spreads |0⟩ over all nine, and eight checks (four X, four Z) watch for errors. Pick an error next to the Play button to see which checks fire.">
+<link rel="canonical" href="https://pandey-tushar.com/qec-in-practice/lesson-1.html">
+<!-- the homepage's theme choice (tp-theme), settled before the first paint -->
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.theme = (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light") ? "light" : "dark";
+  }catch(e){ d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="stylesheet" href="css/site.css">
+<script type="module" src="js/lesson.js"></script>
+</head>
+<body>
+<main class="page" data-lesson="1">
+  <nav class="nav"><a href="../">Tushar Pandey</a> <a href="./">All lessons</a> <a id="next" href="lesson-2.html">Next &rarr;</a></nav>
+  <h1 id="lesson-title">Lesson 1: A surface code patch</h1>
+  <p class="lead" id="lesson-intro">Nine physical qubits in a 3 by 3 grid hold one logical qubit. An encoder spreads |0&#10217; over all nine, and eight checks (four X, four Z) watch for errors. Pick an error next to the Play button to see which checks fire.</p>
+
+  <div class="stage" id="stage">
+    <section class="panel player">
+      <h2 class="sr-only">Patches and gate layers</h2>
+      <svg id="patches" class="patches"></svg>
+      <p class="legend"><span class="sw sw-x"></span> X check <span class="sw sw-z"></span> Z check <span class="sw sw-fire"></span> fired <span class="sw sw-off"></span> undetermined <span class="sw sw-gate"></span> gate <span class="sw sw-log"></span> X<sub>L</sub>, Z<sub>L</sub> = +1</p>
+      <div class="controls">
+        <div class="timeline-head">
+          <button type="button" id="play" aria-pressed="false">Play</button>
+          <span id="where" class="where" aria-live="polite"></span>
+          <label id="inject-box" class="inject-box" hidden>Inject an error
+            <select id="inject-pick"><option value="">No error</option></select></label>
+        </div>
+        <input type="range" id="slider" class="slider" min="0" max="1" step="any" value="0" aria-label="Position in the circuit (steps)">
+        <div class="strip-scroll" id="strip-scroll"><div class="strip" id="strip"></div></div>
+        <p class="caption" id="caption" aria-live="polite"></p>
+      </div>
+      <div class="layer-text">
+        <p class="caption checkline" id="checkline"></p>
+        <div id="state" class="state"></div>
+        <div id="error-panel" class="error-panel"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel" id="circuit-box">
+    <h2>The ideal logical circuit</h2>
+    <div id="circuit" class="circuit"></div>
+  </section>
+
+  <section class="panel" id="live-box" hidden>
+    <h2>Run it live</h2>
+    <div id="live"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Step by step</h2>
+    <ol class="steps">
+      <li><b>encode A.</b> CNOT q0 → q1 starts copying q0 along the top row. H on q4, q5, q6, q7 makes them the sources of the X checks.</li>
+      <li><b>encode A.</b> CNOT q0 → q2 finishes the copy. Had q0 been |1&#10217;, the top row would now carry X on all three qubits: that is X&#8203;<sub>L</sub>, the logical flip.</li>
+      <li><b>encode A.</b> The sources fan out: CNOT q4 → q0, q5 → q2.</li>
+      <li><b>encode A.</b> The sources fan out: CNOT q4 → q1, q7 → q0.</li>
+      <li><b>encode A.</b> The sources fan out: CNOT q4 → q3, q7 → q1.</li>
+      <li><b>encode A.</b> The sources fan out: CNOT q6 → q3, q7 → q2.</li>
+      <li><b>encode A.</b> The sources fan out: CNOT q7 → q3.</li>
+      <li><b>encode A.</b> CNOT q7 → q8 completes the fan-out: all eight checks hold and A is |0&#10217;&#8203;<sub>L</sub>. Whatever state q0 starts in, the encoder makes it the logical state.</li>
+      <li><b>measure.</b> Every qubit is measured in Z. Only the checks that are Z parities can still be read.</li>
+    </ol>
+  </section>
+
+  <section class="panel">
+    <h2 id="results-head">Results</h2>
+    <div id="results"></div>
+  </section>
+</main>
+</body>
+</html>

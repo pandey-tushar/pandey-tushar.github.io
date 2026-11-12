@@ -33,6 +33,8 @@ if (Test-Path "$repo\hindi") { throw 'the Hindi edition must not be deployed' }
 # 4. everything the site links to must survive
 $must = @('CNAME','index.html','books.html','cv.html','research.html','qubit-dialogues.html',
           'sitemap.xml','robots.txt',
+          'qec-in-practice\lesson-1.html','qec-in-practice\lesson-2.html',
+          'qec-in-practice\lesson-3.html','qec-in-practice\lesson-4.html',
           'og-home.png','og-book.png',
           'qubit-dialogues.pdf','an-unpolarized-life.pdf','illustrated.pdf',
           'Tushar_Pandey_Resume_AI.pdf','Tushar_Pandey_Resume_Quantum.pdf')

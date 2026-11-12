@@ -45,6 +45,10 @@ a { color: var(--acc); }
 .lcard .num { font: 0.72rem var(--mono); letter-spacing: 0.2em; color: var(--acc); }
 .lcard span:last-child { color: var(--muted); font-size: 0.95rem; }
 
+/* the written-out steps under the player */
+.steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
+.steps b { font-weight: 600; }
+
 /* panels */
 .panel { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin: 12px 0; min-width: 0; }
 .panel[hidden], section[hidden] { display: none; }

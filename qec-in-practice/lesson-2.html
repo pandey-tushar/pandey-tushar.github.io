@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 2: Logical CNOT between two patches · Quantum Error Correction in Practice</title>
+<meta name="description" content="Both patches use the encoder from lesson 1: A becomes |+⟩, B becomes |0⟩. Nine physical CNOTs, one between each pair of matching qubits, then act as one logical CNOT and leave a logical Bell pair.">
+<link rel="canonical" href="https://pandey-tushar.com/qec-in-practice/lesson-2.html">
+<!-- the homepage's theme choice (tp-theme), settled before the first paint -->
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.theme = (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light") ? "light" : "dark";
+  }catch(e){ d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="stylesheet" href="css/site.css">
+<script type="module" src="js/lesson.js"></script>
+</head>
+<body>
+<main class="page" data-lesson="2">
+  <nav class="nav"><a href="../">Tushar Pandey</a> <a href="./">All lessons</a> <a id="prev" href="lesson-1.html">&larr; Previous</a> <a id="next" href="lesson-3.html">Next &rarr;</a></nav>
+  <h1 id="lesson-title">Lesson 2: Logical CNOT between two patches</h1>
+  <p class="lead" id="lesson-intro">Both patches use the encoder from lesson 1: A becomes |+&#10217;&#8203;<sub>L</sub>, B becomes |0&#10217;&#8203;<sub>L</sub>. Nine physical CNOTs, one between each pair of matching qubits, then act as one logical CNOT and leave a logical Bell pair.</p>
+
+  <div class="stage" id="stage">
+    <section class="panel player">
+      <h2 class="sr-only">Patches and gate layers</h2>
+      <svg id="patches" class="patches"></svg>
+      <p class="legend"><span class="sw sw-x"></span> X check <span class="sw sw-z"></span> Z check <span class="sw sw-fire"></span> fired <span class="sw sw-off"></span> undetermined <span class="sw sw-gate"></span> gate <span class="sw sw-log"></span> X<sub>L</sub>, Z<sub>L</sub> = +1</p>
+      <div class="controls">
+        <div class="timeline-head">
+          <button type="button" id="play" aria-pressed="false">Play</button>
+          <span id="where" class="where" aria-live="polite"></span>
+          <label id="inject-box" class="inject-box" hidden>Inject an error
+            <select id="inject-pick"><option value="">No error</option></select></label>
+        </div>
+        <input type="range" id="slider" class="slider" min="0" max="1" step="any" value="0" aria-label="Position in the circuit (steps)">
+        <div class="strip-scroll" id="strip-scroll"><div class="strip" id="strip"></div></div>
+        <p class="caption" id="caption" aria-live="polite"></p>
+      </div>
+      <div class="layer-text">
+        <p class="caption checkline" id="checkline"></p>
+        <div id="state" class="state"></div>
+        <div id="error-panel" class="error-panel"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel" id="circuit-box">
+    <h2>The ideal logical circuit</h2>
+    <div id="circuit" class="circuit"></div>
+  </section>
+
+  <section class="panel" id="live-box" hidden>
+    <h2>Run it live</h2>
+    <div id="live"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Step by step</h2>
+    <ol class="steps">
+      <li><b>prepare A.</b> H puts q0 of A in |+&#10217;. A CNOT acting on |0&#10217;&#8203;<sub>L</sub> would do nothing; with A in |+&#10217;&#8203;<sub>L</sub> it makes a Bell pair.</li>
+      <li><b>encode A.</b> Encode A with the encoder from lesson 1. It turns q0 = |0&#10217; into |0&#10217;&#8203;<sub>L</sub> and q0 = |1&#10217; into X&#8203;<sub>L</sub>|0&#10217;&#8203;<sub>L</sub> = |1&#10217;&#8203;<sub>L</sub>, so q0 = |+&#10217; becomes |+&#10217;&#8203;<sub>L</sub>: X&#8203;<sub>L</sub> holds, Z&#8203;<sub>L</sub> does not.</li>
+      <li><b>encode B.</b> Encode B the same way from q0 = |0&#10217;: |0&#10217;&#8203;<sub>L</sub>, so Z&#8203;<sub>L</sub> holds.</li>
+      <li><b>transversal CNOT A→B.</b> Nine CNOTs, qi of A → qi of B. Each copies X forward and Z backward: X&#8203;<sub>L</sub> of A becomes X&#8203;<sub>L</sub> of A · X&#8203;<sub>L</sub> of B, Z&#8203;<sub>L</sub> of B becomes Z&#8203;<sub>L</sub> of A · Z&#8203;<sub>L</sub> of B. That is a logical CNOT. Checks map to checks, so all sixteen hold, and one faulty CNOT hits each patch at most once.</li>
+      <li><b>measure.</b> Every qubit is measured in Z. Only the checks that are Z parities can still be read. The two logical bits come out random, but always equal.</li>
+    </ol>
+  </section>
+
+  <section class="panel">
+    <h2 id="results-head">Results</h2>
+    <div id="results"></div>
+  </section>
+</main>
+</body>
+</html>
