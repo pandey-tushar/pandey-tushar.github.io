@@ -28,6 +28,8 @@ for n in ('1', '2', '3', '4'):
     fail += [f'{page.name}: no {k}' for k, v in want.items() if v not in html]
     if any(ord(c) < 32 and c not in '\n\t' for c in html):
         fail.append(f'{page.name}: control character in the page')
+hub = read(QEC / 'index.html')
+fail += [f'index.html: no card picture for lesson {n}' for n in lessons if f'<!-- thumb {n} --><figure' not in hub]
 for f in [QEC / 'index.html', *QEC.glob('lesson-*.html'), *QEC.glob('js/*.js'), QEC.parent / 'sitemap.xml']:
     if re.search(r'lesson\.html\?n=', read(f)):
         fail.append(f'{f.name}: still links to lesson.html?n=')

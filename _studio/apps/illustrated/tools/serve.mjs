@@ -5,6 +5,7 @@
 import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -20,6 +21,10 @@ const MIME = {
   '.ttf': 'font/ttf',
 };
 
+/* index.html links the site chrome by root URL (/lib/site.css, /lib/site.js),
+   which lives at the site root, not in dist/. */
+const LIB = resolve(fileURLToPath(new URL('../../../../lib', import.meta.url)));
+
 export async function serve(root) {
   const base = resolve(root);
   try {
@@ -32,8 +37,9 @@ export async function serve(root) {
     const url = new URL(req.url ?? '/', 'http://localhost');
     let file = decodeURIComponent(url.pathname);
     if (file.endsWith('/')) file += 'index.html';
-    const target = resolve(join(base, file));
-    if (!target.startsWith(base)) {
+    const lib = file.startsWith('/lib/');
+    const target = lib ? resolve(join(LIB, file.slice(4))) : resolve(join(base, file));
+    if (!target.startsWith(lib ? LIB : base)) {
       res.writeHead(403).end();
       return;
     }

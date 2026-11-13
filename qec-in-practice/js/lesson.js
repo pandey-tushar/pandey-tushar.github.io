@@ -142,7 +142,11 @@ async function main() {
     const gates = cur.layers[k].summary ? [] : cur.layers[k].gates;
     patches.update({ a, b, la, lb, m, gates, gateAlpha, error });
     if (k !== lastK) {
-      cells.forEach((c, t) => c.classList.toggle('current', t === k && pos < T + 1));
+      cells.forEach((c, t) => {
+        const on = t === k && pos < T + 1;
+        c.classList.toggle('current', on);
+        if (on) c.setAttribute('aria-current', 'step'); else c.removeAttribute('aria-current');
+      });
       const c = cells[k];
       if (c && (c.offsetLeft < scroller.scrollLeft || c.offsetLeft + c.offsetWidth > scroller.scrollLeft + scroller.clientWidth)) {
         scroller.scrollLeft = c.offsetLeft - scroller.clientWidth / 2;

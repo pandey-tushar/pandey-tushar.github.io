@@ -1,8 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="tp-full">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b1122">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%23070a14'/%3E%3Cg%20fill='none'%20stroke='%2352d6e6'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
 <script>
@@ -12,7 +30,7 @@
   gtag('config', 'G-DVPGC1C44Z');
 </script>
 <title>Books · Tushar Pandey</title>
-<meta name="description" content="Three editions by Tushar Pandey. The Qubit Dialogues, twenty two cantos on what the quantum machine can and cannot do. An Unpolarized Life, twelve chapters on the questions underneath. And the illustrated edition, every canto cut as an engraved plate.">
+<meta name="description" content="Books by Tushar Pandey: The Qubit Dialogues on quantum computing, its illustrated edition, and An Unpolarized Life. Read free online or as a PDF.">
 <meta name="author" content="Tushar Pandey">
 <link rel="canonical" href="https://pandey-tushar.com/books.html">
 <script type="application/ld+json">
@@ -35,7 +53,7 @@
      "url": "https://pandey-tushar.com/"
     },
     "inLanguage": "en",
-    "numberOfPages": 90,
+    "numberOfPages": 99,
     "description": "Twenty two cantos in two voices, a Seeker and an Oracle, on superposition, entanglement, error correction and the price of the impossible.",
     "isAccessibleForFree": true,
     "workExample": {
@@ -59,7 +77,8 @@
      "url": "https://pandey-tushar.com/"
     },
     "inLanguage": "en",
-    "numberOfPages": 38,
+    "numberOfPages": 42,
+    "image": "https://pandey-tushar.com/og-life.png",
     "description": "Twelve chapters in two voices on deciding, on what choosing costs, on repair, and on what survives you.",
     "isAccessibleForFree": true,
     "workExample": {
@@ -83,7 +102,7 @@
      "url": "https://pandey-tushar.com/"
     },
     "inLanguage": "en",
-    "numberOfPages": 106,
+    "numberOfPages": 96,
     "description": "The twenty two cantos of The Qubit Dialogues set as engraved plates of generative artwork.",
     "isAccessibleForFree": true,
     "workExample": {
@@ -97,7 +116,7 @@
 }
 </script>
 <meta property="og:title" content="Books · Tushar Pandey">
-<meta property="og:description" content="Three editions. Two voices, one night at a time. Read online or take the PDF.">
+<meta property="og:description" content="Two books and an illustrated edition. Two voices, one night at a time. Read online or take the PDF.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://pandey-tushar.com/books.html">
 <meta property="og:image" content="https://pandey-tushar.com/og-book.png">
@@ -106,142 +125,46 @@
 <meta property="og:site_name" content="Tushar Pandey">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Books · Tushar Pandey">
-<meta name="twitter:description" content="Three editions. Two voices, one night at a time. Read online or take the PDF.">
+<meta name="twitter:description" content="Two books and an illustrated edition. Two voices, one night at a time. Read online or take the PDF.">
 <meta name="twitter:image" content="https://pandey-tushar.com/og-book.png">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#05060f">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='74' font-size='72' text-anchor='middle' fill='%23f4d58d'%3E%E2%9C%A7%3C/text%3E%3C/svg%3E">
 <style>
 /* -------------------------------------------------------------------
-   THE CATALOGUE. Same plate the site is cut from: night ground, gold
-   burin, one serif in four registers, and a mono voice reserved for
-   apparatus. No webfont, no request beyond this document.
+   THE CATALOGUE. The site ground and type from /lib/site.css; gold is
+   kept as the books' own second ink, for the plates and the numerals.
    ------------------------------------------------------------------- */
 
-:root{
-  --void:#05060f;
-  --ink:#e8e6ff;
-  --gold:#f4d58d;
-  --cyan:#5ef4ff;
-  --dim:#8a88b8;
-  --g08:rgba(244,213,141,.08);
-  --g14:rgba(244,213,141,.14);
-  --g22:rgba(244,213,141,.22);
-  --g40:rgba(244,213,141,.40);
-  --g70:rgba(244,213,141,.70);
-  --body:rgba(232,230,255,.86);
+:root{--gold:#f4d58d;--step:clamp(2.6rem,1.4rem + 3.4vw,4.6rem)}
+:root[data-theme="light"]{--gold:#8a5a0f}
 
-  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","Hoefler Text",Georgia,"Times New Roman",serif;
-  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
-
-  --gut:clamp(20px,4.4vw,58px);
-  --step:clamp(2.6rem,1.4rem + 3.4vw,4.6rem);
-}
-
-*,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-body,h1,h2,p,ol,ul,li,figure{margin:0;padding:0}
+body,h1,h2,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
 ol,ul{list-style:none}
 
-body{
-  background:var(--void);
-  color:var(--ink);
-  font-family:var(--serif);
-  font-size:1rem;
-  line-height:1.6;
-  font-kerning:normal;
-  hanging-punctuation:first last;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
-/* the ground: one low wash, no image, no request */
-body::before{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:
-    radial-gradient(120% 80% at 82% 2%, rgba(176,123,255,.065), transparent 58%),
-    radial-gradient(90% 70% at 4% 98%, rgba(244,213,141,.05), transparent 58%),
-    linear-gradient(180deg,#070818 0%,var(--void) 45%,#04050c 100%);
-}
-
-a{color:inherit;text-decoration:none}
-::selection{background:rgba(244,213,141,.22)}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-
-.skip{
-  position:absolute;left:-9999px;top:0;z-index:9;
-  background:var(--gold);color:#05060f;padding:8px 14px;
-  font-family:var(--mono);font-size:12px;
-}
-.skip:focus{left:8px;top:8px}
-
-/* ---------- the apparatus voice ---------- */
-.lbl{
-  font-family:var(--mono);
-  font-size:9.5px;
-  line-height:1.25;
-  letter-spacing:.24em;
-  text-transform:uppercase;
-  color:var(--g70);
-}
-
-/* ---------- rule bar ---------- */
-.bar{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:14px 18px;flex-wrap:wrap;
-  padding:16px var(--gut) 14px;
-  border-bottom:1px solid var(--g14);
-}
-.mark{display:flex;align-items:center;gap:11px;flex:0 0 auto}
-.mark svg{display:block}
-.mark span{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
-  color:rgba(232,230,255,.78);white-space:nowrap;
-}
-.nav{display:flex;gap:clamp(11px,1.8vw,26px);flex-wrap:wrap}
-.nav a{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--dim);padding-bottom:2px;border-bottom:1px solid transparent;
-  transition:color .18s,border-color .18s;
-}
-.nav a:hover{color:var(--gold);border-bottom-color:var(--g40)}
-.nav a[aria-current="page"]{color:var(--gold);border-bottom-color:var(--g40)}
-
 /* ---------- masthead ---------- */
-.wrap{max-width:78rem;margin-inline:auto;padding-inline:var(--gut)}
-
 .masthead{padding-block:clamp(2.4rem,1.2rem + 4vw,4.6rem) 0}
 .eyebrow{
   display:flex;align-items:center;gap:12px;
   margin-bottom:clamp(16px,2.6vh,28px);
   letter-spacing:.3em;
 }
-.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--g22),transparent)}
+.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--tp-a22),transparent)}
 
-h1{
-  font-weight:400;
-  font-size:clamp(2.65rem,8vw,4.6rem);
-  line-height:.96;
-  letter-spacing:-.02em;
-  color:#f2f0ff;
-  margin-left:-.028em;
-}
+h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
 .lede{
   margin-top:clamp(18px,2.4vw,26px);
   max-width:34em;
-  font-style:italic;
+  font-family:var(--tp-serif);font-style:italic;
   font-size:clamp(1.06rem,1.5vw,1.34rem);
   line-height:1.46;
-  color:rgba(232,230,255,.9);
-  text-wrap:pretty;
+  color:var(--tp-text);
 }
 .note{
   margin-top:clamp(14px,1.8vw,20px);
   display:flex;gap:10px;align-items:baseline;
-  max-width:38em;
-  font-family:var(--mono);font-size:10.5px;line-height:1.65;letter-spacing:.05em;
-  color:var(--dim);
+  max-width:42em;
+  font-family:var(--tp-mono);font-size:12px;line-height:1.65;letter-spacing:.04em;
+  color:var(--tp-dim);
 }
-.note i{color:var(--gold);font-style:normal;flex:0 0 auto;opacity:.85}
+.note i{color:var(--tp-acc);font-style:normal;flex:0 0 auto;opacity:.9}
 
 /* ---------- the catalogue ---------- */
 .catalogue{
@@ -256,55 +179,36 @@ h1{
   row-gap:1.45rem;
   align-items:start;
   padding-block:var(--step);
-  border-top:1px solid var(--g14);
+  border-top:1px solid var(--tp-a14);
 }
-.catalogue li:last-child .entry{border-bottom:1px solid var(--g14)}
 
-/* the plate seal */
-.seal{display:flex;flex-direction:column;gap:9px;align-items:flex-start}
-.seal svg{display:block;width:120px;height:120px}
-/* the plate number leads, the subject sits under it: the caption is too
-   long for the margin column, so it is broken where a caption breaks
-   rather than wherever the column runs out */
-.seal figcaption{
-  font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
-  line-height:1.5;
-  color:rgba(138,136,184,.85);
-}
-.seal figcaption b{display:block;font-weight:400;color:var(--g70)}
+/* the plate seal: its art draws its own frame, so the plate is open */
+.seal{display:flex;flex-direction:column;gap:0;align-items:flex-start;color:var(--gold)}
+.seal svg{width:120px;height:120px}
+.seal .cy{stroke:var(--tp-acc)}
 
 .body{min-width:0}
 /* nowrap, so a long title breaks inside itself rather than dropping the
    numeral onto a line of its own */
 .head{display:flex;align-items:baseline;gap:.8rem;flex-wrap:nowrap}
 .rn{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;
-  color:var(--g70);flex:0 0 auto;
+  font-family:var(--tp-mono);font-size:12px;letter-spacing:.22em;
+  color:var(--gold);flex:0 0 auto;
 }
-h2{
-  min-width:0;
-  font-weight:400;
-  font-size:clamp(1.6rem,3.4vw,2.35rem);
-  line-height:1.1;
-  letter-spacing:-.014em;
-  color:#f2f0ff;
-  text-wrap:balance;
-}
+h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
 .voice{
   margin-top:.85rem;
   max-width:36em;
-  font-style:italic;
+  font-family:var(--tp-serif);font-style:italic;
   font-size:clamp(1.02rem,1.25vw,1.16rem);
   line-height:1.5;
-  color:rgba(232,230,255,.9);
-  text-wrap:pretty;
+  color:var(--tp-text);
 }
 .what{
   margin-top:1.15rem;
   max-width:38em;
-  color:var(--body);
+  color:var(--tp-text);
   line-height:1.62;
-  text-wrap:pretty;
 }
 
 /* the specification block: apparatus label, then value */
@@ -317,54 +221,18 @@ h2{
 }
 .spec dt{justify-self:start}
 .spec dd{
-  font-family:var(--mono);font-size:11px;letter-spacing:.05em;line-height:1.5;
-  color:rgba(232,230,255,.82);
+  font-family:var(--tp-mono);font-size:12px;letter-spacing:.04em;line-height:1.5;
+  color:var(--tp-text);
 }
 
 /* ---------- actions ---------- */
 .actions{display:flex;flex-wrap:wrap;gap:10px}
-.btn{
-  position:relative;display:inline-block;padding:11px 17px;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
-  color:rgba(232,230,255,.86);
-  border:1px solid rgba(244,213,141,.17);
-  background:rgba(244,213,141,.012);
-  transition:color .18s,border-color .18s,background-color .18s;
-}
-.btn::before,.btn::after{
-  content:"";position:absolute;width:6px;height:6px;
-  border:1px solid var(--g40);transition:border-color .18s;
-}
-.btn::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
-.btn::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
-.btn:hover{color:var(--gold);border-color:var(--g22);background:rgba(244,213,141,.045)}
-.btn:hover::before,.btn:hover::after{border-color:var(--g70)}
-.btn .sub{opacity:.62;letter-spacing:.1em}
+.tp-btn .sub{opacity:.62;letter-spacing:.1em}
 
-/* ---------- foot ---------- */
-.foot{
-  border-top:1px solid var(--g14);
-  padding-block:clamp(1.1rem,1.6vw,1.6rem) clamp(2.2rem,3vw,3.2rem);
-  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;
-  gap:.9rem 2.4rem;
-}
-.foot-links{display:flex;flex-wrap:wrap;gap:.55rem 1.4rem}
-.foot-links a{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
-  color:var(--dim);border-bottom:1px solid transparent;padding-bottom:2px;
-  transition:color .18s,border-color .18s;
-}
-.foot-links a:hover{color:var(--gold);border-bottom-color:var(--g40)}
-.colophon{font-size:.86rem;color:rgba(232,230,255,.72);line-height:1.55}
-.colophon .lbl{margin-right:.6em}
-
-/* ---------------------------------------------------------------
-   Phone first, so the single column above is the default. Below 52em
-   the plate lies down beside its caption and shrinks to a mark.
-   --------------------------------------------------------------- */
 @media (max-width:43.99em){
   .seal{flex-direction:row;align-items:center;gap:14px}
   .seal svg{width:76px;height:76px}
+  .seal figcaption{margin-top:0}
 }
 
 /* >= 44em: the plate swings out into a margin column */
@@ -402,62 +270,60 @@ h2{
 }
 
 @media (max-width:34em){
-  .mark span{display:none}
-  .bar{gap:12px}
-  .nav{gap:11px}
-  .nav a{font-size:9.5px;letter-spacing:.1em}
   .eyebrow{letter-spacing:.2em}
   .spec{grid-template-columns:minmax(0,1fr);gap:.25rem}
   .spec dd{margin-bottom:.55rem}
-  .btn{padding:10px 13px;letter-spacing:.12em}
+  .tp-btn{padding:10px 13px;letter-spacing:.12em}
 }
 
-@media (prefers-reduced-motion:reduce){
-  *{transition:none !important}
+@media print{
+  .lede,.voice,.what,.spec dd,.note{color:#000}
+  .actions{display:none}
 }
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
+<a class="tp-skip" href="#main">Skip to content</a>
 
-<header class="bar">
-  <a class="mark" href="/" aria-label="Tushar Pandey, home">
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
     <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <g fill="none" stroke="#f4d58d" stroke-width="1.05" opacity=".85">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
         <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
       </g>
     </svg>
     <span>Tushar Pandey</span>
   </a>
-  <nav class="nav" aria-label="Sections">
-    <a href="/#quantum">Quantum</a>
-    <a href="/#ai">AI</a>
+  <nav class="tp-nav" aria-label="Primary">
     <a href="/research.html">Research</a>
-    <a href="books.html" aria-current="page">Books</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
     <a href="/cv.html">CV</a>
     <a href="/#contact">Contact</a>
   </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
 <main id="main">
 
-  <div class="wrap">
-    <div class="masthead">
-      <p class="lbl eyebrow">Catalogue of editions</p>
+  <div class="tp-wrap">
+    <div class="masthead tp-lattice">
+      <p class="tp-lbl eyebrow">Catalogue</p>
       <h1>Books</h1>
-      <p class="lede">Three editions, all of them the same argument held at a different angle: that the thing you were told is settled is usually a true statement about one machine, mistaken for a law about all of them.</p>
-      <p class="note"><i>&#10022;</i><span>Every edition reads in the browser and downloads as a PDF. Nothing is behind a form, a login or a price.</span></p>
+      <p class="lede">Two books and one illustrated edition. The Qubit Dialogues argues about quantum computing in two voices, the illustrated edition sets the same text with engraved plates, and An Unpolarized Life is a separate, shorter book that keeps the two voices and leaves the physics out. New here? Start with The Qubit Dialogues, read online.</p>
+      <p class="note"><i>&#10022;</i><span>Every book reads in the browser and downloads as a PDF. Nothing is behind a form, a login or a price.</span></p>
+      <p class="note"><i>&#10022;</i><span>Related reading: <a class="tp-link" href="/qec-in-practice/">Quantum Error Correction in Practice</a>, four lessons.</span></p>
     </div>
   </div>
 
-  <div class="wrap">
+  <div class="tp-wrap">
     <ol class="catalogue">
 
       <li>
         <article class="entry">
-          <figure class="seal">
+          <figure class="seal tp-plate tp-plate-open">
             <svg viewBox="0 0 120 120" role="img" aria-label="Engraved plate: a Bloch sphere in gold line, ringed by a graduated scale.">
-              <g fill="none" stroke="#f4d58d">
+              <g fill="none" stroke="currentColor">
                 <rect x="6.5" y="6.5" width="107" height="107" stroke-opacity=".2"/>
                 <rect x="11.5" y="11.5" width="97" height="97" stroke-opacity=".09"/>
                 <path d="M6.5 17.5V6.5H17.5M102.5 6.5h11v11M113.5 102.5v11h-11M17.5 113.5h-11v-11" stroke-opacity=".42" stroke-width="1.2"/>
@@ -470,9 +336,9 @@ h2{
                 <path d="M60 60 78.4 41.6" stroke-opacity=".8" stroke-width="1.3"/>
                 <path d="M60 34v-9M60 86v9M34 60h-9M86 60h9" stroke-opacity=".3"/>
               </g>
-              <circle cx="78.4" cy="41.6" r="3.1" fill="none" stroke="#5ef4ff" stroke-opacity=".7"/>
-              <circle cx="60" cy="60" r="1.6" fill="#f4d58d" fill-opacity=".8"/>
-              <g fill="#f4d58d" fill-opacity=".5">
+              <circle cx="78.4" cy="41.6" r="3.1" fill="none" class="cy" stroke-opacity=".7"/>
+              <circle cx="60" cy="60" r="1.6" fill="currentColor" fill-opacity=".8"/>
+              <g fill="currentColor" fill-opacity=".5">
                 <path d="M60 12l3 4-3 4-3-4zM60 100l3 4-3 4-3-4zM12 60l4-3 4 3-4 3zM100 60l4-3 4 3-4 3z"/>
               </g>
             </svg>
@@ -489,22 +355,24 @@ h2{
           </div>
 
           <dl class="spec">
-            <dt class="lbl">Extent</dt><dd>22 cantos &middot; 90 pages in print</dd>
-            <dt class="lbl">Form</dt><dd>Dialogue, with interactive figures</dd>
+            <dt class="tp-lbl">Extent</dt><dd>22 cantos &middot; 99 pages in print</dd>
+            <dt class="tp-lbl">Reading</dt><dd>About two hours; about 80 minutes for the dialogue alone</dd>
+            <dt class="tp-lbl">For</dt><dd>Readers curious about quantum computing; the science asides add the maths</dd>
+            <dt class="tp-lbl">Form</dt><dd>Dialogue, with interactive figures</dd>
           </dl>
 
           <div class="actions">
-            <a class="btn" href="/qubit-dialogues.html">Read online</a>
-            <a class="btn" href="/qubit-dialogues.pdf">PDF <span class="sub">90pp</span></a>
+            <a class="tp-btn" href="/qubit-dialogues.html">Read online</a>
+            <a class="tp-btn" href="/qubit-dialogues.pdf">PDF <span class="sub">99pp</span></a>
           </div>
         </article>
       </li>
 
       <li>
         <article class="entry">
-          <figure class="seal">
+          <figure class="seal tp-plate tp-plate-open">
             <svg viewBox="0 0 120 120" role="img" aria-label="Engraved plate: a polarizing filter drawn as a hatched square, with light entering full and leaving reduced.">
-              <g fill="none" stroke="#f4d58d">
+              <g fill="none" stroke="currentColor">
                 <rect x="6.5" y="6.5" width="107" height="107" stroke-opacity=".2"/>
                 <rect x="11.5" y="11.5" width="97" height="97" stroke-opacity=".09"/>
                 <path d="M6.5 17.5V6.5H17.5M102.5 6.5h11v11M113.5 102.5v11h-11M17.5 113.5h-11v-11" stroke-opacity=".42" stroke-width="1.2"/>
@@ -518,11 +386,11 @@ h2{
                 <g stroke-opacity=".3">
                   <path d="M18 48h16M18 54h16M18 60h16M18 66h16M18 72h16"/>
                 </g>
-                <g stroke-opacity=".62" stroke="#5ef4ff">
+                <g stroke-opacity=".62" class="cy">
                   <path d="M86 56h16M86 64h16"/>
                 </g>
               </g>
-              <g fill="#f4d58d" fill-opacity=".5">
+              <g fill="currentColor" fill-opacity=".5">
                 <path d="M60 12l3 4-3 4-3-4zM60 100l3 4-3 4-3-4zM12 60l4-3 4 3-4 3zM100 60l4-3 4 3-4 3z"/>
               </g>
             </svg>
@@ -539,22 +407,24 @@ h2{
           </div>
 
           <dl class="spec">
-            <dt class="lbl">Extent</dt><dd>12 chapters &middot; 38 pages in print</dd>
-            <dt class="lbl">Form</dt><dd>Dialogue, text only, readable in a sitting</dd>
+            <dt class="tp-lbl">Extent</dt><dd>12 chapters &middot; 42 pages in print</dd>
+            <dt class="tp-lbl">Reading</dt><dd>About 35 minutes</dd>
+            <dt class="tp-lbl">For</dt><dd>Anyone facing a decision; no physics at all</dd>
+            <dt class="tp-lbl">Form</dt><dd>Dialogue, text only, readable in a sitting</dd>
           </dl>
 
           <div class="actions">
-            <a class="btn" href="/life/">Read online</a>
-            <a class="btn" href="/an-unpolarized-life.pdf">PDF <span class="sub">38pp</span></a>
+            <a class="tp-btn" href="/life/">Read online</a>
+            <a class="tp-btn" href="/an-unpolarized-life.pdf">PDF <span class="sub">42pp</span></a>
           </div>
         </article>
       </li>
 
       <li>
         <article class="entry">
-          <figure class="seal">
+          <figure class="seal tp-plate tp-plate-open">
             <svg viewBox="0 0 120 120" role="img" aria-label="Engraved plate: a cross hatched ring cut with a burin, marked at three points.">
-              <g fill="none" stroke="#f4d58d">
+              <g fill="none" stroke="currentColor">
                 <rect x="6.5" y="6.5" width="107" height="107" stroke-opacity=".2"/>
                 <rect x="11.5" y="11.5" width="97" height="97" stroke-opacity=".09"/>
                 <path d="M6.5 17.5V6.5H17.5M102.5 6.5h11v11M113.5 102.5v11h-11M17.5 113.5h-11v-11" stroke-opacity=".42" stroke-width="1.2"/>
@@ -566,10 +436,10 @@ h2{
                 <circle cx="60" cy="60" r="19.5" stroke-opacity=".4"/>
                 <path d="M60 29.5v-7M86.4 75.3l6.1 3.5M33.6 75.3l-6.1 3.5" stroke-opacity=".35"/>
               </g>
-              <g fill="#f4d58d" fill-opacity=".5">
+              <g fill="currentColor" fill-opacity=".5">
                 <path d="M60 12l3 4-3 4-3-4zM60 100l3 4-3 4-3-4zM12 60l4-3 4 3-4 3zM100 60l4-3 4 3-4 3z"/>
               </g>
-              <g fill="none" stroke="#5ef4ff" stroke-opacity=".55">
+              <g fill="none" class="cy" stroke-opacity=".55">
                 <circle cx="60" cy="29.5" r="2.6"/>
                 <circle cx="86.4" cy="75.3" r="2.6"/>
                 <circle cx="33.6" cy="75.3" r="2.6"/>
@@ -588,13 +458,15 @@ h2{
           </div>
 
           <dl class="spec">
-            <dt class="lbl">Extent</dt><dd>22 cantos &middot; 106 pages in print</dd>
-            <dt class="lbl">Form</dt><dd>Generative artwork, drawn live in the browser</dd>
+            <dt class="tp-lbl">Extent</dt><dd>22 cantos &middot; 96 pages in print</dd>
+            <dt class="tp-lbl">Reading</dt><dd>About two hours, the same text as the main edition</dd>
+            <dt class="tp-lbl">For</dt><dd>Readers who want the cantos with the art, or a second reading</dd>
+            <dt class="tp-lbl">Form</dt><dd>Generative artwork, drawn live in the browser</dd>
           </dl>
 
           <div class="actions">
-            <a class="btn" href="/illustrated/">Read online</a>
-            <a class="btn" href="/illustrated.pdf">PDF <span class="sub">104pp</span></a>
+            <a class="tp-btn" href="/illustrated/">Read online</a>
+            <a class="tp-btn" href="/illustrated.pdf">PDF <span class="sub">96pp</span></a>
           </div>
         </article>
       </li>
@@ -604,19 +476,17 @@ h2{
 
 </main>
 
-<footer class="wrap">
-  <div class="foot">
-    <ul class="foot-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/cv.html">Curriculum Vitae</a></li>
-      <li><a href="/research.html">Research</a></li>
-      <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
-      <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
-    </ul>
-    <div class="colophon">
-      <p><span class="lbl">Rights</span>&copy; 2026 Tushar Pandey</p>
-    </div>
-  </div>
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
 </footer>
 
 </body>

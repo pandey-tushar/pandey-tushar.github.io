@@ -26,12 +26,20 @@ for (const [path, url] of Object.entries(built)) {
   if (m) posterFile.set(Number(m[1]), url);
 }
 
-/* index.html ships a plain summary for anything that runs no script (see
-   ../static.ts). This file builds the real page, so that copy goes. */
-document.getElementById('static-book')?.remove();
+/* index.html ships a plain summary, in its <main>, for anything that runs no
+   script (see ../static.ts). This file builds the real page, so that copy goes. */
+document.getElementById('main')?.remove();
+
+/* The plates are dark artwork, so the page stays dark: /lib/site.js still
+   follows the stored or system theme, and this undoes each change it makes. */
+const stayDark = (): void => {
+  document.documentElement.setAttribute('data-theme', 'dark');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0b1122');
+};
+stayDark();
+document.addEventListener('tp-theme', stayDark);
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-document.documentElement.setAttribute('data-theme', 'dark');
 document.documentElement.dataset.motion = reduced ? 'reduce' : 'full';
 
 const el = <K extends keyof HTMLElementTagNameMap>(
@@ -80,7 +88,7 @@ if (frontArt) front.append(el('p', 'legend', frontArt.legend));
 /* ---------- cantos ---------- */
 
 const book = el('main', 'book');
-book.id = 'book';
+book.id = 'main';
 
 function buildCanto(c: Canto): HTMLElement {
   const art = artFor(c.n);
@@ -149,16 +157,23 @@ rail.innerHTML = en
   })
   .join('');
 
-const footer = el('footer', 'foot',
+const colophon = el('section', 'foot',
   '<p>The Qubit Dialogues, illustrated edition. Text by Tushar Pandey. ' +
   'Every plate is generated from a seed; the same seed draws the same picture on every machine.</p>' +
-  '<p class="quiet">Local preview. Not published, not indexed.</p>',
+  '<ul class="editions" aria-label="Editions">' +
+  '<li><a href="/qubit-dialogues.html">Text edition</a></li>' +
+  '<li><a href="/illustrated.pdf">This edition as a PDF</a></li>' +
+  '<li><a href="/books.html">All books</a></li>' +
+  '<li><a href="/life/">An Unpolarized Life</a></li>' +
+  '</ul>',
 );
+colophon.setAttribute('aria-label', 'About this edition');
 
-const skip = el('a', 'skip', 'Skip to the first canto');
-skip.href = '#canto-1';
-
-document.body.append(skip, rail, front, book, footer);
+/* the site header and footer are in index.html; the book goes between them */
+const siteFoot = document.querySelector('.tp-foot');
+const parts = [rail, front, book, colophon];
+if (siteFoot) siteFoot.before(...parts);
+else document.body.append(...parts);
 
 /* ---------- posters ---------- */
 

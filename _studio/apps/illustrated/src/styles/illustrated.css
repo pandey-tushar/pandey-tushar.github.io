@@ -48,20 +48,6 @@ body {
   white-space: nowrap;
 }
 
-.skip {
-  position: fixed;
-  top: -4rem; left: 1rem;
-  z-index: 60;
-  padding: .6rem 1rem;
-  background: var(--void2);
-  color: var(--gold);
-  border: 1px solid var(--gold);
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  transition: top .18s ease;
-}
-.skip:focus { top: 1rem; }
-
 :where(a):focus-visible,
 :where(button):focus-visible {
   outline: 2px solid var(--gold);
@@ -146,6 +132,18 @@ body {
       rgba(5, 6, 15, .62) 74%,
       rgba(5, 6, 15, 0) 100%);
 }
+/* The bloom alone thins out toward the corners of the text box, where lines of
+   the plate showed through the prose. This even ground under the text itself
+   fades out through its shadow, so it has no edge either. */
+.column::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 2rem;
+  background: rgba(5, 6, 15, .8);
+  box-shadow: 0 0 2.5rem 1.5rem rgba(5, 6, 15, .8);
+}
 
 .column > * { position: relative; }
 
@@ -161,6 +159,7 @@ body {
 .front-type {
   position: relative;
   z-index: 1;
+  isolation: isolate;
   margin-top: calc(var(--plate) * -1);
   min-height: var(--plate);
   display: grid;
@@ -168,6 +167,16 @@ body {
   justify-items: center;
   text-align: center;
   padding: 0 var(--pad);
+}
+
+/* the same kind of ground under the title, so the plate's lines pass behind it */
+.front-type::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(34rem 13rem at 50% 50%,
+    rgba(5, 6, 15, .9) 0%, rgba(5, 6, 15, .82) 55%, rgba(5, 6, 15, 0) 100%);
 }
 
 .front-type .kicker,
@@ -398,7 +407,23 @@ body {
   font-size: .86rem;
   text-align: center;
 }
-.foot .quiet { color: var(--line); font-family: var(--mono); font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; }
+.foot .editions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .2rem 1.6rem;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.foot .editions a {
+  display: inline-block;
+  padding-block: 10px;
+  color: var(--ink);
+  text-decoration: underline 1px var(--line);
+  text-underline-offset: 5px;
+}
+.foot .editions a:hover { color: var(--gold); }
 
 /* ---------- unstyled cantos ---------- */
 
@@ -462,7 +487,8 @@ body {
     max-width: none;
     padding: 0;
   }
-  .column::before { display: none; }
+  .column::before,
+  .column::after { display: none; }
 
   .front-track { min-height: 100svh; }
   /* the frontispiece is the one place text over art is still wanted, so it

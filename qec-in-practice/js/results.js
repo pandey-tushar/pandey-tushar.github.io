@@ -37,8 +37,9 @@ export function resultsHTML(lesson, rows, source) {
   const src = source.simulated
     ? `Simulated with Qiskit Aer · ${source.noise} · ${source.shots} shots per readout`
     : `Source: ${source.backend}, ${source.date}, ${source.shots} shots per readout.`;
-  return `<div class="table-wrap"><table>
+  return `<div class="table-wrap" tabindex="0" role="region" aria-label="Results table, scrolls sideways"><table>
     <thead><tr><th scope="col">Probability of</th><th scope="col">Ideal</th><th scope="col">After correction</th><th scope="col">Clean shots only</th><th scope="col">No correction</th><th scope="col">Bare qubits</th><th scope="col">Corrected by the code</th><th scope="col">Discarded by the checks</th></tr></thead>
     <tbody>${tr}</tbody></table></div>
+    <p class="scroll-hint" aria-hidden="true">Scroll the table sideways for every column &rarr;</p>
     <p class="source">${src}</p>`;
 }

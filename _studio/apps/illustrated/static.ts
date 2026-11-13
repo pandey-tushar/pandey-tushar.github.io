@@ -3,8 +3,8 @@
    The page is built in the browser, so the HTML a crawler fetches used to be
    an empty body. The prose itself is not repeated here: it is the text of the
    main edition, and two full copies would only compete. This names the book,
-   lists its cantos, and points at the text edition. main.ts removes the block
-   before it builds the page. */
+   lists its cantos, and points at the text edition. It is the page's one
+   <main>, under the site header; main.ts removes it before it builds the page. */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'vite';
@@ -34,5 +34,6 @@ export const staticBookPlugin = (): Plugin => ({
   transformIndexHtml: (html, ctx) =>
     ctx.path.endsWith('poster.html')
       ? html
-      : html.replace('</head>', STYLE + '\n</head>').replace('<body>', '<body>\n' + staticBook()),
+      : html.replace('</head>', STYLE + '\n</head>')
+        .replace('<!--static-book-->', '<main id="main">' + staticBook() + '</main>'),
 });

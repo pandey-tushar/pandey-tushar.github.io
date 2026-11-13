@@ -1,8 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="tp-full">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b1122">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%23070a14'/%3E%3Cg%20fill='none'%20stroke='%2352d6e6'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
 <script>
@@ -12,21 +30,22 @@
   gtag('config', 'G-DVPGC1C44Z');
 </script>
 <title>Research and Publications · Tushar Pandey</title>
-<meta name="description" content="Selected publications and preprints by Tushar Pandey: quantum error correction, qLDPC codes, quantum machine learning, LLM reasoning (Adaptive Graph of Thoughts), quantum topology, and number theory." />
-<meta name="author" content="Tushar Pandey" />
-<link rel="canonical" href="https://pandey-tushar.com/research.html" />
-<meta property="og:title" content="Research and Publications · Tushar Pandey" />
-<meta property="og:description" content="Selected publications and preprints by Tushar Pandey: quantum error correction, qLDPC codes, quantum machine learning, LLM reasoning (Adaptive Graph of Thoughts), quantum topology, and number theory." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://pandey-tushar.com/research.html" />
-<meta property="og:image" content="https://pandey-tushar.com/og-home.png" />
-<meta property="og:site_name" content="Tushar Pandey" />
-<meta name="twitter:card" content="summary_large_image" />
+<meta name="description" content="Papers and preprints by Tushar Pandey on quantum error correction, quantum machine learning, LLM reasoning, quantum topology and number theory.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/research.html">
+<meta property="og:title" content="Research and Publications · Tushar Pandey">
+<meta property="og:description" content="Papers and preprints by Tushar Pandey on quantum error correction, quantum machine learning, LLM reasoning, quantum topology and number theory.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pandey-tushar.com/research.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-home.png">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<!-- jsonld:start -->
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
  "@type": "CollectionPage",
- "name": "Research and Publications · Tushar Pandey",
+ "name": "Research and Publications, Tushar Pandey",
  "url": "https://pandey-tushar.com/research.html",
  "about": {
   "@type": "Person",
@@ -42,16 +61,21 @@
     "position": 1,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures",
-     "name": "Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif",
-     "sameAs": "https://arxiv.org/abs/2502.05078"
+     "headline": "Topological phases of matter, quantum error correction, and topological twists",
+     "name": "Topological phases of matter, quantum error correction, and topological twists",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2025-07-08",
+     "url": "https://pandey-tushar.com/research.html#topological-phases-of-matter-quantum-error-correction-and-to",
+     "abstract": "Reviews anyon condensation and lattice twists through tensor categories, and gives a new explicit error detection and correction algorithm for the doubled semion model.",
+     "isPartOf": "APL Quantum 2(3), 031501",
+     "sameAs": "https://doi.org/10.1063/5.0255351"
     }
    },
    {
@@ -59,16 +83,21 @@
     "position": 2,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "Topological Phases of Matter, Quantum Error Correction, and Topological Twists",
-     "name": "Topological Phases of Matter, Quantum Error Correction, and Topological Twists",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#topological-phases-of-matter-quantum-error-correction-and-to",
-     "sameAs": "https://doi.org/10.1063/5.0255351"
+     "headline": "Lifted surgery for non-Abelian two-block group-algebra codes",
+     "name": "Lifted surgery for non-Abelian two-block group-algebra codes",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2026",
+     "url": "https://pandey-tushar.com/research.html#lifted-surgery-for-non-abelian-two-block-group-algebra-codes",
+     "abstract": "Extends lifted code surgery to non-Abelian group-algebra qLDPC codes, bounds the gain, and finds codes that measure more logicals in fewer rounds.",
+     "isPartOf": "arXiv preprint",
+     "sameAs": "https://arxiv.org/abs/2610.05307"
     }
    },
    {
@@ -76,16 +105,21 @@
     "position": 3,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "Efficient Variational Quantum Eigensolver Methodologies on Quantum Processors",
-     "name": "Efficient Variational Quantum Eigensolver Methodologies on Quantum Processors",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#efficient-variational-quantum-eigensolver-methodologies-on-q",
-     "sameAs": "https://doi.org/10.1088/1402-4896/ae9e06"
+     "headline": "Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel",
+     "name": "Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2026",
+     "url": "https://pandey-tushar.com/research.html#fair-decoder-baselines-and-rigorous-finite-size-scaling-for",
+     "abstract": "Shows that unfair decoder baselines distort bivariate bicycle code comparisons on erasure noise, and estimates an asymptotic threshold near 0.488 by finite-size scaling.",
+     "isPartOf": "arXiv preprint",
+     "sameAs": "https://arxiv.org/abs/2603.19062"
     }
    },
    {
@@ -93,16 +127,33 @@
     "position": 4,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "Lifted Surgery for Non-Abelian Two-Block Group-Algebra Codes",
-     "name": "Lifted Surgery for Non-Abelian Two-Block Group-Algebra Codes",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#lifted-surgery-for-non-abelian-two-block-group-algebra-codes",
-     "sameAs": "https://arxiv.org/abs/2610.05307"
+     "headline": "Efficient variational quantum eigensolver methodologies on quantum processors",
+     "name": "Efficient variational quantum eigensolver methodologies on quantum processors",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      },
+      {
+       "@type": "Person",
+       "name": "Jason Saroni"
+      },
+      {
+       "@type": "Person",
+       "name": "Abdullah Kazi"
+      },
+      {
+       "@type": "Person",
+       "name": "Kartik Sharma"
+      }
+     ],
+     "datePublished": "2026-09-08",
+     "url": "https://pandey-tushar.com/research.html#efficient-variational-quantum-eigensolver-methodologies-on-q",
+     "abstract": "Compares adaptive VQE, Tetris-ADAPT-VQE and entanglement forging for the BeH2 ground state on IBM hardware, with TREX and ZNE error mitigation.",
+     "isPartOf": "Physica Scripta 101, 365104",
+     "sameAs": "https://doi.org/10.1088/1402-4896/ae9e06"
     }
    },
    {
@@ -110,16 +161,21 @@
     "position": 5,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel",
-     "name": "Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#fair-decoder-baselines-and-rigorous-finite-size-scaling-for",
-     "sameAs": "https://arxiv.org/pdf/2603.19062"
+     "headline": "An architectural capacity ceiling, not a barren plateau: why a fixed-encoding variational quantum circuit cannot fit the Lorenz-63 attractor",
+     "name": "An architectural capacity ceiling, not a barren plateau: why a fixed-encoding variational quantum circuit cannot fit the Lorenz-63 attractor",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2026",
+     "url": "https://pandey-tushar.com/research.html#an-architectural-capacity-ceiling-not-a-barren-plateau-why-a",
+     "abstract": "Argues a four-qubit variational circuit fails on Lorenz-63 because its time encoding caps accessible frequencies, not because of barren plateaus.",
+     "isPartOf": "arXiv preprint",
+     "sameAs": "https://arxiv.org/abs/2604.23743"
     }
    },
    {
@@ -127,16 +183,21 @@
     "position": 6,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "An Architectural Capacity Ceiling, Not a Barren Plateau: Why a Fixed-Encoding Variational Quantum Circuit Cannot Fit the Lorenz-63 Attractor",
-     "name": "An Architectural Capacity Ceiling, Not a Barren Plateau: Why a Fixed-Encoding Variational Quantum Circuit Cannot Fit the Lorenz-63 Attractor",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#an-architectural-capacity-ceiling-not-a-barren-plateau-why-a",
-     "sameAs": "https://arxiv.org/pdf/2604.23743"
+     "headline": "When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?",
+     "name": "When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2026",
+     "url": "https://pandey-tushar.com/research.html#when-classical-baselines-are-tuned-as-carefully-as-the-quant",
+     "abstract": "With equally tuned classical baselines, two commonly cited quantum reservoir advantages vanish in exact simulations of up to eleven qubits.",
+     "isPartOf": "IEEE Quantum Week (QCE 2026), QuBench workshop",
+     "sameAs": "https://arxiv.org/abs/2607.09905"
     }
    },
    {
@@ -144,16 +205,21 @@
     "position": 7,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?",
-     "name": "When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#when-classical-baselines-are-tuned-as-carefully-as-the-quant",
-     "sameAs": "https://arxiv.org/abs/2607.09905"
+     "headline": "A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps",
+     "name": "A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2026",
+     "url": "https://pandey-tushar.com/research.html#a-quantum-reservoir-architecture-for-chaotic-forecasting-and",
+     "abstract": "Gives a reproducible quantum reservoir recipe for chaotic forecasting and a diagnostic for whether its large feature space genuinely helps.",
+     "isPartOf": "arXiv preprint",
+     "sameAs": "https://arxiv.org/abs/2607.07978"
     }
    },
    {
@@ -161,16 +227,21 @@
     "position": 8,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps",
-     "name": "A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#a-quantum-reservoir-architecture-for-chaotic-forecasting-and",
-     "sameAs": "https://arxiv.org/abs/2607.07978"
+     "headline": "Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline",
+     "name": "Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2026",
+     "url": "https://pandey-tushar.com/research.html#quantum-kernels-for-parity-structured-classification-a-hybri",
+     "abstract": "A ZZ quantum kernel beats a binary-encoding classical ablation on high-order parity (XOR) classification, with the margin growing with parity complexity.",
+     "isPartOf": "2026 IEEE 19th Dallas Circuits and Systems Conference (DCAS), pp. 1-6",
+     "sameAs": "https://doi.org/10.1109/DCAS69364.2026.11544464"
     }
    },
    {
@@ -178,16 +249,29 @@
     "position": 9,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline",
-     "name": "Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#quantum-kernels-for-parity-structured-classification-a-hybri",
-     "sameAs": "https://arxiv.org/abs/2605.05625"
+     "headline": "Machine Learning-Driven Quantum Hacking of CHSH-Based QKD: Exploiting Entropy Vulnerabilities in Self-testing Protocols",
+     "name": "Machine Learning-Driven Quantum Hacking of CHSH-Based QKD: Exploiting Entropy Vulnerabilities in Self-testing Protocols",
+     "author": [
+      {
+       "@type": "Person",
+       "name": "Hubert Ko\u0142cz"
+      },
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      },
+      {
+       "@type": "Person",
+       "name": "Yug Shah"
+      }
+     ],
+     "datePublished": "2026-02-05",
+     "url": "https://pandey-tushar.com/research.html#machine-learning-driven-quantum-hacking-of-chsh-based-qkd",
+     "abstract": "Uses a qGAN, bias detection and neural classifiers on Rigetti and IonQ hardware to detect weak random number generators that could enable attacks on CHSH-based QKD.",
+     "isPartOf": "QUEST-IS 2025, Communications in Computer and Information Science vol. 2744, Springer, pp. 140-149",
+     "sameAs": "https://doi.org/10.1007/978-3-032-13855-2_13"
     }
    },
    {
@@ -195,16 +279,33 @@
     "position": 10,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "Generalized Bonahon–Wong–Yang Volume Conjecture of Quantum Invariants of Surface Diffeomorphisms I: The Figure Eight Knot Complement",
-     "name": "Generalized Bonahon–Wong–Yang Volume Conjecture of Quantum Invariants of Surface Diffeomorphisms I: The Figure Eight Knot Complement",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i",
-     "sameAs": "https://arxiv.org/abs/2402.04483"
+     "headline": "Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures",
+     "name": "Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      },
+      {
+       "@type": "Person",
+       "name": "Ara Ghukasyan"
+      },
+      {
+       "@type": "Person",
+       "name": "Oktay Goktas"
+      },
+      {
+       "@type": "Person",
+       "name": "Santosh Kumar Radha"
+      }
+     ],
+     "datePublished": "2025-02-07",
+     "url": "https://pandey-tushar.com/research.html#adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif",
+     "abstract": "A test-time LLM reasoning method that recursively breaks a query into a graph of subproblems, expanding only hard ones; up to 46.2% gain on GPQA.",
+     "isPartOf": "arXiv preprint",
+     "sameAs": "https://arxiv.org/abs/2502.05078"
     }
    },
    {
@@ -212,16 +313,41 @@
     "position": 11,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "The Bonahon–Wong–Yang Volume Conjecture for the Four-Puncture Sphere",
-     "name": "The Bonahon–Wong–Yang Volume Conjecture for the Four-Puncture Sphere",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
-     "url": "https://pandey-tushar.com/research.html#the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur",
-     "sameAs": "https://arxiv.org/abs/2311.13151"
+     "headline": "Modeling Sea Level Rise Using Ensemble Techniques: Impacts on Coastal Adaptation, Freshwater Ecosystems, Agriculture and Infrastructure",
+     "name": "Modeling Sea Level Rise Using Ensemble Techniques: Impacts on Coastal Adaptation, Freshwater Ecosystems, Agriculture and Infrastructure",
+     "author": [
+      {
+       "@type": "Person",
+       "name": "Sambandh Bhusan Dhal"
+      },
+      {
+       "@type": "Person",
+       "name": "Rishabh Singh"
+      },
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      },
+      {
+       "@type": "Person",
+       "name": "Sheelabhadra Dey"
+      },
+      {
+       "@type": "Person",
+       "name": "Stavros Kalafatis"
+      },
+      {
+       "@type": "Person",
+       "name": "Vivekvardhan Kesireddy"
+      }
+     ],
+     "datePublished": "2024-07-05",
+     "url": "https://pandey-tushar.com/research.html#modeling-sea-level-rise-using-ensemble-techniques",
+     "abstract": "A weighted SARIMAX, LSTM and exponential-smoothing ensemble forecasts sea level rise on the US East and Gulf coasts to 2103 and assesses ecological and infrastructure impacts.",
+     "isPartOf": "Analytics 3(3), 276-296",
+     "sameAs": "https://doi.org/10.3390/analytics3030016"
     }
    },
    {
@@ -229,15 +355,93 @@
     "position": 12,
     "item": {
      "@type": "ScholarlyArticle",
-     "headline": "An Intermediate Conjecture Between Goldbach and Dubner: Every Even Number Is the Sum of a Prime and a Twin Prime",
-     "name": "An Intermediate Conjecture Between Goldbach and Dubner: Every Even Number Is the Sum of a Prime and a Twin Prime",
-     "author": {
-      "@type": "Person",
-      "@id": "https://pandey-tushar.com/#person",
-      "name": "Tushar Pandey",
-      "url": "https://pandey-tushar.com/"
-     },
+     "headline": "Generalized Bonahon\u2013Wong\u2013Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure eight knot complement",
+     "name": "Generalized Bonahon\u2013Wong\u2013Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure eight knot complement",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      },
+      {
+       "@type": "Person",
+       "name": "Ka Ho Wong"
+      }
+     ],
+     "datePublished": "2024",
+     "url": "https://pandey-tushar.com/research.html#generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i",
+     "abstract": "Proposes a generalized Bonahon-Wong-Yang volume conjecture tied to hyperbolic cone structures and proves it for the figure-eight knot complement (word LR).",
+     "isPartOf": "Algebraic & Geometric Topology",
+     "sameAs": "https://arxiv.org/abs/2402.04483"
+    }
+   },
+   {
+    "@type": "ListItem",
+    "position": 13,
+    "item": {
+     "@type": "ScholarlyArticle",
+     "headline": "The Bonahon\u2013Wong\u2013Yang volume conjecture for the four-puncture sphere",
+     "name": "The Bonahon\u2013Wong\u2013Yang volume conjecture for the four-puncture sphere",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2023",
+     "url": "https://pandey-tushar.com/research.html#the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur",
+     "abstract": "Computes the Bonahon-Wong-Yang invariant for four-puncture sphere diffeomorphisms and verifies the volume conjecture for these bundles under technical conditions.",
+     "isPartOf": "arXiv preprint",
+     "sameAs": "https://arxiv.org/abs/2311.13151"
+    }
+   },
+   {
+    "@type": "ListItem",
+    "position": 14,
+    "item": {
+     "@type": "Thesis",
+     "headline": "A Study of Bonahon\u2013Wong\u2013Yang Quantum Invariants",
+     "name": "A Study of Bonahon\u2013Wong\u2013Yang Quantum Invariants",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2024",
+     "url": "https://pandey-tushar.com/research.html#phd-thesis-a-study-of-bonahon-wong-yang-quantum-invariants",
+     "abstract": "Doctoral thesis in mathematics, written under the supervision of Prof. Tian Yang.",
+     "inSupportOf": "Ph.D. in Mathematics",
+     "sourceOrganization": {
+      "@type": "CollegeOrUniversity",
+      "name": "Texas A&M University"
+     }
+    }
+   },
+   {
+    "@type": "ListItem",
+    "position": 15,
+    "item": {
+     "@type": "ScholarlyArticle",
+     "headline": "An intermediate conjecture between Goldbach and Dubner: every even number is the sum of a prime and a twin prime",
+     "name": "An intermediate conjecture between Goldbach and Dubner: every even number is the sum of a prime and a twin prime",
+     "author": [
+      {
+       "@type": "Person",
+       "@id": "https://pandey-tushar.com/#person",
+       "name": "Tushar Pandey",
+       "url": "https://pandey-tushar.com/"
+      }
+     ],
+     "datePublished": "2026",
      "url": "https://pandey-tushar.com/research.html#an-intermediate-conjecture-between-goldbach-and-dubner-every",
+     "abstract": "Studies the conjecture, proves a conditional positive-density result, and verifies it numerically up to 10^14.",
+     "isPartOf": "arXiv preprint",
      "sameAs": "https://arxiv.org/abs/2608.02381"
     }
    }
@@ -245,121 +449,444 @@
  }
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<!-- jsonld:end -->
 <style>
-  :root{
-    --ink:#070a14;--ink-2:#0c1020;--surface:#121829;--surface-2:#171e33;
-    --line:rgba(150,170,210,.14);--line-strong:rgba(150,170,210,.28);
-    --text:#e8ecf6;--text-2:#9aa4c0;--text-3:#69728e;
-    --cyan:#52d6e6;--violet:#9b7bff;--magenta:#f06ab0;
-    --grad:linear-gradient(100deg,var(--cyan),var(--violet) 58%,var(--magenta));
-    --maxw:820px;
-    --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:inherit;text-decoration:none}
-  ::selection{background:rgba(155,123,255,.32)}
-  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
-  .bar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;
-    padding:13px 28px;backdrop-filter:blur(12px);background:rgba(7,10,20,.78);border-bottom:1px solid var(--line)}
-  .bar a{font-family:var(--mono);font-size:12.5px;color:var(--text-2);border:1px solid var(--line-strong);
-    border-radius:8px;padding:9px 15px;transition:.2s}
-  .bar a:hover{color:var(--text);background:var(--surface-2);border-color:transparent}
-  .bar span{display:flex;gap:10px;flex-wrap:wrap}
-  .page{max-width:var(--maxw);margin:0 auto;padding:54px 28px 90px}
-  h1{font-family:var(--serif);font-weight:500;font-size:clamp(32px,6vw,48px);line-height:1.05;letter-spacing:-.02em;margin:0}
-  h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .lead{font-size:clamp(15px,2vw,17px);line-height:1.62;color:var(--text-2);margin:20px 0 34px;max-width:64ch}
-  .lead a,.more a{color:var(--text);border-bottom:1px solid var(--line-strong)}
-  .pub{padding:20px 0;border-top:1px solid var(--line);scroll-margin-top:70px}
-  .pub h2{font-family:var(--serif);font-weight:500;font-size:clamp(18px,2.6vw,21px);line-height:1.35;margin:0;color:var(--text)}
-  .pub .meta{font-size:13.5px;color:var(--text-2);margin:7px 0 0}
-  .pub .lk{font-family:var(--mono);font-size:12px;margin:7px 0 0}
-  .pub .lk a{color:var(--violet);border-bottom:1px solid transparent;transition:.2s}
-  .pub .lk a:hover{border-color:var(--violet)}
-  .more{font-size:14px;color:var(--text-2);border-top:1px solid var(--line);padding-top:20px;margin:0}
-  @media (max-width:620px){.page{padding:38px 20px 70px}.bar{padding:11px 18px}}
+body,h1,h2,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
+ol,ul{list-style:none}
+
+/* ---------- masthead ---------- */
+.masthead{padding-block:clamp(2.4rem,1.2rem + 4vw,4.6rem) 0}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(16px,2.6vh,28px);letter-spacing:.3em}
+.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--tp-a22),transparent)}
+h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
+.lede{
+  margin-top:clamp(18px,2.4vw,26px);max-width:34em;
+  font-family:var(--tp-serif);font-style:italic;font-size:clamp(1.06rem,1.5vw,1.34rem);line-height:1.46;
+  color:var(--tp-text);
+}
+.note{
+  margin-top:clamp(14px,1.8vw,20px);display:flex;gap:10px;align-items:baseline;max-width:46em;
+  font-family:var(--tp-mono);font-size:12px;line-height:1.7;letter-spacing:.04em;color:var(--tp-dim);
+}
+.note i{color:var(--tp-acc);font-style:normal;flex:0 0 auto}
+.note a{color:var(--tp-text)}
+
+/* ---------- areas ---------- */
+.list{padding-bottom:clamp(3rem,2rem + 3vw,5rem)}
+.area{padding-top:clamp(2.6rem,1.6rem + 3vw,4.4rem)}
+.area-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(16px,2.4vw,28px);align-items:center;padding-bottom:clamp(1rem,.6rem + 1vw,1.6rem)}
+.motif{padding:10px;color:var(--tp-acc)}
+.motif svg{width:64px;height:64px}
+.motif .v{stroke:var(--tp-violet)}
+.motif .vf{fill:var(--tp-violet);fill-opacity:.16;stroke:none}
+.motif .box{fill:var(--tp-a14)}
+.area-head .tp-lbl{margin-bottom:.5rem}
+.area-title{font-family:var(--tp-serif);font-size:var(--tp-t-h2);line-height:1.1;letter-spacing:-.014em;color:var(--tp-head);text-wrap:balance}
+.blurb{margin-top:.5rem;max-width:40em;color:var(--tp-text)}
+
+/* ---------- one entry: number, body, links; the specification in a margin when there is room ---------- */
+.paper{
+  display:grid;grid-template-columns:minmax(0,1fr);row-gap:1rem;align-items:start;
+  padding-block:clamp(1.5rem,1rem + 1.6vw,2.4rem);
+  border-top:1px solid var(--tp-a14);
+  scroll-margin-top:calc(var(--tp-barh) + 16px);
+}
+.no{
+  display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;padding:0;
+  font-family:var(--tp-mono);font-size:13px;letter-spacing:.06em;color:var(--tp-acc);
+  transition:background-color .18s;
+}
+.no:hover,.paper:target .no{background:var(--tp-a14)}
+.body{min-width:0}
+.paper h2{font-size:clamp(1.22rem,.95rem + 1vw,1.6rem);line-height:1.22}
+.by{margin-top:.6rem;color:var(--tp-text)}
+.me{font-weight:600;color:var(--tp-head);border-bottom:1px solid var(--tp-a40)}
+.sum{margin-top:.6rem;max-width:40em;line-height:1.62;color:var(--tp-text)}
+.claim{margin-top:.7rem;max-width:40em;padding-left:.9rem;border-left:2px solid var(--tp-violet);line-height:1.6;color:var(--tp-text)}
+.spec{display:grid;grid-template-columns:5rem minmax(0,1fr);gap:.4rem 1rem;align-items:baseline;max-width:40em}
+.spec dd{font-family:var(--tp-mono);font-size:12px;letter-spacing:.03em;line-height:1.55;color:var(--tp-text)}
+.links{display:flex;flex-wrap:wrap;gap:.3rem 1.4rem;font-family:var(--tp-mono);font-size:12.5px;letter-spacing:.02em;color:var(--tp-dim)}
+.links a{display:inline-flex;align-items:center;min-height:32px}
+@media (pointer:coarse){ .links a,.note a{min-height:44px;display:inline-flex;align-items:center} }
+
+@media (min-width:44em){
+  .paper{grid-template-columns:48px minmax(0,1fr);column-gap:clamp(20px,3vw,40px)}
+  .no{grid-column:1;grid-row:1 / span 3}
+  .body,.spec,.links{grid-column:2}
+}
+@media (min-width:70em){
+  .paper{grid-template-columns:48px minmax(0,40em) minmax(0,1fr)}
+  .no{grid-row:1 / span 2}
+  .body{grid-row:1}
+  .links{grid-row:2}
+  .spec{grid-column:3;grid-row:1 / span 2;grid-template-columns:minmax(0,1fr);gap:.16rem;max-width:22rem;justify-self:end;text-align:right;padding-top:.3rem}
+  .spec dt{justify-self:end}
+  .spec dd + dt{margin-top:.75rem}
+}
+@media (max-width:34em){
+  .eyebrow{letter-spacing:.2em}
+  .area-head{grid-template-columns:minmax(0,1fr)}
+  .motif{justify-self:start}
+}
+@media print{
+  .lede,.note,.blurb,.by,.sum,.claim,.spec dd,.links,.area-title{color:#000}
+  .motif{display:none}
+  .paper{break-inside:avoid}
+}
 </style>
 </head>
 <body>
+<a class="tp-skip" href="#main">Skip to content</a>
 
-<div class="bar">
-  <a href="/" aria-label="Back to site">&larr; Tushar Pandey</a>
-  <span><a href="/cv.html">CV</a><a href="/books.html">Books</a></span>
-</div>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
 
-<main class="page">
-  <h1>Research and <span>Publications</span></h1>
-  <p class="lead">Selected papers by Tushar Pandey, PhD, across quantum error correction, quantum machine learning, LLM reasoning, quantum topology, and number theory. The full list is on <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" rel="noopener">Google Scholar</a>.</p>
+<main id="main">
+  <div class="tp-wrap">
+    <div class="masthead tp-lattice">
+      <p class="tp-lbl eyebrow">Papers and preprints</p>
+      <h1>Research</h1>
+      <p class="lede">Quantum error correction, quantum algorithms and machine learning, LLM reasoning, quantum topology, and a conjecture in number theory. Each entry says who wrote it, where it stands, and what it shows.</p>
+    </div>
+  </div>
 
-  <article class="pub" id="adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif">
-    <h2>Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures</h2>
-    <p class="meta">First author · test-time reasoning for LLMs</p>
-    <p class="lk"><a href="https://arxiv.org/abs/2502.05078" rel="noopener">arXiv:2502.05078 &#8599;</a></p>
-  </article>
-  <article class="pub" id="topological-phases-of-matter-quantum-error-correction-and-to">
-    <h2>Topological Phases of Matter, Quantum Error Correction, and Topological Twists</h2>
-    <p class="meta">APL Quantum 2(3):031501 (2025) · sole author</p>
-    <p class="lk"><a href="https://doi.org/10.1063/5.0255351" rel="noopener">DOI &#8599;</a></p>
-  </article>
-  <article class="pub" id="efficient-variational-quantum-eigensolver-methodologies-on-q">
-    <h2>Efficient Variational Quantum Eigensolver Methodologies on Quantum Processors</h2>
-    <p class="meta">Physica Scripta (2026) · first author · VQE on hardware</p>
-    <p class="lk"><a href="https://doi.org/10.1088/1402-4896/ae9e06" rel="noopener">DOI &#8599;</a></p>
-  </article>
-  <article class="pub" id="lifted-surgery-for-non-abelian-two-block-group-algebra-codes">
-    <h2>Lifted Surgery for Non-Abelian Two-Block Group-Algebra Codes</h2>
-    <p class="meta">Sole author · qLDPC codes · fault-tolerant logic</p>
-    <p class="lk"><a href="https://arxiv.org/abs/2610.05307" rel="noopener">arXiv:2610.05307 &#8599;</a></p>
-  </article>
-  <article class="pub" id="fair-decoder-baselines-and-rigorous-finite-size-scaling-for">
-    <h2>Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel</h2>
-    <p class="meta">Sole author · qLDPC codes · quantum-advantage threshold assessment</p>
-    <p class="lk"><a href="https://arxiv.org/pdf/2603.19062" rel="noopener">arXiv:2603.19062 &#8599;</a></p>
-  </article>
-  <article class="pub" id="an-architectural-capacity-ceiling-not-a-barren-plateau-why-a">
-    <h2>An Architectural Capacity Ceiling, Not a Barren Plateau: Why a Fixed-Encoding Variational Quantum Circuit Cannot Fit the Lorenz-63 Attractor</h2>
-    <p class="meta">Sole author · quantum machine learning</p>
-    <p class="lk"><a href="https://arxiv.org/pdf/2604.23743" rel="noopener">arXiv:2604.23743 &#8599;</a></p>
-  </article>
-  <article class="pub" id="when-classical-baselines-are-tuned-as-carefully-as-the-quant">
-    <h2>When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?</h2>
-    <p class="meta">IEEE Quantum Week (QCE 2026), QuBench workshop · sole author</p>
-    <p class="lk"><a href="https://arxiv.org/abs/2607.09905" rel="noopener">arXiv:2607.09905 &#8599;</a></p>
-  </article>
-  <article class="pub" id="a-quantum-reservoir-architecture-for-chaotic-forecasting-and">
-    <h2>A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps</h2>
-    <p class="meta">Sole author · quantum reservoir computing</p>
-    <p class="lk"><a href="https://arxiv.org/abs/2607.07978" rel="noopener">arXiv:2607.07978 &#8599;</a></p>
-  </article>
-  <article class="pub" id="quantum-kernels-for-parity-structured-classification-a-hybri">
-    <h2>Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline</h2>
-    <p class="meta">IEEE Dallas Circuits and Systems Conference (DCAS 2026) · sole author</p>
-    <p class="lk"><a href="https://arxiv.org/abs/2605.05625" rel="noopener">arXiv:2605.05625 &#8599;</a></p>
-  </article>
-  <article class="pub" id="generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i">
-    <h2>Generalized Bonahon–Wong–Yang Volume Conjecture of Quantum Invariants of Surface Diffeomorphisms I: The Figure Eight Knot Complement</h2>
-    <p class="meta">Algebraic &amp; Geometric Topology (accepted 2026) · with Ka Ho Wong · quantum topology</p>
-    <p class="lk"><a href="https://arxiv.org/abs/2402.04483" rel="noopener">arXiv:2402.04483 &#8599;</a></p>
-  </article>
-  <article class="pub" id="the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur">
-    <h2>The Bonahon–Wong–Yang Volume Conjecture for the Four-Puncture Sphere</h2>
-    <p class="meta">Sole author · quantum topology</p>
-    <p class="lk"><a href="https://arxiv.org/abs/2311.13151" rel="noopener">arXiv:2311.13151 &#8599;</a></p>
-  </article>
-  <article class="pub" id="an-intermediate-conjecture-between-goldbach-and-dubner-every">
-    <h2>An Intermediate Conjecture Between Goldbach and Dubner: Every Even Number Is the Sum of a Prime and a Twin Prime</h2>
-    <p class="meta">Sole author · number theory</p>
-    <p class="lk"><a href="https://arxiv.org/abs/2608.02381" rel="noopener">arXiv:2608.02381 &#8599;</a></p>
-  </article>
-
-  <p class="more">Selected from 19 publications and preprints. Talks, surveys, and the complete record are on the <a href="https://sites.google.com/view/tusharpandey" rel="noopener">research site</a>.</p>
+  <div class="tp-wrap list">
+<!-- papers:start -->
+  <p class="note"><i aria-hidden="true">&#10022;</i><span>Listed here: 14 of Tushar Pandey&rsquo;s 18 papers and preprints, grouped by area, and his doctoral thesis. The other four are earlier arXiv preprints, from 2021 to 2023, listed on <a class="tp-link" href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" rel="noopener">Google Scholar</a>.</span></p>
+  <section class="area" aria-labelledby="area-qec">
+    <div class="area-head">
+      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><rect x="8" y="8" width="16" height="16" class="vf"/><rect x="40" y="8" width="16" height="16" class="vf"/><rect x="24" y="24" width="16" height="16" class="vf"/><rect x="8" y="40" width="16" height="16" class="vf"/><rect x="40" y="40" width="16" height="16" class="vf"/><path d="M8 8h48v48H8zM24 8v48M40 8v48M8 24h48M8 40h48" stroke-opacity=".55"/><circle cx="8" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="8" cy="24" r="2" fill="currentColor" stroke="none"/><circle cx="8" cy="40" r="2" fill="currentColor" stroke="none"/><circle cx="8" cy="56" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="24" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="40" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="56" r="2" fill="currentColor" stroke="none"/><circle cx="40" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="40" cy="24" r="2" fill="currentColor" stroke="none"/><circle cx="40" cy="40" r="2" fill="currentColor" stroke="none"/><circle cx="40" cy="56" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="24" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="40" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="56" r="2" fill="currentColor" stroke="none"/></g></svg></figure>
+      <div>
+        <p class="tp-lbl">Area I &middot; 3 entries</p>
+        <p class="area-title" id="area-qec">Quantum error correction</p>
+        <p class="blurb">Topological and qLDPC codes: how they detect errors, how they compute, and how fairly their decoders are compared.</p>
+      </div>
+    </div>
+    <ol class="papers">
+      <li>
+        <article class="paper" id="topological-phases-of-matter-quantum-error-correction-and-to">
+          <a class="no tp-plate" href="#topological-phases-of-matter-quantum-error-correction-and-to" aria-label="Link to entry 1">01</a>
+          <div class="body">
+            <h2>Topological phases of matter, quantum error correction, and topological twists</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">Reviews anyon condensation and lattice twists through tensor categories, and gives a new explicit error detection and correction algorithm for the doubled semion model.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>APL Quantum 2(3), 031501</dd>
+            <dt class="tp-lbl">Year</dt><dd>2025</dd>
+            <dt class="tp-lbl">Status</dt><dd>Published &middot; Review article</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://doi.org/10.1063/5.0255351" rel="noopener">doi:10.1063/5.0255351</a><a class="tp-link" href="https://arxiv.org/abs/2208.08571" rel="noopener">arXiv:2208.08571</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="lifted-surgery-for-non-abelian-two-block-group-algebra-codes">
+          <a class="no tp-plate" href="#lifted-surgery-for-non-abelian-two-block-group-algebra-codes" aria-label="Link to entry 2">02</a>
+          <div class="body">
+            <h2>Lifted surgery for non-Abelian two-block group-algebra codes</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">Extends lifted code surgery to non-Abelian group-algebra qLDPC codes, bounds the gain, and finds codes that measure more logicals in fewer rounds.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>arXiv preprint</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>Preprint</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2610.05307" rel="noopener">arXiv:2610.05307</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="fair-decoder-baselines-and-rigorous-finite-size-scaling-for">
+          <a class="no tp-plate" href="#fair-decoder-baselines-and-rigorous-finite-size-scaling-for" aria-label="Link to entry 3">03</a>
+          <div class="body">
+            <h2>Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">Shows that unfair decoder baselines distort bivariate bicycle code comparisons on erasure noise, and estimates an asymptotic threshold near 0.488 by finite-size scaling.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>arXiv preprint</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>Preprint</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2603.19062" rel="noopener">arXiv:2603.19062</a></p>
+        </article>
+      </li>
+    </ol>
+  </section>
+  <section class="area" aria-labelledby="area-qml">
+    <div class="area-head">
+      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 16h56M4 32h56M4 48h56" stroke-opacity=".55"/><rect x="10" y="10" width="12" height="12" class="box"/><rect x="10" y="42" width="12" height="12" class="box"/><path d="M32 16v21M46 32v21"/><circle cx="32" cy="16" r="2.4" fill="currentColor" stroke="none"/><circle cx="32" cy="32" r="5" class="v"/><path d="M27 32h10" class="v"/><circle cx="46" cy="32" r="2.4" fill="currentColor" stroke="none"/><circle cx="46" cy="48" r="5" class="v"/><path d="M41 48h10" class="v"/></g></svg></figure>
+      <div>
+        <p class="tp-lbl">Area II &middot; 6 entries</p>
+        <p class="area-title" id="area-qml">Quantum algorithms and quantum machine learning</p>
+        <p class="blurb">Variational eigensolvers on hardware, quantum reservoirs and kernels, and machine learning that probes quantum random number generators.</p>
+      </div>
+    </div>
+    <ol class="papers">
+      <li>
+        <article class="paper" id="efficient-variational-quantum-eigensolver-methodologies-on-q">
+          <a class="no tp-plate" href="#efficient-variational-quantum-eigensolver-methodologies-on-q" aria-label="Link to entry 4">04</a>
+          <div class="body">
+            <h2>Efficient variational quantum eigensolver methodologies on quantum processors</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, Jason Saroni, Abdullah Kazi, Kartik Sharma</p>
+            <p class="sum">Compares adaptive VQE, Tetris-ADAPT-VQE and entanglement forging for the BeH2 ground state on IBM hardware, with TREX and ZNE error mitigation.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>Physica Scripta 101, 365104</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>Published</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://doi.org/10.1088/1402-4896/ae9e06" rel="noopener">doi:10.1088/1402-4896/ae9e06</a><a class="tp-link" href="https://arxiv.org/abs/2407.16107" rel="noopener">arXiv:2407.16107</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="an-architectural-capacity-ceiling-not-a-barren-plateau-why-a">
+          <a class="no tp-plate" href="#an-architectural-capacity-ceiling-not-a-barren-plateau-why-a" aria-label="Link to entry 5">05</a>
+          <div class="body">
+            <h2>An architectural capacity ceiling, not a barren plateau: why a fixed-encoding variational quantum circuit cannot fit the Lorenz-63 attractor</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">Argues a four-qubit variational circuit fails on Lorenz-63 because its time encoding caps accessible frequencies, not because of barren plateaus.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>arXiv preprint</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>Preprint</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2604.23743" rel="noopener">arXiv:2604.23743</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="when-classical-baselines-are-tuned-as-carefully-as-the-quant">
+          <a class="no tp-plate" href="#when-classical-baselines-are-tuned-as-carefully-as-the-quant" aria-label="Link to entry 6">06</a>
+          <div class="body">
+            <h2>When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">With equally tuned classical baselines, two commonly cited quantum reservoir advantages vanish in exact simulations of up to eleven qubits.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>IEEE Quantum Week (QCE 2026), QuBench workshop</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>To appear</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2607.09905" rel="noopener">arXiv:2607.09905</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="a-quantum-reservoir-architecture-for-chaotic-forecasting-and">
+          <a class="no tp-plate" href="#a-quantum-reservoir-architecture-for-chaotic-forecasting-and" aria-label="Link to entry 7">07</a>
+          <div class="body">
+            <h2>A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">Gives a reproducible quantum reservoir recipe for chaotic forecasting and a diagnostic for whether its large feature space genuinely helps.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>arXiv preprint</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>Preprint</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2607.07978" rel="noopener">arXiv:2607.07978</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="quantum-kernels-for-parity-structured-classification-a-hybri">
+          <a class="no tp-plate" href="#quantum-kernels-for-parity-structured-classification-a-hybri" aria-label="Link to entry 8">08</a>
+          <div class="body">
+            <h2>Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">A ZZ quantum kernel beats a binary-encoding classical ablation on high-order parity (XOR) classification, with the margin growing with parity complexity.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>2026 IEEE 19th Dallas Circuits and Systems Conference (DCAS), pp. 1-6</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>Published</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://doi.org/10.1109/DCAS69364.2026.11544464" rel="noopener">doi:10.1109/DCAS69364.2026.11544464</a><a class="tp-link" href="https://arxiv.org/abs/2605.05625" rel="noopener">arXiv:2605.05625</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="machine-learning-driven-quantum-hacking-of-chsh-based-qkd">
+          <a class="no tp-plate" href="#machine-learning-driven-quantum-hacking-of-chsh-based-qkd" aria-label="Link to entry 9">09</a>
+          <div class="body">
+            <h2>Machine Learning-Driven Quantum Hacking of CHSH-Based QKD: Exploiting Entropy Vulnerabilities in Self-testing Protocols</h2>
+            <p class="by">Hubert Ko&#322;cz, <b class="me">Tushar Pandey</b>, Yug Shah</p>
+            <p class="sum">Uses a qGAN, bias detection and neural classifiers on Rigetti and IonQ hardware to detect weak random number generators that could enable attacks on CHSH-based QKD.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>QUEST-IS 2025, Communications in Computer and Information Science vol. 2744, Springer, pp. 140-149</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>Published</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://doi.org/10.1007/978-3-032-13855-2_13" rel="noopener">doi:10.1007/978-3-032-13855-2_13</a></p>
+        </article>
+      </li>
+    </ol>
+  </section>
+  <section class="area" aria-labelledby="area-ai">
+    <div class="area-head">
+      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M32 8 16 26M32 8l16 18M16 26 8 44M16 26l12 18M48 26 36 44M48 26l8 18M8 44l24 14M28 44l4 14M36 44l-4 14M56 44 32 58" stroke-opacity=".55"/><circle cx="32" cy="8" r="3" fill="currentColor" stroke="none"/><circle cx="16" cy="26" r="3" fill="currentColor" stroke="none"/><circle cx="8" cy="44" r="3" fill="currentColor" stroke="none"/><circle cx="28" cy="44" r="3" fill="currentColor" stroke="none"/><circle cx="36" cy="44" r="3" fill="currentColor" stroke="none"/><circle cx="56" cy="44" r="3" fill="currentColor" stroke="none"/><circle cx="32" cy="58" r="3" fill="currentColor" stroke="none"/><circle cx="48" cy="26" r="4.2" class="v"/></g></svg></figure>
+      <div>
+        <p class="tp-lbl">Area III &middot; 2 entries</p>
+        <p class="area-title" id="area-ai">LLM reasoning and applied machine learning</p>
+        <p class="blurb">Test-time reasoning for language models, and ensemble forecasting.</p>
+      </div>
+    </div>
+    <ol class="papers">
+      <li>
+        <article class="paper" id="adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif">
+          <a class="no tp-plate" href="#adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif" aria-label="Link to entry 10">10</a>
+          <div class="body">
+            <h2>Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, Ara Ghukasyan, Oktay Goktas, Santosh Kumar Radha</p>
+            <p class="sum">A test-time LLM reasoning method that recursively breaks a query into a graph of subproblems, expanding only hard ones; up to 46.2% gain on GPQA.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>arXiv preprint</dd>
+            <dt class="tp-lbl">Year</dt><dd>2025</dd>
+            <dt class="tp-lbl">Status</dt><dd>Preprint</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2502.05078" rel="noopener">arXiv:2502.05078</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="modeling-sea-level-rise-using-ensemble-techniques">
+          <a class="no tp-plate" href="#modeling-sea-level-rise-using-ensemble-techniques" aria-label="Link to entry 11">11</a>
+          <div class="body">
+            <h2>Modeling Sea Level Rise Using Ensemble Techniques: Impacts on Coastal Adaptation, Freshwater Ecosystems, Agriculture and Infrastructure</h2>
+            <p class="by">Sambandh Bhusan Dhal, Rishabh Singh, <b class="me">Tushar Pandey</b>, Sheelabhadra Dey, Stavros Kalafatis, Vivekvardhan Kesireddy</p>
+            <p class="sum">A weighted SARIMAX, LSTM and exponential-smoothing ensemble forecasts sea level rise on the US East and Gulf coasts to 2103 and assesses ecological and infrastructure impacts.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>Analytics 3(3), 276-296</dd>
+            <dt class="tp-lbl">Year</dt><dd>2024</dd>
+            <dt class="tp-lbl">Status</dt><dd>Published</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://doi.org/10.3390/analytics3030016" rel="noopener">doi:10.3390/analytics3030016</a></p>
+        </article>
+      </li>
+    </ol>
+  </section>
+  <section class="area" aria-labelledby="area-topo">
+    <div class="area-head">
+      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M59.6 32.0L58.5 39.1L55.4 45.5L50.6 50.6L44.7 54.0L38.3 55.5L32.0 55.0L26.4 52.8L22.0 49.3L19.0 45.0L17.4 40.4L17.3 35.9L18.2 32.0L19.9 28.8L22.2 26.3L24.6 24.6L27.1 23.6L29.6 23.0L32.0 22.8L34.4 23.0L36.9 23.6L39.4 24.6L41.8 26.3L44.1 28.8L45.8 32.0L46.7 35.9L46.6 40.4L45.0 45.0L42.0 49.3L37.6 52.8L32.0 55.0L25.7 55.5L19.3 54.0L13.4 50.6L8.6 45.5L5.5 39.1L4.4 32.0L5.5 24.9L8.6 18.5L13.4 13.4L19.3 10.0L25.7 8.5L32.0 9.0L37.6 11.2L42.0 14.7L45.0 19.0L46.6 23.6L46.7 28.1L45.8 32.0L44.1 35.2L41.8 37.7L39.4 39.4L36.9 40.4L34.4 41.0L32.0 41.2L29.6 41.0L27.1 40.4L24.6 39.4L22.2 37.7L19.9 35.2L18.2 32.0L17.3 28.1L17.4 23.6L19.0 19.0L22.0 14.7L26.4 11.2L32.0 9.0L38.3 8.5L44.7 10.0L50.6 13.4L55.4 18.5L58.5 24.9Z" stroke-width="1.6" stroke-linejoin="round"/></g></svg></figure>
+      <div>
+        <p class="tp-lbl">Area IV &middot; 3 entries</p>
+        <p class="area-title" id="area-topo">Quantum topology</p>
+        <p class="blurb">Bonahon&#8211;Wong&#8211;Yang quantum invariants of surface diffeomorphisms and their volume conjectures.</p>
+      </div>
+    </div>
+    <ol class="papers">
+      <li>
+        <article class="paper" id="generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i">
+          <a class="no tp-plate" href="#generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i" aria-label="Link to entry 12">12</a>
+          <div class="body">
+            <h2>Generalized Bonahon&#8211;Wong&#8211;Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure eight knot complement</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, Ka Ho Wong</p>
+            <p class="sum">Proposes a generalized Bonahon-Wong-Yang volume conjecture tied to hyperbolic cone structures and proves it for the figure-eight knot complement (word LR).</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>Algebraic &amp; Geometric Topology</dd>
+            <dt class="tp-lbl">Year</dt><dd>2024</dd>
+            <dt class="tp-lbl">Status</dt><dd>To appear</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2402.04483" rel="noopener">arXiv:2402.04483</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur">
+          <a class="no tp-plate" href="#the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur" aria-label="Link to entry 13">13</a>
+          <div class="body">
+            <h2>The Bonahon&#8211;Wong&#8211;Yang volume conjecture for the four-puncture sphere</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">Computes the Bonahon-Wong-Yang invariant for four-puncture sphere diffeomorphisms and verifies the volume conjecture for these bundles under technical conditions.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>arXiv preprint</dd>
+            <dt class="tp-lbl">Year</dt><dd>2023</dd>
+            <dt class="tp-lbl">Status</dt><dd>Preprint</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2311.13151" rel="noopener">arXiv:2311.13151</a></p>
+        </article>
+      </li>
+      <li>
+        <article class="paper" id="phd-thesis-a-study-of-bonahon-wong-yang-quantum-invariants">
+          <a class="no tp-plate" href="#phd-thesis-a-study-of-bonahon-wong-yang-quantum-invariants" aria-label="Link to entry 14">14</a>
+          <div class="body">
+            <h2>A Study of Bonahon&#8211;Wong&#8211;Yang Quantum Invariants</h2>
+            <p class="by"><b class="me">Tushar Pandey</b></p>
+            <p class="sum">Doctoral thesis in mathematics, written under the supervision of Prof. Tian Yang.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>Ph.D. thesis, Texas A&amp;M University</dd>
+            <dt class="tp-lbl">Year</dt><dd>2024</dd>
+            <dt class="tp-lbl">Status</dt><dd>Thesis</dd>
+          </dl>
+          <p class="links"><span>No public copy online</span></p>
+        </article>
+      </li>
+    </ol>
+  </section>
+  <section class="area" aria-labelledby="area-nt">
+    <div class="area-head">
+      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="8" r="1.7" fill="currentColor" stroke="none"/><circle cx="24" cy="8" r="3.3" class="v"/><circle cx="24" cy="8" r="1.7" fill="currentColor" stroke="none"/><circle cx="32" cy="8" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="8" r="3.3" class="v"/><circle cx="40" cy="8" r="1.7" fill="currentColor" stroke="none"/><circle cx="48" cy="8" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="8" r="3.3" class="v"/><circle cx="56" cy="8" r="1.7" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="24" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="32" cy="16" r="3.3" class="v"/><circle cx="32" cy="16" r="1.7" fill="currentColor" stroke="none"/><circle cx="40" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="48" cy="16" r="3.3" class="v"/><circle cx="48" cy="16" r="1.7" fill="currentColor" stroke="none"/><circle cx="56" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="24" cy="24" r="3.3" class="v"/><circle cx="24" cy="24" r="1.7" fill="currentColor" stroke="none"/><circle cx="32" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="24" r="3.3" class="v"/><circle cx="40" cy="24" r="1.7" fill="currentColor" stroke="none"/><circle cx="48" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="32" r="1.7" fill="currentColor" stroke="none"/><circle cx="24" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="32" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="48" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="40" r="3.3" class="v"/><circle cx="8" cy="40" r="1.7" fill="currentColor" stroke="none"/><circle cx="16" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="24" cy="40" r="3.3" class="v"/><circle cx="24" cy="40" r="1.7" fill="currentColor" stroke="none"/><circle cx="32" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="48" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="48" r="1.7" fill="currentColor" stroke="none"/><circle cx="24" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="32" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="48" cy="48" r="3.3" class="v"/><circle cx="48" cy="48" r="1.7" fill="currentColor" stroke="none"/><circle cx="56" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="56" r="3.3" class="v"/><circle cx="8" cy="56" r="1.7" fill="currentColor" stroke="none"/><circle cx="16" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="24" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="32" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="56" r="1.7" fill="currentColor" stroke="none"/><circle cx="48" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/></g></svg></figure>
+      <div>
+        <p class="tp-lbl">Area V &middot; 1 entry</p>
+        <p class="area-title" id="area-nt">Number theory</p>
+        <p class="blurb">Primes, twin primes and Goldbach.</p>
+      </div>
+    </div>
+    <ol class="papers">
+      <li>
+        <article class="paper" id="an-intermediate-conjecture-between-goldbach-and-dubner-every">
+          <a class="no tp-plate" href="#an-intermediate-conjecture-between-goldbach-and-dubner-every" aria-label="Link to entry 15">15</a>
+          <div class="body">
+            <h2>An intermediate conjecture between Goldbach and Dubner: every even number is the sum of a prime and a twin prime</h2>
+            <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
+            <p class="sum">Studies the conjecture, proves a conditional positive-density result, and verifies it numerically up to 10<sup>14</sup>.</p>
+          <p class="claim">The conjecture itself is not proved. The density theorem assumes a lower bound of Hardy-Littlewood order for twin primes; the statement is checked by computer for every even number from 6 to 10<sup>14</sup>.</p>
+          </div>
+          <dl class="spec">
+            <dt class="tp-lbl">Venue</dt><dd>arXiv preprint</dd>
+            <dt class="tp-lbl">Year</dt><dd>2026</dd>
+            <dt class="tp-lbl">Status</dt><dd>Preprint</dd>
+          </dl>
+          <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2608.02381" rel="noopener">arXiv:2608.02381</a><a class="tp-link" href="https://doi.org/10.5281/zenodo.21744861" rel="noopener">Code and data</a></p>
+        </article>
+      </li>
+    </ol>
+  </section>
+<!-- papers:end -->
+    <p class="note"><i aria-hidden="true">&#10022;</i><span>Talks, surveys and the older record are on the <a class="tp-link" href="https://sites.google.com/view/tusharpandey" rel="noopener">research site</a>. The <a class="tp-link" href="/cv.html">CV</a> carries a short selection.</span></p>
+  </div>
 </main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
 
 </body>
 </html>

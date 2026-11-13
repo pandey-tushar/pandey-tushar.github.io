@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b1122">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%23070a14'/%3E%3Cg%20fill='none'%20stroke='%2352d6e6'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<title>Page not found &middot; Tushar Pandey</title>
+<meta name="robots" content="noindex">
+<style>
+.lost{padding-block:clamp(3rem,2rem + 8vh,7rem) clamp(3rem,10vh,6rem);min-height:calc(100vh - var(--tp-barh) - 7rem)}
+.lost .tp-lbl{margin:0 0 clamp(16px,2.6vh,28px)}
+.lost p{max-width:52ch;margin:clamp(14px,2vh,22px) 0 0;color:var(--tp-text)}
+.lost ul{display:flex;flex-wrap:wrap;gap:12px;margin:clamp(22px,3vh,34px) 0 0;padding:0;list-style:none}
+</style>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="tp-wrap">
+  <div class="lost tp-lattice">
+    <p class="tp-lbl">Error 404</p>
+    <h1>This page is not here.</h1>
+    <p>The address may be mistyped, or the page has moved. One of these should get you where you meant to go.</p>
+    <ul>
+      <li><a class="tp-btn" href="/">Home</a></li>
+      <li><a class="tp-btn" href="/research.html">Research</a></li>
+      <li><a class="tp-btn" href="/books.html">Books</a></li>
+      <li><a class="tp-btn" href="/qec-in-practice/">Lessons</a></li>
+      <li><a class="tp-btn" href="/cv.html">CV</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

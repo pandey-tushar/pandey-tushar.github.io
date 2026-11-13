@@ -54,10 +54,8 @@
 
   /* ---------- everything that only makes sense with a pointer ---------- */
 
-  .skip,
   .rail,
   .cue,
-  .foot .quiet,
   .stage-inner .live,
   .stage::after,
   canvas,
@@ -70,7 +68,9 @@
   iframe { display: none !important }
 
   /* the dark bloom that lifts text off the plate has no plate to sit on */
-  .column::before { display: none !important }
+  .column::before,
+  .column::after,
+  .front-type::before { display: none !important }
 
   /* ---------- unpin the scroll machinery ---------- */
 

@@ -1,0 +1,258 @@
+/* =================================================================
+   SITE SYSTEM. One identity for every page, mirrored from the homepage
+   (index.html keeps its own inline copy for first paint). Every class
+   and token is prefixed tp- so a page with its own stylesheet keeps it.
+   Chrome-only (default): header, footer, toggle, skip link, .tp-lattice,
+   .tp-plate. Full mode: <html class="tp-full"> also takes the ground,
+   type and links. See _studio/site-system.md.
+   ================================================================= */
+
+:root{
+  --tp-void:#0b1122; --tp-void2:#16203f; --tp-bar:#0d1428;
+  --tp-ink:#e6ecff; --tp-acc:#52d6e6; --tp-cyan:#52d6e6; --tp-violet:#9b7bff; --tp-mag:#f06ab0;
+  --tp-dim:#8891b8;
+  --tp-a08:rgba(82,214,230,.08); --tp-a14:rgba(82,214,230,.15); --tp-a22:rgba(82,214,230,.24);
+  --tp-a40:rgba(82,214,230,.42); --tp-a70:rgba(82,214,230,.74);
+  --tp-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI Variable Display","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --tp-mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
+  --tp-serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+
+  --tp-head:#f4f7ff;
+  --tp-text:rgba(230,236,255,.9);
+  --tp-chrome:rgba(232,230,255,.82);
+  --tp-gut:clamp(26px,6vw,96px);
+  --tp-barh:52px;
+  --tp-t-display:clamp(2.2rem,1.4rem + 3.4vw,3.6rem);
+  --tp-t-h2:clamp(1.42rem,.95rem + 2.1vw,2.1rem);
+  --tp-t-body:.92rem;
+  --tp-t-small:.8rem;
+  --tp-t-app:12px;
+}
+:root[data-theme="light"]{
+  --tp-void:#eef1f8; --tp-void2:#dbe2f0; --tp-bar:#e8ecf6;
+  --tp-ink:#101828;
+  --tp-acc:#0a6f80; --tp-cyan:#0a6f80; --tp-violet:#5233c4; --tp-mag:#a8226a;
+  --tp-dim:#57617d;
+  --tp-a08:rgba(10,111,128,.09); --tp-a14:rgba(10,111,128,.17);
+  --tp-a22:rgba(10,111,128,.27); --tp-a40:rgba(10,111,128,.45); --tp-a70:rgba(10,111,128,.78);
+
+  --tp-head:#0b1220;
+  --tp-text:rgba(16,24,40,.9);
+  --tp-chrome:rgba(16,24,40,.86);
+}
+@media (max-width:960px){ :root{--tp-barh:48px} }
+
+/* ---------- full mode: the page adopts the ground, type and links ---------- */
+.tp-full{
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+  font-size:100%;overflow-x:clip;scroll-behavior:smooth;
+  background:var(--tp-void);
+  transition:background-color .4s ease;
+}
+@media (min-width:40em){ .tp-full{font-size:106.25%} }
+.tp-full *,.tp-full *::before,.tp-full *::after{box-sizing:border-box}
+.tp-full body{
+  margin:0;
+  color:var(--tp-ink);
+  font-family:var(--tp-sans);font-size:var(--tp-t-body);line-height:1.6;
+  font-kerning:normal;font-variant-numeric:tabular-nums;hanging-punctuation:first last;
+  -webkit-font-smoothing:antialiased;overflow-x:clip;
+}
+.tp-full body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 84% 0%, rgba(155,123,255,.17), transparent 58%),
+    radial-gradient(90% 70% at 2% 96%, rgba(82,214,230,.13), transparent 58%),
+    radial-gradient(60% 40% at 96% 88%, rgba(240,106,176,.085), transparent 62%),
+    linear-gradient(180deg,#111a36 0%,var(--tp-void) 42%,#080e1e 100%);
+}
+.tp-full[data-theme="light"] body::before{
+  background:
+    radial-gradient(120% 80% at 84% 0%, rgba(82,51,196,.10), transparent 58%),
+    radial-gradient(90% 70% at 2% 96%, rgba(10,111,128,.09), transparent 58%),
+    radial-gradient(60% 40% at 96% 88%, rgba(168,34,106,.06), transparent 62%),
+    linear-gradient(180deg,#e7ecf7 0%,var(--tp-void) 42%,#e3e9f5 100%);
+}
+.tp-full a{color:inherit;text-decoration:none}
+.tp-full ::selection{background:rgba(82,214,230,.26)}
+.tp-full[data-theme="light"] ::selection{background:rgba(10,111,128,.20)}
+.tp-full :focus-visible{outline:2px solid var(--tp-acc);outline-offset:3px}
+.tp-full h1,.tp-full h2,.tp-full h3{
+  margin:0;font-family:var(--tp-serif);font-weight:400;color:var(--tp-head);
+  letter-spacing:-.014em;text-wrap:balance;
+}
+.tp-full h1{font-size:var(--tp-t-display);line-height:.98;letter-spacing:-.02em}
+.tp-full h2{font-size:var(--tp-t-h2);line-height:1.1}
+.tp-full p{text-wrap:pretty}
+
+.tp-wrap{max-width:calc(78rem + 2*var(--tp-gut));margin-inline:auto;padding-inline:var(--tp-gut)}
+
+/* the apparatus voice: mono field names */
+.tp-lbl{
+  font-family:var(--tp-mono);font-size:var(--tp-t-app);font-weight:400;line-height:1.25;
+  letter-spacing:.185em;text-transform:uppercase;color:var(--tp-a70);
+}
+
+/* a link inside running text */
+.tp-link{
+  color:inherit;text-decoration:none;
+  border-bottom:1px solid var(--tp-a40);padding-bottom:1px;
+  transition:color .18s,border-color .18s;
+}
+.tp-link:hover,.tp-link:focus-visible{color:var(--tp-acc);border-bottom-color:var(--tp-a70)}
+
+.tp-btn{
+  position:relative;display:inline-block;padding:11px 17px;
+  font-family:var(--tp-mono);font-size:12px;line-height:1.6;letter-spacing:.17em;text-transform:uppercase;
+  color:rgba(230,236,255,.88);border:1px solid rgba(82,214,230,.18);
+  background:rgba(82,214,230,.015);text-decoration:none;
+  transition:color .18s,border-color .18s,background-color .18s;
+}
+.tp-btn::before,.tp-btn::after{content:"";position:absolute;width:6px;height:6px;border:1px solid var(--tp-a40);transition:border-color .18s}
+.tp-btn::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.tp-btn::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.tp-btn:hover,.tp-btn:focus-visible{color:var(--tp-acc);border-color:var(--tp-a22);background:rgba(82,214,230,.06);box-shadow:0 0 22px -8px rgba(82,214,230,.55)}
+.tp-btn:hover::before,.tp-btn:hover::after,.tp-btn:focus-visible::before,.tp-btn:focus-visible::after{border-color:var(--tp-a70)}
+:root[data-theme="light"] .tp-btn{color:rgba(16,24,40,.9);border-color:rgba(10,111,128,.30);background:rgba(10,111,128,.03)}
+:root[data-theme="light"] .tp-btn:hover,
+:root[data-theme="light"] .tp-btn:focus-visible{color:var(--tp-acc);background:rgba(10,111,128,.09);box-shadow:0 0 18px -8px rgba(10,111,128,.5)}
+
+/* ---------- skip link ---------- */
+.tp-skip{
+  position:absolute;left:-9999px;top:0;z-index:99;
+  background:var(--tp-acc);color:#04060e;padding:8px 14px;
+  font-family:var(--tp-mono);font-size:12px;text-decoration:none;
+}
+.tp-skip:focus{left:8px;top:8px}
+:root[data-theme="light"] .tp-skip{color:#fff}
+
+/* ---------- the rule bar ---------- */
+.tp-bar{
+  position:sticky;top:0;z-index:30;
+  box-sizing:border-box;height:var(--tp-barh);
+  display:flex;align-items:center;gap:18px;
+  padding:0 var(--tp-gut);margin:0;
+  background:var(--tp-bar);border-bottom:1px solid var(--tp-a14);
+  font:400 12px/1 var(--tp-mono);color:var(--tp-ink);
+  text-align:left;
+}
+:root[data-theme="light"] .tp-bar{background:linear-gradient(180deg,rgba(238,241,248,.82),rgba(238,241,248,.96))}
+.tp-bar *,.tp-foot *{box-sizing:border-box}
+.tp-bar a,.tp-bar button,.tp-foot a{font:inherit;color:inherit;text-decoration:none}
+.tp-bar :focus-visible,.tp-foot :focus-visible,.tp-skip:focus-visible{outline:2px solid var(--tp-acc);outline-offset:3px}
+.tp-mark{display:flex;align-items:center;gap:11px;flex:0 0 auto;min-height:44px}
+.tp-mark svg{display:block;overflow:visible}
+.tp-mark span{letter-spacing:.24em;text-transform:uppercase;color:var(--tp-chrome);white-space:nowrap}
+
+.tp-nav{
+  display:flex;align-items:center;gap:clamp(12px,1.8vw,26px);
+  margin-left:auto;min-width:0;position:relative;
+  overflow-x:auto;scrollbar-width:none;
+}
+.tp-nav::-webkit-scrollbar{display:none}
+.tp-nav a{
+  flex:0 0 auto;display:flex;align-items:center;min-height:44px;
+  letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;color:var(--tp-dim);
+  text-decoration:underline 1px transparent;text-underline-offset:6px;
+  transition:color .18s,text-decoration-color .18s;
+}
+.tp-nav a:hover,.tp-nav a:focus-visible,.tp-nav a[aria-current]{color:var(--tp-acc);text-decoration-color:var(--tp-a40)}
+.tp-nav a:focus-visible{outline-offset:-2px}
+
+/* the switch: offers the cycle auto, light, dark, as on the homepage */
+.tp-toggle{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:32px;margin:0;padding:0 14px;border-radius:999px;cursor:pointer;
+  letter-spacing:.17em;text-transform:uppercase;
+  border:1px solid var(--tp-a22);background:color-mix(in srgb, var(--tp-void) 72%, transparent);
+  transition:color .18s,border-color .18s;
+}
+.tp-toggle:hover,.tp-toggle:focus-visible{color:var(--tp-acc);border-color:var(--tp-a40)}
+.tp-toggle b{font-weight:400;opacity:.55;letter-spacing:0}
+@media (pointer:coarse){ .tp-toggle{min-height:44px;min-width:44px} .tp-foot a{padding-block:13px} .tp-skip{padding:14px} }
+
+@media (max-width:960px){
+  .tp-bar{gap:12px}
+  .tp-nav{gap:clamp(4px,2vw,18px)}
+  .tp-nav a{letter-spacing:.12em}
+  .tp-mark span{display:none}
+}
+/* a phone: the nav is one row that scrolls sideways, faded at the edge it
+   continues past, and the switch keeps only its glyph */
+@media (max-width:600px){
+  .tp-bar{padding:0 8px;gap:2px}
+  .tp-mark{min-width:44px;justify-content:center}
+  .tp-nav{gap:0;mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+  .tp-nav[data-end]{mask-image:none;-webkit-mask-image:none}
+  .tp-nav a{padding:0 5px;letter-spacing:.06em}
+  .tp-toggle{padding:0;width:44px;min-height:44px;border-color:transparent;background:none}
+  .tp-toggle span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .tp-toggle b{opacity:.8;font-size:15px}
+}
+
+/* ---------- foot ---------- */
+.tp-foot{
+  margin:0 var(--tp-gut);padding:clamp(.9rem,2vh,1.3rem) 0 clamp(2.2rem,5vh,3.4rem);
+  border-top:1px solid var(--tp-a14);
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.9rem 2.5rem;
+  font:400 .8rem/1.6 var(--tp-sans);color:var(--tp-text);text-align:left;
+}
+.tp-foot ul{display:flex;flex-wrap:wrap;align-items:baseline;margin:0;padding:0;list-style:none}
+.tp-foot li{margin:0;padding:0}
+.tp-foot li + li::before{content:"\00b7";color:var(--tp-dim);margin:0 .75em}
+.tp-foot a{display:inline-block;padding-block:6px;border-bottom:1px solid transparent;transition:color .18s,border-color .18s}
+.tp-foot a:hover,.tp-foot a:focus-visible{color:var(--tp-acc);border-bottom-color:var(--tp-a40)}
+.tp-foot p{margin:0;color:var(--tp-dim)}
+
+/* ---------- surface-code lattice: a faint ground for a block, opt in ----------
+   Data qubits at the vertices, checks on the faces. Painted on a pseudo
+   element under the block's own content, faded toward its edges. */
+.tp-lattice{position:relative;isolation:isolate}
+.tp-lattice::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(circle,var(--tp-a40) 1.2px,transparent 1.8px) -18px -18px / 36px 36px,
+    linear-gradient(var(--tp-a08) 1px,transparent 1px) 0 0 / 36px 36px,
+    linear-gradient(90deg,var(--tp-a08) 1px,transparent 1px) 0 0 / 36px 36px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 80% at 70% 30%,#000,transparent 75%);
+  mask-image:radial-gradient(ellipse 70% 80% at 70% 30%,#000,transparent 75%);
+  opacity:.7;
+}
+
+/* ---------- the plate: a figure set as a journal plate ----------
+   A thin rule with cut corners around the art, then a mono caption led by
+   the plate number. .tp-plate-open drops the rule for art that draws its own. */
+.tp-plate{
+  position:relative;margin:0;padding:14px;
+  border:1px solid var(--tp-a14);
+}
+.tp-plate::before,.tp-plate::after{content:"";position:absolute;width:8px;height:8px;border:1px solid var(--tp-a40)}
+.tp-plate::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.tp-plate::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.tp-plate.tp-plate-open{padding:0;border:0}
+.tp-plate.tp-plate-open::before,.tp-plate.tp-plate-open::after{display:none}
+.tp-plate > img,.tp-plate > svg,.tp-plate > canvas{display:block;max-width:100%;height:auto}
+.tp-plate figcaption{
+  margin-top:10px;
+  font:400 12px/1.5 var(--tp-mono);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--tp-dim);
+}
+.tp-plate figcaption b{display:block;font-weight:400;color:var(--tp-a70)}
+/* a70 on paper is 3.4:1, under AA for 12px; small labels take the full accent */
+:root[data-theme="light"] .tp-lbl,
+:root[data-theme="light"] .tp-plate figcaption b{color:var(--tp-acc)}
+
+@media (prefers-reduced-motion:reduce){
+  .tp-full{scroll-behavior:auto;transition:none}
+  .tp-bar *,.tp-foot *,.tp-btn,.tp-link{transition:none!important}
+}
+
+@media print{
+  .tp-skip,.tp-bar,.tp-toggle{display:none!important}
+  .tp-lattice::before{display:none}
+  .tp-full body{background:#fff;color:#000}
+  .tp-full body::before{display:none}
+  .tp-full h1,.tp-full h2,.tp-full h3{color:#000}
+  .tp-foot{margin:8mm 0 0;padding-top:3mm;border-top:.4pt solid #000;color:#000}
+  .tp-foot a,.tp-foot p,.tp-foot li + li::before{color:#000}
+}

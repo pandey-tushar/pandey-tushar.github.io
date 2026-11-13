@@ -1,32 +1,58 @@
-# Tushar Pandey — personal site
+# pandey-tushar.com
 
-Two self-contained pages (HTML + CSS + JS, no build step, no dependencies):
+Personal site of Tushar Pandey, served by GitHub Pages from the repo root
+(custom domain in `CNAME`). Static files, no build step for the pages at the root.
 
-- `index.html` — portfolio (WebGL hero, research, projects, teaching, conferences, service)
-- `cv.html` — academic CV (dark on screen, prints to a clean PDF via the in-page button)
+## Pages
+
+- `index.html`: homepage, with its own inline CSS and theme switch
+- `research.html`, `cv.html`, `books.html`: research list, CV, catalogue of the books
+- `qubit-dialogues.html`: The Qubit Dialogues, read online
+- `life/`, `illustrated/`: An Unpolarized Life and the illustrated edition (built output, see below)
+- `qec-in-practice/`: four interactive surface-code lessons
+- `404.html`: served by GitHub Pages for any unknown path
+- `sitemap.xml`, `robots.txt`, `og-*.png` (share cards), the book and resume PDFs
+
+## lib/
+
+`lib/site.css` and `lib/site.js` are the shared header, footer, theme switch
+(`tp-theme`) and tokens every page but the homepage links. The rules are in
+`_studio/site-system.md`. `lib/` also holds three.js and KaTeX for the book page.
+
+## The lessons
+
+`qec-in-practice/lesson-1.html` to `lesson-4.html` are generated: edit
+`_studio/tools/lesson-template.html` or `qec-in-practice/data/*.json`, then run
+`python _studio/tools/build-lessons.py`. It also draws the card pictures in
+`qec-in-practice/index.html`. The pages fetch `data/lesson<n>.json` at run time.
+
+## _studio
+
+Source and tooling. Jekyll skips folders that start with an underscore, so
+nothing in it is published. The editions are built from `_studio/apps/*`
+(`npm run build` in `_studio`). Checks in `_studio/tools`, each exits non-zero on failure:
+
+- `check-site.py`: shared head, header, nav, one main and h1 on every page; prints `site ok`
+- `check-lessons.py`: lesson text present without script; prints `lessons ok`
+- `check-editions.py`: built editions carry their text; prints `editions ok`
+- `check-qd.py`: qubit-dialogues.html loads lib/ and stays small; prints `qd ok`
+- `check-perf.py`: homepage idle frame cost on a slowed phone; prints `perf ok`
+
+Other tools: `build-lessons.py`, `og/render.py` (share cards), `compress-pdf.py`,
+`pdf.mjs` (print the editions to PDF), `extract-content.mjs`, `deploy.ps1`.
 
 ## Preview locally
-Double-click `index.html`, or:
-```
-python3 -m http.server 8000
-# open http://localhost:8000
-```
 
-## Deploy to GitHub Pages
-This repo is named `pandey-tushar.github.io`, so it publishes as a **user site** at
-`https://pandey-tushar.github.io`.
+    python -m http.server 8000
 
-1. Push `index.html`, `cv.html`, and this `README.md` to the repo root on the `main` branch.
-2. Repo → Settings → Pages → Source: `main` / `/ (root)` → Save.
-3. Live in ~1 min at `https://pandey-tushar.github.io`. The CV is at `/cv.html`.
+then open http://localhost:8000. Serve from the repo root: links are root-relative,
+so file:// does not work. An unknown path shows the server's own 404; open /404.html.
 
-## Custom domain (optional)
-Settings → Pages → Custom domain, then point a CNAME at GitHub Pages. A `CNAME`
-file is created automatically.
+## Deploy
 
-## Editing content
-All content lives in the `<script>` block near the bottom of each file:
-`papers`, `talks`, `projects`, `surveys`, `teaching`, `conferences`, `leadership`,
-`prizes` (index), plus `education`, `employment`, `interests`, `skills` (cv).
-Add an entry to the relevant array and it renders automatically. The two files keep
-their own copies of the shared arrays.
+    powershell -File _studio/tools/deploy.ps1
+
+copies the homepage source and the built editions (`_studio/apps/*/dist`) into
+the root, then fails if any file the site links to is missing. It never deletes,
+commits or pushes: review with `git status` and `git diff`, then commit and push
+to `main`; GitHub Pages publishes it.

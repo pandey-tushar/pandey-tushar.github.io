@@ -1,8 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="tp-full">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b1122">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%23070a14'/%3E%3Cg%20fill='none'%20stroke='%2352d6e6'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
 <script>
@@ -12,260 +30,279 @@
   gtag('config', 'G-DVPGC1C44Z');
 </script>
 <title>Tushar Pandey, PhD · Curriculum Vitæ</title>
-<link rel="canonical" href="https://pandey-tushar.com/cv.html" />
-<meta property="og:title" content="Tushar Pandey, PhD · Curriculum Vitæ" />
-<meta property="og:description" content="Mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between." />
-<meta property="og:type" content="profile" />
-<meta property="og:url" content="https://pandey-tushar.com/cv.html" />
-<meta property="og:image" content="https://pandey-tushar.com/og-home.png" />
-<meta property="og:site_name" content="Tushar Pandey" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="description" content="Tushar Pandey: mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="canonical" href="https://pandey-tushar.com/cv.html">
+<meta property="og:title" content="Tushar Pandey, PhD · Curriculum Vitæ">
+<meta property="og:description" content="Mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between.">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="https://pandey-tushar.com/cv.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-home.png">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Tushar Pandey: mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between.">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "ProfilePage",
+ "name": "Tushar Pandey, PhD, Curriculum Vitae",
+ "url": "https://pandey-tushar.com/cv.html",
+ "mainEntity": {"@id": "https://pandey-tushar.com/#person"}
+}
+</script>
 <style>
-  :root{
-    --ink:#070a14;--ink-2:#0c1020;--surface:#121829;--surface-2:#171e33;
-    --line:rgba(150,170,210,.14);--line-strong:rgba(150,170,210,.28);
-    --text:#e8ecf6;--text-2:#9aa4c0;--text-3:#69728e;
-    --cyan:#52d6e6;--violet:#9b7bff;--magenta:#f06ab0;
-    --grad:linear-gradient(100deg,var(--cyan),var(--violet) 58%,var(--magenta));
-    --maxw:820px;
-    --serif:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:inherit;text-decoration:none}
-  ::selection{background:rgba(155,123,255,.32)}
-  :focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+:root{--cv-grad:linear-gradient(100deg,var(--tp-cyan),var(--tp-violet) 58%,var(--tp-mag))}
+body,h1,h2,p,ol,ul,li,dl,dd{margin:0;padding:0}
+ol,ul{list-style:none}
 
-  .bar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;
-    padding:13px 28px;backdrop-filter:blur(12px);background:rgba(7,10,20,.78);border-bottom:1px solid var(--line)}
-  .bar a,.bar button{font-family:var(--mono);font-size:12.5px;color:var(--text-2);border:1px solid var(--line-strong);
-    background:none;border-radius:8px;padding:9px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:.2s}
-  .bar a:hover,.bar button:hover{color:var(--text);background:var(--surface-2);border-color:transparent}
-  .bar .print{background:var(--grad);color:#0a0e1a;border-color:transparent;font-weight:500}
-  .bar .print:hover{filter:brightness(1.08);background:var(--grad)}
+.cv{max-width:52rem;padding-block:clamp(2.4rem,1.2rem + 4vw,4.6rem) clamp(3rem,2rem + 3vw,5rem)}
 
-  .page{max-width:var(--maxw);margin:0 auto;padding:54px 28px 90px}
+/* ---------- head ---------- */
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(16px,2.6vh,28px);letter-spacing:.3em}
+.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--tp-a22),transparent)}
+h1{font-size:clamp(2.4rem,7vw,4rem);line-height:1;margin-left:-.028em}
+h1 span{background:var(--cv-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.role{margin-top:14px;font-family:var(--tp-serif);font-style:italic;font-size:clamp(1.06rem,1.5vw,1.3rem);line-height:1.46;color:var(--tp-text)}
+.contact{display:flex;flex-wrap:wrap;align-items:center;gap:2px 20px;margin-top:16px;font-family:var(--tp-mono);font-size:12.5px;letter-spacing:.02em;color:var(--tp-dim)}
+.contact a{display:inline-flex;align-items:center;min-height:32px;color:var(--tp-text)}
+.contact a span{border-bottom:1px solid var(--tp-a40);transition:color .18s,border-color .18s}
+.contact a:hover span{color:var(--tp-acc);border-color:var(--tp-a70)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.actions button.tp-btn{cursor:pointer;font:inherit;font-family:var(--tp-mono);font-size:12px;letter-spacing:.17em}
+.lead{margin-top:28px;max-width:40em;font-size:1.06rem;line-height:1.66;color:var(--tp-text)}
+.lead b{font-weight:600;color:var(--tp-head)}
+.lead .accent{background:var(--cv-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
 
-  .cvhead h1{font-family:var(--serif);font-weight:500;font-size:clamp(34px,6vw,52px);line-height:1;letter-spacing:-.02em;margin:0}
-  .cvhead h1 span{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .role-line{font-family:var(--serif);font-style:italic;font-size:clamp(15px,2.4vw,20px);color:var(--text-2);margin:14px 0 0}
-  .contact{display:flex;flex-wrap:wrap;gap:7px 18px;margin:18px 0 0;font-family:var(--mono);font-size:12.5px;color:var(--text-2)}
-  .contact a{color:var(--text-2);border-bottom:1px solid var(--line);padding-bottom:1px;transition:.2s}
-  .contact a:hover{color:var(--text);border-color:var(--cyan)}
-  .contact .loc{color:var(--text-3)}
+/* ---------- sections ---------- */
+.cv section{margin-top:clamp(2rem,1.4rem + 2vw,3rem);padding-top:clamp(1.4rem,1rem + 1vw,2rem);border-top:1px solid var(--tp-a14)}
+.cv h2{font-size:clamp(1.3rem,1rem + 1vw,1.7rem);margin-bottom:1rem}
+.hl li{position:relative;padding:.5rem 0 .5rem 1.5rem;line-height:1.58;color:var(--tp-text)}
+.hl li::before{content:"";position:absolute;left:2px;top:1.08em;width:6px;height:6px;transform:rotate(45deg);border:1px solid var(--tp-acc)}
+.hl b{font-weight:600;color:var(--tp-head)}
+a.lk{font-family:var(--tp-mono);font-size:12px;letter-spacing:.02em;color:var(--tp-acc);white-space:nowrap;border-bottom:1px solid transparent;transition:border-color .18s}
+a.lk:hover{border-bottom-color:var(--tp-a70)}
 
-  /* lead / summary */
-  .lead{font-size:clamp(16px,2vw,18px);line-height:1.62;color:var(--text);margin:30px 0 0;max-width:64ch}
-  .lead b{font-weight:600}
-  .lead .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.row{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:1.4rem;padding:.75rem 0;align-items:baseline}
+.row + .row{border-top:1px solid var(--tp-a08)}
+.when{font-family:var(--tp-mono);font-size:12px;letter-spacing:.04em;line-height:1.6;color:var(--tp-dim)}
+.what{min-width:0}
+.what .t{display:block;color:var(--tp-head);line-height:1.45}
+.what .t b{font-weight:600}
+.what .n{display:block;margin-top:.25rem;line-height:1.58;color:var(--tp-text)}
+.what cite{font-style:italic;font-family:var(--tp-serif);font-size:1.06em}
+.tag{font-family:var(--tp-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tp-violet)}
 
-  section{padding:32px 0 4px;border-top:1px solid var(--line);margin-top:34px}
-  section:first-of-type{margin-top:34px}
-  h2{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);margin:0 0 20px;display:flex;align-items:center;gap:13px}
-  h2::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--grad);flex:0 0 auto}
+.pub{padding:.75rem 0;line-height:1.5}
+.pub + .pub{border-top:1px solid var(--tp-a08)}
+.pub .ttl{display:block;color:var(--tp-head);transition:color .18s}
+.pub .ttl:hover{color:var(--tp-acc)}
+.pub .meta{display:block;margin-top:.2rem;font-size:.9em;color:var(--tp-dim)}
+.more{margin-top:1rem;max-width:40em;color:var(--tp-text)}
+.oneline{max-width:40em;line-height:1.62;color:var(--tp-text)}
 
-  /* highlights */
-  .hl{display:grid;grid-template-columns:16px 1fr;gap:14px;padding:11px 0;align-items:start}
-  .hl+.hl{border-top:1px solid var(--line)}
-  .hl .dot{width:7px;height:7px;border-radius:50%;background:var(--grad);margin-top:8px}
-  .hl .tx{font-size:15px;line-height:1.5;color:var(--text-2)}
-  .hl .tx b{color:var(--text);font-weight:600}
-  .hl a.lk{color:var(--violet);font-family:var(--mono);font-size:11px;border-bottom:1px solid transparent;transition:.2s;white-space:nowrap}
-  .hl a.lk:hover{border-color:var(--violet)}
+@media (pointer:coarse){
+  .contact a,.lk,.pub .ttl,.more a{min-height:44px;display:inline-flex;align-items:center}
+  .actions .tp-btn{min-height:44px}
+  .pub .ttl{display:flex}
+}
+@media (max-width:620px){
+  .row{grid-template-columns:minmax(0,1fr);gap:.15rem}
+  .eyebrow{letter-spacing:.2em}
+}
 
-  /* trajectory rows */
-  .row{display:grid;grid-template-columns:140px 1fr;gap:24px;padding:13px 0;align-items:baseline}
-  .row+.row{border-top:1px solid var(--line)}
-  .when{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.02em;line-height:1.5}
-  .what .t{display:block;font-size:15px;color:var(--text);line-height:1.45}
-  .what .t b{font-weight:600}
-  .what .n{display:block;color:var(--text-2);font-size:13.5px;margin-top:4px;line-height:1.55}
-
-  /* selected research */
-  .pub{display:grid;grid-template-columns:1fr;gap:2px;padding:10px 0;border-top:1px solid var(--line)}
-  .pub:first-of-type{border-top:0}
-  .pub .ttl{font-size:14.5px;color:var(--text);line-height:1.45}
-  .pub .meta{font-size:12.5px;color:var(--text-3)}
-  .pub .meta b{color:var(--text-2);font-weight:500}
-  .pub a.lk{color:var(--violet);font-family:var(--mono);font-size:11px;border-bottom:1px solid transparent;transition:.2s;white-space:nowrap}
-  .pub a.lk:hover{border-color:var(--violet)}
-  .more{font-family:var(--mono);font-size:12px;color:var(--text-3);margin:12px 0 0}
-  .more a{color:var(--violet);border-bottom:1px solid transparent;transition:.2s}
-  .more a:hover{border-color:var(--violet)}
-
-  .tags{display:flex;flex-wrap:wrap;gap:8px}
-  .tag{font-family:var(--mono);font-size:11.5px;color:var(--text-2);border:1px solid var(--line);padding:5px 11px;border-radius:99px}
-  .tag b{color:var(--text);font-weight:600}
-
-  .skill{display:grid;grid-template-columns:140px 1fr;gap:24px;padding:10px 0;align-items:baseline}
-  .skill+.skill{border-top:1px solid var(--line)}
-  .skill .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
-  .skill .v{font-size:14px;color:var(--text-2);line-height:1.55}
-
-  .oneline{font-size:14px;color:var(--text-2);line-height:1.6}
-  .oneline a{color:var(--text);border-bottom:1px solid var(--line-strong)}
-
-  @media (max-width:620px){
-    .row,.skill{grid-template-columns:1fr;gap:5px}
-    .when{color:var(--text-3)}
-    .page{padding:38px 20px 70px}
-    .bar{padding:11px 18px}
-  }
-
-  /* ============ PRINT ============ */
-  @media print{
-    @page{margin:14mm 16mm}
-    html,body{background:#fff!important;color:#15171c!important;font-size:9.8pt;line-height:1.4}
-    .bar{display:none!important}
-    .page{max-width:none;margin:0;padding:0}
-    a{color:#1a2b6b!important}
-    ::selection{background:transparent}
-    .cvhead h1{color:#0d0f14!important;font-size:25pt}
-    .cvhead h1 span{-webkit-text-fill-color:#0d0f14;color:#0d0f14!important;background:none}
-    .role-line{color:#3a3f4a!important;font-size:11pt}
-    .contact,.contact a,.contact .loc{color:#2a2e38!important}.contact a{border-color:#bbb}
-    .lead{color:#15171c!important;font-size:11pt}
-    .lead .accent{-webkit-text-fill-color:#15171c;color:#15171c!important;background:none}
-    section{border-color:#ccc;margin-top:16px;padding:14px 0 2px;break-inside:auto}
-    h2{color:#5a3fb0!important;font-size:9pt;break-after:avoid}h2::before{background:#7b5cff}
-    .when{color:#7a3aa0!important}
-    .what .t,.pub .ttl{color:#15171c!important}
-    .what .n,.hl .tx,.skill .v,.oneline,.pub .meta{color:#2f333d!important}
-    .hl .tx b,.what .t b,.pub .meta b{color:#15171c!important}
-    .hl .dot{background:#7b5cff}
-    .hl a.lk,.pub a.lk{color:#1a2b6b!important}
-    .skill .k{color:#444!important}
-    .tag{color:#333!important;border-color:#bbb}.tag b{color:#111!important}
-    .more,.more a{color:#555!important}
-    .hl,.row,.pub,.skill{break-inside:avoid}
-    .row{grid-template-columns:128px 1fr;gap:18px;padding:8px 0}
-  }
+/* ---------- print: a plain document, no site chrome ---------- */
+@media print{
+  @page{margin:14mm 16mm}
+  html.tp-full{background:#fff;font-size:9.6pt}
+  .tp-foot,.actions{display:none!important}
+  .tp-wrap{max-width:none;padding:0}
+  .cv{max-width:none;padding:0}
+  .cv,.cv *{color:#15171c!important}
+  h1{font-size:24pt}
+  h1 span,.lead .accent{background:none;-webkit-text-fill-color:#15171c}
+  .role{font-size:11pt}
+  .lead{margin-top:12px;font-size:10pt}
+  .cv a,.cv a span,.lk{color:#1a2b6b!important;border-color:#bbb}
+  .cv section{margin-top:12px;padding-top:9px;border-color:#bbb}
+  .cv h2{font-size:13pt;margin-bottom:5px;break-after:avoid}
+  .eyebrow::after{background:#bbb}
+  .hl li::before{border-color:#555}
+  .row{grid-template-columns:8rem minmax(0,1fr);padding:5px 0;gap:14px}
+  .row + .row,.pub + .pub{border-color:#ddd}
+  .pub{padding:5px 0}
+  .hl li{padding-block:3px}
+  .row,.pub,.hl li{break-inside:avoid}
+}
 </style>
 </head>
 <body>
+<a class="tp-skip" href="#main">Skip to content</a>
 
-<div class="bar">
-  <a href="/" aria-label="Back to site">&larr; Back to site</a>
-  <span style="display:flex;gap:10px;flex-wrap:wrap">
-    <a href="Tushar_Pandey_Resume_Quantum.pdf" download title="One-page ATS-friendly resume, quantum focus">R&eacute;sum&eacute; &middot; Quantum</a>
-    <a href="Tushar_Pandey_Resume_AI.pdf" download title="One-page ATS-friendly resume, AI focus">R&eacute;sum&eacute; &middot; AI</a>
-    <button class="print" id="printBtn" aria-label="Print or save as PDF">&#x2913; Print / Save PDF</button>
-  </span>
-</div>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
 
-<div class="page">
+<main id="main">
+  <div class="tp-wrap">
+    <article class="cv">
 
-  <header class="cvhead">
-    <h1>Tushar <span>Pandey</span>, PhD</h1>
-    <p class="role-line">Mathematician and builder, from quantum-topology proofs to production AI.</p>
-    <div class="contact">
-      <span class="loc">Dallas, TX</span>
-      <a href="mailto:wtatushar@gmail.com">wtatushar@gmail.com</a>
-      <a href="https://github.com/pandey-tushar" target="_blank" rel="noopener">github.com/pandey-tushar</a>
-      <a href="https://pandey-tushar.com" target="_blank" rel="noopener">pandey-tushar.com</a>
-      <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener">Google Scholar</a>
-    </div>
+      <header class="cvhead">
+        <p class="tp-lbl eyebrow">Curriculum vit&aelig;</p>
+        <h1>Tushar <span>Pandey</span>, PhD</h1>
+        <p class="role">Mathematician and builder, from quantum-topology proofs to production AI.</p>
+        <p class="contact">
+          <span>Dallas, TX</span>
+          <a href="mailto:wtatushar@gmail.com"><span>wtatushar@gmail.com</span></a>
+          <a href="https://github.com/pandey-tushar" rel="noopener"><span>github.com/pandey-tushar</span></a>
+          <a href="https://pandey-tushar.com/"><span>pandey-tushar.com</span></a>
+          <a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" rel="noopener"><span>Google Scholar</span></a>
+        </p>
+        <p class="actions">
+          <a class="tp-btn" href="/Tushar_Pandey_Resume_Quantum.pdf" download>R&eacute;sum&eacute; &middot; Quantum</a>
+          <a class="tp-btn" href="/Tushar_Pandey_Resume_AI.pdf" download>R&eacute;sum&eacute; &middot; AI</a>
+          <button class="tp-btn" type="button" id="print" hidden>Print / Save PDF</button>
+        </p>
+        <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: an error-correction algorithm for the doubled semion model, begun at Oak Ridge; a test-time reasoning framework shipped at Agnostiq; and LLM inference infrastructure at DataRobot that serves many tenants at scale and is being hardened for government-grade security. Along the way I won the 2026 Global Industry Challenge at Quantum World Congress, a challenge at the 2025 IBM Quantum Developer Conference, the Classiq challenge at MIT iQuHACK 2024, and first prize at the Q-Volution Hackathon 2026.</p>
+      </header>
 
-    <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: designing fault-tolerant error correction at Oak Ridge, inventing a test-time reasoning framework now running in production, and building LLM inference infrastructure that serves many tenants at scale and is being hardened for government-grade security, while winning the discipline&rsquo;s hardest challenges along the way.</p>
-  </header>
+      <section aria-labelledby="h-highlights">
+        <h2 id="h-highlights">Selected highlights</h2>
+        <ul class="hl">
+          <li><b>Invented Adaptive Graph of Thoughts (AGoT)</b>, a test-time reasoning framework unifying chain, tree, and graph structures; shipped at Agnostiq as a production agentic-AI blueprint, with the code open source. <a class="lk" href="https://arxiv.org/abs/2502.05078" rel="noopener">arXiv:2502.05078</a></li>
+          <li><b>Sole-authored a proof of the Bonahon&ndash;Wong&ndash;Yang volume conjecture</b> for the four-puncture sphere; independent results at the frontier of quantum topology. <a class="lk" href="https://arxiv.org/abs/2311.13151" rel="noopener">arXiv:2311.13151</a></li>
+          <li><b>Built production multi-tenant LLM inference at scale</b> at DataRobot: co-author of TokenGrid, a token-aware capacity scheduler; now building disaggregated LLM serving and hardening the platform for government-grade deployments. <a class="lk" href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" rel="noopener">DataRobot blog</a></li>
+          <li><b>Cut LLM fine-tuning cost by 99%</b> at Agnostiq with a CPU-first, federated architecture that matched quality at a fraction of the spend.</li>
+          <li><b>Gave a new explicit error detection and correction algorithm for the doubled semion model</b>, in a review of topological phases of matter and lattice twists begun as an NSF-MSGI researcher at Oak Ridge National Laboratory; sole author, APL Quantum 2025. <a class="lk" href="https://doi.org/10.1063/5.0255351" rel="noopener">doi:10.1063/5.0255351</a></li>
+          <li><b>Won four quantum challenges and hackathons</b>: the 2026 Global Industry Challenge at Quantum World Congress (600+ applicants from 50+ countries), the Schwinger-model hadron dynamics challenge at the IBM Quantum Developer Conference 2025, the Classiq general-arithmetic challenge at MIT iQuHACK 2024, and first prize at the Q-Volution Hackathon 2026. <a class="lk" href="https://www.quantumworldcongress.com/news/from-challenge-to-proof-2026-global-industry-challenge-winners" rel="noopener">QWC winners</a></li>
+        </ul>
+      </section>
 
-  <section id="highlights"><h2>Selected Highlights</h2><div id="cv-hl"></div></section>
-  <section id="experience"><h2>Experience</h2><div id="cv-exp"></div></section>
-  <section id="research"><h2>Selected Research</h2><div id="cv-pubs"></div></section>
-  <section id="recognition"><h2>Recognition</h2><div class="tags" id="cv-rec"></div></section>
-  <section id="education"><h2>Education</h2><div id="cv-edu"></div></section>
-  <section id="leadership"><h2>Leadership &amp; Service</h2><p class="oneline" id="cv-lead"></p></section>
-  <section id="skills"><h2>Range &amp; Skills</h2><div id="cv-skills"></div></section>
+      <section aria-labelledby="h-experience">
+        <h2 id="h-experience">Experience</h2>
+        <ol>
+          <li class="row"><span class="when">Mar 2026 &ndash; present</span><span class="what"><span class="t"><b>Senior Software Engineer</b>, DataRobot</span><span class="n">Production multi-tenant LLM inference: co-authored TokenGrid, a token-aware capacity scheduler; now building disaggregated model serving, where each stage of inference scales on its own hardware, and hardening platform security to the bar set by government contracts. Certified Covalent for GenAI and hybrid quantum-classical / HPC pipelines. Software Developer II, Mar 2025 &ndash; Mar 2026.</span></span></li>
+          <li class="row"><span class="when">Jul 2024 &ndash; Feb 2025</span><span class="what"><span class="t"><b>Research Software Engineer</b>, Agnostiq</span><span class="n">Invented AGoT and shipped it as a production agentic-AI blueprint; cut LLM fine-tuning cost 99% via a CPU-first federated architecture on the Covalent distributed-compute framework.</span></span></li>
+          <li class="row"><span class="when">Aug 2019 &ndash; Jul 2024</span><span class="what"><span class="t"><b>Graduate Researcher and Teaching Assistant</b>, Texas A&amp;M University</span><span class="n">Original quantum-topology results including a sole-authored conjecture proof; founded a Directed Reading Program and mentored 20+ students. Advisor: Prof. Tian Yang.</span></span></li>
+          <li class="row"><span class="when">Summers 2021, 2022</span><span class="what"><span class="t"><b>Summer Researcher (NSF-MSGI Fellow)</b>, Oak Ridge National Laboratory</span><span class="n">NSF Mathematical Sciences Graduate Internship, mentored by Eugene Dumitrescu: topological phases of matter, and the start of the doubled semion error-correction work published in APL Quantum (2025).</span></span></li>
+        </ol>
+      </section>
 
-</div>
+      <section aria-labelledby="h-research">
+        <h2 id="h-research">Selected research</h2>
+<!-- selected:start -->
+        <ol class="pubs">
+          <li class="pub"><a class="ttl" href="/research.html#topological-phases-of-matter-quantum-error-correction-and-to">Topological phases of matter, quantum error correction, and topological twists</a>
+            <span class="meta">APL Quantum 2(3), 031501, 2025, review article &middot; sole author &middot; <a class="lk" href="https://doi.org/10.1063/5.0255351" rel="noopener">doi:10.1063/5.0255351</a></span></li>
+          <li class="pub"><a class="ttl" href="/research.html#lifted-surgery-for-non-abelian-two-block-group-algebra-codes">Lifted surgery for non-Abelian two-block group-algebra codes</a>
+            <span class="meta">arXiv preprint, 2026 &middot; sole author &middot; <a class="lk" href="https://arxiv.org/abs/2610.05307" rel="noopener">arXiv:2610.05307</a></span></li>
+          <li class="pub"><a class="ttl" href="/research.html#efficient-variational-quantum-eigensolver-methodologies-on-q">Efficient variational quantum eigensolver methodologies on quantum processors</a>
+            <span class="meta">Physica Scripta 101, 365104, 2026 &middot; first of 4 authors &middot; <a class="lk" href="https://doi.org/10.1088/1402-4896/ae9e06" rel="noopener">doi:10.1088/1402-4896/ae9e06</a></span></li>
+          <li class="pub"><a class="ttl" href="/research.html#quantum-kernels-for-parity-structured-classification-a-hybri">Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline</a>
+            <span class="meta">2026 IEEE 19th Dallas Circuits and Systems Conference (DCAS), pp. 1-6, 2026 &middot; sole author &middot; <a class="lk" href="https://doi.org/10.1109/DCAS69364.2026.11544464" rel="noopener">doi:10.1109/DCAS69364.2026.11544464</a></span></li>
+          <li class="pub"><a class="ttl" href="/research.html#adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif">Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures</a>
+            <span class="meta">arXiv preprint, 2025 &middot; first of 4 authors &middot; <a class="lk" href="https://arxiv.org/abs/2502.05078" rel="noopener">arXiv:2502.05078</a></span></li>
+          <li class="pub"><a class="ttl" href="/research.html#generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i">Generalized Bonahon&#8211;Wong&#8211;Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure eight knot complement</a>
+            <span class="meta">Algebraic &amp; Geometric Topology, 2024, to appear &middot; with Ka Ho Wong &middot; <a class="lk" href="https://arxiv.org/abs/2402.04483" rel="noopener">arXiv:2402.04483</a></span></li>
+          <li class="pub"><a class="ttl" href="/research.html#the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur">The Bonahon&#8211;Wong&#8211;Yang volume conjecture for the four-puncture sphere</a>
+            <span class="meta">arXiv preprint, 2023 &middot; sole author &middot; <a class="lk" href="https://arxiv.org/abs/2311.13151" rel="noopener">arXiv:2311.13151</a></span></li>
+        </ol>
+        <p class="more">Selected from 18 papers and preprints across quantum error correction, quantum algorithms, LLM reasoning, quantum topology and number theory. <a class="tp-link" href="/research.html">The full list, with summaries</a>.</p>
+<!-- selected:end -->
+      </section>
+
+      <section aria-labelledby="h-recognition">
+        <h2 id="h-recognition">Recognition</h2>
+        <ol>
+          <li class="row"><span class="when">2026</span><span class="what"><span class="t"><b>Winner</b>, 2026 Global Industry Challenge, Quantum World Congress</span></span></li>
+          <li class="row"><span class="when">2026</span><span class="what"><span class="t"><b>1st prize</b>, Q-Volution Hackathon (GiQ)</span></span></li>
+          <li class="row"><span class="when">2025</span><span class="what"><span class="t"><b>Challenge winner</b>, Schwinger-model hadron dynamics, IBM Quantum Developer Conference</span></span></li>
+          <li class="row"><span class="when">2024</span><span class="what"><span class="t"><b>1st prize</b>, Classiq general-arithmetic challenge, MIT iQuHACK</span></span></li>
+          <li class="row"><span class="when">2023</span><span class="what"><span class="t"><b>Guseman Prize</b>, TAMU Mathematics</span></span></li>
+          <li class="row"><span class="when">2021, 2022, 2024</span><span class="what"><span class="t"><b>TAMIDS Data Science Competition</b>: 1st prize and Best Presentation (2021), 2nd prize and Best Presentation (2022), 3rd prize (2024)</span></span></li>
+          <li class="row"><span class="when">2020</span><span class="what"><span class="t"><b>1st prize</b>, HPE Challenge, TAMU Datathon</span></span></li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="h-talks">
+        <h2 id="h-talks">Talks, posters and sessions</h2>
+        <ol>
+          <li class="row"><span class="when">Sep 2026</span><span class="what"><span class="t">Invited speaker, IEEE Quantum Week (QCE 2026), Toronto</span></span></li>
+          <li class="row"><span class="when">Apr 2026</span><span class="what"><span class="t"><span class="tag">Poster</span> &middot; QCTiP 2026, Oxford</span></span></li>
+          <li class="row"><span class="when">Apr 2026</span><span class="what"><span class="t">Invited speaker, Workshop on Applied Quantum Computing and Quantum Circuits &amp; Systems (AQ-QCAS), SMU, Dallas</span></span></li>
+          <li class="row"><span class="when">Oct 2025</span><span class="what"><span class="t"><span class="tag">Co-organizer</span> &middot; Special session <cite>New Horizons for Quantum Error Correction: Categorical Approaches to Topological Codes</cite>, <a class="tp-link" href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" rel="noopener">AMS Fall Eastern Sectional Meeting</a> (online)</span></span></li>
+          <li class="row"><span class="when">Feb 2024</span><span class="what"><span class="t"><cite>Toric code: A blend of physics, math, and (maybe) computer science</cite>, Texas A&amp;M University</span></span></li>
+          <li class="row"><span class="when">Feb 2024</span><span class="what"><span class="t">Invited speaker, Algebra and Combinatorics Seminar, Texas A&amp;M University</span></span></li>
+          <li class="row"><span class="when">Jan 2024</span><span class="what"><span class="t"><cite>BWY volume conjecture for incomplete structures for surface diffeomorphisms I</cite>, JMM 2024, special session on Knots, skein modules and categorification, San Francisco</span></span></li>
+          <li class="row"><span class="when">Nov 2023</span><span class="what"><span class="t"><cite>Quantum Invariant computation using representation theory</cite>, Friday Morning Seminar, Yale University</span></span></li>
+          <li class="row"><span class="when">Oct 2023</span><span class="what"><span class="t"><cite>Quantum Invariant for surface diffeomorphisms for incomplete structures</cite>, Topology Seminar, UC Santa Barbara</span></span></li>
+          <li class="row"><span class="when">Oct 2023</span><span class="what"><span class="t"><cite>BWY volume conjecture for incomplete structures on figure eight knot complement</cite>, Geometry/Topology Seminar, Rutgers University</span></span></li>
+          <li class="row"><span class="when">Sep 2023</span><span class="what"><span class="t"><cite>BWY volume conjecture for incomplete structures on figure eight knot complement</cite>, Topology Seminar, Michigan State University</span></span></li>
+          <li class="row"><span class="when">Jun 2023</span><span class="what"><span class="t"><cite>Quantum Invariants for punctured sphere</cite>, Workshop in Geometric Topology, Colorado College</span></span></li>
+          <li class="row"><span class="when">Mar 2023</span><span class="what"><span class="t"><cite>Quantum Invariants for surface Diffeomorphisms</cite>, AMS Spring Southeastern Sectional Meeting, Georgia Tech</span></span></li>
+          <li class="row"><span class="when">Oct 2022</span><span class="what"><span class="t"><cite>From Jones Polynomial to Volume Conjecture</cite>, Low-dimensional Topology Seminar, Texas A&amp;M University</span></span></li>
+          <li class="row"><span class="when">Jul 2022</span><span class="what"><span class="t"><cite>Category theory and Topological phases of matter</cite>, summer research talk, Oak Ridge National Laboratory</span></span></li>
+          <li class="row"><span class="when">May 2022</span><span class="what"><span class="t"><cite>Tetrahedral Decomposition</cite>, Graduate School on Geometric Group Theory and Low-Dimensional Topology, ICMAT, Madrid</span></span></li>
+          <li class="row"><span class="when">2021</span><span class="what"><span class="t"><span class="tag">Poster</span> &middot; <cite>Topological data from the ground state Hamiltonian</cite>, with Eugene Dumitrescu, NSF MSGI Summer Symposium, Oak Ridge National Laboratory</span></span></li>
+          <li class="row"><span class="when">Mar 2021</span><span class="what"><span class="t"><cite>Art to Mathematics to Quantum</cite>, GIG&rsquo;EM Conference (Gathering in Graduate Expository Mathematics), Texas A&amp;M University</span></span></li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="h-education">
+        <h2 id="h-education">Education</h2>
+        <ol>
+          <li class="row"><span class="when">2024</span><span class="what"><span class="t"><b>Ph.D., Mathematics</b>, Texas A&amp;M University</span><span class="n">Thesis: <cite>A Study of Bonahon&ndash;Wong&ndash;Yang Quantum Invariants</cite>. Advisor: Prof. Tian Yang. Quantum topology, TQFT, the Volume Conjecture.</span></span></li>
+          <li class="row"><span class="when">2019</span><span class="what"><span class="t"><b>B.S., Mathematics &amp; Scientific Computing</b>, Indian Institute of Technology (IIT) Kanpur</span></span></li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="h-service">
+        <h2 id="h-service">Service</h2>
+        <p class="oneline">Reviewer for Quantum Science and Technology and Physica Scripta. Co-organizer of the AMS 2025 special session above. Mentored 20+ students.</p>
+      </section>
+
+      <section aria-labelledby="h-skills">
+        <h2 id="h-skills">Range and skills</h2>
+        <ol>
+          <li class="row"><span class="when">Quantum</span><span class="what"><span class="n">Qiskit, PennyLane, Cirq; quantum error correction (surface, color, bivariate-bicycle, topological codes); VQE / QAOA / ADAPT-VQE; quantum machine learning</span></span></li>
+          <li class="row"><span class="when">AI &amp; systems</span><span class="what"><span class="n">LLMs, agentic AI, test-time reasoning, multi-tenant and disaggregated model serving, platform security, PyTorch; Docker, Kubernetes, CI/CD, AWS / Azure / GCP</span></span></li>
+          <li class="row"><span class="when">Mathematics</span><span class="what"><span class="n">Quantum topology, topological QFT, hyperbolic geometry, optimization, asymptotic analysis</span></span></li>
+        </ol>
+      </section>
+
+    </article>
+  </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
 
 <script>
-const highlights = [
-  {b:"Invented Adaptive Graph of Thoughts (AGoT)", r:", a test-time reasoning framework unifying chain, tree, and graph structures; shipped to production.", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
-  {b:"Sole-authored a proof of the Bonahon–Wong–Yang volume conjecture", r:" for the four-puncture sphere; independent results at the frontier of quantum topology.", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
-  {b:"Built production multi-tenant LLM inference at scale", r:" at DataRobot: co-author of TokenGrid, a token-aware capacity scheduler; now building disaggregated LLM serving and hardening the platform for government-grade deployments.", link:"https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/", id:"DataRobot blog"},
-  {b:"Cut LLM fine-tuning cost by 99%", r:" at Agnostiq with a CPU-first, federated architecture that matched quality at a fraction of the spend."},
-  {b:"Designed a fault-tolerant quantum error-correction pipeline", r:" for a non-abelian topological code, begun as an NSF-MSGI researcher at Oak Ridge National Laboratory; sole-authored in APL Quantum.", link:"https://doi.org/10.1063/5.0255351", id:"APL Quantum"},
-  {b:"Won four first-place titles", r:" at the field&rsquo;s hardest challenges: the Global Industry Challenge at Quantum World Congress (600+ applicants, 50+ countries), IBM Quantum Developer Conference, MIT iQuHACK, and Q-Volution.", link:"https://www.quantumworldcongress.com/news/from-challenge-to-proof-2026-global-industry-challenge-winners", id:"QWC"},
-];
-const experience = [
-  {y:"2026 – Present", r:"Senior Software Engineer", o:"DataRobot", n:"Production multi-tenant LLM inference: co-authored TokenGrid, a token-aware capacity scheduler; now building disaggregated model serving, where each stage of inference scales on its own hardware, and hardening platform security to the bar set by government contracts. Certified Covalent for GenAI and hybrid quantum–classical / HPC pipelines. (Software Developer II, 2025–26.)"},
-  {y:"2024 – 2025", r:"Research Software Engineer", o:"Agnostiq", n:"Invented and shipped AGoT; cut LLM fine-tuning cost 99% via a CPU-first federated architecture on the Covalent distributed-compute framework."},
-  {y:"2019 – 2024", r:"Doctoral Researcher", o:"Texas A&M University", n:"Original quantum-topology results including a sole-authored conjecture proof; founded a Directed Reading Program and mentored 20+ students. Advisor: Prof. Tian Yang."},
-  {y:"Summers 2021 & 2022", r:"Summer Researcher (NSF-MSGI)", o:"Oak Ridge National Laboratory", n:"Fault-tolerant quantum error correction for the doubled Semion model; topological phases of matter (APL Quantum, 2025)."},
-];
-const research = [
-  {t:"Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures", m:"First author · test-time reasoning for LLMs", link:"https://arxiv.org/abs/2502.05078", id:"arXiv:2502.05078"},
-  {t:"Topological Phases of Matter, Quantum Error Correction, and Topological Twists", m:"APL Quantum 2(3):031501 (2025) · sole author", link:"https://doi.org/10.1063/5.0255351", id:"DOI"},
-  {t:"Efficient Variational Quantum Eigensolver Methodologies on Quantum Processors", m:"Physica Scripta (2026) · first author · VQE on hardware", link:"https://doi.org/10.1088/1402-4896/ae9e06", id:"DOI"},
-  {t:"Lifted Surgery for Non-Abelian Two-Block Group-Algebra Codes", m:"Sole author · qLDPC codes · fault-tolerant logic", link:"https://arxiv.org/abs/2610.05307", id:"arXiv:2610.05307"},
-  {t:"Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel", m:"Sole author · qLDPC codes · quantum-advantage threshold assessment", link:"https://arxiv.org/pdf/2603.19062", id:"arXiv:2603.19062"},
-  {t:"An Architectural Capacity Ceiling, Not a Barren Plateau: Why a Fixed-Encoding Variational Quantum Circuit Cannot Fit the Lorenz-63 Attractor", m:"Sole author · quantum machine learning", link:"https://arxiv.org/pdf/2604.23743", id:"arXiv:2604.23743"},
-  {t:"When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?", m:"IEEE Quantum Week (QCE 2026), QuBench workshop · sole author", link:"https://arxiv.org/abs/2607.09905", id:"arXiv:2607.09905"},
-  {t:"A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps", m:"Sole author · quantum reservoir computing", link:"https://arxiv.org/abs/2607.07978", id:"arXiv:2607.07978"},
-  {t:"Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline", m:"IEEE Dallas Circuits and Systems Conference (DCAS 2026) · sole author", link:"https://arxiv.org/abs/2605.05625", id:"arXiv:2605.05625"},
-  {t:"Generalized Bonahon–Wong–Yang Volume Conjecture of Quantum Invariants of Surface Diffeomorphisms I: The Figure Eight Knot Complement", m:"Algebraic & Geometric Topology (accepted 2026) · with Ka Ho Wong · quantum topology", link:"https://arxiv.org/abs/2402.04483", id:"arXiv:2402.04483"},
-  {t:"The Bonahon–Wong–Yang Volume Conjecture for the Four-Puncture Sphere", m:"Sole author · quantum topology", link:"https://arxiv.org/abs/2311.13151", id:"arXiv:2311.13151"},
-  {t:"An Intermediate Conjecture Between Goldbach and Dubner: Every Even Number Is the Sum of a Prime and a Twin Prime", m:"Sole author · number theory", link:"https://arxiv.org/abs/2608.02381", id:"arXiv:2608.02381"},
-];
-const recognition = [
-  {b:"1st", r:"Global Industry Challenge, Quantum World Congress, 2026"},
-  {b:"1st", r:"IBM Quantum Developer Conference, 2025"},
-  {b:"1st", r:"MIT iQuHACK, 2024"},
-  {b:"1st", r:"Q-Volution Hackathon, 2026"},
-  {b:"Guseman Prize", r:"TAMU Mathematics, 2023"},
-  {b:"4×", r:"TAMIDS Data Science Competition winner"},
-];
-const education = [
-  {y:"2024", d:"Ph.D., Mathematics", s:"Texas A&M University", n:"Advisor: Prof. Tian Yang · quantum topology, TQFT, the Volume Conjecture"},
-  {y:"2019", d:"B.S., Mathematics & Scientific Computing", s:"Indian Institute of Technology (IIT) Kanpur"},
-];
-const skills = {
-  "Quantum":"Qiskit, PennyLane, Cirq; quantum error correction (surface, color, bivariate-bicycle, topological codes); VQE / QAOA / ADAPT-VQE; quantum machine learning",
-  "AI & Systems":"LLMs, agentic AI, test-time reasoning, multi-tenant and disaggregated model serving, platform security, PyTorch; Docker, Kubernetes, CI/CD, AWS / Azure / GCP",
-  "Mathematics":"Quantum topology, topological QFT, hyperbolic geometry, optimization, asymptotic analysis",
-};
-const leadership = 'Organizer, <a href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" target="_blank" rel="noopener">AMS 2025 Special Session on Quantum Error Correction</a> · Reviewer for Quantum Science and Technology and Physica Scripta · Invited talks at JMM, IEEE Quantum Week, IBM Quantum Developer Conference, ICTP, ICERM, Yale, and UCSB · Mentored 20+ students.';
-
-const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
-// allow pre-escaped entities (rsquo, ndash, amp) we wrote on purpose
-const safe = s => String(s);
-
-document.getElementById("cv-hl").innerHTML = highlights.map(h=>{
-  let lk = h.link?' <a class="lk" href="'+h.link+'" target="_blank" rel="noopener">'+safe(h.id||'link')+' &#8599;</a>':'';
-  return '<div class="hl"><span class="dot"></span><span class="tx"><b>'+safe(h.b)+'</b>'+safe(h.r)+lk+'</span></div>';
-}).join("");
-
-document.getElementById("cv-exp").innerHTML = experience.map(e=>
-  '<div class="row"><span class="when">'+esc(e.y)+'</span><span class="what">'+
-  '<span class="t"><b>'+esc(e.r)+'</b>, '+esc(e.o)+'</span>'+
-  '<span class="n">'+esc(e.n)+'</span></span></div>').join("");
-
-document.getElementById("cv-pubs").innerHTML = research.map(p=>{
-  let lk = p.link?' &nbsp;<a class="lk" href="'+p.link+'" target="_blank" rel="noopener">'+safe(p.id)+' &#8599;</a>':'';
-  return '<div class="pub"><span class="ttl">'+esc(p.t)+'</span><span class="meta">'+esc(p.m)+lk+'</span></div>';
-}).join("")+'<p class="more">Selected from 19 publications and preprints across quantum topology, quantum error correction, quantum machine learning, and number theory.</p>';
-
-document.getElementById("cv-rec").innerHTML = recognition.map(r=>
-  '<span class="tag"><b>'+esc(r.b)+'</b> &nbsp;'+esc(r.r)+'</span>').join("");
-
-document.getElementById("cv-edu").innerHTML = education.map(e=>
-  '<div class="row"><span class="when">'+esc(e.y)+'</span><span class="what">'+
-  '<span class="t"><b>'+esc(e.d)+'</b>, '+esc(e.s)+'</span>'+
-  (e.n?'<span class="n">'+esc(e.n)+'</span>':'')+'</span></div>').join("");
-
-document.getElementById("cv-lead").innerHTML = safe(leadership);
-
-document.getElementById("cv-skills").innerHTML = Object.entries(skills).map(([k,v])=>
-  '<div class="skill"><span class="k">'+esc(k)+'</span><span class="v">'+esc(v)+'</span></div>').join("");
-
-document.getElementById("printBtn").addEventListener("click",()=>window.print());
+var pb = document.getElementById("print");
+pb.hidden = false;
+pb.addEventListener("click", function(){ window.print(); });
 </script>
 </body>
 </html>

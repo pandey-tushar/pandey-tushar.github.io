@@ -1,0 +1,44 @@
+/* This edition inside the site chrome (/lib/site.css). */
+
+/* the site header sits above the cover, so the cover fills the rest of the
+   first screen and the scroll cue stays in view */
+#cover { height: calc(100vh - var(--tp-barh)) }
+
+/* at least 4.5:1 on the cover through the whole pulse, and no smaller than 12px */
+#cover .scrollcue { color: #a9a7d4; font-size: .75rem; animation-name: cue-pulse }
+@keyframes cue-pulse { 0%, 100% { opacity: .75 } 50% { opacity: 1 } }
+
+/* chapter jumps land below the sticky site header */
+html { scroll-padding-top: var(--tp-barh) }
+
+/* 44px tap targets on touch. The transparent border keeps the painted dot at
+   9px, 13.5px from the edge as before, and the height shrinks only when twelve
+   44px rows would not fit. The reader's rules set the background shorthand,
+   which resets the clip, hence !important. */
+@media (pointer: coarse) {
+  #mala { --hit: min(44px, calc((100vh - 2 * var(--tp-barh)) / 12)); gap: 0; right: 0 }
+  #mala .bead {
+    width: 44px; height: var(--hit);
+    border: solid transparent; border-width: calc((var(--hit) - 9px) / 2) 9px calc((var(--hit) - 9px) / 2) 26px;
+    border-radius: 30.5px 13.5px 13.5px 30.5px / calc(var(--hit) / 2);
+    background-clip: padding-box !important;
+    transform-origin: 30.5px 50%;
+  }
+  #mala .bead.active { box-shadow: none; filter: drop-shadow(0 0 5px var(--cyan)) }
+}
+
+.editions {
+  position: relative; z-index: 2;
+  margin: 0 var(--tp-gut); padding: 2.2rem 0 1.4rem;
+  border-top: 1px solid var(--tp-a14);
+  font: 400 .9rem/1.6 var(--tp-sans);
+}
+.editions ul { display: flex; flex-wrap: wrap; gap: .4rem 1.8rem; margin: 0; padding: 0; list-style: none }
+.editions a {
+  display: inline-block; padding-block: 10px; color: var(--tp-text);
+  text-decoration: underline 1px var(--tp-a40); text-underline-offset: 5px;
+}
+.editions a:hover, .editions a:focus-visible { color: var(--tp-acc) }
+.editions + .tp-foot { border-top: 0 }
+/* the reader styles every footer element; the site footer keeps its own tracking */
+.tp-foot { letter-spacing: normal }

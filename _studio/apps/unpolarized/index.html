@@ -2,9 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<script>/* apply the stored theme before first paint so nothing flashes */
-try{var t=localStorage.getItem('qd-theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0b1122">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%23070a14'/%3E%3Cg%20fill='none'%20stroke='%2352d6e6'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<!-- the site chrome lives at the site root, outside this app: vite-ignore keeps
+     both URLs literal instead of bundling them -->
+<link rel="stylesheet" href="/lib/site.css" vite-ignore>
+<script src="/lib/site.js" defer vite-ignore></script>
 <!-- Google Analytics (GA4) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
 <script>
@@ -32,7 +50,7 @@ try{var t=localStorage.getItem('qd-theme');document.documentElement.setAttribute
   "url": "https://pandey-tushar.com/"
  },
  "inLanguage": "en",
- "numberOfPages": 38,
+ "numberOfPages": 42,
  "description": "Twelve chapters in two voices on deciding, on what choosing costs, on repair, and on what survives you.",
  "isAccessibleForFree": true,
  "workExample": {
@@ -46,17 +64,58 @@ try{var t=localStorage.getItem('qd-theme');document.documentElement.setAttribute
 <meta property="og:description" content="Twelve short chapters in two voices, over one night. A Seeker with a question to answer by Friday, and an Oracle who has watched people for a long time.">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://pandey-tushar.com/life/">
-<meta property="og:image" content="https://pandey-tushar.com/og-book.png">
+<meta property="og:image" content="https://pandey-tushar.com/og-life.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Tushar Pandey">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="An Unpolarized Life · A Book of Questions">
 <meta name="twitter:description" content="Twelve short chapters in two voices, over one night. A Seeker with a question to answer by Friday, and an Oracle who has watched people for a long time.">
-<meta name="twitter:image" content="https://pandey-tushar.com/og-book.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='76' font-size='76' text-anchor='middle' fill='%23f4d58d'%3E%E2%97%AB%3C/text%3E%3C/svg%3E">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-life.png">
 </head>
 <body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+<!--static-book-->
+<div id="end">
+<nav class="editions" aria-label="Editions">
+  <ul>
+    <li><a href="/an-unpolarized-life.pdf">This book as a PDF</a></li>
+    <li><a href="/books.html">All books</a></li>
+    <li><a href="/qubit-dialogues.html">The Qubit Dialogues</a></li>
+    <li><a href="/illustrated/">The Qubit Dialogues, illustrated</a></li>
+  </ul>
+</nav>
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</div>
 <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

@@ -31,6 +31,7 @@
  "name": "Tushar Pandey",
  "honorificSuffix": "PhD",
  "url": "https://pandey-tushar.com/",
+ "image": "https://pandey-tushar.com/img/tushar-pandey.webp",
  "jobTitle": "Senior Software Engineer",
  "worksFor": {
   "@type": "Organization",
@@ -118,10 +119,10 @@
   /* display carries the claim; the question above it is demoted to a
      mono field query, so the heading is the only large voice */
   --t-display:clamp(1.42rem,.95rem + 2.1vw,2.1rem);
-  --t-ask:clamp(.66rem,.62rem + .18vw,.75rem);
+  --t-ask:clamp(12px,.62rem + .18vw,.8rem);
   --t-body:.92rem;
   --t-small:.8rem;
-  --t-app:.64rem;
+  --t-app:12px;
   /* The rhythm between sections. This is not only typographic: the states are
      anchored to the middles of these sections, so the air between them is
      also the room the object has to change shape in. Too tight and a small
@@ -196,27 +197,48 @@ a{color:inherit;text-decoration:none}
   white-space:nowrap;
 }
 
-/* ---------- rule bar ---------- */
+/* ---------- rule bar: the shared header (lib/site.css .tp-bar), inline ---------- */
 .bar{
   position:sticky; top:0; z-index:30;
   height:var(--barh);
-  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  display:flex;align-items:center;gap:18px;
   padding:0 var(--gut);
   background:var(--bar);
   border-bottom:1px solid var(--a14);
+  font:400 12px/1 var(--mono);color:var(--ink);
 }
-.mark{display:flex;align-items:center;gap:11px;flex:0 0 auto}
+.bar a,.bar button{font:inherit;color:inherit}
+.mark{display:flex;align-items:center;gap:11px;flex:0 0 auto;min-height:44px}
 .mark svg{display:block;overflow:visible}
 .mark span{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  letter-spacing:.24em;text-transform:uppercase;
   color:rgba(232,230,255,.82);white-space:nowrap;
 }
-.nav{display:flex;gap:clamp(12px,1.8vw,26px);flex-wrap:nowrap}
-.nav a{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--dim);padding-bottom:2px;border-bottom:1px solid transparent;transition:color .18s,border-color .18s;
+.nav{
+  display:flex;align-items:center;gap:clamp(12px,1.8vw,26px);
+  margin-left:auto;min-width:0;position:relative;
+  overflow-x:auto;scrollbar-width:none;
 }
-.nav a:hover,.nav a:focus-visible{color:var(--acc);border-bottom-color:var(--a40)}
+.nav::-webkit-scrollbar{display:none}
+.nav a{
+  flex:0 0 auto;display:flex;align-items:center;min-height:44px;
+  letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;color:var(--dim);
+  text-decoration:underline 1px transparent;text-underline-offset:6px;
+  transition:color .18s,text-decoration-color .18s;
+}
+.nav a:hover,.nav a:focus-visible{color:var(--acc);text-decoration-color:var(--a40)}
+.nav a:focus-visible{outline-offset:-2px}
+/* the switch: the cycle auto, light, dark, as on every page */
+.toggle{
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:32px;margin:0;padding:0 14px;border-radius:999px;cursor:pointer;
+  letter-spacing:.17em;text-transform:uppercase;
+  border:1px solid var(--a22);background:color-mix(in srgb, var(--void) 72%, transparent);
+  transition:color .18s,border-color .18s;
+}
+.toggle:hover,.toggle:focus-visible{color:var(--acc);border-color:var(--a40)}
+.toggle b{font-weight:400;opacity:.55;letter-spacing:0}
+@media (pointer:coarse){ .toggle{min-height:44px;min-width:44px} }
 
 /* ---------- first screen ----------
    The content sits on the left of a two column grid whose right column is
@@ -248,7 +270,7 @@ main,footer,.hero,.quire,.quire section{pointer-events:none}
 
 .eyebrow{
   margin:0 0 clamp(18px,2.8vh,30px);
-  font-family:var(--mono);font-size:clamp(9.5px,1vw,11px);letter-spacing:.3em;text-transform:uppercase;
+  font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;
   color:var(--a70);display:flex;align-items:center;gap:12px;
 }
 .eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--a22),transparent)}
@@ -272,7 +294,7 @@ h1 .sur{display:block;color:#b9d9ef;text-shadow:0 0 34px rgba(82,214,230,.30)}
 .whisper{
   margin:clamp(14px,2vh,20px) 0 0;
   display:flex;gap:10px;align-items:baseline;
-  font-family:var(--mono);font-size:clamp(10px,1.02vw,11.5px);line-height:1.6;
+  font-family:var(--mono);font-size:12px;line-height:1.6;
   letter-spacing:.055em;color:var(--dim);
 }
 .whisper i{color:var(--acc);font-style:normal;flex:0 0 auto;opacity:.9}
@@ -280,7 +302,7 @@ h1 .sur{display:block;color:#b9d9ef;text-shadow:0 0 34px rgba(82,214,230,.30)}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(24px,3.4vh,36px)}
 .btn{
   position:relative;display:inline-block;padding:11px 17px;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
+  font-family:var(--mono);font-size:12px;letter-spacing:.17em;text-transform:uppercase;
   color:rgba(230,236,255,.88);border:1px solid rgba(82,214,230,.18);
   background:rgba(82,214,230,.015);
   transition:color .18s,border-color .18s,background-color .18s;
@@ -324,14 +346,14 @@ h1 .sur{display:block;color:#b9d9ef;text-shadow:0 0 34px rgba(82,214,230,.30)}
   opacity:0;transition:opacity .5s ease-out;
 }
 #hud.on{opacity:1}
-#hud b{display:block;font-weight:400;font-size:9px;letter-spacing:.28em;color:var(--a70)}
+#hud b{display:block;font-weight:400;font-size:12px;letter-spacing:.28em;color:var(--a70)}
 #hud b span{color:var(--dim)}
-#hud i{display:block;font-style:normal;font-size:12.5px;letter-spacing:.13em;
+#hud i{display:block;font-style:normal;font-size:14px;letter-spacing:.13em;
        color:rgba(230,236,255,.95);margin-top:6px}
-#hud i sub{font-size:.7em;letter-spacing:0;vertical-align:baseline;position:relative;top:.3em}
-#hud u{display:block;text-decoration:none;font-size:9px;letter-spacing:.18em;
+#hud i sub{font-size:12px;letter-spacing:0;vertical-align:baseline;position:relative;top:.3em}
+#hud u{display:block;text-decoration:none;font-size:12px;letter-spacing:.18em;
        color:var(--dim);margin-top:7px;font-variant-numeric:tabular-nums}
-#hud em{display:block;font-style:normal;font-size:8.5px;letter-spacing:.16em;
+#hud em{display:block;font-style:normal;font-size:12px;letter-spacing:.16em;
         line-height:1.7;white-space:normal;
         color:var(--dim);margin-top:13px;transition:opacity .55s ease}
 #hud.used em{opacity:0}
@@ -346,7 +368,7 @@ h1 .sur{display:block;color:#b9d9ef;text-shadow:0 0 34px rgba(82,214,230,.30)}
 }
 .status div{display:flex;align-items:baseline;gap:11px;min-width:0}
 .status .k{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--a70);
+  font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--a70);
   flex:0 0 auto;
 }
 .status .v{font-size:clamp(.86rem,1.1vw,.98rem);color:rgba(230,236,255,.92);letter-spacing:-.004em}
@@ -411,6 +433,15 @@ h1 .sur{display:block;color:#b9d9ef;text-shadow:0 0 34px rgba(82,214,230,.30)}
 }
 .say b{font-weight:500;color:#9ae7f4}
 
+/* the portrait sits beside the bio; the bio keeps the row's baseline */
+.bio{display:flex;align-items:flex-start;gap:clamp(1.1rem,2.4vw,1.6rem)}
+.bio .say{align-self:baseline}
+.face{
+  flex:0 0 auto;width:144px;height:144px;margin-top:clamp(.95rem,2vh,1.35rem);
+  border-radius:50%;border:1px solid var(--a40);padding:3px;
+  background:var(--a08);object-fit:cover;
+}
+
 .more{margin-top:clamp(1.05rem,2.2vh,1.5rem);display:flex;align-items:baseline;flex-wrap:wrap}
 .more a{
   font-family:var(--mono);
@@ -420,8 +451,8 @@ h1 .sur{display:block;color:#b9d9ef;text-shadow:0 0 34px rgba(82,214,230,.30)}
 }
 .more a:hover,.more a:focus-visible{color:var(--acc);border-bottom-color:var(--a70)}
 
-/* a live pip, not a proof mark: the claim above it says the work is
-   running, so the mark says the same thing in the instrument's terms */
+/* a status pip, not a proof mark: the claim above it says the work
+   shipped, so the mark says the same thing in the instrument's terms */
 .qed{
   align-self:baseline;
   width:.52rem;height:.52rem;border-radius:50%;
@@ -516,11 +547,13 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
 @media (max-width:47.99em){
   .act > .lbl{display:block;margin-bottom:.8rem}
   .corr li{
-    display:grid;grid-template-columns:4.7rem minmax(0,1fr);
+    display:grid;grid-template-columns:6.2rem minmax(0,1fr);
     column-gap:.85rem;align-items:baseline;
   }
-  .corr .lbl{font-size:.64rem;letter-spacing:.14em}
+  .corr .lbl{font-size:12px;letter-spacing:.14em}
   .corr .val{font-size:.86rem}
+  .bio{flex-direction:column}
+  .face{width:108px;height:108px;margin-top:0}
 }
 
 /* Under the width that affords a margin beside the measure there is no
@@ -537,23 +570,27 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
   .hero{gap:clamp(20px,2.8vh,28px);padding-top:clamp(22px,3.4vh,34px)}
   .col{max-width:none}
   .actions{margin-top:clamp(18px,2.6vh,26px)}
-  .nav{gap:clamp(9px,2.6vw,18px)}
-  .nav a{letter-spacing:.12em;font-size:9.5px}
+  .nav{gap:clamp(4px,2vw,18px)}
+  .nav a{letter-spacing:.12em}
   .mark span{display:none}
   .bar{gap:12px}
 }
-/* Seven items fit at 375 with about 20px to spare, which is not enough margin
-   for a 360 or 320 wide phone. Tighten once more rather than let the bar
-   overflow. */
-@media (max-width:22.5em){
-  .nav{gap:7px}
-  .nav a{letter-spacing:.02em}
+/* a phone: as lib/site.css, the nav is one row that scrolls sideways, faded
+   at the edge it continues past, and the switch keeps only its glyph */
+@media (max-width:600px){
+  .bar{padding:0 8px;gap:2px}
+  .mark{min-width:44px;justify-content:center}
+  .nav{gap:0;mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+  .nav[data-end]{mask-image:none;-webkit-mask-image:none}
+  .nav a{padding:0 5px;letter-spacing:.06em}
+  .toggle{padding:0;width:44px;min-height:44px;border-color:transparent;background:none}
+  .toggle span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .toggle b{opacity:.8;font-size:15px}
+  .eyebrow{letter-spacing:.16em}
 }
 @media (max-width:400px){
-  .nav a{letter-spacing:.05em;font-size:9px}
-  .btn{padding:10px 12px;letter-spacing:.12em;font-size:10px}
-  /* keeps the marginal note on one line at 375 */
-  .whisper{letter-spacing:.012em;font-size:9.6px;gap:8px}
+  .btn{padding:10px 12px;letter-spacing:.12em}
+  .whisper{letter-spacing:.012em;gap:8px}
   .names li:not(:last-child)::after{margin:0 .7em .08em}
 }
 
@@ -619,22 +656,6 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
   background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.90));
 }
 :root[data-theme="light"] .quire::before{background:linear-gradient(180deg,rgba(10,111,128,.30),rgba(10,111,128,.07))}
-
-/* the switch. Fixed, so it reads as interface rather than as another line of
-   the page, and a direct child of body so no transformed ancestor can steal
-   its positioning. It offers the theme you are NOT in. */
-#lamp{
-  position:fixed;right:clamp(14px,2vw,26px);bottom:clamp(14px,2vw,26px);z-index:40;
-  display:inline-flex;align-items:center;gap:9px;
-  padding:9px 15px;border-radius:999px;cursor:pointer;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;
-  color:var(--ink);border:1px solid var(--a22);
-  background:color-mix(in srgb, var(--void) 72%, transparent);
-  transition:color .18s,border-color .18s,background-color .18s;
-}
-#lamp:hover,#lamp:focus-visible{color:var(--acc);border-color:var(--a40)}
-#lamp b{font-weight:400;opacity:.55}
-@media print{ #lamp{display:none!important} }
 
 @media print{
   @page{margin:16mm 18mm}
@@ -722,8 +743,8 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
 </div>
 
 <header class="bar">
-  <a class="mark" href="#main" aria-label="Tushar Pandey, home">
-    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true">
+  <a class="mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
         <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
       </g>
@@ -731,14 +752,13 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
     <span>Tushar Pandey</span>
   </a>
   <nav class="nav" aria-label="Primary">
-    <a href="#quantum">Quantum</a>
-    <a href="#ai">AI</a>
-    <a href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener">Writing</a>
-    <a href="research.html">Research</a>
-    <a href="books.html">Books</a>
-    <a href="cv.html">CV</a>
-    <a href="#contact">Contact</a>
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
   </nav>
+  <button class="toggle" id="lamp" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span id="lamptx">Auto</span></button>
 </header>
 
 <main id="main">
@@ -749,10 +769,9 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
         <p class="eyebrow">Ph.D. Mathematics&nbsp;&#183; Quantum &#215; AI</p>
         <h1>Tushar <span class="sur">Pandey</span></h1>
         <div class="rule"></div>
-        <p class="lede">I turn ideas into systems that ship.</p>
-        <p class="whisper"><i>&#10022;</i><span>Trained on proofs. Fluent in production.</span></p>
+        <p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>
         <div class="actions">
-          <a class="btn" href="cv.html">Curriculum Vitae</a>
+          <a class="btn" href="/cv.html">Curriculum Vitae</a>
           <a class="btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
           <a class="btn" href="mailto:wtatushar@gmail.com">Email</a>
         </div>
@@ -775,9 +794,9 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
         <div>
           <p class="ask">Can you compute with broken parts?</p>
           <h2 id="h-quantum">Error, <em>corrected.</em></h2>
-          <p class="say"><b>Fault tolerance for a non-abelian code</b>, built at Oak Ridge. Lead author, APL Quantum 2025. <b>Variational eigensolvers</b> on real processors, first author, Physica Scripta 2026.</p>
-          <p class="more"><a href="https://doi.org/10.1088/1402-4896/ae9e06" target="_blank" rel="noopener" data-url="doi.org/10.1088/1402-4896/ae9e06">Physica Scripta, 2026<span aria-hidden="true"> &#8594;</span></a><span class="sep" aria-hidden="true">&#183;</span><a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener" data-url="sites.google.com/view/tusharpandey">the record<span aria-hidden="true"> &#8594;</span></a></p>
-          <p class="whisper"><i>&#10022;</i><span>Every qubit is a rumour. The code is the fact&#8209;check.</span></p>
+          <p class="say"><b>Error correction for the doubled semion model</b>, begun at Oak Ridge. Sole author, APL Quantum 2025. <b>Variational eigensolvers</b> on real processors, first author, Physica Scripta 2026.</p>
+          <p class="more"><a href="https://doi.org/10.1063/5.0255351" target="_blank" rel="noopener" data-url="doi.org/10.1063/5.0255351">APL Quantum, 2025<span aria-hidden="true"> &#8594;</span></a><span class="sep" aria-hidden="true">&#183;</span><a href="https://doi.org/10.1088/1402-4896/ae9e06" target="_blank" rel="noopener" data-url="doi.org/10.1088/1402-4896/ae9e06">Physica Scripta, 2026<span aria-hidden="true"> &#8594;</span></a><span class="sep" aria-hidden="true">&#183;</span><a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener" data-url="sites.google.com/view/tusharpandey">the record<span aria-hidden="true"> &#8594;</span></a></p>
+          <p class="whisper"><i>&#10022;</i><span>Every qubit is a rumor. The code is the fact&#8209;check.</span></p>
         </div>
       </div>
     </section>
@@ -789,9 +808,9 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
         <div>
           <p class="ask">Can a machine think harder, mid-thought?</p>
           <h2 id="h-ai">Reasoning that <em>grows.</em></h2>
-          <p class="say"><b>AGoT</b> grows chains, trees and graphs as it runs.</p>
-          <p class="more"><a href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener" data-url="github.com/AgnostiqHQ/multi-agent-llm">the code, open source<span aria-hidden="true"> &#8594;</span></a><span class="qed" role="img" aria-label="Status: running in production"></span></p>
-          <p class="whisper"><i>&#10022;</i><span>It thinks harder when the question is harder. Rarer than it sounds.</span></p>
+          <p class="say"><b>AGoT</b> grows chains, trees and graphs as it runs. Shipped at Agnostiq as a production agentic-AI blueprint (2024-25); code open source.</p>
+          <p class="more"><a href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener" data-url="github.com/AgnostiqHQ/multi-agent-llm">the code, open source<span aria-hidden="true"> &#8594;</span></a><span class="sep" aria-hidden="true">&#183;</span><a href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener" data-url="arxiv.org/abs/2502.05078">the paper<span aria-hidden="true"> &#8594;</span></a><span class="qed" role="img" aria-label="Status: shipped"></span></p>
+          <p class="whisper"><i>&#10022;</i><span>It thinks harder when the question is harder.</span></p>
         </div>
       </div>
     </section>
@@ -800,24 +819,49 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
     <section id="record" aria-labelledby="h-record">
       <div class="act">
         <h2 class="lbl" id="h-record">Record</h2>
-        <ul class="names"><li>Oak Ridge National Laboratory</li><li>APL Quantum</li><li>IBM Quantum</li><li>MIT</li><li>Texas A&amp;M</li><li>IIT Kanpur</li></ul>
+        <ul class="names"><li>DataRobot</li><li>Agnostiq</li><li>Oak Ridge National Laboratory</li><li>Texas A&amp;M University</li><li>IIT Kanpur</li></ul>
+        <p class="whisper"><i>&#10022;</i><span>Five institutions, one consistent variable.</span></p>
       </div>
       <div class="act">
-        <p class="lbl">Metrics</p>
-        <p class="say">LLM inference at DataRobot: <b>30 to 40 percent faster</b> deploys, throughput <b>tripled</b>.</p>
+        <p class="lbl">Writing</p>
+        <p class="say">LLM inference at DataRobot: co-author of <b>TokenGrid</b>, a token-aware capacity scheduler for multi-tenant model serving.</p>
         <p class="more"><a href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener" data-url="datarobot.com/blog">TokenGrid, on the DataRobot blog<span aria-hidden="true"> &#8594;</span></a></p>
-        <p class="whisper"><i>&#10022;</i><span>Six institutions, one consistent variable.</span></p>
+      </div>
+    </section>
+
+    <hr class="grad">
+    <section id="books" aria-labelledby="h-books">
+      <div class="act">
+        <h2 class="lbl" id="h-books">Books</h2>
+        <div>
+          <p class="say"><b>The Qubit Dialogues</b>, twenty-two cantos on quantum computing, about two hours.<br><b>An Unpolarized Life</b>, twelve chapters, about 35 minutes.<br><b>The illustrated edition</b>, the same prose set as plates, about two hours.</p>
+          <p class="more"><a href="/books.html">the books<span aria-hidden="true"> &#8594;</span></a></p>
+        </div>
+      </div>
+      <div class="act">
+        <p class="lbl">Lessons</p>
+        <div>
+          <p class="say"><b>Quantum Error Correction in Practice</b>: four interactive surface-code lessons, from a single patch to teleporting a T state between logical qubits.</p>
+          <p class="more"><a href="/qec-in-practice/">the lessons<span aria-hidden="true"> &#8594;</span></a></p>
+        </div>
       </div>
     </section>
 
     <hr class="grad">
     <section id="contact" aria-labelledby="h-contact">
       <div class="act">
+        <p class="lbl">About</p>
+        <div class="bio">
+          <img class="face" src="/img/tushar-pandey.webp" srcset="/img/tushar-pandey-320.webp 320w, /img/tushar-pandey.webp 640w" sizes="(max-width:47.99em) 108px, 144px" width="640" height="640" loading="lazy" decoding="async" alt="Tushar Pandey">
+          <p class="say">I am a math Ph.D. from Texas A&amp;M University, where I worked under Tian Yang in quantum topology and the volume conjecture, and I did my undergraduate degree at IIT Kanpur in mathematics and scientific computing. I am currently a Senior Software Engineer at DataRobot; before that I worked at Agnostiq as a research software engineer on gen-AI algorithms. I have worked on quantum algorithms, error correction, topological quantum computing, ZX-calculus, machine learning, NLP and gen-AI.</p>
+        </div>
+      </div>
+      <div class="act">
         <p class="lbl">Contact</p>
         <div>
           <p class="ask">What&rsquo;s left to prove?</p>
           <h2 id="h-contact">Let&rsquo;s build the <em>improbable.</em></h2>
-          <p class="whisper"><i>&#10022;</i><span>Improbable, not impossible. Usually a question of who is in the room.</span></p>
+          <p class="whisper"><i>&#10022;</i><span>Improbable, not impossible.</span></p>
         </div>
       </div>
 
@@ -843,16 +887,13 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
   </div>
 </main>
 
-<button id="lamp" type="button" aria-label="Switch to the light theme" title="Switch theme">
-  <b>&#9788;</b><span id="lamptx">Let there be light</span>
-</button>
-
 <footer>
   <div class="foot">
     <ul class="foot-links">
-      <li><a href="cv.html" data-url="pandey-tushar.com/cv.html">Curriculum Vitae</a></li>
-      <li><a href="research.html" data-url="pandey-tushar.com/research.html">Research</a></li>
-      <li><a href="books.html" data-url="pandey-tushar.com/books.html">Books</a></li>
+      <li><a href="/research.html" data-url="pandey-tushar.com/research.html">Research</a></li>
+      <li><a href="/books.html" data-url="pandey-tushar.com/books.html">Books</a></li>
+      <li><a href="/qec-in-practice/" data-url="pandey-tushar.com/qec-in-practice/">Lessons</a></li>
+      <li><a href="/cv.html" data-url="pandey-tushar.com/cv.html">Curriculum Vitae</a></li>
       <li><a href="https://github.com/pandey-tushar" target="_blank" rel="noopener" data-url="github.com/pandey-tushar">GitHub</a></li>
       <li><a href="mailto:wtatushar@gmail.com" data-url="wtatushar@gmail.com">Email</a></li>
     </ul>
@@ -2016,7 +2057,7 @@ var hud = document.getElementById("hud"), veil = document.getElementById("veil")
 var hIx = document.getElementById("hix"), hNm = document.getElementById("hnm");
 var hTl = document.getElementById("htl");
 var barEl = document.querySelector(".bar"), foldEl = document.querySelector(".fold");
-var statusEl = document.querySelector(".status");
+var statusEl = document.querySelector(".status"), colEl = document.querySelector(".hero .col");
 var secQ = document.getElementById("quantum");
 var secA = document.getElementById("ai");
 var secC = document.getElementById("contact");
@@ -2033,7 +2074,7 @@ var STATES = [
 ];
 var AHINT = " Interactive: drag, or use the arrow keys, to turn it; click or press Enter to send a pulse through it.";
 
-var VW = 0, VH = 0, DPR = 1, BARH = 52, NARROW = 0, FOLD = 600;
+var VW = 0, VH = 0, DPR = 1, BARH = 52, NARROW = 0, FOLD = 600, COLB = 0;
 var sW = 0, sH = 0;
 var reduce = matchMedia("(prefers-reduced-motion: reduce)");
 var raf = 0, last = 0, t0 = 0, lastP = -1, lastY = -1, lastF = -1, capI = -1;
@@ -2209,6 +2250,8 @@ function measure(){
   NARROW = VW < 1250 ? 1 : 0;
   FOLD = Math.max(280, foldEl.offsetHeight);
   var yo = window.pageYOffset;
+  COLB = colEl.getBoundingClientRect().bottom + yo;
+  HW = hud.offsetWidth || 200; HH = hud.offsetHeight || 104;
   var qr = secQ.getBoundingClientRect(), ar = secA.getBoundingClientRect();
   var cr = secC.getBoundingClientRect();
   T1 = qr.top + yo + qr.height/2 - VH/2;
@@ -2245,6 +2288,7 @@ function prog(){
    the fold it draws back into the margin the argument is not using, dims, and
    stays: it is the space the page sits in, so it never leaves. */
 var OCX = 0, OCY = 0, OU = 1, RETA = 1, FOC = 0;
+var KH = .52;   /* the strand's reach above its centre at its tallest turn, in units of its size */
 var HW = 200, HH = 104;
 function place(snapf){
   var f = ease(span(window.pageYOffset, FOLD*.10, FOLD*.72));
@@ -2253,6 +2297,9 @@ function place(snapf){
   var av = Math.max(120, VH - BARH), hx, hy, hu, tx, ty, tu;
   if (NARROW){
     hu = Math.min(VW*1.02, av*.66); hx = VW*.5;   hy = BARH + av*.72;
+    /* the readout rides above the strand here, so the strand drops if the
+       text over it runs long enough to leave the readout no room */
+    hy = Math.max(hy, COLB + 22 + HH + 6 + hu*KH);
     tu = Math.min(VW*1.04, VH*.72); tx = VW*.5;   ty = VH*.46;
   } else {
     hu = Math.min(VW*.52, av*1.04); hx = VW*.66;  hy = BARH + av*.48;
@@ -2281,12 +2328,19 @@ function place(snapf){
   /* the object is large enough now that on a phone the readout would land on
      the standing strip at the foot of the first screen, so it stops above it
      while that strip is on screen */
-  var lim = VH - HH - 12;
-  if (statusEl){
-    var sr = statusEl.getBoundingClientRect();
-    if (sr.top > 0 && sr.top < VH) lim = Math.min(lim, sr.top - HH - 10);
+  var lim = VH - HH - 12, hy2;
+  if (NARROW){
+    /* With no column beside the strand, the readout under it landed on the
+       strand itself (it stops above the standing strip), so here it sits
+       above the strand instead, clear of both */
+    hy2 = Math.max(OCY - OU*KH - HH - 6, BARH + 10);
+  } else {
+    if (statusEl){
+      var sr = statusEl.getBoundingClientRect();
+      if (sr.top > 0 && sr.top < VH) lim = Math.min(lim, sr.top - HH - 10);
+    }
+    hy2 = Math.min(Math.max(OCY + OU*.30, BARH + 10), Math.max(BARH+10, lim));
   }
-  var hy2 = Math.min(Math.max(OCY + OU*.30, BARH + 10), Math.max(BARH+10, lim));
   hud.style.transform = "translate3d(" + hx2.toFixed(1) + "px," + hy2.toFixed(1) + "px,0)";
 }
 
@@ -2451,7 +2505,6 @@ if (reduce.matches){
 var rt = 0;
 function relayout(){
   measure(); size();
-  HW = hud.offsetWidth || 200; HH = hud.offsetHeight || 104;
   LMX = null;                 /* the type moved, so every letter is re-weighed */
   lastP = -1; lastY = -1; lastF = -1;
   if (reduce.matches) still();
@@ -2490,8 +2543,20 @@ function applyTheme(){
   sayLamp();
   size(true);                 /* repaint the ground under the new palette */
   if (reduce.matches) still(); else { t0 = 0; ptv = 0; start(); }
+  /* the same event lib/site.js sends, so anything listening on any page hears it */
+  document.dispatchEvent(new CustomEvent("tp-theme", { detail: { theme: d.dataset.theme, pref: PREF } }));
 }
 sayLamp();
+/* the nav on a phone scrolls sideways; its fade marks the edge it continues
+   past and drops at the end, as lib/site.js does on every other page */
+var navEl = document.querySelector(".bar .nav");
+function navEdge(){
+  if (navEl.scrollLeft + navEl.clientWidth >= navEl.scrollWidth - 2) navEl.setAttribute("data-end", "");
+  else navEl.removeAttribute("data-end");
+}
+navEl.addEventListener("scroll", navEdge, { passive:true });
+window.addEventListener("resize", navEdge, { passive:true });
+navEdge();
 lamp.addEventListener("click", function(){
   PREF = PREF === "auto" ? "light" : PREF === "light" ? "dark" : "auto";
   try { localStorage.setItem("tp-theme", PREF); } catch(e){}

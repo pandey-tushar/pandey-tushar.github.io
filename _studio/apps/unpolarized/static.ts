@@ -41,8 +41,11 @@ export function staticBook(): string {
     chapters.join('') + '</div>';
 }
 
+/* It is the page's one <main>, under the site header. main.ts removes that
+   main and gives its id to the reader's. */
 export const staticBookPlugin = (): Plugin => ({
   name: 'static-book',
   transformIndexHtml: (html) =>
-    html.replace('</head>', STYLE + '\n</head>').replace('<body>', '<body>\n' + staticBook()),
+    html.replace('</head>', STYLE + '\n</head>')
+      .replace('<!--static-book-->', '<main id="main">' + staticBook() + '</main>'),
 });
