@@ -1,44 +1,152 @@
-/* This edition inside the site chrome (/lib/site.css). */
+/* This edition inside the site chrome (/lib/site.css), set as a book page:
+   the site's paper and ink in both themes, a serif text block held near 65
+   characters, the two voices told apart by small capitals and an indent.
+   It loads after the reader's own sheet, so these rules win where they meet. */
 
-/* the site header sits above the cover, so the cover fills the rest of the
-   first screen and the scroll cue stays in view */
-#cover { height: calc(100vh - var(--tp-barh)) }
+/* the reader's palette, pointed at the site tokens for either theme */
+html[data-theme] {
+  --void: var(--tp-void); --void2: var(--tp-void2); --ink: var(--tp-ink);
+  --cyan: var(--tp-acc); --violet: var(--tp-ink); --gold: var(--tp-ink); --rose: var(--tp-ink);
+  --dim: var(--tp-dim); --line: var(--tp-rule);
+  --serif: var(--tp-serif);
+  --bs: 1.1875rem;
+  scroll-padding-top: calc(var(--tp-barh) + 8px);
+  transition: none;
+}
+@media (max-width: 600px) { html[data-theme] { --bs: 1.0625rem } }
+body { color: var(--tp-text); overflow-x: clip }
+::selection { background: var(--tp-a22) }
+:focus-visible { outline-color: var(--tp-acc) }
+main a, #cover a, .contents a { color: var(--tp-acc); text-decoration: underline 1px var(--tp-a40); text-underline-offset: .18em }
 
-/* at least 4.5:1 on the cover through the whole pulse, and no smaller than 12px */
-#cover .scrollcue { color: #a9a7d4; font-size: .75rem; animation-name: cue-pulse }
-@keyframes cue-pulse { 0%, 100% { opacity: .75 } 50% { opacity: 1 } }
+/* no night sky, no rail, no progress bar: the contents list does their work */
+#starfield, .vignette, #mala, #prog, #loader { display: none !important }
 
-/* chapter jumps land below the sticky site header */
-html { scroll-padding-top: var(--tp-barh) }
+/* ---------- title page, after the cover ---------- */
+#cover {
+  height: auto; min-height: calc(100svh - var(--tp-barh));
+  width: auto; margin: 0; padding: 3.5rem 0 3rem;
+  background: none; color: var(--tp-ink);
+}
+#cover .bar { display: block; width: 48px; height: 3px; background: var(--tp-acc); margin: 0 0 1.6rem }
+#cover h1 {
+  margin: 0; font: 400 clamp(2.6rem, 1.6rem + 4.2vw, 4.6rem)/1.04 var(--tp-serif); letter-spacing: -.015em;
+  background: none; color: var(--tp-ink); text-wrap: balance;
+}
+#cover .sub {
+  margin: .7rem 0 0; font: italic 400 clamp(1.15rem, 1rem + .6vw, 1.45rem)/1.3 var(--tp-serif);
+  letter-spacing: 0; color: var(--tp-dim);
+}
+#cover .figure { display: block; width: min(270px, 62vw); height: auto; margin: 2.2rem 0 1.6rem; overflow: visible }
+.fig-lens { fill: none; stroke: var(--tp-ink); stroke-width: 1.6; vector-effect: non-scaling-stroke }
+.fig-core { fill: var(--tp-acc); fill-opacity: .16 }
+#cover .author { margin: 0; font: 600 .875rem/1.3 var(--tp-sans); letter-spacing: .2em; text-transform: uppercase; color: var(--tp-ink) }
+#cover .cover-links { margin: 1.6rem 0 0; font: 400 1rem/1.9 var(--tp-sans); color: var(--tp-dim) }
+#cover .cover-links a { padding: .6em .15em }
 
-/* 44px tap targets on touch. The transparent border keeps the painted dot at
-   9px, 13.5px from the edge as before, and the height shrinks only when twelve
-   44px rows would not fit. The reader's rules set the background shorthand,
-   which resets the clip, hence !important. */
-@media (pointer: coarse) {
-  #mala { --hit: min(44px, calc((100vh - 2 * var(--tp-barh)) / 12)); gap: 0; right: 0 }
-  #mala .bead {
-    width: 44px; height: var(--hit);
-    border: solid transparent; border-width: calc((var(--hit) - 9px) / 2) 9px calc((var(--hit) - 9px) / 2) 26px;
-    border-radius: 30.5px 13.5px 13.5px 30.5px / calc(var(--hit) / 2);
-    background-clip: padding-box !important;
-    transform-origin: 30.5px 50%;
-  }
-  #mala .bead.active { box-shadow: none; filter: drop-shadow(0 0 5px var(--cyan)) }
+/* ---------- the text block ---------- */
+#book { max-width: calc(31em + 2 * var(--tp-gut)); padding: 0 var(--tp-gut); font-size: var(--bs); line-height: 1.68 }
+#book p { text-wrap: pretty }
+section.canto { min-height: 0; padding: 4rem 0 3rem; opacity: 1; transform: none; transition: none }
+section.canto.acc { scroll-margin-top: var(--tp-barh) }
+#invocation, #references { border-top: 1px solid var(--tp-rule) }
+
+.contents { padding: 3.5rem 0 2.5rem; border-top: 1px solid var(--tp-rule) }
+.contents h2 {
+  margin: 0 0 1.4rem; font: 600 var(--tp-t-app)/1.3 var(--tp-sans); letter-spacing: .07em;
+  text-transform: uppercase; color: var(--tp-dim);
+}
+.contents ol { list-style: none; margin: 0; padding: 0; font-size: 1rem; line-height: 1.45 }
+.contents li { margin: 0 }
+.contents li.mv { margin: 1.4rem 0 .35rem; font: italic 400 1rem/1.4 var(--tp-serif); color: var(--tp-dim) }
+.contents li.mv:first-child { margin-top: 0 }
+.contents a { display: flex; gap: .9em; align-items: baseline; padding: .32rem 0; color: var(--tp-ink); text-decoration: none }
+.contents a .n { flex: 0 0 1.6em; text-align: right; font: 400 .8125rem/1 var(--tp-sans); font-variant-numeric: tabular-nums; color: var(--tp-dim) }
+.contents a:hover .t, .contents a:focus-visible .t { color: var(--tp-acc); text-decoration: underline 1px var(--tp-a40); text-underline-offset: .18em }
+
+/* chapter openings: a label, the title, a hairline */
+.canto-num {
+  display: block; font: 600 var(--tp-t-app)/1.3 var(--tp-sans); letter-spacing: .07em;
+  text-transform: uppercase; color: var(--tp-dim); opacity: 1;
+}
+.canto-title {
+  display: block; margin: .35rem 0 0; font: 400 var(--tp-t-h2)/1.15 var(--tp-serif); letter-spacing: -.01em;
+  background: none; -webkit-text-fill-color: currentColor; color: var(--tp-head); text-wrap: balance;
+}
+#invocation > .canto-title, #references > .canto-title { margin-bottom: 1.6rem }
+.canto-head { padding: 2.6rem 3rem 1.25rem 0; font: inherit; border-bottom: 1px solid var(--tp-rule) }
+.canto-head::after { display: none }
+.canto-head:focus-visible { outline: 2px solid var(--tp-acc); outline-offset: 4px }
+.canto-head .canto-title { margin: .35rem 0 0 }
+.canto-head .caret {
+  top: auto; bottom: 1.15rem; right: 0; width: 2rem; height: 2rem; display: flex; align-items: center;
+  justify-content: center; font: 400 1.25rem/1 var(--tp-sans); color: var(--tp-dim); opacity: 1;
+}
+.canto-head:hover .canto-title, .canto-head:hover .caret { color: var(--tp-acc) }
+.canto.expanded > .canto-head .caret { opacity: 1 }
+.canto-body { padding-bottom: 0 }
+.canto.expanded > .canto-wrap > .canto-body { padding: .6rem 0 4rem }
+
+.movement { padding: 5rem 0 .5rem }
+.movement .mlabel { font: 600 var(--tp-t-app)/1.3 var(--tp-sans); letter-spacing: .07em; text-transform: uppercase; color: var(--tp-dim) }
+.movement .mtitle { margin: .5rem 0 0; font: italic 400 clamp(1.6rem, 1.2rem + 1.5vw, 2.2rem)/1.2 var(--tp-serif); color: var(--tp-ink) }
+.movement .mline { width: 48px; height: 2px; background: var(--tp-acc); margin: 1.3rem auto 0 }
+
+.epigraph { margin: 2rem 0 2.2rem 2em; padding: 0; border: 0; font-size: 1em; color: var(--tp-text); line-height: 1.6 }
+.epigraph .attr {
+  margin-top: .5rem; font-family: var(--tp-serif); font-size: 1em; font-variant-caps: all-small-caps;
+  letter-spacing: .06em; color: var(--tp-dim);
+}
+.epigraph .attr::before { content: "\2014\2002" }
+
+/* the two voices */
+.dlg { margin: 1.35em 0; font-size: 1em; line-height: 1.68 }
+.dlg p { margin: .6em 0 }
+.speaker {
+  margin: 0 0 -.25em; font-family: var(--tp-serif); font-size: 1.02em; font-weight: 600;
+  font-variant-caps: all-small-caps; letter-spacing: .07em; text-transform: none; color: var(--tp-ink);
+}
+.seeker { border: 0; padding: 0; margin-left: 0 }
+.oracle { border: 0; padding-left: 1.6em }
+.seeker .speaker { color: var(--tp-ink) }
+.oracle .speaker { color: var(--tp-acc) }
+
+.reflect { margin: 2.6em auto 1em; max-width: 27em; color: var(--tp-ink); font-size: 1.08em; line-height: 1.6 }
+.reflect .r-label {
+  margin-bottom: .7rem; font: 600 var(--tp-t-app)/1.3 var(--tp-sans); letter-spacing: .07em; color: var(--tp-dim);
 }
 
+/* the closing colophon */
+#book > footer {
+  padding: 4rem 0 3rem; border-top: 1px solid var(--tp-rule);
+  font: 400 .875rem/1.75 var(--tp-sans); letter-spacing: 0; color: var(--tp-dim);
+}
+#book > footer .closeq { display: block; width: 48px; height: 2px; margin: 0 auto 1.4rem; background: var(--tp-acc); font-size: 0; color: transparent }
+#book > footer a { color: var(--tp-acc) }
+.cite { color: var(--tp-dim); font-size: 1em }
+.foot-note { font: 400 .8125rem/1.65 var(--tp-sans); letter-spacing: 0; color: var(--tp-dim); border-top-color: var(--tp-rule) }
+.foot-note strong { color: var(--tp-ink) !important; letter-spacing: .04em !important }
+
 .editions {
-  position: relative; z-index: 2;
-  margin: 0 var(--tp-gut); padding: 2.2rem 0 1.4rem;
-  border-top: 1px solid var(--tp-a14);
-  font: 400 .9rem/1.6 var(--tp-sans);
+  max-width: calc(31em * 1.1875 + 2 * var(--tp-gut)); margin: 0 auto; padding: 2rem var(--tp-gut) 1.4rem;
+  font: 400 .9375rem/1.6 var(--tp-sans);
 }
 .editions ul { display: flex; flex-wrap: wrap; gap: .4rem 1.8rem; margin: 0; padding: 0; list-style: none }
 .editions a {
-  display: inline-block; padding-block: 10px; color: var(--tp-text);
-  text-decoration: underline 1px var(--tp-a40); text-underline-offset: 5px;
+  display: inline-block; padding-block: 10px; color: var(--tp-acc);
+  text-decoration: underline 1px var(--tp-a40); text-underline-offset: .18em;
 }
-.editions a:hover, .editions a:focus-visible { color: var(--tp-acc) }
-.editions + .tp-foot { border-top: 0 }
-/* the reader styles every footer element; the site footer keeps its own tracking */
-.tp-foot { letter-spacing: normal }
+.editions a:hover, .editions a:focus-visible { text-decoration-color: currentColor }
+/* the reader styles every footer element; the site footer keeps its own */
+.tp-foot { letter-spacing: normal; text-align: left; z-index: auto }
+
+@media print {
+  #cover { min-height: 0; padding: 2em 0 }
+  #cover h1 { color: #111 !important }
+  #cover .figure { width: 56mm }
+  .fig-lens { stroke: #333 }
+  .contents, .cover-links, .editions { display: none !important }
+  .canto-head { border-bottom: .4pt solid #999 }
+  .canto-title { color: #111 !important }
+  .dlg p, .speaker, .oracle .speaker, .reflect, .epigraph { color: #111 !important }
+}

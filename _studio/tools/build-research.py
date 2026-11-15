@@ -5,7 +5,7 @@ between marker comments, as static HTML that reads with scripts off.
     python _studio/tools/build-research.py
     python _studio/tools/check-research.py
 """
-import io, json, math, pathlib, re
+import io, json, pathlib, re
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 SITE = 'https://pandey-tushar.com/'
@@ -28,55 +28,16 @@ def roman(n):
     return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'][n - 1]
 
 
-def knot():
-    pts = []
-    for i in range(72):
-        t = 2 * math.pi * i / 72
-        r = 2 + math.cos(2 * t)
-        pts.append(f'{32 + 9.2 * r * math.cos(3 * t):.1f} {32 + 9.2 * r * math.sin(3 * t):.1f}')
-    return f'<path d="M{"L".join(pts)}Z" stroke-width="1.6" stroke-linejoin="round"/>'
-
-
-def primes():
-    p = [n for n in range(2, 50) if all(n % d for d in range(2, int(n ** .5) + 1))]
-    twin = {n for n in p if n - 2 in p or n + 2 in p}
-    out = []
-    for n in range(1, 50):
-        x, y = 8 + 8 * ((n - 1) % 7), 8 + 8 * ((n - 1) // 7)
-        if n in twin:
-            out.append(f'<circle cx="{x}" cy="{y}" r="3.3" class="v"/><circle cx="{x}" cy="{y}" r="1.7" fill="currentColor" stroke="none"/>')
-        elif n in p:
-            out.append(f'<circle cx="{x}" cy="{y}" r="1.7" fill="currentColor" stroke="none"/>')
-        else:
-            out.append(f'<circle cx="{x}" cy="{y}" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/>')
-    return ''.join(out)
-
-
-MOTIFS = {
-    'lattice': ('<rect x="8" y="8" width="16" height="16" class="vf"/><rect x="40" y="8" width="16" height="16" class="vf"/>'
-                '<rect x="24" y="24" width="16" height="16" class="vf"/><rect x="8" y="40" width="16" height="16" class="vf"/>'
-                '<rect x="40" y="40" width="16" height="16" class="vf"/>'
-                '<path d="M8 8h48v48H8zM24 8v48M40 8v48M8 24h48M8 40h48" stroke-opacity=".55"/>'
-                + ''.join(f'<circle cx="{x}" cy="{y}" r="2" fill="currentColor" stroke="none"/>'
-                          for x in (8, 24, 40, 56) for y in (8, 24, 40, 56))),
-    'circuit': ('<path d="M4 16h56M4 32h56M4 48h56" stroke-opacity=".55"/>'
-                '<rect x="10" y="10" width="12" height="12" class="box"/><rect x="10" y="42" width="12" height="12" class="box"/>'
-                '<path d="M32 16v21M46 32v21"/><circle cx="32" cy="16" r="2.4" fill="currentColor" stroke="none"/>'
-                '<circle cx="32" cy="32" r="5" class="v"/><path d="M27 32h10" class="v"/>'
-                '<circle cx="46" cy="32" r="2.4" fill="currentColor" stroke="none"/>'
-                '<circle cx="46" cy="48" r="5" class="v"/><path d="M41 48h10" class="v"/>'),
-    'graph': ('<path d="M32 8 16 26M32 8l16 18M16 26 8 44M16 26l12 18M48 26 36 44M48 26l8 18M8 44l24 14M28 44l4 14M36 44l-4 14M56 44 32 58" stroke-opacity=".55"/>'
-              + ''.join(f'<circle cx="{x}" cy="{y}" r="3" fill="currentColor" stroke="none"/>'
-                        for x, y in ((32, 8), (16, 26), (8, 44), (28, 44), (36, 44), (56, 44), (32, 58)))
-              + '<circle cx="48" cy="26" r="4.2" class="v"/>'),
-    'knot': knot(),
-    'primes': primes(),
-}
+# an area's motif in papers.json -> its emblem in img/figures/ (drawn by
+# _studio/tools/assets/emblems.py), inlined so currentColor and the tokens
+# follow the theme
+EMBLEMS = {'lattice': 'qec', 'circuit': 'circuit', 'graph': 'reasoning', 'knot': 'topology', 'primes': 'primes'}
 
 
 def motif(name):
-    return (f'<svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false">'
-            f'<g fill="none" stroke="currentColor" stroke-width="1.2">{MOTIFS[name]}</g></svg>')
+    svg = read(ROOT / 'img' / 'figures' / f'{EMBLEMS[name]}.svg').strip()
+    svg = re.sub(r'<title>.*?</title>', '', svg)
+    return re.sub(r' role="img" aria-label="[^"]*"', ' aria-hidden="true" focusable="false"', svg, count=1)
 
 
 def links(p):

@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="tp-full">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Tushar Pandey, PhD &#183; Quantum Error Correction and LLM Reasoning</title>
 <meta name="description" content="Tushar Pandey, PhD. Mathematician and Senior Software Engineer at DataRobot working on quantum error correction, quantum topology, and LLM reasoning and inference.">
 <meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#0b1122">
+<meta name="theme-color" content="#0d1320">
 <!-- The theme is settled before the first paint. Reading it in the body, or
      from CSS alone, shows the wrong one for a frame and the page blinks. -->
 <script>
@@ -31,7 +31,7 @@
  "name": "Tushar Pandey",
  "honorificSuffix": "PhD",
  "url": "https://pandey-tushar.com/",
- "image": "https://pandey-tushar.com/img/tushar-pandey.webp",
+ "image": "https://pandey-tushar.com/img/tushar-pandey-b.webp",
  "jobTitle": "Senior Software Engineer",
  "worksFor": {
   "@type": "Organization",
@@ -88,662 +88,140 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://pandey-tushar.com/og-home.png">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%23070a14'/%3E%3Cg%20fill='none'%20stroke='%2352d6e6'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
 <style>
-/* =================================================================
-   INSTRUMENT, NOT MANUSCRIPT.
-   The hero is a seeded emissive figure: a strand that gives off
-   light rather than one cut into paper. Everything below it is set
-   as a readout: mono for every label and datum, one clean face for
-   display and running text, and hierarchy from size, case and
-   tracking rather than weight. The palette is the book palette,
-   cyan through violet through magenta on the same near black, so
-   the site and the editions read as one body of work.
-   ================================================================= */
+/* The homepage, set like a paper: one interactive figure beside the name,
+   then numbered sections, each figure drawn in line with a caption.
+   Ground, type, header, footer and tokens: /lib/site.css. */
 
-:root{
-  --void:#0b1122; --void2:#16203f; --bar:#0d1428;
-  --ink:#e6ecff; --acc:#52d6e6; --cyan:#52d6e6; --violet:#9b7bff; --mag:#f06ab0;
-  --dim:#8891b8;
-  --a08:rgba(82,214,230,.08); --a14:rgba(82,214,230,.15); --a22:rgba(82,214,230,.24);
-  --a40:rgba(82,214,230,.42); --a70:rgba(82,214,230,.74);
-  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI Variable Display","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,"DejaVu Sans Mono",Menlo,monospace;
-
-  --gut:clamp(26px,6vw,96px);
-  --barh:52px;
-
-  /* the apparatus column, its gutter, and the measure it annotates */
-  --app:0rem; --agut:0rem; --measure:100%;
-
-  /* display carries the claim; the question above it is demoted to a
-     mono field query, so the heading is the only large voice */
-  --t-display:clamp(1.42rem,.95rem + 2.1vw,2.1rem);
-  --t-ask:clamp(12px,.62rem + .18vw,.8rem);
-  --t-body:.92rem;
-  --t-small:.8rem;
-  --t-app:12px;
-  /* The rhythm between sections. This is not only typographic: the states are
-     anchored to the middles of these sections, so the air between them is
-     also the room the object has to change shape in. Too tight and a small
-     scroll runs through two morphs at once. */
-  --step:clamp(7.5rem,17vh,13rem);
-}
-
-/* ---------- paper ----------
-   The accents are tuned for a black ground and are far too bright on paper,
-   so they are darkened rather than reused: the same three hues, taken down
-   until they hold their own against white. Everything the page draws in ink
-   follows from these. */
-:root[data-theme="light"]{
-  --void:#eef1f8; --void2:#dbe2f0; --bar:#e8ecf6;
-  --ink:#101828;
-  --acc:#0a6f80; --cyan:#0a6f80; --violet:#5233c4; --mag:#a8226a;
-  --dim:#57617d;
-  --a08:rgba(10,111,128,.09); --a14:rgba(10,111,128,.17);
-  --a22:rgba(10,111,128,.27); --a40:rgba(10,111,128,.45); --a70:rgba(10,111,128,.78);
-}
-html{transition:background-color .4s ease}
-@media (prefers-reduced-motion:reduce){ html{transition:none} }
-
-*,*::before,*::after{box-sizing:border-box}
-html,body,h1,h2,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
+body,h1,h2,h3,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
 ol,ul{list-style:none}
-html{
-  -webkit-text-size-adjust:100%;text-size-adjust:100%;
-  font-size:100%;
-  overflow-x:clip;
-  scroll-behavior:smooth;
-}
-@media (min-width:40em){html{font-size:106.25%}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-body{
-  background:var(--void); color:var(--ink);
-  font-family:var(--sans);
-  font-size:var(--t-body);
-  line-height:1.6;
-  font-kerning:normal;
-  font-variant-numeric:tabular-nums;
-  hanging-punctuation:first last;
-  -webkit-font-smoothing:antialiased;
-  overflow-x:clip;
-}
-/* the page ground: three low washes, no image, no request. Cyan low
-   and left, violet high and right, so the whole document sits inside
-   the same light the figure gives off. */
-body::before{
-  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background:
-    radial-gradient(120% 80% at 84% 0%, rgba(155,123,255,.17), transparent 58%),
-    radial-gradient(90% 70% at 2% 96%, rgba(82,214,230,.13), transparent 58%),
-    radial-gradient(60% 40% at 96% 88%, rgba(240,106,176,.085), transparent 62%),
-    linear-gradient(180deg,#111a36 0%,var(--void) 42%,#080e1e 100%);
-}
-a{color:inherit;text-decoration:none}
-::selection{background:rgba(82,214,230,.26)}
-.skip{position:absolute;left:-9999px;top:0;background:var(--acc);color:#04060e;padding:8px 14px;z-index:99;font-family:var(--mono);font-size:12px}
-.skip:focus{left:8px;top:8px}
-:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.home > section{padding-block:clamp(3rem,2rem + 3.5vw,5rem);border-top:1px solid var(--tp-rule)}
+.home > .hero{border-top:0;padding-block:clamp(2.2rem,1rem + 4vw,4.4rem) clamp(2.8rem,1.6rem + 4vw,5rem)}
+.sec-head{display:flex;align-items:baseline;gap:.8rem;margin-bottom:clamp(1.6rem,1rem + 2vw,2.6rem)}
+.sec-head .n{font:600 1rem/1 var(--tp-sans);color:var(--tp-acc);font-variant-numeric:tabular-nums}
+.more{margin-top:clamp(1.6rem,1rem + 1.6vw,2.4rem);font-size:var(--tp-t-small)}
 
-/* ---------- apparatus: mono field names, the instrument's own voice ---------- */
-.lbl{
-  font-family:var(--mono);
-  font-size:var(--t-app);
-  font-weight:400;
-  line-height:1.25;
-  letter-spacing:.185em;
-  text-transform:uppercase;
-  color:var(--a70);
-  white-space:nowrap;
+/* ---------- 0. hero ---------- */
+/* the text column and the figure panel share one centre line */
+.hero{display:grid;gap:clamp(2.2rem,4vw,4.5rem);align-items:center}
+.face{display:block;width:144px;height:144px;border-radius:50%;object-fit:cover;border:1px solid var(--tp-rule);margin-bottom:1.6rem}
+.lede{margin-top:1.1rem;max-width:32em;font-size:clamp(1.08rem,1rem + .4vw,1.22rem);line-height:1.55;color:var(--tp-text)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.7rem}
+.place{margin-top:1.1rem;font-size:var(--tp-t-small);color:var(--tp-dim)}
+@media (max-width:61.99em){ .hero .lat{max-width:32rem} }
+@media (min-width:62em){
+  .hero{grid-template-columns:minmax(0,1fr) minmax(0,29rem)}
 }
 
-/* ---------- rule bar: the shared header (lib/site.css .tp-bar), inline ---------- */
-.bar{
-  position:sticky; top:0; z-index:30;
-  height:var(--barh);
-  display:flex;align-items:center;gap:18px;
-  padding:0 var(--gut);
-  background:var(--bar);
-  border-bottom:1px solid var(--a14);
-  font:400 12px/1 var(--mono);color:var(--ink);
-}
-.bar a,.bar button{font:inherit;color:inherit}
-.mark{display:flex;align-items:center;gap:11px;flex:0 0 auto;min-height:44px}
-.mark svg{display:block;overflow:visible}
-.mark span{
-  letter-spacing:.24em;text-transform:uppercase;
-  color:rgba(232,230,255,.82);white-space:nowrap;
-}
-.nav{
-  display:flex;align-items:center;gap:clamp(12px,1.8vw,26px);
-  margin-left:auto;min-width:0;position:relative;
-  overflow-x:auto;scrollbar-width:none;
-}
-.nav::-webkit-scrollbar{display:none}
-.nav a{
-  flex:0 0 auto;display:flex;align-items:center;min-height:44px;
-  letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;color:var(--dim);
-  text-decoration:underline 1px transparent;text-underline-offset:6px;
-  transition:color .18s,text-decoration-color .18s;
-}
-.nav a:hover,.nav a:focus-visible{color:var(--acc);text-decoration-color:var(--a40)}
-.nav a:focus-visible{outline-offset:-2px}
-/* the switch: the cycle auto, light, dark, as on every page */
-.toggle{
-  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  min-height:32px;margin:0;padding:0 14px;border-radius:999px;cursor:pointer;
-  letter-spacing:.17em;text-transform:uppercase;
-  border:1px solid var(--a22);background:color-mix(in srgb, var(--void) 72%, transparent);
-  transition:color .18s,border-color .18s;
-}
-.toggle:hover,.toggle:focus-visible{color:var(--acc);border-color:var(--a40)}
-.toggle b{font-weight:400;opacity:.55;letter-spacing:0}
-@media (pointer:coarse){ .toggle{min-height:44px;min-width:44px} }
+/* the lattice: qubits on edges, checks on vertices */
+.lat svg{display:block;width:100%;height:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.lat svg *{vector-effect:non-scaling-stroke}
+.lat .e{stroke:var(--tp-dim);stroke-width:1.25;stroke-opacity:.6}
+.lat .s{stroke:var(--tp-ink);stroke-width:2.5;opacity:0}
+.lat .q{cursor:pointer;outline:none}
+.lat .q .hit{fill:transparent}
+.lat .q .d{fill:var(--tp-void2);stroke:var(--tp-dim);stroke-width:1.25}
+.lat .q:hover .d{stroke:var(--tp-acc);stroke-width:2}
+.lat .q[aria-pressed="true"] .d{fill:var(--tp-ink);stroke:var(--tp-ink)}
+.lat .q[aria-pressed="true"] .s{opacity:1}
+.lat .q .ring{fill:none;stroke:var(--tp-acc);stroke-width:2;opacity:0}
+.lat .q:focus-visible .ring{opacity:1}
+.lat .c .dot{fill:var(--tp-ink)}
+.lat .c .halo{fill:var(--tp-warm);fill-opacity:.16;stroke:var(--tp-warm);stroke-width:1.5;opacity:0}
+.lat .c.on .dot{fill:var(--tp-warm)}
+.lat .c.on .halo{opacity:1}
+.lat .ghost{opacity:.38}
+.lat .fx{stroke:var(--tp-acc);stroke-width:2.6;stroke-linecap:round;fill:none;vector-effect:none}
+.lat-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+.lat-ctl .tp-btn:disabled{opacity:.5;cursor:default;color:var(--tp-dim);border-color:var(--tp-rule)}
+.lat-status{margin-top:10px;min-height:3.2em;font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-text)}
+.lat-status b{font-weight:600;color:var(--tp-warm)}
 
-/* ---------- first screen ----------
-   The content sits on the left of a two column grid whose right column is
-   empty on purpose: that emptiness is where the object hangs. Nothing here
-   sizes it, so it is free to overflow the grid in any direction. */
-.fold{min-height:calc(100svh - var(--barh));display:flex;flex-direction:column}
+/* ---------- static figures ---------- */
+.fig svg{color:var(--tp-ink)}
+.fig svg *{vector-effect:non-scaling-stroke}
+.fig .ln{fill:none;stroke:currentColor;stroke-width:1.25;stroke-linejoin:round;stroke-linecap:round}
+.fig .bold{stroke-width:2}
+.fig .faint{fill:none;stroke:var(--tp-dim);stroke-width:1;stroke-opacity:.55}
+.fig .acc{stroke:var(--tp-acc)}
+.fig .warm{stroke:var(--tp-warm)}
+.fig .fw{fill:var(--tp-warm);stroke:none}
+.fig .fi{fill:currentColor;stroke:none}
+.fig .fp{fill:var(--tp-void2)}
+.fig .ft{fill:var(--tp-acc);fill-opacity:.18}
+.fig .fwt{fill:var(--tp-warm);fill-opacity:.16}
+.fig text{font:12px var(--tp-sans);fill:var(--tp-dim)}
 
-.hero{
-  flex:1 1 auto;min-height:0;
-  display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1fr);
-  gap:clamp(24px,4vw,64px);
-  padding:clamp(26px,4.2vh,54px) var(--gut) clamp(18px,2.6vh,30px);
-  align-items:center;
-}
-.col{min-width:0;max-width:25em}
+/* ---------- 1. selected work ---------- */
+.works{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2.4rem,3vw,3.2rem) clamp(1.6rem,3.4vw,3.4rem)}
+@media (min-width:52em){ .works{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.work .tp-plate{margin-bottom:1.2rem}
+.work .tp-plate svg{width:100%;height:150px}
+.work .tp-lbl{margin-bottom:.4rem}
+.work h3{font-size:clamp(1.25rem,1.1rem + .5vw,1.45rem)}
+.work p{margin-top:.55rem;max-width:var(--tp-measure)}
+.work b{font-weight:600;color:var(--tp-ink)}
+.links{display:flex;flex-wrap:wrap;gap:.2rem 1.3rem;margin-top:.8rem;font-size:var(--tp-t-small)}
+.links a{display:inline-block;padding-block:4px}
 
-/* The content is lifted over the two canvases and the veil and under the
-   readout, and everything in it that is not text hands the pointer through
-   to the object behind. */
-main,footer{position:relative;z-index:3}
-main,footer,.hero,.quire,.quire section{pointer-events:none}
-/* Text sits ABOVE the grab area, not below it, so the object can stay
-   grabbable at every width and every scroll offset without swallowing the
-   links or the selection: you pull the object wherever there is no text. */
-.col,.status,.act,.corr,.foot,.skip{pointer-events:auto}
-/* .skip is left out: it parks itself off screen with position:absolute and
-   carries its own stacking, so it must not be given this one */
-.col,.status,.act,.corr,.foot{position:relative;z-index:6}
+/* ---------- 2. books and lessons ---------- */
+/* one row of jackets, the lessons drawn as a jacket of their own; two by two on a phone */
+.shelf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2.2rem clamp(1.4rem,4vw,4rem)}
+.shelf li{position:relative}
+.jacket{display:block;width:100%;height:auto;aspect-ratio:2/3;border:1px solid var(--tp-rule);border-radius:2px;background:var(--tp-void2);
+  box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 18px -8px rgba(0,0,0,.22)}
+svg.jacket{background:var(--tp-void)}
+.jacket .fr{fill:none;stroke:var(--tp-rule);stroke-width:1}
+.jacket .t{font:400 18px/1 var(--tp-serif);fill:var(--tp-ink)}
+.jacket .s{font:italic 400 11px/1 var(--tp-serif);fill:var(--tp-dim)}
+.jacket .a{font:400 8.5px/1 var(--tp-sans);letter-spacing:.2em;fill:var(--tp-ink)}
+.shelf h3{margin-top:.95rem;font-size:1.14rem;line-height:1.25}
+.shelf h3 a{color:var(--tp-ink);text-decoration:underline 1px;text-decoration-color:var(--tp-rule);text-underline-offset:.2em}
+.shelf h3 a::after{content:"";position:absolute;inset:0}
+.shelf li:hover h3 a,.shelf h3 a:focus-visible{color:var(--tp-acc);text-decoration-color:currentColor}
+.shelf p{margin-top:.3rem;font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-text)}
+@media (max-width:40em){ .shelf{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.8rem 1.1rem} }
 
-.eyebrow{
-  margin:0 0 clamp(18px,2.8vh,30px);
-  font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--a70);display:flex;align-items:center;gap:12px;
-}
-.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--a22),transparent)}
+/* ---------- 3. record ---------- */
+.record{max-width:46rem}
+.record li{display:grid;grid-template-columns:7.5rem minmax(0,1fr);gap:1.4rem;padding:.75rem 0;border-top:1px solid var(--tp-rule)}
+.record li:last-child{border-bottom:1px solid var(--tp-rule)}
+.record .when{font-size:var(--tp-t-small);color:var(--tp-dim);font-variant-numeric:tabular-nums;padding-top:.15rem}
+.record b{display:block;font-weight:600;color:var(--tp-ink)}
+.record span.r{color:var(--tp-text)}
 
-h1{
-  margin:0;font-weight:600;
-  font-size:clamp(1.95rem,4.1vw,3.1rem);
-  line-height:.96;letter-spacing:-.028em;
-  color:#f4f7ff;
-}
-/* the surname carries the light the figure is throwing, the one place
-   the display type is tinted at all */
-h1 .sur{display:block;color:#b9d9ef;text-shadow:0 0 34px rgba(82,214,230,.30)}
+/* ---------- 4. about and contact ---------- */
+.about{display:grid;grid-template-columns:minmax(0,1fr);gap:2rem clamp(2rem,5vw,5rem)}
+@media (min-width:62em){ .about{grid-template-columns:minmax(0,1fr) minmax(0,24rem)} }
+.bio{max-width:var(--tp-measure);font-size:1.06rem;line-height:1.65}
+.reach{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:.55rem 1rem;align-content:start;align-items:baseline}
+.reach dt{padding-top:.1rem}
+.reach dd{display:flex;flex-wrap:wrap;gap:.1rem .9rem;white-space:nowrap}
 
-.rule{margin:clamp(18px,2.6vh,26px) 0 clamp(16px,2.2vh,22px);height:1px;background:linear-gradient(90deg,var(--a40),rgba(155,123,255,.20) 40%,transparent)}
-
-.lede{
-  margin:0;font-size:clamp(.94rem,1.08vw,1.06rem);line-height:1.5;
-  color:rgba(230,236,255,.94);font-weight:400;letter-spacing:-.008em;
+@media (max-width:40em){ .face{width:112px;height:112px} }
+@media (max-width:30em){
+  .record li{grid-template-columns:minmax(0,1fr);gap:.1rem}
 }
-.whisper{
-  margin:clamp(14px,2vh,20px) 0 0;
-  display:flex;gap:10px;align-items:baseline;
-  font-family:var(--mono);font-size:12px;line-height:1.6;
-  letter-spacing:.055em;color:var(--dim);
-}
-.whisper i{color:var(--acc);font-style:normal;flex:0 0 auto;opacity:.9}
-
-.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(24px,3.4vh,36px)}
-.btn{
-  position:relative;display:inline-block;padding:11px 17px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.17em;text-transform:uppercase;
-  color:rgba(230,236,255,.88);border:1px solid rgba(82,214,230,.18);
-  background:rgba(82,214,230,.015);
-  transition:color .18s,border-color .18s,background-color .18s;
-}
-.btn::before,.btn::after{content:"";position:absolute;width:6px;height:6px;border:1px solid var(--a40);transition:border-color .18s}
-.btn::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
-.btn::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
-.btn:hover,.btn:focus-visible{color:var(--acc);border-color:var(--a22);background:rgba(82,214,230,.06);box-shadow:0 0 22px -8px rgba(82,214,230,.55)}
-.btn:hover::before,.btn:hover::after,.btn:focus-visible::before,.btn:focus-visible::after{border-color:var(--a70)}
-
-/* ---------- the figure layer ----------
-   Two fixed canvases under the whole document and no box around either.
-   #field is the space the object hangs in: painted once per size and never
-   again. #fig is the object itself, cleared and re-emitted every frame, so
-   what is on it is light rather than ink. Content sits over both, and the
-   containers that hold the content are transparent to a pointer so the empty
-   space beside the measure belongs to the object. */
-#field,#fig{position:fixed;inset:0;width:100%;height:100%;display:block;pointer-events:none}
-#field{z-index:0}
-#fig{z-index:1;opacity:0;transition:opacity .5s ease-out}
-#fig.on{opacity:1}
-/* the object recedes behind the argument rather than being taken away */
-#veil{position:fixed;inset:0;z-index:2;pointer-events:none;background:var(--void);opacity:0}
-
-/* the hand. A round grab area over the object, the one thing on the page that
-   takes a pointer where there is no text. pan-y hands a vertical swipe
-   straight back to the document, so a thumb on the object can still read on;
-   a sideways pull is the object's own. */
-#grip{
-  position:fixed;left:0;top:0;z-index:5;border-radius:50%;
-  touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none;
-}
-#grip.grabbing{cursor:grabbing}
-#grip:focus-visible{outline:2px solid var(--acc);outline-offset:8px}
-
-/* the readout, carried beside the object rather than set under it as a caption */
-#hud{
-  position:fixed;left:0;top:0;z-index:4;pointer-events:none;
-  width:200px;line-height:1.2;
-  font-family:var(--mono);text-transform:uppercase;white-space:nowrap;
-  opacity:0;transition:opacity .5s ease-out;
-}
-#hud.on{opacity:1}
-#hud b{display:block;font-weight:400;font-size:12px;letter-spacing:.28em;color:var(--a70)}
-#hud b span{color:var(--dim)}
-#hud i{display:block;font-style:normal;font-size:14px;letter-spacing:.13em;
-       color:rgba(230,236,255,.95);margin-top:6px}
-#hud i sub{font-size:12px;letter-spacing:0;vertical-align:baseline;position:relative;top:.3em}
-#hud u{display:block;text-decoration:none;font-size:12px;letter-spacing:.18em;
-       color:var(--dim);margin-top:7px;font-variant-numeric:tabular-nums}
-#hud em{display:block;font-style:normal;font-size:12px;letter-spacing:.16em;
-        line-height:1.7;white-space:normal;
-        color:var(--dim);margin-top:13px;transition:opacity .55s ease}
-#hud.used em{opacity:0}
-
-/* ---------- status strip: the one band of hard data on the first screen,
-   set over the field on ground of its own so it stays legible there ---------- */
-.status{
-  display:flex;flex-wrap:wrap;gap:8px clamp(28px,5vw,64px);
-  padding:14px var(--gut) 18px;
-  border-top:1px solid var(--a14);
-  background:linear-gradient(180deg,rgba(7,10,20,.30),rgba(7,10,20,.78));
-}
-.status div{display:flex;align-items:baseline;gap:11px;min-width:0}
-.status .k{
-  font-family:var(--mono);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--a70);
-  flex:0 0 auto;
-}
-.status .v{font-size:clamp(.86rem,1.1vw,.98rem);color:rgba(230,236,255,.92);letter-spacing:-.004em}
-
-/* =================================================================
-   THE QUIRE. Everything below the fold is one composed argument.
-   ================================================================= */
-.quire{position:relative;padding-inline:var(--gut)}
-
-/* section divider: a hairline with a lit run at its head, the way a
-   channel marks where a track begins. It glows; it is not engraved. */
-.grad{
-  border:0;margin:0;height:1px;
-  background:linear-gradient(90deg,var(--acc) 0 54px,var(--a40) 54px 98px,
-             var(--a14) 98px 42%,transparent 80%);
-  box-shadow:0 0 16px -3px rgba(82,214,230,.55);
-}
-
-/* A section is a page. The states are anchored to the middles of these, so
-   giving each one a full screen means each shape gets a full screen of scroll
-   to arrive in and be looked at, instead of several changing hands inside one
-   view. The content sits centred in that screen rather than at the top of it,
-   so the anchor the object is tracking is where the reader is looking. */
-.quire section{
-  padding-block:var(--step);
-  min-height:100svh;
-  display:flex;flex-direction:column;justify-content:center;
-  scroll-margin-top:calc(var(--barh) + 14px);
-}
-
-/* one apparatus row: label in the margin, block on the axis */
-.act{max-width:calc(var(--app) + var(--agut) + var(--measure))}
-.act + .act{margin-top:clamp(2rem,4.4vh,3.2rem)}
-
-/* the question, demoted to a field query in the instrument's own voice,
-   so the claim under it is the only large thing on the row */
-.ask{
-  font-family:var(--mono);
-  font-size:var(--t-ask);
-  line-height:1.5;
-  letter-spacing:.145em;
-  text-transform:uppercase;
-  color:rgba(82,214,230,.86);
-  text-wrap:pretty;
-}
-.quire h2:not(.lbl){
-  margin-top:.62em;
-  font-weight:600;
-  font-size:var(--t-display);
-  line-height:1.02;
-  letter-spacing:-.032em;
-  color:#f4f7ff;
-  text-wrap:balance;
-}
-.quire h2 em{font-style:normal;color:#8fe3f2;text-shadow:0 0 28px rgba(82,214,230,.45)}
-.say{
-  margin-top:clamp(.95rem,2vh,1.35rem);
-  color:rgba(230,236,255,.86);
-  line-height:1.66;
-  letter-spacing:-.004em;
-  text-wrap:pretty;
-}
-.say b{font-weight:500;color:#9ae7f4}
-
-/* the portrait sits beside the bio; the bio keeps the row's baseline */
-.bio{display:flex;align-items:flex-start;gap:clamp(1.1rem,2.4vw,1.6rem)}
-.bio .say{align-self:baseline}
-.face{
-  flex:0 0 auto;width:144px;height:144px;margin-top:clamp(.95rem,2vh,1.35rem);
-  border-radius:50%;border:1px solid var(--a40);padding:3px;
-  background:var(--a08);object-fit:cover;
-}
-
-.more{margin-top:clamp(1.05rem,2.2vh,1.5rem);display:flex;align-items:baseline;flex-wrap:wrap}
-.more a{
-  font-family:var(--mono);
-  font-size:var(--t-app);letter-spacing:.185em;text-transform:uppercase;
-  color:var(--a70);border-bottom:1px solid var(--a22);padding-bottom:3px;
-  transition:color .18s,border-color .18s;
-}
-.more a:hover,.more a:focus-visible{color:var(--acc);border-bottom-color:var(--a70)}
-
-/* a status pip, not a proof mark: the claim above it says the work
-   shipped, so the mark says the same thing in the instrument's terms */
-.qed{
-  align-self:baseline;
-  width:.52rem;height:.52rem;border-radius:50%;
-  background:#7df0a8;
-  box-shadow:0 0 0 3px rgba(125,240,168,.14), 0 0 14px rgba(125,240,168,.7);
-  margin-left:1.9em;
-  flex:0 0 auto;
-  opacity:0;animation:qed 900ms ease 400ms forwards;
-}
-@keyframes qed{to{opacity:1}}
-
-/* the record */
-.names{line-height:2.05;color:rgba(230,236,255,.9);letter-spacing:-.004em}
-/* each name travels with the mark that follows it, so a wrapped line opens
-   on a name rather than on an orphaned separator, and no institution ever
-   breaks across two lines */
-.names li{display:inline-block;white-space:nowrap}
-.names li:not(:last-child)::after{
-  content:"";display:inline-block;
-  width:.3em;height:.3em;background:var(--a70);
-  margin:0 .95em .08em;
-}
-
-/* correspondence: the same axis, one row per line */
-.corr{margin-top:clamp(1.8rem,4vh,2.8rem)}
-.corr li + li{margin-top:.62rem}
-.corr .val{font-size:var(--t-small);color:rgba(232,230,255,.88)}
-.corr .val a{
-  border-bottom:1px solid var(--a14);padding-bottom:2px;
-  transition:color .18s,border-color .18s;
-}
-.corr .val a:hover,.corr .val a:focus-visible{color:var(--acc);border-bottom-color:var(--a70)}
-.corr .sep,.more .sep{color:var(--dim);margin:0 .55em}
-
-/* ---------- foot ---------- */
-footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
-.foot{
-  padding-top:clamp(.9rem,2vh,1.3rem);
-  border-top:1px solid var(--a14);
-  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;
-  gap:.9rem 2.5rem;
-}
-.foot-links{display:flex;flex-wrap:wrap;align-items:baseline;font-size:var(--t-small);color:rgba(232,230,255,.86)}
-.foot-links li + li::before{content:"\00b7";color:var(--dim);margin:0 .75em}
-.foot-links a{border-bottom:1px solid transparent;transition:color .18s,border-color .18s}
-.foot-links a:hover,.foot-links a:focus-visible{color:var(--acc);border-bottom-color:var(--a40)}
-.colophon{font-size:var(--t-small);color:var(--dim);line-height:1.6}
-
-/* =================================================================
-   >= 48em: the apparatus swings out into the margin, labels align to
-   the first baseline of the block they annotate, and one hairline
-   holds the axis every line of the argument sits on.
-   ================================================================= */
-@media (min-width:48em){
-  :root{--app:7rem;--agut:1.65rem;--measure:40rem}
-
-  .quire::before{
-    content:"";position:absolute;
-    left:calc(var(--gut) + var(--app) + var(--agut)/2);
-    top:var(--step);bottom:var(--step);
-    width:1px;background:linear-gradient(180deg,rgba(82,214,230,.28),rgba(82,214,230,.06));
-  }
-  .act{
-    display:grid;
-    grid-template-columns:var(--app) minmax(0,var(--measure));
-    column-gap:var(--agut);
-    align-items:baseline;
-  }
-  .act > .lbl{
-    grid-column:1;justify-self:end;text-align:right;
-    /* strip the trailing letterspace so the caps rag flush to the gutter */
-    margin-right:-.185em;
-  }
-  .act > :not(.lbl){grid-column:2}
-
-  .corr li{
-    display:grid;
-    grid-template-columns:var(--app) minmax(0,var(--measure));
-    column-gap:var(--agut);
-    align-items:baseline;
-  }
-  .corr .lbl{justify-self:end;text-align:right;margin-right:-.185em}
-
-  .colophon{text-align:right}
-}
-
-/* =================================================================
-   Narrow. The label stacks over the block it annotates; the
-   correspondence keeps two columns because seven stacked pairs is a
-   list, not a table.
-   ================================================================= */
-@media (max-width:47.99em){
-  .act > .lbl{display:block;margin-bottom:.8rem}
-  .corr li{
-    display:grid;grid-template-columns:6.2rem minmax(0,1fr);
-    column-gap:.85rem;align-items:baseline;
-  }
-  .corr .lbl{font-size:12px;letter-spacing:.14em}
-  .corr .val{font-size:.86rem}
-  .bio{flex-direction:column}
-  .face{width:108px;height:108px;margin-top:0}
-}
-
-/* Under the width that affords a margin beside the measure there is no
-   margin to hang the object in, so the content takes the top of the first
-   screen and the object takes the room under it. */
-@media (max-width:78.125em){
-  .hero{grid-template-columns:minmax(0,1fr);align-items:start;
-        padding-bottom:clamp(200px,42svh,360px)}
-  .col{max-width:40em}
-}
-
-@media (max-width:960px){
-  :root{--barh:48px}
-  .hero{gap:clamp(20px,2.8vh,28px);padding-top:clamp(22px,3.4vh,34px)}
-  .col{max-width:none}
-  .actions{margin-top:clamp(18px,2.6vh,26px)}
-  .nav{gap:clamp(4px,2vw,18px)}
-  .nav a{letter-spacing:.12em}
-  .mark span{display:none}
-  .bar{gap:12px}
-}
-/* a phone: as lib/site.css, the nav is one row that scrolls sideways, faded
-   at the edge it continues past, and the switch keeps only its glyph */
-@media (max-width:600px){
-  .bar{padding:0 8px;gap:2px}
-  .mark{min-width:44px;justify-content:center}
-  .nav{gap:0;mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
-  .nav[data-end]{mask-image:none;-webkit-mask-image:none}
-  .nav a{padding:0 5px;letter-spacing:.06em}
-  .toggle{padding:0;width:44px;min-height:44px;border-color:transparent;background:none}
-  .toggle span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-  .toggle b{opacity:.8;font-size:15px}
-  .eyebrow{letter-spacing:.16em}
-}
-@media (max-width:400px){
-  .btn{padding:10px 12px;letter-spacing:.12em}
-  .whisper{letter-spacing:.012em;gap:8px}
-  .names li:not(:last-child)::after{margin:0 .7em .08em}
-}
-
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *{transition:none!important}
-  #fig{opacity:1}
-  #hud{opacity:1}
-  .qed{opacity:1;animation:none}
-}
-
-/* =================================================================
-   Print. Fixed point sizes, because vw is meaningless on paper, and
-   the argument restated in full rather than inherited from whichever
-   breakpoint the page box happens to match. The object is light on a
-   dark field; on white paper it is a black rectangle, so it is left
-   behind entirely.
-   ================================================================= */
-/* ---------- paper, continued ----------
-   Everything above that names a colour outright instead of going through a
-   custom property has to be answered here, or it stays a dark-theme value on
-   a white page and disappears. Grouped rather than scattered so the next
-   person editing a colour can see what else owes an answer. */
-:root[data-theme="light"] body::before{
-  background:
-    radial-gradient(120% 80% at 84% 0%, rgba(82,51,196,.10), transparent 58%),
-    radial-gradient(90% 70% at 2% 96%, rgba(10,111,128,.09), transparent 58%),
-    radial-gradient(60% 40% at 96% 88%, rgba(168,34,106,.06), transparent 62%),
-    linear-gradient(180deg,#e7ecf7 0%,var(--void) 42%,#e3e9f5 100%);
-}
-:root[data-theme="light"] ::selection{background:rgba(10,111,128,.20)}
-:root[data-theme="light"] .skip{color:#fff}
-:root[data-theme="light"] .mark span{color:rgba(16,24,40,.86)}
-:root[data-theme="light"] h1{color:#0b1220}
-:root[data-theme="light"] h1 .sur{color:#175d72;text-shadow:none}
-:root[data-theme="light"] .rule{background:linear-gradient(90deg,var(--a40),rgba(82,51,196,.22) 40%,transparent)}
-:root[data-theme="light"] .lede{color:rgba(16,24,40,.94)}
-:root[data-theme="light"] .btn{
-  color:rgba(16,24,40,.9);border-color:rgba(10,111,128,.30);background:rgba(10,111,128,.03);
-}
-:root[data-theme="light"] .btn:hover,
-:root[data-theme="light"] .btn:focus-visible{
-  color:var(--acc);background:rgba(10,111,128,.09);box-shadow:0 0 18px -8px rgba(10,111,128,.5);
-}
-:root[data-theme="light"] .bar{background:linear-gradient(180deg,rgba(238,241,248,.82),rgba(238,241,248,.96))}
-:root[data-theme="light"] .status .v,
-:root[data-theme="light"] .names{color:rgba(16,24,40,.92)}
-:root[data-theme="light"] .grad{box-shadow:0 0 12px -4px rgba(10,111,128,.45)}
-:root[data-theme="light"] .ask{color:rgba(10,111,128,.92)}
-:root[data-theme="light"] .quire h2:not(.lbl){color:#0b1220}
-:root[data-theme="light"] .quire h2 em{color:#0d6b7e;text-shadow:none}
-:root[data-theme="light"] .say{color:rgba(16,24,40,.88)}
-:root[data-theme="light"] .say b{color:#0c5f70}
-:root[data-theme="light"] .qed{background:#0f8f52;box-shadow:0 0 0 3px rgba(15,143,82,.14),0 0 12px rgba(15,143,82,.45)}
-:root[data-theme="light"] .corr .val,
-:root[data-theme="light"] .foot-links{color:rgba(16,24,40,.88)}
-:root[data-theme="light"] .more a{color:rgba(16,24,40,.9)}
-:root[data-theme="light"] #hud i{color:rgba(16,24,40,.95)}
-/* the status strip carries its own ground so it stays legible over the field.
-   That ground was a near-black wash, which on paper reads as a black bar laid
-   across the first screen; it becomes the same wash in white. */
-:root[data-theme="light"] .status{
-  background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.90));
-}
-:root[data-theme="light"] .quire::before{background:linear-gradient(180deg,rgba(10,111,128,.30),rgba(10,111,128,.07))}
-
+@media (pointer:coarse){ .links a,.reach a{padding-block:12px} }
+@media (prefers-reduced-motion:reduce){ .lat *{transition:none!important} }
 @media print{
-  @page{margin:16mm 18mm}
-  html{font-size:11pt;scroll-behavior:auto}
-  body{background:#fff;color:#000;line-height:1.5;overflow:visible}
-  body::before{display:none}
-  #field,#fig,#veil,#grip,#hud,
-  .skip,.bar,.grad,.quire::before,.btn,.whisper i{display:none!important}
-  main,footer,.hero,.quire,.quire section{pointer-events:auto}
-
-  :root{--app:22mm;--agut:5mm;--measure:100%;--gut:0}
-
-  .fold{min-height:0;display:block}
-  .hero{display:block;padding:0}
-  .col{max-width:none}
-  .eyebrow{font-family:inherit;font-size:8pt;color:#000;display:block;margin-bottom:6mm}
-  .eyebrow::after{display:none}
-  h1{font-size:36pt;color:#000}
-  h1 .sur{color:#000}
-  .rule{background:none;border-top:.4pt solid #000;height:0;margin:5mm 0 4mm}
-  .lede{font-size:15pt;color:#000}
-  .whisper{font-family:inherit;font-size:10pt;color:#000;letter-spacing:0;margin-top:3mm}
-  .actions{display:none}
-  .status{border-top:.4pt solid #000;padding:3mm 0 0;margin-top:5mm;gap:2mm 12mm}
-  .status .k,.status .v{font-family:inherit;color:#000;letter-spacing:.1em;font-size:9pt}
-  .status .v{letter-spacing:0;font-size:10.5pt}
-
-  .quire{padding:0}
-  /* on paper a section is as tall as its own text, never a screen */
-  .quire section{padding-block:8mm 0;break-inside:auto;min-height:0;display:block}
-  .act{
-    display:grid;grid-template-columns:var(--app) minmax(0,1fr);
-    column-gap:var(--agut);align-items:baseline;max-width:none;
-  }
-  .act > .lbl{grid-column:1;justify-self:end;text-align:right;margin-right:-.185em}
-  .act > :not(.lbl){grid-column:2}
-  .act + .act{margin-top:6mm}
-  .lbl{color:#000;font-size:7.5pt}
-  /* on paper the query is read as a sentence, not as a field name */
-  .ask{font-family:inherit;text-transform:none;letter-spacing:0;font-size:13pt;color:#000}
-  .quire h2:not(.lbl){font-size:22pt;color:#000;margin-top:2mm}
-  .quire h2 em{color:#000}
-  .say{color:#000;font-size:11pt;margin-top:3mm}
-  .say b{color:#000;font-weight:700}
-  .names{color:#000;line-height:1.8}
-  .names li:not(:last-child)::after{background:#000}
-  .more{margin-top:3mm}
-  .more a{color:#000;border:0;font-size:8.5pt}
-  .corr{margin-top:6mm}
-  .corr li{
-    display:grid;grid-template-columns:var(--app) minmax(0,1fr);
-    column-gap:var(--agut);align-items:baseline;
-  }
-  .corr .lbl{justify-self:end;text-align:right;margin-right:-.185em}
-  .corr .val,.corr .val a{color:#000;border:0;font-size:10pt}
-
-  /* backgrounds are unreliable on paper, so the pip is set hollow */
-  .qed{opacity:1;animation:none;background:none;box-shadow:none;
-       border:.75pt solid #000;width:7pt;height:7pt}
-
-  footer{padding:0}
-  .foot{border-top:.4pt solid #000;display:block;padding-top:3mm;margin-top:8mm}
-  .foot-links{font-size:9pt;color:#000}
-  .foot-links a{color:#000}
-  .colophon{color:#000;font-size:9pt;text-align:left;margin-top:2mm}
-  a[data-url]::after{content:" (" attr(data-url) ")";font-size:8.5pt;letter-spacing:.01em;text-transform:none}
-  .act,.corr li,.colophon p{break-inside:avoid}
-  p{orphans:2;widows:2}
+  .lat-ctl,.actions{display:none}
+  .home > section{break-inside:avoid}
 }
 </style>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
+<a class="tp-skip" href="#main">Skip to content</a>
 
-<canvas id="field" aria-hidden="true"></canvas>
-<canvas id="fig" aria-hidden="true"></canvas>
-<div id="veil" aria-hidden="true"></div>
-<div id="grip" role="img" tabindex="0"
-  aria-label="A luminous closed strand suspended in a dark field, tied as a trefoil knot. Interactive: drag or use the arrow keys to turn it, click or press Enter to send a pulse through it."></div>
-<div id="hud" aria-hidden="true">
-  <b id="hix">01<span> / 04</span></b>
-  <i id="hnm">Trefoil 3<sub>1</sub></i>
-  <u id="htl">AZ 000.0 &#183; EL 009.7</u>
-  <em>Drag to spin &#183; click to pulse</em>
-</div>
-
-<header class="bar">
-  <a class="mark" href="/" aria-label="Tushar Pandey, home">
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
     <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
         <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
@@ -751,1839 +229,391 @@ footer{padding:0 var(--gut) clamp(2.2rem,5vh,3.4rem)}
     </svg>
     <span>Tushar Pandey</span>
   </a>
-  <nav class="nav" aria-label="Primary">
+  <nav class="tp-nav" aria-label="Primary">
     <a href="/research.html">Research</a>
     <a href="/books.html">Books</a>
     <a href="/qec-in-practice/">Lessons</a>
     <a href="/cv.html">CV</a>
     <a href="/#contact">Contact</a>
   </nav>
-  <button class="toggle" id="lamp" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span id="lamptx">Auto</span></button>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
-<main id="main">
+<main id="main" class="home tp-wrap">
 
-  <div class="fold">
-    <section class="hero" aria-label="Introduction">
-      <div class="col">
-        <p class="eyebrow">Ph.D. Mathematics&nbsp;&#183; Quantum &#215; AI</p>
-        <h1>Tushar <span class="sur">Pandey</span></h1>
-        <div class="rule"></div>
-        <p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>
-        <div class="actions">
-          <a class="btn" href="/cv.html">Curriculum Vitae</a>
-          <a class="btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
-          <a class="btn" href="mailto:wtatushar@gmail.com">Email</a>
-        </div>
+  <section class="hero" aria-label="Introduction">
+    <div>
+      <img class="face" src="/img/tushar-pandey-b-320.webp" srcset="/img/tushar-pandey-b-320.webp 320w, /img/tushar-pandey-b.webp 640w" sizes="(max-width:40em) 112px, 144px" width="640" height="640" decoding="async" alt="Tushar Pandey">
+      <h1>Tushar Pandey</h1>
+      <p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>
+      <div class="actions">
+        <a class="tp-btn" href="/cv.html">Curriculum Vitae</a>
+        <a class="tp-btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
+        <a class="tp-btn" href="mailto:wtatushar@gmail.com">Email</a>
       </div>
-
-    </section>
-
-    <div class="status">
-      <div><span class="k">Now</span><span class="v">Senior Software Engineer @ DataRobot</span></div>
-      <div><span class="k">Based in</span><span class="v">Dallas, TX</span></div>
+      <p class="place">Dallas, TX</p>
     </div>
-  </div>
 
-  <div class="quire">
+    <figure class="lat tp-plate">
+      <svg id="lattice" viewBox="0 0 360 360" role="group" aria-label="Toric code lattice with 50 qubits" aria-describedby="lat-help"></svg>
+      <p class="sr" id="lat-help">Each qubit is a button: Tab reaches the lattice, the arrow keys move between qubits, and Enter or Space flips one. The status line below says which checks are lit.</p>
+      <div class="lat-ctl">
+        <button class="tp-btn" type="button" id="fix">Correct</button>
+        <button class="tp-btn" type="button" id="reset">Reset</button>
+      </div>
+      <p class="lat-status" id="lat-status" aria-live="polite">Two qubits flipped; <b>four checks</b> lit.</p>
+      <figcaption><b>Fig. 1</b>A distance-5 toric code: qubits on the edges, a check at every vertex, opposite sides identified (the faint copies at right and bottom). Two flipped qubits and the checks that notice. Tap a qubit to flip it; Correct pairs the lit checks by minimum-weight matching.</figcaption>
+    </figure>
+  </section>
 
-    <hr class="grad">
-    <section id="quantum" aria-labelledby="h-quantum">
-      <div class="act">
-        <p class="lbl">Quantum</p>
-        <div>
-          <p class="ask">Can you compute with broken parts?</p>
-          <h2 id="h-quantum">Error, <em>corrected.</em></h2>
-          <p class="say"><b>Error correction for the doubled semion model</b>, begun at Oak Ridge. Sole author, APL Quantum 2025. <b>Variational eigensolvers</b> on real processors, first author, Physica Scripta 2026.</p>
-          <p class="more"><a href="https://doi.org/10.1063/5.0255351" target="_blank" rel="noopener" data-url="doi.org/10.1063/5.0255351">APL Quantum, 2025<span aria-hidden="true"> &#8594;</span></a><span class="sep" aria-hidden="true">&#183;</span><a href="https://doi.org/10.1088/1402-4896/ae9e06" target="_blank" rel="noopener" data-url="doi.org/10.1088/1402-4896/ae9e06">Physica Scripta, 2026<span aria-hidden="true"> &#8594;</span></a><span class="sep" aria-hidden="true">&#183;</span><a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener" data-url="sites.google.com/view/tusharpandey">the record<span aria-hidden="true"> &#8594;</span></a></p>
-          <p class="whisper"><i>&#10022;</i><span>Every qubit is a rumor. The code is the fact&#8209;check.</span></p>
-        </div>
-      </div>
-    </section>
+  <section id="work" aria-labelledby="h-work">
+    <div class="sec-head"><span class="n" aria-hidden="true">1</span><h2 id="h-work">Selected work</h2></div>
+    <div class="works">
 
-    <hr class="grad">
-    <section id="ai" aria-labelledby="h-ai">
-      <div class="act">
-        <p class="lbl">Reasoning</p>
-        <div>
-          <p class="ask">Can a machine think harder, mid-thought?</p>
-          <h2 id="h-ai">Reasoning that <em>grows.</em></h2>
-          <p class="say"><b>AGoT</b> grows chains, trees and graphs as it runs. Shipped at Agnostiq as a production agentic-AI blueprint (2024-25); code open source.</p>
-          <p class="more"><a href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener" data-url="github.com/AgnostiqHQ/multi-agent-llm">the code, open source<span aria-hidden="true"> &#8594;</span></a><span class="sep" aria-hidden="true">&#183;</span><a href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener" data-url="arxiv.org/abs/2502.05078">the paper<span aria-hidden="true"> &#8594;</span></a><span class="qed" role="img" aria-label="Status: shipped"></span></p>
-          <p class="whisper"><i>&#10022;</i><span>It thinks harder when the question is harder.</span></p>
-        </div>
-      </div>
-    </section>
+      <article class="work">
+        <figure class="fig tp-plate">
+          <svg viewBox="0 0 233 97" aria-hidden="true" focusable="false">
+            <path class="faint" d="M6 14.5V31.5M6 14.5L20.7 6M6 31.5L20.7 40M6 65.5V82.5M6 65.5L20.7 57M6 82.5L20.7 91M20.7 6L35.4 14.5M20.7 40V57M20.7 40L35.4 31.5M20.7 57L35.4 65.5M20.7 91L35.4 82.5M35.4 14.5V31.5M35.4 14.5L50.2 6M35.4 31.5L50.2 40M35.4 65.5V82.5M35.4 65.5L50.2 57M35.4 82.5L50.2 91M50.2 6L64.9 14.5M50.2 40V57M50.2 40L64.9 31.5M50.2 57L64.9 65.5M50.2 91L64.9 82.5M64.9 14.5V31.5M64.9 14.5L79.6 6M64.9 31.5L79.6 40M64.9 65.5V82.5M64.9 65.5L79.6 57M64.9 82.5L79.6 91M79.6 6L94.3 14.5M79.6 40V57M79.6 40L94.3 31.5M79.6 57L94.3 65.5M79.6 91L94.3 82.5M94.3 14.5V31.5M94.3 14.5L109.1 6M94.3 31.5L109.1 40M94.3 65.5V82.5M94.3 65.5L109.1 57M94.3 82.5L109.1 91M109.1 6L123.8 14.5M109.1 40V57M109.1 40L123.8 31.5M109.1 57L123.8 65.5M109.1 91L123.8 82.5M123.8 14.5V31.5M123.8 14.5L138.5 6M123.8 31.5L138.5 40M123.8 65.5V82.5M123.8 65.5L138.5 57M123.8 82.5L138.5 91M138.5 6L153.2 14.5M138.5 40V57M138.5 40L153.2 31.5M138.5 57L153.2 65.5M138.5 91L153.2 82.5M153.2 14.5V31.5M153.2 14.5L167.9 6M153.2 31.5L167.9 40M153.2 65.5V82.5M153.2 65.5L167.9 57M153.2 82.5L167.9 91M167.9 6L182.7 14.5M167.9 40V57M167.9 40L182.7 31.5M167.9 57L182.7 65.5M167.9 91L182.7 82.5M182.7 14.5V31.5M182.7 14.5L197.4 6M182.7 31.5L197.4 40M182.7 65.5V82.5M182.7 65.5L197.4 57M182.7 82.5L197.4 91M197.4 6L212.1 14.5M197.4 40V57M197.4 40L212.1 31.5M197.4 57L212.1 65.5M197.4 91L212.1 82.5M212.1 14.5V31.5M212.1 31.5L226.8 40M212.1 65.5V82.5M212.1 65.5L226.8 57M226.8 40V57"/>
+            <path class="ln bold" d="M50.2 40L64.9 31.5L79.6 40L94.3 31.5L109.1 40V57L94.3 65.5L79.6 57L64.9 65.5L50.2 57Z"/>
+            <path class="ln bold" d="M182.7 14.5V31.5L167.9 40L153.2 31.5V14.5L167.9 6Z"/>
+            <path class="ln bold warm" d="M123.8 82.5V65.5L138.5 57L153.2 65.5L167.9 57"/>
+            <circle class="fw" cx="123.8" cy="82.5" r="3.6"/><circle class="fw" cx="167.9" cy="57" r="3.6"/>
+          </svg>
+          <figcaption><b>Fig. 2</b>The doubled semion ground state is a signed sum over closed loops on the honeycomb lattice, like the two here. An open string (warm) violates the vertices at its ends; those are what error correction has to find.</figcaption>
+        </figure>
+        <p class="tp-lbl">Quantum error correction</p>
+        <h3>Error correction for the doubled semion model</h3>
+        <p>Begun at Oak Ridge. Sole author, APL Quantum 2025. <b>Variational eigensolvers</b> on real processors, first author, Physica Scripta 2026.</p>
+        <p class="links"><a class="tp-link" href="https://doi.org/10.1063/5.0255351" target="_blank" rel="noopener">APL Quantum, 2025</a><a class="tp-link" href="https://doi.org/10.1088/1402-4896/ae9e06" target="_blank" rel="noopener">Physica Scripta, 2026</a><a class="tp-link" href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">The record</a></p>
+      </article>
 
-    <hr class="grad">
-    <section id="record" aria-labelledby="h-record">
-      <div class="act">
-        <h2 class="lbl" id="h-record">Record</h2>
-        <ul class="names"><li>DataRobot</li><li>Agnostiq</li><li>Oak Ridge National Laboratory</li><li>Texas A&amp;M University</li><li>IIT Kanpur</li></ul>
-        <p class="whisper"><i>&#10022;</i><span>Five institutions, one consistent variable.</span></p>
-      </div>
-      <div class="act">
-        <p class="lbl">Writing</p>
-        <p class="say">LLM inference at DataRobot: co-author of <b>TokenGrid</b>, a token-aware capacity scheduler for multi-tenant model serving.</p>
-        <p class="more"><a href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener" data-url="datarobot.com/blog">TokenGrid, on the DataRobot blog<span aria-hidden="true"> &#8594;</span></a></p>
-      </div>
-    </section>
+      <article class="work">
+        <figure class="fig tp-plate">
+          <svg viewBox="0 0 260 168" aria-hidden="true" focusable="false">
+            <rect class="faint" x="94" y="74" width="72" height="50" rx="6" stroke-dasharray="4 3"/>
+            <path class="ln" d="M130 14L56 54M130 14V54M130 14L204 54M130 54L114 90M130 54L146 90M114 90L130 110M146 90L130 110M130 110V148M56 54Q56 148 130 148M204 54Q204 148 130 148"/>
+            <circle class="ln fp" cx="130" cy="14" r="5"/>
+            <circle class="ln fp" cx="56" cy="54" r="5"/>
+            <circle class="ln fp" cx="204" cy="54" r="5"/>
+            <circle class="ln fp" cx="114" cy="90" r="4"/>
+            <circle class="ln fp" cx="146" cy="90" r="4"/>
+            <circle class="ln fp" cx="130" cy="110" r="4"/>
+            <circle class="ln bold warm fp" cx="130" cy="54" r="6"/>
+            <circle class="fi" cx="130" cy="148" r="5"/>
+            <text x="116" y="18" text-anchor="end">query</text>
+            <text x="130" y="166" text-anchor="middle">answer</text>
+          </svg>
+          <figcaption><b>Fig. 3</b>AGoT breaks a query into a graph of subproblems and expands only the hard one (warm) into a nested graph of its own.</figcaption>
+        </figure>
+        <p class="tp-lbl">LLM reasoning</p>
+        <h3>Adaptive Graph of Thoughts</h3>
+        <p><b>AGoT</b> grows chains, trees and graphs as it runs. Shipped at Agnostiq as a production agentic-AI blueprint (2024&ndash;25); code open source.</p>
+        <p class="links"><a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">The code, open source</a><a class="tp-link" href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener">The paper, <span class="tp-id">arXiv:2502.05078</span></a></p>
+      </article>
 
-    <hr class="grad">
-    <section id="books" aria-labelledby="h-books">
-      <div class="act">
-        <h2 class="lbl" id="h-books">Books</h2>
-        <div>
-          <p class="say"><b>The Qubit Dialogues</b>, twenty-two cantos on quantum computing, about two hours.<br><b>An Unpolarized Life</b>, twelve chapters, about 35 minutes.<br><b>The illustrated edition</b>, the same prose set as plates, about two hours.</p>
-          <p class="more"><a href="/books.html">the books<span aria-hidden="true"> &#8594;</span></a></p>
-        </div>
-      </div>
-      <div class="act">
-        <p class="lbl">Lessons</p>
-        <div>
-          <p class="say"><b>Quantum Error Correction in Practice</b>: four interactive surface-code lessons, from a single patch to teleporting a T state between logical qubits.</p>
-          <p class="more"><a href="/qec-in-practice/">the lessons<span aria-hidden="true"> &#8594;</span></a></p>
-        </div>
-      </div>
-    </section>
+      <article class="work">
+        <figure class="fig tp-plate">
+          <svg viewBox="0 0 260 140" aria-hidden="true" focusable="false">
+            <defs><pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V4" stroke="currentColor" stroke-width="1" stroke-opacity=".7"/></pattern></defs>
+            <g class="ln">
+              <rect class="fp" x="24" y="98" width="18" height="20"/><rect fill="url(#hatch)" x="24" y="68" width="18" height="30"/><rect class="ft acc" x="24" y="46" width="18" height="22"/>
+              <rect class="fp" x="52" y="84" width="18" height="34"/><rect fill="url(#hatch)" x="52" y="66" width="18" height="18"/><rect class="ft acc" x="52" y="36" width="18" height="30"/>
+              <rect class="fp" x="80" y="92" width="18" height="26"/><rect fill="url(#hatch)" x="80" y="52" width="18" height="40"/><rect class="ft acc" x="80" y="38" width="18" height="14"/>
+              <rect class="fp" x="108" y="102" width="18" height="16"/><rect fill="url(#hatch)" x="108" y="78" width="18" height="24"/><rect class="ft acc" x="108" y="38" width="18" height="40"/>
+              <rect class="fp" x="136" y="78" width="18" height="40"/><rect fill="url(#hatch)" x="136" y="58" width="18" height="20"/><rect class="ft acc" x="136" y="38" width="18" height="20"/>
+              <rect class="fp" x="164" y="96" width="18" height="22"/><rect fill="url(#hatch)" x="164" y="60" width="18" height="36"/><rect class="ft acc" x="164" y="34" width="18" height="26"/>
+              <rect class="fp" x="192" y="88" width="18" height="30"/><rect fill="url(#hatch)" x="192" y="74" width="18" height="14"/><rect class="ft acc" x="192" y="38" width="18" height="36"/>
+              <rect class="fp" x="220" y="100" width="18" height="18"/><rect fill="url(#hatch)" x="220" y="70" width="18" height="30"/><rect class="ft acc" x="220" y="40" width="18" height="30"/>
+              <path d="M14 118H250"/>
+            </g>
+            <path class="ln acc" d="M14 30H250" stroke-dasharray="5 4"/>
+            <text x="250" y="24" text-anchor="end">token capacity</text>
+            <text x="250" y="134" text-anchor="end">time</text>
+          </svg>
+          <figcaption><b>Fig. 4</b>Three tenants (outline, hatched, tinted) share one model. Each request is counted by its tokens against one shared capacity.</figcaption>
+        </figure>
+        <p class="tp-lbl">LLM inference</p>
+        <h3>TokenGrid</h3>
+        <p>LLM inference at DataRobot: co-author of <b>TokenGrid</b>, a token-aware capacity scheduler for multi-tenant model serving.</p>
+        <p class="links"><a class="tp-link" href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener">TokenGrid, on the DataRobot blog</a></p>
+      </article>
 
-    <hr class="grad">
-    <section id="contact" aria-labelledby="h-contact">
-      <div class="act">
-        <p class="lbl">About</p>
-        <div class="bio">
-          <img class="face" src="/img/tushar-pandey.webp" srcset="/img/tushar-pandey-320.webp 320w, /img/tushar-pandey.webp 640w" sizes="(max-width:47.99em) 108px, 144px" width="640" height="640" loading="lazy" decoding="async" alt="Tushar Pandey">
-          <p class="say">I am a math Ph.D. from Texas A&amp;M University, where I worked under Tian Yang in quantum topology and the volume conjecture, and I did my undergraduate degree at IIT Kanpur in mathematics and scientific computing. I am currently a Senior Software Engineer at DataRobot; before that I worked at Agnostiq as a research software engineer on gen-AI algorithms. I have worked on quantum algorithms, error correction, topological quantum computing, ZX-calculus, machine learning, NLP and gen-AI.</p>
-        </div>
-      </div>
-      <div class="act">
-        <p class="lbl">Contact</p>
-        <div>
-          <p class="ask">What&rsquo;s left to prove?</p>
-          <h2 id="h-contact">Let&rsquo;s build the <em>improbable.</em></h2>
-          <p class="whisper"><i>&#10022;</i><span>Improbable, not impossible.</span></p>
-        </div>
-      </div>
+      <article class="work">
+        <figure class="fig tp-plate">
+          <svg viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+            <path class="ln bold" d="M100.76 44.94L100.61 48.88L99.82 52.91L98.51 56.95L96.82 60.89L94.87 64.58L92.74 67.9L90.2 70.81L87.35 73.48L84.37 76.06L81.42 78.72L78.49 81.61L74.98 84.61L71.35 87.67L68.28 90.75L66.42 93.84L66.42 96.89L68.28 99.93L71.35 102.98L74.98 106.02L74.98 106.02M84.15 115.25L86.92 118.38L89.69 121.45L92.46 124.41L95.2 127.22L97.82 130.07L100.42 132.83L103.12 135.34L106.08 137.44L109.41 139.05L113.18 140.52L117.2 141.65L121.28 142.15L125.21 141.71L128.89 140.08L132.64 137.38L136.32 133.78L139.69 129.4L142.53 124.38L144.65 118.72L146.23 111.96L147.31 104.45L147.89 96.69L147.97 89.18L147.55 82.24L146.6 75.25L145.15 68.37L143.22 61.94L140.86 56.28L138.13 51.67L135.18 47.97L131.82 45.01L127.83 42.67L122.97 40.8L116.97 39.34L109.63 38.58L101.37 38.35L92.7 38.43L84.11 38.58L75.89 38.58L67.3 38.43L67.3 38.43M53.39 38.44L45.65 38.98L39.12 40.19L33.88 41.92L29.59 44.07L26.02 46.78L22.95 50.19L20.13 54.42L17.62 59.71L15.52 65.89L13.89 72.64L12.74 79.63L12.12 86.53L12.02 93.82L12.42 101.54L13.31 109.2L14.7 116.31L16.59 122.36L19.17 127.58L22.37 132.22L25.96 136.13L29.71 139.18L33.39 141.24L37.22 142.11L41.27 141.93L45.33 141L49.22 139.62L52.73 138.08L55.8 136.18L58.59 133.81L61.21 131.12L63.81 128.29L66.5 125.47L69.27 122.58L72.04 119.54L74.81 116.42L77.58 113.29L80.35 110.21L83.66 107.17L87.32 104.12L90.68 101.08L93.07 98.03L93.83 94.99L92.6 91.91L89.9 88.82L86.41 85.75L85.02 84.61M75.25 75.74L72.28 73.15L69.46 70.47L66.97 67.51L64.88 64.14L62.95 60.41L61.3 56.45L60.05 52.4L59.34 48.39L59.27 44.43L59.77 40.27L60.77 36.11L62.21 32.17L64.01 28.68L66.21 25.73L69 22.98L72.19 20.61L75.55 18.85L78.83 17.93L81.97 18.07L85.29 19.22L88.63 21.15L91.74 23.64L94.4 26.45L96.47 29.5L97.79 32.17"/>
+          </svg>
+          <figcaption><b>Fig. 5</b>The figure-eight knot. A generalized Bonahon&ndash;Wong&ndash;Yang volume conjecture is proved for its complement.</figcaption>
+        </figure>
+        <p class="tp-lbl">Quantum topology</p>
+        <h3>The volume conjecture</h3>
+        <p>Ph.D. work under Tian Yang in quantum topology. A generalized <b>Bonahon&ndash;Wong&ndash;Yang volume conjecture</b>, proved for the figure-eight knot complement with Ka Ho Wong (Algebraic &amp; Geometric Topology, to appear); and, sole author, the conjecture verified for four-puncture sphere bundles under technical conditions.</p>
+        <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2402.04483" target="_blank" rel="noopener">Figure-eight knot, <span class="tp-id">arXiv:2402.04483</span></a><a class="tp-link" href="https://arxiv.org/abs/2311.13151" target="_blank" rel="noopener">Four-puncture sphere, <span class="tp-id">arXiv:2311.13151</span></a></p>
+      </article>
 
-      <!-- Three rows, not six. Nothing is unreachable: CV sits in the nav and
-           the footer, and the rest are gathered onto one line rather than
-           given a row each. -->
-      <ul class="corr">
-        <li>
-          <span class="lbl">Email</span>
-          <span class="val"><a href="mailto:wtatushar@gmail.com" data-url="wtatushar@gmail.com">wtatushar [at] gmail [dot] com</a></span>
-        </li>
-        <li>
-          <span class="lbl">Elsewhere</span>
-          <span class="val"><a href="https://www.linkedin.com/in/tpmath/" target="_blank" rel="noopener">LinkedIn</a><span class="sep" aria-hidden="true">&#183;</span><a href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a><span class="sep" aria-hidden="true">&#183;</span><a href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener" data-url="scholar.google.com">Scholar</a></span>
-        </li>
-        <li>
-          <span class="lbl">R&eacute;sum&eacute;</span>
-          <span class="val"><a href="Tushar_Pandey_Resume_AI.pdf" aria-label="R&eacute;sum&eacute;, AI track, PDF" data-url="Tushar_Pandey_Resume_AI.pdf">AI</a><span class="sep" aria-hidden="true">&#183;</span><a href="Tushar_Pandey_Resume_Quantum.pdf" aria-label="R&eacute;sum&eacute;, quantum track, PDF" data-url="Tushar_Pandey_Resume_Quantum.pdf">Quantum</a></span>
-        </li>
-      </ul>
-    </section>
+    </div>
+    <p class="more"><a class="tp-link" href="/research.html">Every paper and preprint, with summaries</a></p>
+  </section>
 
-  </div>
+  <section id="books" aria-labelledby="h-books">
+    <div class="sec-head"><span class="n" aria-hidden="true">2</span><h2 id="h-books">Books and lessons</h2></div>
+    <ul class="shelf">
+      <li>
+        <img class="jacket" src="/img/covers/qubit-dialogues-300.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="(max-width:40em) 44vw, 220px" width="300" height="450" loading="lazy" decoding="async" alt="">
+        <h3><a href="/qubit-dialogues.html">The Qubit Dialogues</a></h3>
+        <p>Twenty-two cantos on quantum computing, about two hours.</p>
+      </li>
+      <li>
+        <img class="jacket" src="/img/covers/an-unpolarized-life-300.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="(max-width:40em) 44vw, 220px" width="300" height="450" loading="lazy" decoding="async" alt="">
+        <h3><a href="/life/">An Unpolarized Life</a></h3>
+        <p>Twelve chapters, about 35 minutes.</p>
+      </li>
+      <li>
+        <img class="jacket" src="/img/covers/qubit-dialogues-illustrated-300.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="(max-width:40em) 44vw, 220px" width="300" height="450" loading="lazy" decoding="async" alt="">
+        <h3><a href="/illustrated/">The illustrated edition</a></h3>
+        <p>The same prose set as plates, about two hours.</p>
+      </li>
+      <li>
+        <svg class="jacket fig" viewBox="0 0 200 300" aria-hidden="true" focusable="false"><rect class="fr" x="9.5" y="9.5" width="181" height="281"/><path class="ln acc bold" d="M92 36H108"/><text class="t" x="100" y="66" text-anchor="middle">Quantum Error</text><text class="t" x="100" y="90" text-anchor="middle">Correction</text><text class="t" x="100" y="114" text-anchor="middle">in Practice</text><text class="s" x="100" y="134" text-anchor="middle">Four lessons</text><path class="ln ft" d="M68 172h32v32h-32Z"/><path class="ln ft" d="M100 204h32v32h-32Z"/><path class="ln ft" d="M132 172A16.0 16.0 0 0 1 132 204Z"/><path class="ln ft" d="M68 204A16.0 16.0 0 0 0 68 236Z"/><path class="ln fwt warm" d="M100 172h32v32h-32Z"/><path class="ln fwt warm" d="M68 204h32v32h-32Z"/><path class="ln fp" d="M68 172A16.0 16.0 0 0 1 100 172Z"/><path class="ln fp" d="M100 236A16.0 16.0 0 0 0 132 236Z"/><circle class="ln fp" cx="68" cy="172" r="4.5"/><circle class="ln fp" cx="100" cy="172" r="4.5"/><circle class="ln fp" cx="132" cy="172" r="4.5"/><circle class="ln fp" cx="68" cy="204" r="4.5"/><circle class="ln fw" cx="100" cy="204" r="6"/><circle class="ln fp" cx="132" cy="204" r="4.5"/><circle class="ln fp" cx="68" cy="236" r="4.5"/><circle class="ln fp" cx="100" cy="236" r="4.5"/><circle class="ln fp" cx="132" cy="236" r="4.5"/><text class="a" x="100" y="274" text-anchor="middle">TUSHAR PANDEY</text></svg>
+        <h3><a href="/qec-in-practice/">Quantum Error Correction in Practice</a></h3>
+        <p>Four interactive surface-code lessons, from a single patch to teleporting a T state between logical qubits.</p>
+      </li>
+    </ul>
+    <p class="more"><a class="tp-link" href="/books.html">All three books, to read online or as a PDF</a></p>
+  </section>
+
+  <section id="record" aria-labelledby="h-record">
+    <div class="sec-head"><span class="n" aria-hidden="true">3</span><h2 id="h-record">Record</h2></div>
+    <ol class="record">
+      <li><span class="when">2026 &ndash; now</span><span><b>DataRobot</b><span class="r">Senior Software Engineer, LLM inference</span></span></li>
+      <li><span class="when">2024 &ndash; 2025</span><span><b>Agnostiq</b><span class="r">Research Software Engineer, gen-AI algorithms</span></span></li>
+      <li><span class="when">2021, 2022</span><span><b>Oak Ridge National Laboratory</b><span class="r">Summer researcher, NSF-MSGI fellow</span></span></li>
+      <li><span class="when">2019 &ndash; 2024</span><span><b>Texas A&amp;M University</b><span class="r">Ph.D., Mathematics, under Tian Yang</span></span></li>
+      <li><span class="when">to 2019</span><span><b>IIT Kanpur</b><span class="r">B.S., Mathematics and Scientific Computing</span></span></li>
+    </ol>
+  </section>
+
+  <section id="contact" aria-labelledby="h-contact">
+    <div class="sec-head"><span class="n" aria-hidden="true">4</span><h2 id="h-contact">About and contact</h2></div>
+    <div class="about">
+      <p class="bio">I am a math Ph.D. from Texas A&amp;M University, where I worked under Tian Yang in quantum topology and the volume conjecture, and I did my undergraduate degree at IIT Kanpur in mathematics and scientific computing. I am currently a Senior Software Engineer at DataRobot; before that I worked at Agnostiq as a research software engineer on gen-AI algorithms. I have worked on quantum algorithms, error correction, topological quantum computing, ZX-calculus, machine learning, NLP and gen-AI.</p>
+      <dl class="reach">
+        <dt class="tp-lbl">Email</dt>
+        <dd><a class="tp-link" href="mailto:wtatushar@gmail.com">wtatushar [at] gmail [dot] com</a></dd>
+        <dt class="tp-lbl">Elsewhere</dt>
+        <dd><a class="tp-link" href="https://www.linkedin.com/in/tpmath/" target="_blank" rel="noopener">LinkedIn</a><a class="tp-link" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a><a class="tp-link" href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener">Scholar</a></dd>
+        <dt class="tp-lbl">R&eacute;sum&eacute;</dt>
+        <dd><a class="tp-link" href="Tushar_Pandey_Resume_AI.pdf" aria-label="R&eacute;sum&eacute;, AI track, PDF">AI</a><a class="tp-link" href="Tushar_Pandey_Resume_Quantum.pdf" aria-label="R&eacute;sum&eacute;, quantum track, PDF">Quantum</a></dd>
+      </dl>
+    </div>
+  </section>
+
 </main>
 
-<footer>
-  <div class="foot">
-    <ul class="foot-links">
-      <li><a href="/research.html" data-url="pandey-tushar.com/research.html">Research</a></li>
-      <li><a href="/books.html" data-url="pandey-tushar.com/books.html">Books</a></li>
-      <li><a href="/qec-in-practice/" data-url="pandey-tushar.com/qec-in-practice/">Lessons</a></li>
-      <li><a href="/cv.html" data-url="pandey-tushar.com/cv.html">Curriculum Vitae</a></li>
-      <li><a href="https://github.com/pandey-tushar" target="_blank" rel="noopener" data-url="github.com/pandey-tushar">GitHub</a></li>
-      <li><a href="mailto:wtatushar@gmail.com" data-url="wtatushar@gmail.com">Email</a></li>
-    </ul>
-    <div class="colophon">
-      <p>&copy; <span id="yr">2026</span> Tushar Pandey</p>
-    </div>
-  </div>
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
 </footer>
 
 <script>
+/* Fig. 1: a distance-5 toric code. Edges are qubits, vertices are checks;
+   a check lights when an odd number of its four qubits are flipped. Correct
+   pairs the lit checks by minimum-weight perfect matching on the torus and
+   flips a shortest path between each pair. Nothing runs until touched. */
 (function(){
 "use strict";
+var L = 5, S = 60, M = 30, NE = 2 * L * L, NS = "http://www.w3.org/2000/svg";
+var svg = document.getElementById("lattice");
+var out = document.getElementById("lat-status");
+var fixB = document.getElementById("fix"), resetB = document.getElementById("reset");
+var still = matchMedia("(prefers-reduced-motion: reduce)");
+var START = [2 * (1 * L + 1), 2 * (2 * L + 3) + 1];   /* h(1,1) and v(3,2) */
+var err = new Uint8Array(NE), cor = new Uint8Array(NE), corrected = false, cur = START[0];
+var checks = [], qubits = [], shown = new Uint8Array(L * L), pressed = new Uint8Array(NE);
 
-/* ------------------------------------------------------------------
-   Ported from packages/motifs/src: rng.ts (mulberry32 + xmur3),
-   surface.ts (alpha/mix), plate.ts (seeded ground).
-   Seeded and deterministic: same seed, same size, same pixels.
-   ------------------------------------------------------------------ */
+function el(n, a, p){ var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+function P(i){ return M + i * S; }
+function h(x, y){ return 2 * (y * L + x); }
+function v(x, y){ return 2 * (y * L + x) + 1; }
+/* drawn end points: a wrapping edge runs to the faint copy at index L */
+function ends(e){ var c = e >> 1, x = c % L, y = (c / L) | 0; return e & 1 ? [x, y, x, y + 1] : [x, y, x + 1, y]; }
+function line(e, cls, p){ var a = ends(e); return el("line", { x1: P(a[0]), y1: P(a[1]), x2: P(a[2]), y2: P(a[3]), "class": cls }, p); }
 
-var TAU = Math.PI * 2;
-var SEED = "observatory/tushar-pandey";
-
-function hashSeed(s){
-  var h = 1779033703 ^ s.length;
-  for (var i=0;i<s.length;i++){
-    h = Math.imul(h ^ s.charCodeAt(i), 3432918353);
-    h = (h << 13) | (h >>> 19);
-  }
-  h = Math.imul(h ^ (h >>> 16), 2246822507);
-  h = Math.imul(h ^ (h >>> 13), 3266489909);
-  return (h ^ (h >>> 16)) >>> 0;
+var gE = el("g", {}, svg), gF = el("g", {}, svg), gC = el("g", {}, svg), gQ = el("g", {}, svg);
+for (var e = 0; e < NE; e++) line(e, "e", gE);
+for (var j = 0; j <= L; j++) for (var i = 0; i <= L; i++) {
+  var g = el("g", { "class": "c" + (i === L || j === L ? " ghost" : "") }, gC);
+  el("circle", { cx: P(i), cy: P(j), r: 10, "class": "halo" }, g);
+  el("circle", { cx: P(i), cy: P(j), r: 3.2, "class": "dot" }, g);
+  (checks[(j % L) * L + (i % L)] = checks[(j % L) * L + (i % L)] || []).push(g);
 }
-function rng(seed){
-  var a = hashSeed(String(seed));
-  function next(){
-    a = (a + 0x6d2b79f5) | 0;
-    var t = a;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  }
-  next.range = function(lo,hi){ return lo + (hi-lo)*next(); };
-  return next;
-}
-
-/* the book palette, unchanged, so the site and the editions are one body
-   of work: cyan through violet through magenta on the same near black */
-/* Two palettes, one set of keys, so nothing downstream has to ask which
-   theme it is in. Note `white`: it is not the colour white, it is whatever
-   the hot end of a value ramp runs TOWARD. On a black ground that is white;
-   on paper it is ink. Every mix(col, P.white, x) in this file therefore
-   inverts on its own, and the points come out as black dots without a single
-   call site changing. `deep` and `edge` are the two grounds paintField
-   needed spelled out.
-   Named PDK/PPR, not PD/PL: PA..PD are already the four particle shapes, and
-   a palette called PD is silently a Float64Array by the time anyone reads it. */
-var PDK = { v:"#070a14", v2:"#0c1226", ink:"#e6ecff", cyan:"#52d6e6",
-           violet:"#9b7bff", mag:"#f06ab0", white:"#ffffff", dim:"#8891b8",
-           deep:"#04060e", edge:"#03040a" };
-var PPR = { v:"#eef1f8", v2:"#dbe2f0", ink:"#101828", cyan:"#0a6f80",
-           violet:"#5233c4", mag:"#a8226a", white:"#0c1220", dim:"#57617d",
-           deep:"#e4eaf6", edge:"#aab6d0" };
-var LIGHT = document.documentElement.dataset.theme === "light";
-var P = LIGHT ? PPR : PDK;
-/* Additive light is the whole technique here, and it is meaningless on paper:
-   white plus anything is still white, so the figure would simply vanish.
-   On the light theme every pass is laid down as ink instead. */
-var BLEND = LIGHT ? "source-over" : "lighter";
-
-var pcache = {};
-function parse(c){
-  var hit = pcache[c]; if (hit) return hit;
-  var f = c.slice(1);
-  var out = [parseInt(f.slice(0,2),16), parseInt(f.slice(2,4),16), parseInt(f.slice(4,6),16)];
-  pcache[c] = out; return out;
-}
-function A(c,a){
-  var p = parse(c);
-  return "rgba(" + p[0] + "," + p[1] + "," + p[2] + "," + (a<0?0:a>1?1:a).toFixed(3) + ")";
-}
-/* returns hex, because A() only reads hex and every tone in the
-   engraving is a mix fed straight back into A() */
-function hx(n){ n = n<0?0:n>255?255:Math.round(n); return (n<16?"0":"") + n.toString(16); }
-function mix(a,b,t){
-  var X = parse(a), Y = parse(b), k = t<0?0:t>1?1:t;
-  return "#" + hx(X[0]+(Y[0]-X[0])*k) + hx(X[1]+(Y[1]-X[1])*k) + hx(X[2]+(Y[2]-X[2])*k);
+for (e = 0; e < NE; e++) {
+  var a = ends(e), mx = (P(a[0]) + P(a[2])) / 2, my = (P(a[1]) + P(a[3])) / 2;
+  var q = el("g", { "class": "q", role: "button", tabindex: e === cur ? 0 : -1, "data-q": e, "aria-pressed": "false",
+    "aria-label": "Qubit on the " + (e & 1 ? "vertical" : "horizontal") + " edge at row " + (a[1] + 1) + ", column " + (a[0] + 1) }, gQ);
+  line(e, "s", q);
+  el("circle", { cx: mx, cy: my, r: 15, "class": "hit" }, q);
+  el("circle", { cx: mx, cy: my, r: 9, "class": "ring" }, q);
+  el("circle", { cx: mx, cy: my, r: 4.6, "class": "d" }, q);
+  qubits.push(q);
 }
 
-/* ---------- the field: the space the object hangs in ----------
-   Painted once per viewport size onto its own canvas and then left alone.
-   Nothing here is drawn per frame, so the animated layer above it never
-   pays for the sky. */
-
-function paintField(c,w,h){
-  var r = rng(SEED + "/field");
-  var g = c.createLinearGradient(0,0,0,h);
-  g.addColorStop(0, mix(P.v,P.v2,.55));
-  g.addColorStop(.5, P.v);
-  g.addColorStop(1, P.deep);
-  c.fillStyle = g; c.fillRect(0,0,w,h);
-
-  /* two washes of hue, so the colour bleeds across the page rather than
-     sitting in one accent: violet high and right, cyan low and left */
-  var D = Math.hypot(w,h);
-  wash(c,w,h, w*.86, h*.06, D*.72, P.violet, .11);
-  wash(c,w,h, w*.06, h*.94, D*.62, P.cyan, .085);
-  wash(c,w,h, w*.96, h*.86, D*.42, P.mag, .05);
-
-  /* stars, scaled to area so a phone gets no denser a sky than a laptop */
-  var n = Math.min(560, Math.round(150 * ((w*h)/(1000*700))));
-  for (var i=0;i<n;i++){
-    var sx = r()*w, sy = r()*h, m = r(), rad = .35 + m*m*1.5;
-    var hue = m > .94 ? P.cyan : m > .86 ? P.violet : P.ink;
-    c.fillStyle = A(hue, .12 + (Math.round(m*8)/8)*.5);
-    c.beginPath(); c.arc(sx,sy,rad,0,TAU); c.fill();
-  }
-
-  /* grain, banded into six opacities: six colour strings instead of thousands */
-  var gn = Math.min(2600, Math.round(950 * ((w*h)/(1000*700)))), bands = 6,
-      per = Math.round(gn/bands);
-  for (var b=0;b<bands;b++){
-    c.fillStyle = A(P.ink, .005 + (b/bands)*.032);
-    for (var j=0;j<per;j++) c.fillRect(r()*w, r()*h, 1, 1);
-  }
-
-  /* the corners fall away, so running text always has ground under it */
-  var vg = c.createRadialGradient(w*.5,h*.45,Math.min(w,h)*.3, w*.5,h*.45,D*.68);
-  vg.addColorStop(0, A(P.v,0));
-  vg.addColorStop(1, A(P.edge, LIGHT ? .40 : .9));
-  c.fillStyle = vg; c.fillRect(0,0,w,h);
-}
-
-function wash(c,w,h,x,y,rad,col,al){
-  var g = c.createRadialGradient(x,y,0,x,y,rad);
-  g.addColorStop(0, A(col,al));
-  g.addColorStop(.55, A(col,al*.3));
-  g.addColorStop(1, A(col,0));
-  c.fillStyle = g; c.fillRect(0,0,w,h);
-}
-
-/* ---------- the four states ----------
-   One closed strand, tied four ways. State 1 is the trefoil. State 2 is a
-   cycle on the toric code, which is what a knot becomes laid on a code:
-   topological correction is the statement that a closed loop is correctable
-   and an open chain is not, and the loop here is one that cannot be pulled
-   shut because it goes round the hole. State 3 is a read across attention: a
-   sphere of tokens taken one after another, each throw landing nowhere near
-   the last, closing only once every one of them has been taken. State 4 is
-   the unknot, the same strand with every crossing let go and then widened
-   into a band that takes a half turn on its way round, so the simplest loop
-   there is turns out to have one side. The trefoil is the first knot that is
-   not a circle, so the sequence counts the crossings down, 3 to 0, and ends
-   on the one loop with nothing left to resolve.
-
-   All four are the same closed strand resampled onto the same 660 stations,
-   so the scroll interpolates one curve and never cross fades two pictures.
-   State 3 is the one exception, and it is deliberate: a cortex is a body, not
-   a line, and a bright cord thrown over a body only ever reads as a wire lying
-   on it. So the strand goes on morphing underneath, holding the transitions
-   either side honest, but stands down to a whisper while the mass is up. */
-
-var NS = 660, ARCS = 60;
-var XS = new Float64Array(NS+1), YS = new Float64Array(NS+1), ZS = new Float64Array(NS+1);
-var RAD = 0;
-(function seedCurve(){
-  var roll = Math.PI/3; /* one lobe straight up */
-  var cr = Math.cos(roll), sr = Math.sin(roll);
-  for (var i=0;i<=NS;i++){
-    var t = (i/NS)*TAU;
-    var x = Math.sin(t) + 2*Math.sin(2*t);
-    var y = Math.cos(t) - 2*Math.cos(2*t);
-    XS[i] = x*cr - y*sr;
-    YS[i] = x*sr + y*cr;
-    ZS[i] = -Math.sin(3*t);
-    var m = Math.abs(XS[i]) > Math.abs(YS[i]) ? Math.abs(XS[i]) : Math.abs(YS[i]);
-    if (m > RAD) RAD = m;
-  }
-})();
-
-function cl1(v){ return v<0?0:v>1?1:v; }
-function ease(t){ t = cl1(t); return t*t*(3-2*t); }
-function span(v,lo,hi){ return hi===lo ? (v<lo?0:1) : cl1((v-lo)/(hi-lo)); }
-
-/* even stations along a closed polyline in space. Arc length is measured in
-   three dimensions, so a form that climbs is not sampled as though it were a
-   drawing of itself. */
-function resample(pts,n){
-  var m = pts.length, seg = new Float64Array(m), tot = 0, i;
-  for (i=0;i<m;i++){
-    var a = pts[i], b = pts[(i+1)%m], adz = (b[2]||0)-(a[2]||0);
-    seg[i] = Math.sqrt((b[0]-a[0])*(b[0]-a[0]) + (b[1]-a[1])*(b[1]-a[1]) + adz*adz);
-    tot += seg[i];
-  }
-  var X = new Float64Array(n+1), Y = new Float64Array(n+1), Z = new Float64Array(n+1), k = 0, acc = 0;
-  for (var j=0;j<n;j++){
-    var d = (j/n)*tot;
-    while (k < m-1 && acc + seg[k] < d){ acc += seg[k]; k++; }
-    var f = seg[k] > 1e-9 ? (d-acc)/seg[k] : 0;
-    var p0 = pts[k], p1 = pts[(k+1)%m], z0 = p0[2]||0, z1 = p1[2]||0;
-    X[j] = p0[0] + (p1[0]-p0[0])*f;
-    Y[j] = p0[1] + (p1[1]-p0[1])*f;
-    Z[j] = z0 + (z1-z0)*f;
-  }
-  X[n] = X[0]; Y[n] = Y[0]; Z[n] = Z[0];
-  return { x:X, y:Y, z:Z };
-}
-
-/* a few passes of a three tap mean. The tree walk reverses exactly on itself
-   at every leaf; without this the ribbon folds back through its own edge. */
-function relax(f,n,passes){
-  for (var p=0;p<passes;p++){
-    var X = f.x.slice(0), Y = f.y.slice(0), Z = f.z.slice(0);
-    for (var i=0;i<n;i++){
-      var a = (i+n-1)%n, b = (i+1)%n;
-      f.x[i] = X[i]*.5 + (X[a]+X[b])*.25;
-      f.y[i] = Y[i]*.5 + (Y[a]+Y[b])*.25;
-      f.z[i] = Z[i]*.5 + (Z[a]+Z[b])*.25;
-    }
-    f.x[n] = f.x[0]; f.y[n] = f.y[0]; f.z[n] = f.z[0];
-  }
-  return f;
-}
-
-/* Rotate the target, reversing it if that is shorter, so every station travels
-   the least it can. Without this the strand spins on its way across and the
-   transition reads as a tumble instead of a re-setting. */
-function align(rx,ry,f,n){
-  var best = 0, dir = 0, score = Infinity, o, r, i;
-  var stepO = Math.max(1, Math.round(n/48));
-  for (r=0;r<2;r++){
-    for (o=0;o<n;o+=stepO){
-      var d = 0;
-      for (i=0;i<n;i+=12){
-        var j = r ? (n + o - i) % n : (i + o) % n;
-        var dx = rx[i]-f.x[j], dy = ry[i]-f.y[j];
-        d += dx*dx + dy*dy;
-      }
-      if (d < score){ score = d; best = o; dir = r; }
-    }
-  }
-  var X = new Float64Array(n+1), Y = new Float64Array(n+1), Z = new Float64Array(n+1);
-  for (i=0;i<=n;i++){
-    var jj = dir ? (n + best - i) % n : (i + best) % n;
-    X[i] = f.x[jj]; Y[i] = f.y[jj]; Z[i] = f.z[jj];
-  }
-  return { x:X, y:Y, z:Z };
-}
-
-/* --- plate II: the code closed on a torus, and one cycle on it.
-   A patch of code is a sheet, and a sheet turned in space is still a sheet:
-   from any bearing it reads as a plan being held at an angle. Closed on
-   itself both ways it becomes the toric code, which is where this code was
-   first written down and which has no flat way of being drawn at all.
-   The cycle laid on it goes the whole way round the hole. A loop that cannot
-   be pulled shut is precisely the one the code cannot mistake for a stray
-   error, which is the whole of why a closed loop is correctable and an open
-   chain is not. --- */
-var LK = 5;                          /* checks each way round */
-var TR1 = RAD*.63, TR2 = RAD*.285;   /* through the hole, and around the tube */
-/* a point at lattice bearing (i,j), taken continuously so an edge can be
-   walked rather than jumped. Every part of this state is read off this one
-   surface: strand, lattice and markers alike. */
-function tp(i,j){
-  var u = (i/LK)*TAU, v = (j/LK)*TAU, rr = TR1 + TR2*Math.cos(v);
-  return [rr*Math.cos(u), TR2*Math.sin(v), rr*Math.sin(u)];
-}
-/* wraps the hole once while stepping around the tube and back, so it closes
-   on itself without ever being contractible */
-var LOOP = [[0,1],[1,1],[1,2],[2,2],[2,1],[3,1],[3,2],[4,2],[4,1],[5,1]];
-var SYN = Math.floor(rng(SEED + "/code")()*3); /* which pair of checks fired */
-/* The pair as plaquettes: one at (SA,SB), the other DI round the hole and DJ
-   round the tube from it, each at most two, which on five is the short way.
-   A click on this plate fires a new pair and lays the chain between them by
-   the shortest path, which for one pair is what a matching decoder returns. */
-var SA = SYN, SB = 1, DI = 2, DJ = 0, SYNN = 0, CT0 = 0;
-var CDRAW = 600, CHOLD = 350, CDUR = 1450;
-function ctp(s){
-  var ai = DI < 0 ? -DI : DI;
-  if (s <= ai) return tp(SA + .5 + (DI < 0 ? -s : s), SB + .5);
-  return tp(SA + .5 + DI, SB + .5 + (DJ < 0 ? ai - s : s - ai));
-}
 function syndrome(){
-  var r = rng(SEED + "/syndrome/" + (SYNN++)), n;
-  SA = Math.floor(r()*LK); SB = Math.floor(r()*LK);
-  do { DI = Math.floor(r()*5) - 2; DJ = Math.floor(r()*5) - 2; n = (DI<0?-DI:DI) + (DJ<0?-DJ:DJ); }
-  while (n < 1 || n > 3);
-  CT0 = performance.now();
+  var s = new Uint8Array(L * L);
+  for (var e = 0; e < NE; e++) if (err[e] ^ cor[e]) {
+    var a = ends(e);
+    s[(a[1] % L) * L + a[0] % L] ^= 1; s[(a[3] % L) * L + a[2] % L] ^= 1;
+  }
+  return s;
 }
-/* each lattice edge is walked along the surface, so the strand lies on the
-   torus instead of cutting the chord through it */
-var LPTS = (function(){
-  var pts = [], sub = 12, s, t;
-  for (s=0; s<LOOP.length-1; s++){
-    var a = LOOP[s], b = LOOP[s+1];
-    for (t=0; t<sub; t++){
-      var f = t/sub;
-      pts.push(tp(a[0] + (b[0]-a[0])*f, a[1] + (b[1]-a[1])*f));
-    }
-  }
-  return pts;
-})();
-var FB = align(XS, YS, relax(resample(LPTS, NS), NS, 1), NS);
-
-/* --- plate III: attention, and the read that crosses it ---
-   This was a tree, and a tree was the wrong picture. A tree says the work
-   goes one way, outward, from a root that got there first; the thing being
-   drawn holds every token at once and asks what each one has to do with all
-   the others. So: tokens over a sphere, every pair carrying a weight, and the
-   strong pairs strung. No root, no levels, no direction, and the reader ends
-   up inside it rather than in front of it. */
-var BR = RAD*.80;
-/* A point on the cortex. An ellipsoid wider than it is tall, corrugated so
-   the surface has gyri rather than being a bald egg, and split down the
-   middle so it has two halves. */
-function bpt(u,v){
-  var cu = Math.cos(u), su = Math.sin(u), cv = Math.cos(v), sv = Math.sin(v);
-  var fold = 1 + .080*Math.sin(u*9 + v*3) + .052*Math.sin(v*7 - u*2);
-  var x = cv*cu*BR*1.06*fold, y = sv*BR*.72*fold, z = cv*su*BR*.94*fold;
-  /* the fissure down the midline: the halves stand apart rather than meeting */
-  x = (x < 0 ? -1 : 1) * (Math.abs(x)*.86 + BR*.11);
-  return [x,y,z];
+/* a closed chain wraps the torus when it crosses a cut an odd number of times */
+function wraps(){
+  var wx = 0, wy = 0;
+  for (var k = 0; k < L; k++) { wx ^= err[h(0, k)] ^ cor[h(0, k)]; wy ^= err[v(k, 0)] ^ cor[v(k, 0)]; }
+  return wx || wy;
 }
-/* The strand is one unbroken fold running over the whole cortex: three times
-   around while riding five times up and down the side, which closes exactly
-   and never retraces itself. It is a sulcus, not a branch: nothing here
-   starts anywhere or ends anywhere. */
-var FC = (function(){
-  var w = [], n = 460, i;
-  for (i=0;i<n;i++){
-    var t = i/n;
-    w.push(bpt(t*TAU*3, Math.sin(t*TAU*5)*1.16));
-  }
-  return align(FB.x, FB.y, relax(resample(w, NS), NS, 2), NS);
-})();
-
-/* --- plate IV: the unknot, 0 1. Radius is the trefoil's own reach, less a
-   little, so the strand gives up its crossings without giving up its ground.
-   A flat ring is the one shape a turn cannot teach anything: seen from
-   anywhere it is an ellipse, and the reader learns only how far it has been
-   tipped. So the ring is lifted off its own plane three times and pressed
-   below it three times, a shallow wave around its rim. Nothing is tied by
-   that: it crosses itself nowhere and stays the unknot, which is the one
-   thing this state has to keep, and it stays plainly round, which is the
-   other. Two lobes would fold a ring seen this near to edge on into a
-   teardrop; three, shallower, only give it a near rim and a far rim that
-   trade places as it comes round. --- */
-var PHI = .70, CPH = Math.cos(PHI), SPH = Math.sin(PHI), TPH = Math.tan(PHI);
-/* The band is drawn small. It is the width against the radius that shows a
-   half turn, and at the reach of the other three states the ribbon was a
-   thread laid round a hoop too big to read it on. */
-var URAD = RAD*.56, USAD = URAD*.13;
-var FD = (function(){
-  var X = new Float64Array(NS+1), Y = new Float64Array(NS+1), Z = new Float64Array(NS+1), rr = URAD, i;
-  for (i=0;i<=NS;i++){
-    var a = (i/NS)*TAU, w = USAD*Math.sin(a*3);
-    /* the circle on its tilted plane, then w along that plane's own normal */
-    X[i] = Math.cos(a)*rr;
-    Y[i] = Math.sin(a)*rr*CPH - w*SPH;
-    Z[i] = Math.sin(a)*rr*SPH + w*CPH;
-  }
-  return align(FC.x, FC.y, { x:X, y:Y, z:Z }, NS);
-})();
-
-/* ================= the cloud =================
-   The subject is a fixed set of points, and every state is just where those
-   same points are asked to stand. Each one keeps its own place in all four
-   shapes and travels between them, so a morph is exact by construction rather
-   than by resampling a curve, and a fifth shape costs one function.
-   It also gives the object something a line could never have: it can be blown
-   apart and drawn back.
-   The count is settled once, here, because every array below is cut to it:
-   half as many on a touch screen or under the width NARROW switches at.
-   The cloud was tuned at 5200, so each point is drawn larger to keep its
-   weight: a little short of the full area of 5200/PN of those, because fewer
-   points overlap less and full area read as beads rather than a cloud. */
-var PN = (matchMedia("(pointer:coarse)").matches || window.innerWidth < 1250) ? 900 : 1800;
-var PK = Math.pow(5200/PN, .4);
-var PA = new Float64Array(PN*3), PB = new Float64Array(PN*3),
-    PC = new Float64Array(PN*3), PD = new Float64Array(PN*3);
-var PHU = new Uint8Array(PN), PSZ = new Float32Array(PN);
-/* How far each point is from where its shape wants it, and how fast that is
-   changing. These are OFFSETS, not positions. A point used to be sprung
-   toward a moving target, which meant the whole cloud trailed the shape while
-   the scroll was moving it and rang for a while after it stopped: the bounce
-   was the morph fighting the spring. Holding the offset instead makes the
-   morph exact, because a point with nothing pushing it is simply AT its
-   place, and leaves the spring with one job, which is the whoosh. */
-var POX = new Float64Array(PN), POY = new Float64Array(PN), POZ = new Float64Array(PN);
-var PVX = new Float64Array(PN), PVY = new Float64Array(PN), PVZ = new Float64Array(PN);
-/* the last place each point actually stood, so a whoosh knows which way out is */
-var PLX = new Float64Array(PN), PLY = new Float64Array(PN), PLZ = new Float64Array(PN);
-(function seedPoints(){
-  var r = rng(SEED + "/points"), k;
-  var mvy = CPH, mvz = SPH, mny = -SPH, mnz = CPH, bwid = URAD*.44;
-  /* State 3 is the two of them, facing each other across a gap: a head on the
-     left, a machine on the right, and a thread of points crossing between.
-     Neither is the point on its own. What the section is actually about is the
-     reach across the gap, so the gap is the thing put in the middle. */
-  var HEAD = [[-.56,.72],[-.20,.94],[.22,.86],[.48,.58],[.46,.31],[.63,.17],
-              [.74,.03],[.52,-.03],[.57,-.19],[.47,-.33],[.29,-.49],[.00,-.62],
-              [-.34,-.56],[-.62,-.16],[-.68,.30]];
-  /* is a point inside the profile: crossing count, the usual way */
-  function inHead(x,y){
-    var ins = false, a, b, hi, hj;
-    for (hi=0, hj=HEAD.length-1; hi<HEAD.length; hj=hi++){
-      a = HEAD[hi]; b = HEAD[hj];
-      if (((a[1]>y) !== (b[1]>y)) &&
-          (x < (b[0]-a[0])*(y-a[1])/(b[1]-a[1]) + a[0])) ins = !ins;
+function dist(a, b){
+  var dx = Math.abs(a % L - b % L), dy = Math.abs(((a / L) | 0) - ((b / L) | 0));
+  return Math.min(dx, L - dx) + Math.min(dy, L - dy);
+}
+/* exact minimum-weight perfect matching over subsets; greedy past 14 checks */
+function match(D){
+  var n = D.length, full = (1 << n) - 1, pairs = [], i, j;
+  if (n > 14) {
+    var left = D.slice();
+    while (left.length) {
+      var bi = 0, bj = 1, bd = 1e9;
+      for (i = 0; i < left.length; i++) for (j = i + 1; j < left.length; j++)
+        if (dist(left[i], left[j]) < bd) { bd = dist(left[i], left[j]); bi = i; bj = j; }
+      pairs.push([left[bi], left[bj]]); left.splice(bj, 1); left.splice(bi, 1);
     }
-    return ins;
+    return pairs;
   }
-  for (k=0;k<PN;k++){
-    var t = k/PN, r1 = r(), r2 = r(), r3 = r(), i3 = k*3;
-    /* 1 the trefoil, given a little body so it is a cord and not a hair */
-    var si = Math.floor(t*NS), jm = RAD*.052;
-    PA[i3]   = XS[si] + (r1-.5)*jm;
-    PA[i3+1] = YS[si] + (r2-.5)*jm;
-    PA[i3+2] = ZS[si] + (r3-.5)*jm;
-    /* 2 the torus, over the whole of its surface */
-    var pB = tp((t*3*LK) % LK, r1*LK);
-    PB[i3] = pB[0]; PB[i3+1] = pB[1]; PB[i3+2] = pB[2];
-    /* 3 the head, the machine, and the reach between them */
-    var HS = RAD*.86, GAP = RAD*.72, cx3, cy3, cz3;
-    if (r2 < .455){
-      /* the head: rejection sampled inside the profile, packed toward the
-         edge so the silhouette is what reads, with a real thickness in z */
-      var hx = 0, hy = 0, tries = 0;
-      do { hx = r.range(-.72,.80); hy = r.range(-.66,.98); tries++; }
-      while (!inHead(hx,hy) && tries < 24);
-      cx3 = -GAP + hx*HS; cy3 = hy*HS; cz3 = (r()-.5)*HS*.62;
-      /* a face is not a slab: pull the thickness in toward the silhouette */
-      cz3 *= .55 + .45*(1 - Math.min(1, Math.abs(hy)));
-    } else if (r2 < .93){
-      /* the machine: a die with its traces, square where the head is round */
-      var sq = HS*.62, lay = Math.floor(r()*4);
-      if (r() < .34){
-        /* the pins, in two combs down the sides */
-        var pn = Math.floor(r()*9)/8 - .5;
-        cx3 = GAP + (r()<.5 ? -1 : 1)*sq*1.28;
-        cy3 = pn*sq*1.7; cz3 = (r()-.5)*sq*.5;
-      } else {
-        /* concentric traces on the die face */
-        var ring = (1 + Math.floor(r()*4))/4.4, side = Math.floor(r()*4), u4 = r()*2 - 1;
-        var tx = side < 2 ? u4 : (side === 2 ? -1 : 1);
-        var ty = side < 2 ? (side === 0 ? -1 : 1) : u4;
-        cx3 = GAP + tx*sq*ring; cy3 = ty*sq*ring; cz3 = (lay/3 - .5)*sq*.62;
-      }
-    } else {
-      /* the reach: a thin thread of points crossing the gap, thickening at
-         the two ends where it is nearly touching something */
-      var g = r();
-      cx3 = -GAP*.42 + g*(GAP*.84);
-      var flare = .06 + .16*Math.abs(g - .5)*2;
-      cy3 = (r()-.5)*HS*flare; cz3 = (r()-.5)*HS*flare;
+  var memo = new Float64Array(full + 1).fill(-1), pick = new Int8Array(full + 1);
+  function f(m){
+    if (m === full) return 0;
+    if (memo[m] >= 0) return memo[m];
+    var i = 0; while ((m >> i) & 1) i++;
+    var best = 1e9;
+    for (var j = i + 1; j < n; j++) if (!((m >> j) & 1)) {
+      var c = dist(D[i], D[j]) + f(m | (1 << i) | (1 << j));
+      if (c < best) { best = c; pick[m] = j; }
     }
-    PC[i3] = cx3; PC[i3+1] = cy3; PC[i3+2] = cz3;
-    /* 4 the band, across its width as well as round it */
-    var ma = t*TAU, ha = ma*.5, s = (r1-.5)*2, w = USAD*Math.sin(ma*3);
-    var ca = Math.cos(ma), sa = Math.sin(ma), ch = Math.cos(ha), sh = Math.sin(ha);
-    var mx = ch*ca, my = ch*sa*mvy + sh*mny, mz = ch*sa*mvz + sh*mnz;
-    PD[i3]   = ca*URAD            + mx*s*bwid;
-    PD[i3+1] = sa*URAD*CPH - w*SPH + my*s*bwid;
-    PD[i3+2] = sa*URAD*SPH + w*CPH + mz*s*bwid;
-    PHU[k] = Math.floor(t*ARCS) % ARCS;
-    PSZ[k] = (.55 + r3*r3*1.5)*PK;
-    PLX[k] = PA[i3]; PLY[k] = PA[i3+1]; PLZ[k] = PA[i3+2];
+    return (memo[m] = best);
   }
-})();
-/* the whoosh: every point is shoved straight out from the middle, hard, and
-   then pulled back to wherever its shape wants it. Nothing is scripted; the
-   shape reassembles because the spring is the only thing left running. */
-var WHOOSH = 0;
-/* how many 60ths of a second the last frame took, so the spring runs at the
-   same rate whatever the display is doing */
-var ptStep = 1;
-function blow(){
-  var r = rng(SEED + "/whoosh/" + (WHOOSH++)), k;
-  SHOCKQ = 1;   /* the sheet gets the same shove, as a ring going out */
-  for (k=0;k<PN;k++){
-    var x = PLX[k], y = PLY[k], z = PLZ[k];
-    var d = Math.sqrt(x*x + y*y + z*z) || 1;
-    var g = (.60 + r()*1.05) * RAD * .105;
-    PVX[k] += (x/d)*g + (r()-.5)*RAD*.024;
-    PVY[k] += (y/d)*g + (r()-.5)*RAD*.024;
-    PVZ[k] += (z/d)*g + (r()-.5)*RAD*.024;
+  f(0);
+  for (var m = 0; m !== full; ) {
+    i = 0; while ((m >> i) & 1) i++;
+    j = pick[m]; pairs.push([D[i], D[j]]); m |= (1 << i) | (1 << j);
   }
+  return pairs;
+}
+/* a shortest path on the torus: along the row the short way, then the column */
+function path(a, b){
+  var x = a % L, y = (a / L) | 0, bx = b % L, by = (b / L) | 0, es = [];
+  var dx = (bx - x + L) % L, sx = dx <= L / 2 ? 1 : -1, nx = Math.min(dx, L - dx);
+  while (nx--) { if (sx > 0) { es.push(h(x, y)); x = (x + 1) % L; } else { x = (x + L - 1) % L; es.push(h(x, y)); } }
+  var dy = (by - y + L) % L, sy = dy <= L / 2 ? 1 : -1, ny = Math.min(dy, L - dy);
+  while (ny--) { if (sy > 0) { es.push(v(x, y)); y = (y + 1) % L; } else { y = (y + L - 1) % L; es.push(v(x, y)); } }
+  return es;
 }
 
-var BX = new Float64Array(NS+1), BY = new Float64Array(NS+1), BZ = new Float64Array(NS+1);
-var SX = new Float64Array(NS+1), SY = new Float64Array(NS+1), SD = new Float64Array(NS+1);
-var GX = new Float64Array((LK+1)*(LK+1)), GY = new Float64Array((LK+1)*(LK+1));
-
-/* the strand at scroll position p in [0,3] */
-function strand(p){
-  var i, e;
-  if (p <= 1){
-    e = ease(p);
-    for (i=0;i<=NS;i++){
-      BX[i] = XS[i] + (FB.x[i]-XS[i])*e;
-      BY[i] = YS[i] + (FB.y[i]-YS[i])*e;
-      BZ[i] = ZS[i] + (FB.z[i]-ZS[i])*e;
-    }
-  } else if (p <= 2){
-    e = ease(p-1);
-    for (i=0;i<=NS;i++){
-      BX[i] = FB.x[i] + (FC.x[i]-FB.x[i])*e;
-      BY[i] = FB.y[i] + (FC.y[i]-FB.y[i])*e;
-      BZ[i] = FB.z[i] + (FC.z[i]-FB.z[i])*e;
-    }
-  } else {
-    e = ease(p-2);
-    for (i=0;i<=NS;i++){
-      BX[i] = FC.x[i] + (FD.x[i]-FC.x[i])*e;
-      BY[i] = FC.y[i] + (FD.y[i]-FC.y[i])*e;
-      BZ[i] = FC.z[i] + (FD.z[i]-FC.z[i])*e;
-    }
+function count(n, one, many){ return (n === 0 ? "no" : ["one", "two", "three", "four", "five", "six", "seven", "eight"][n - 1] || n) + " " + (n === 1 ? one : many); }
+function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+function render(note){
+  var s = syndrome(), lit = 0, flips = 0;
+  /* touch only what changed, so a tap restyles a few nodes, not the figure */
+  for (var k = 0; k < L * L; k++) {
+    lit += s[k];
+    if (s[k] !== shown[k]) { shown[k] = s[k]; for (var t = 0; t < checks[k].length; t++) checks[k][t].classList.toggle("on", !!s[k]); }
   }
+  for (var e = 0; e < NE; e++) {
+    flips += err[e];
+    if (err[e] !== pressed[e]) { pressed[e] = err[e]; qubits[e].setAttribute("aria-pressed", err[e] ? "true" : "false"); }
+  }
+  fixB.disabled = lit === 0;
+  if (note) { out.innerHTML = note; return; }
+  if (lit) out.innerHTML = cap(count(flips, "qubit", "qubits")) + " flipped; <b>" + count(lit, "check", "checks") + "</b> lit.";
+  else if (flips) out.innerHTML = cap(count(flips, "qubit", "qubits")) + " flipped and no check lit: the flips close into a loop, " +
+    (wraps() ? "one that wraps the torus, a logical error the checks cannot see." : "itself a product of checks, so it does no harm.");
+  else out.innerHTML = "No qubit flipped; every check is quiet.";
 }
 
-/* ---------- colour around the loop ----------
-   Hue is a function of station, not of frame, so it is settled once: the
-   strand runs cyan into violet into magenta and back, and depth is carried
-   by brightness alone. Settling the strings once also keeps the per frame
-   work down to alpha, which the parse cache already holds. */
-/* Rebuildable, because the theme can change while the page is up. Everything
-   derived from the palette is settled here and nowhere else. */
-var HUE = new Array(ARCS), HOT = new Array(ARCS);
-var FLASH, HOTC, HOTM, MCOL, GRIDC;
-function hues(){
-  for (var q=0;q<ARCS;q++){
-    var u = q/ARCS, col;
-    if (u < 1/3) col = mix(P.cyan, P.violet, u*3);
-    else if (u < 2/3) col = mix(P.violet, P.mag, (u-1/3)*3);
-    else col = mix(P.mag, P.cyan, (u-2/3)*3);
-    /* on paper the body of a point is already ink, so it is taken down
-       rather than left at full chroma, or the cloud reads as confetti */
-    HUE[q] = col;
-    HOT[q] = mix(col, P.white, LIGHT ? .30 : .60);
-  }
-  FLASH = mix(P.cyan, P.white, .72);
-  HOTC  = mix(P.cyan, P.white, .6);
-  HOTM  = mix(P.mag,  P.white, .6);
-  MCOL  = [P.cyan, P.violet, P.mag];
-  GRIDC = LIGHT ? mix(P.cyan, P.white, .45) : P.cyan;
+function flip(e){
+  if (corrected) { err.fill(0); cor.fill(0); gF.textContent = ""; corrected = false; }
+  err[e] ^= 1; render();
 }
-hues();
-
-/* the pulse: which station took the energy, when, and for how long */
-var PI0 = 0, PT0 = 0, PDUR = 900;
-
-/* ---------- the field the object hangs in ----------
-   Motes on slow orbits in a ball around the subject, put through the same
-   camera, so they parallax against it under a drag and give the space its
-   depth. They are also what the pulse is seen travelling through once it
-   has left the strand. Held in polar, so a frame is two trig calls each. */
-var MN = 92;
-var MRD = new Float32Array(MN), MTH = new Float32Array(MN), MPH = new Float32Array(MN),
-    MOM = new Float32Array(MN), MSZ = new Float32Array(MN), MHU = new Uint8Array(MN);
-var MPX = new Float32Array(MN), MPY = new Float32Array(MN), MPZ = new Float32Array(MN);
-(function motes(){
-  var r = rng(SEED + "/motes");
-  for (var i=0;i<MN;i++){
-    MRD[i] = 1.7 + Math.pow(r(), .65)*3.7;
-    MTH[i] = r()*TAU;
-    MPH[i] = (r()-.5)*2.2;
-    /* Kepler: what is close goes round fast and what is far crawls, as the
-       three halves power of the radius. They also nearly all run the same way,
-       because anything orbiting one mass settles into one direction; the few
-       that do not are the ones that read as falling in. */
-    MOM[i] = (r()<.12?-1:1)*(0.34/Math.pow(MRD[i],1.5));
-    MSZ[i] = .35 + r()*r()*1.6;
-    MHU[i] = r() < .30 ? 1 : r() < .58 ? 2 : 0;
+function correct(){
+  var s = syndrome(), D = [];
+  for (var k = 0; k < L * L; k++) if (s[k]) D.push(k);
+  if (!D.length) return;
+  var pairs = match(D), list = [];
+  for (var p = 0; p < pairs.length; p++) list = list.concat(path(pairs[p][0], pairs[p][1]));
+  gF.textContent = "";
+  for (var n = 0; n < list.length; n++) {
+    cor[list[n]] ^= 1;
+    var ln = line(list[n], "fx", gF);
+    if (!still.matches) {
+      ln.style.strokeDasharray = S; ln.style.strokeDashoffset = S;
+      ln.style.transition = "stroke-dashoffset .22s ease " + (n * 0.07) + "s";
+    }
   }
+  if (!still.matches) { gF.getBoundingClientRect(); for (var c = gF.firstChild; c; c = c.nextSibling) c.style.strokeDashoffset = 0; }
+  corrected = true;
+  render("Matching paired " + count(D.length, "lit check", "lit checks") + " with " + count(list.length, "flip", "flips") +
+    ", drawn in teal. Every check is quiet again, and error plus correction " +
+    (wraps() ? "<b>wrap the torus: a logical error</b>. The shortest explanation was the wrong one." : "close into a loop that does no harm: the stored information is intact."));
+}
+function reset(){
+  err.fill(0); cor.fill(0); gF.textContent = ""; corrected = false;
+  for (var k = 0; k < START.length; k++) err[START[k]] = 1;
+  render();
+}
+
+/* keys: edges sit on a doubled grid, h(x,y) at (2x+1, 2y) and v(x,y) at (2x, 2y+1) */
+function pos(e){ var c = e >> 1, x = c % L, y = (c / L) | 0; return e & 1 ? [2 * x, 2 * y + 1] : [2 * x + 1, 2 * y]; }
+function at(px, py){ var W = 2 * L; px = (px + W) % W; py = (py + W) % W; return py % 2 ? v(px / 2, (py - 1) / 2) : h((px - 1) / 2, py / 2); }
+function go(e){ qubits[cur].setAttribute("tabindex", -1); cur = e; qubits[e].setAttribute("tabindex", 0); qubits[e].focus(); }
+svg.addEventListener("keydown", function(ev){
+  var p = pos(cur), odd = p[1] % 2, n = null;
+  switch (ev.key) {
+    case "ArrowRight": n = at(p[0] + 2, p[1]); break;
+    case "ArrowLeft": n = at(p[0] - 2, p[1]); break;
+    case "ArrowDown": n = at(p[0] + (odd ? 1 : -1), p[1] + 1); break;
+    case "ArrowUp": n = at(p[0] + (odd ? 1 : -1), p[1] - 1); break;
+    case "Enter": case " ": flip(cur); ev.preventDefault(); return;
+    default: return;
+  }
+  ev.preventDefault(); go(n);
+});
+svg.addEventListener("focusin", function(ev){
+  var q = ev.target.closest && ev.target.closest(".q");
+  if (q && q !== qubits[cur]) { qubits[cur].setAttribute("tabindex", -1); cur = +q.getAttribute("data-q"); q.setAttribute("tabindex", 0); }
+});
+svg.addEventListener("click", function(ev){
+  var q = ev.target.closest && ev.target.closest(".q");
+  if (!q) return;
+  var e = +q.getAttribute("data-q");
+  qubits[cur].setAttribute("tabindex", -1); cur = e; q.setAttribute("tabindex", 0);
+  flip(e);
+});
+fixB.addEventListener("click", correct);
+resetB.addEventListener("click", reset);
+reset();
 })();
 
-/* ================= the fabric =================
-   The page is not a page with a picture on it. It is a sheet, and everything
-   with any weight sits in the sheet and dents it: the object most of all, but
-   the type has mass too, in proportion to how much ink it is, so the grid
-   crowds under a heading and lets go over the white space beside it. Scroll
-   and the masses move through the sheet, so the whole background is being
-   bent live rather than drawn once.
-
-   Two dimensions on purpose. This is the rubber sheet everyone has already
-   seen, not a relativity engine, and it has to survive being redrawn under a
-   scroll on a laptop. */
-var SHOCKQ = 0, SHOCK = -9;
-/* Every letter is its own mass. Measured once per layout with a Range walked
-   a character at a time, and held in page coordinates, so a scroll is a
-   subtraction rather than a re-measure. A space is skipped: it has no ink, so
-   it has no weight, and that is exactly why the sheet slackens between words
-   and pulls taut through them. */
-var LMX = null, LMY = null, LMM = null, LMN = 0;
-function buildLetters(){
-  var els = document.querySelectorAll(
-    "h1,.lede,.eyebrow,.ask,.quire h2,.say,.names,.status,.corr,.foot,.btn,.nav a,.mark span");
-  var xs = [], ys = [], ms = [], rg = document.createRange();
-  var ox = window.pageXOffset, oy = window.pageYOffset, i, ci;
-  for (i=0;i<els.length;i++){
-    var wk = document.createTreeWalker(els[i], NodeFilter.SHOW_TEXT);
-    for (var tn = wk.nextNode(); tn; tn = wk.nextNode()){
-      var tx = tn.nodeValue;
-      for (ci=0; ci<tx.length; ci++){
-        var cc = tx.charCodeAt(ci);
-        if (cc === 32 || cc === 10 || cc === 9 || cc === 160) continue;
-        rg.setStart(tn, ci); rg.setEnd(tn, ci+1);
-        var r = rg.getBoundingClientRect();
-        if (r.width <= 0 || r.height <= 0) continue;
-        xs.push(r.left + ox + r.width*.5);
-        ys.push(r.top + oy + r.height*.5);
-        ms.push(Math.sqrt(r.width*r.height));
-        if (xs.length > 4000) break;
-      }
-    }
-  }
-  LMN = xs.length;
-  LMX = new Float64Array(xs); LMY = new Float64Array(ys); LMM = new Float64Array(ms);
-}
-
-/* the displacement carried at each knot of the sheet, and how far it came:
-   the distance is what the light is read off */
-var FDX = null, FDY = null, FDM = null;
-/* The sheet is bent by scroll, size, type and the object's place, none of
-   which a still page changes. So the cut paths are kept, and only re-cut when
-   one of those moves or the ring is crossing; a still frame just fills them. */
-var FBP = null, FGL = null, FKEY = "", FLM = null;
-function drawFabric(c, ocx, ocy, unit, e){
-  if (!LMX) buildLetters();
-  if (SHOCKQ){ SHOCK = e; SHOCKQ = 0; }
-  var sw = e - SHOCK, ring = sw > 0 && sw < 1.6, lit = .30 + RETA*.70, NB = 7, bi;
-  var oy = window.pageYOffset;
-  var key = ocx + "," + ocy + "," + unit + "," + RETA + "," + oy + "," + VW + "," + VH;
-  if (ring || key !== FKEY || FLM !== LMX){
-    FKEY = ring ? "" : key; FLM = LMX;
-    cutFabric(ocx, ocy, unit, oy, ring ? sw : -1, NB);
-  }
-  c.save();
-  c.globalCompositeOperation = BLEND;
-  for (bi=1; bi<NB; bi++){
-    var t2 = bi/(NB-1);
-    /* The ramp is deliberately short at both ends. It ran the whole way to
-       magenta and to better than a tenth alpha, which made a deep well read
-       as a coloured pool sitting on the page rather than as the sheet itself
-       catching light. It now travels most of the way to violet and no
-       further, at about half the value: the difference across the sheet
-       should be noticed, not looked at. */
-    var col = mix(P.cyan, P.violet, t2*.72);
-    if (LIGHT) col = mix(col, P.white, .30);
-    c.fillStyle = A(col, (.016 + t2*t2*.055)*lit);
-    c.fill(FBP[bi]);
-  }
-  c.lineWidth = 1;
-  /* the weave is a ground, not a subject: it should be felt before it is
-     read, so it sits close to the threshold of visible in both themes */
-  c.strokeStyle = A(GRIDC, (LIGHT ? .085 : .055)*lit);
-  c.stroke(FGL);
-  c.restore();
-}
-function cutFabric(ocx, ocy, unit, oy, sw, NB){
-  var step = Math.max(30, Math.round(VW/46));
-  var cols = Math.ceil(VW/step) + 3, rows = Math.ceil(VH/step) + 3, n = cols*rows;
-  if (!FDX || FDX.length < n){
-    FDX = new Float64Array(n); FDY = new Float64Array(n); FDM = new Float64Array(n);
-  }
-  FDX.fill(0, 0, n); FDY.fill(0, 0, n);
-  var i, j, gx, gy, dx, dy, d, d2, pull, tp, idx;
-
-  /* one mass laid into the sheet, and only into the knots it can reach: this
-     is what makes a thousand letters affordable sixty times a second */
-  function splat(mx, my, mm, reach, gain){
-    var i0 = Math.floor((mx - reach)/step) + 1, i1 = Math.ceil((mx + reach)/step) + 1;
-    var j0 = Math.floor((my - reach)/step) + 1, j1 = Math.ceil((my + reach)/step) + 1;
-    if (i0 < 0) i0 = 0; if (i1 > cols-1) i1 = cols-1;
-    if (j0 < 0) j0 = 0; if (j1 > rows-1) j1 = rows-1;
-    for (var jj=j0; jj<=j1; jj++){
-      gy = (jj-1)*step;
-      for (var ii=i0; ii<=i1; ii++){
-        gx = (ii-1)*step;
-        dx = gx - mx; dy = gy - my; d2 = dx*dx + dy*dy;
-        if (d2 > reach*reach) continue;
-        d = Math.sqrt(d2) + 6;
-        pull = mm*mm*gain/(d + mm*1.4);
-        tp = 1 - Math.sqrt(d2)/reach;      /* taper, so a reach has no edge */
-        pull *= tp*tp;
-        idx = jj*cols + ii;
-        FDX[idx] -= dx/d*pull; FDY[idx] -= dy/d*pull;
-      }
-    }
-  }
-
-  for (i=0;i<LMN;i++){
-    var ly = LMY[i] - oy;
-    if (ly < -200 || ly > VH + 200) continue;
-    var lm = LMM[i];
-    splat(LMX[i], ly, lm, lm*4.1 + 34, 3.5);
-  }
-  /* the object, which outweighs the whole page put together */
-  var om = unit*.125*(.45 + RETA*.75);
-  splat(ocx, ocy, om, om*3.4 + 90, .62);
-
-  /* the whoosh leaves through the sheet as a ring */
-  if (sw > 0){
-    var swr = sw*900, fall = 1 - sw/1.6;
-    for (j=0;j<rows;j++){
-      gy = (j-1)*step;
-      for (i=0;i<cols;i++){
-        gx = (i-1)*step;
-        dx = gx - ocx; dy = gy - ocy; d = Math.sqrt(dx*dx + dy*dy) + 9;
-        var band = (d - swr)/160;
-        if (band <= -1 || band >= 1) continue;
-        var amp = Math.cos(band*Math.PI*.5); amp = amp*amp*40*fall;
-        idx = j*cols + i;
-        FDX[idx] += dx/d*amp; FDY[idx] += dy/d*amp;
-      }
-    }
-  }
-
-  /* no knot may travel further than most of a cell, or the sheet turns
-     itself inside out where the type is densest */
-  var cap = step*.90;
-  for (i=0;i<n;i++){
-    d = Math.sqrt(FDX[i]*FDX[i] + FDY[i]*FDY[i]);
-    if (d > cap){ FDX[i] *= cap/d; FDY[i] *= cap/d; d = cap; }
-    FDM[i] = d;
-  }
-
-  /* --- the light ---
-     The colour is carried INSIDE the weave, not on it. Brightening the lines
-     themselves only ever reads as wire that has been turned up; what a bent
-     sheet actually does is catch light across its face. So every cell is
-     scored by how far its four corners have travelled and filled with a
-     colour off that ramp, cyan through violet into magenta, while the lines
-     stay one weight and one value throughout. Flat cells are not filled at
-     all, so the fabric only glows where something heavy is standing on it.
-     Cells are sorted into buckets and each bucket filled once: seven fills a
-     frame rather than thirteen hundred. */
-  var bp = [], bi, inv = 1/cap, gl = new Path2D();
-  for (bi=0; bi<NB; bi++) bp.push(new Path2D());
-  for (j=0;j<rows-1;j++) for (i=0;i<cols-1;i++){
-    var ca = j*cols+i, cb = ca+1, cc = ca+cols+1, cd = ca+cols;
-    var t = (FDM[ca]+FDM[cb]+FDM[cc]+FDM[cd])*.25*inv;
-    if (t > 1) t = 1;
-    var kk = (t*NB)|0; if (kk >= NB) kk = NB-1;
-    if (!kk) continue;                       /* slack sheet stays unlit */
-    var pth = bp[kk], xa = (i-1)*step, ya = (j-1)*step;
-    pth.moveTo(xa + FDX[ca], ya + FDY[ca]);
-    pth.lineTo(xa+step + FDX[cb], ya + FDY[cb]);
-    pth.lineTo(xa+step + FDX[cc], ya+step + FDY[cc]);
-    pth.lineTo(xa + FDX[cd], ya+step + FDY[cd]);
-    pth.closePath();
-  }
-  for (j=0;j<rows;j++){
-    gy = (j-1)*step;
-    for (i=0;i<cols;i++){
-      idx = j*cols + i; gx = (i-1)*step;
-      if (i) gl.lineTo(gx+FDX[idx], gy+FDY[idx]); else gl.moveTo(gx+FDX[idx], gy+FDY[idx]);
-    }
-  }
-  for (i=0;i<cols;i++){
-    gx = (i-1)*step;
-    for (j=0;j<rows;j++){
-      idx = j*cols + i; gy = (j-1)*step;
-      if (j) gl.lineTo(gx+FDX[idx], gy+FDY[idx]); else gl.moveTo(gx+FDX[idx], gy+FDY[idx]);
-    }
-  }
-  FBP = bp; FGL = gl;
-}
-
-function drawKnot(c,cx,cy,unit,yaw,pitch,p,e,pt){
-  var S = unit*0.107;
-  var R = S*3;
-
-  /* how much of each state is lit right now */
-  var wA = cl1(1-p), wB = cl1(1-(p<1?1-p:p-1));
-  var wC = cl1(1-(p<2?2-p:p-2)), wD = cl1(p-2);
-  /* the close is the widest of the four: it is a band rather than a cord */
-  var tw = unit*(0.0215*wA + 0.0165*wB + 0.0145*wC + 0.040*wD);
-
-  var cyw = Math.cos(yaw), syw = Math.sin(yaw);
-  var cp = Math.cos(pitch), sp = Math.sin(pitch);
-
-  /* the one camera, shared by subject, annotation and field */
-  var pjx = 0, pjy = 0, pjz = 0;
-  function pj(px,py,pz){
-    var a1 = px*cyw + pz*syw, b1 = -px*syw + pz*cyw;
-    pjx = cx + a1*S; pjy = cy - (py*cp - b1*sp)*S; pjz = py*sp + b1*cp;
-  }
-
-  var i, x, y, z, x1, z1, y2, z2;
-  for (i=0;i<=NS;i++){
-    x = BX[i]; y = BY[i]; z = BZ[i];
-    x1 =  x*cyw + z*syw;
-    z1 = -x*syw + z*cyw;
-    y2 =  y*cp - z1*sp;
-    z2 =  y*sp + z1*cp;
-    SX[i] = cx + x1*S;
-    SY[i] = cy - y2*S;
-    SD[i] = z2;
-  }
-
-  drawFabric(c, cx, cy, unit, e);
-
-  /* --- the field, put through the camera once and drawn in two passes,
-     behind the subject and in front of it, so the object is genuinely
-     inside its space rather than pasted on it --- */
-  var mi, mth, mcph, msh = pt >= 0 ? pt*5.4 : -9;
-  for (mi=0; mi<MN; mi++){
-    mth = MTH[mi] + e*MOM[mi]; mcph = Math.cos(MPH[mi]);
-    pj(MRD[mi]*Math.cos(mth)*mcph, MRD[mi]*Math.sin(MPH[mi]), MRD[mi]*Math.sin(mth)*mcph);
-    MPX[mi] = pjx; MPY[mi] = pjy; MPZ[mi] = pjz;
-  }
-  function field(front){
-    c.save(); c.globalCompositeOperation = BLEND;
-    for (var i2=0; i2<MN; i2++){
-      if ((MPZ[i2] >= 0) !== front) continue;
-      var nr2 = cl1(.5 + MPZ[i2]*.16);
-      var al2 = .10 + .46*nr2;
-      if (msh > -1){ var dd = MRD[i2] - msh; al2 += .85*Math.exp(-dd*dd*2.6)*(1-pt); }
-      c.fillStyle = A(MCOL[MHU[i2]], al2);
-      c.beginPath(); c.arc(MPX[i2],MPY[i2],MSZ[i2]*(.7+.9*nr2)*unit*.0032,0,TAU); c.fill();
-    }
-    c.restore();
-  }
-  field(false);
-
-  /* --- the dial. The one piece of apparatus that outlives all four states,
-     because it is the only one that reads something the reader is doing:
-     twelve bearings, and a lit run on the one the object is being held at. --- */
-  if (RETA > .012){
-    var rr0 = R*1.32, az = ((yaw % TAU) + TAU) % TAU, ma = -Math.PI/2 + az, k, ka;
-    c.save(); c.globalCompositeOperation = BLEND; c.lineWidth = 1;
-    c.strokeStyle = A(P.cyan,.085*RETA);
-    c.beginPath(); c.arc(cx,cy,rr0,0,TAU); c.stroke();
-    for (k=0;k<12;k++){
-      ka = -Math.PI/2 + (k/12)*TAU;
-      var lit = Math.abs(((ka-ma+Math.PI*3) % TAU) - Math.PI) < .34;
-      var ln = unit*(lit ? .019 : .009);
-      c.strokeStyle = A(lit ? P.cyan : P.dim, (lit ? .60 : .17)*RETA);
-      c.beginPath();
-      c.moveTo(cx+Math.cos(ka)*rr0, cy+Math.sin(ka)*rr0);
-      c.lineTo(cx+Math.cos(ka)*(rr0+ln), cy+Math.sin(ka)*(rr0+ln));
-      c.stroke();
-    }
-    c.strokeStyle = A(P.cyan,.30*RETA); c.lineWidth = 1.6;
-    c.beginPath(); c.arc(cx,cy,rr0, ma-.24, ma+.24); c.stroke();
-    c.restore();
-  }
-
-  c.save();
-  c.globalCompositeOperation = BLEND;
-
-  /* --- state 2: the torus the cycle is laid on. Plaquettes as a checkerboard
-     of the two kinds of stabiliser, the lattice both ways round, and the
-     vertices carrying the data qubits. Everything is stepped finely enough to
-     hold the curve, and the far side is let through rather than hidden: what
-     the reader is looking at is a shell, and seeing its back through it is
-     what says so. --- */
-  if (wB > .012){
-    var gi, gj, gs, gk, gp;
-    /* plaquettes, each a quad walked round its own patch of the surface */
-    for (gj=0; gj<LK; gj++) for (gi=0; gi<LK; gi++){
-      c.fillStyle = A((gi+gj)&1 ? P.cyan : P.violet, .060*wB);
-      c.beginPath();
-      for (gs=0; gs<=18; gs++){
-        /* round the quad: along i, along j, back along i, back along j */
-        var q = gs/18*4, qi, qj;
-        if (q < 1)      { qi = gi + q;       qj = gj; }
-        else if (q < 2) { qi = gi + 1;       qj = gj + (q-1); }
-        else if (q < 3) { qi = gi + (3-q);   qj = gj + 1; }
-        else            { qi = gi;           qj = gj + (4-q); }
-        gp = tp(qi,qj); pj(gp[0],gp[1],gp[2]);
-        if (gs) c.lineTo(pjx,pjy); else c.moveTo(pjx,pjy);
-      }
-      c.closePath(); c.fill();
-    }
-    /* the lattice: the circles round the hole, and the circles round the tube */
-    c.strokeStyle = A(P.cyan,.22*wB); c.lineWidth = 1;
-    c.beginPath();
-    for (gj=0; gj<LK; gj++){
-      for (gs=0; gs<=64; gs++){
-        gp = tp(gs/64*LK, gj); pj(gp[0],gp[1],gp[2]);
-        if (gs) c.lineTo(pjx,pjy); else c.moveTo(pjx,pjy);
-      }
-    }
-    for (gi=0; gi<LK; gi++){
-      for (gs=0; gs<=32; gs++){
-        gp = tp(gi, gs/32*LK); pj(gp[0],gp[1],gp[2]);
-        if (gs) c.lineTo(pjx,pjy); else c.moveTo(pjx,pjy);
-      }
-    }
-    c.stroke();
-    for (gj=0; gj<LK; gj++) for (gi=0; gi<LK; gi++){
-      gp = tp(gi,gj); pj(gp[0],gp[1],gp[2]);
-      gk = gj*LK+gi; GX[gk] = pjx; GY[gk] = pjy;
-      c.fillStyle = A(P.cyan,.14*wB);
-      c.beginPath(); c.arc(pjx,pjy,unit*.010,0,TAU); c.fill();
-      c.fillStyle = A(HOTC,.62*wB);
-      c.beginPath(); c.arc(pjx,pjy,unit*.0028,0,TAU); c.fill();
-    }
-  }
-
-  /* --- state 3: every token to every other, at the weight the pair was
-     given. The strong pairs are drawn; the slack ones are left off, which is
-     the only reason the picture is readable at all, and is also exactly what
-     the thing does. The reader is inside the matrix rather than looking at it
-     printed flat. --- */
-  if (wC > .012){
-    /* nothing is drawn around the latent space. The cloud is the state: any
-       scaffolding laid over it only says "diagram" again. */
-  }
-
-  /* --- state 4: with no crossing left to resolve, six bearings leave the
-     ring for the field, each closed by a station: taken, none travelled. --- */
-  if (wD > .012){
-    var ea = S*URAD, eb = ea*CPH, dk;
-    /* the dial is set off the band, not off the page, so it stays a dial
-       around it however small the band is drawn */
-    var DR = S*URAD*1.72;
-    c.lineWidth = 1;
-    for (dk=0; dk<12; dk++){
-      var da = -Math.PI/2 + (dk/12)*TAU, dx6 = Math.cos(da), dy6 = Math.sin(da);
-      var qtr = dk % 3 === 0;                       /* the quarters stand taller */
-      var orr = DR*(qtr ? 1 : .945);
-      var ox = cx + dx6*orr, oy = cy + dy6*orr;
-      /* the ring is an ellipse on the screen, so each line leaves the rim it
-         is actually pointed at rather than a radius the subject does not keep */
-      var dr = ea*eb/Math.hypot(eb*dx6, ea*dy6)*1.2;
-      c.strokeStyle = A(P.violet,(qtr ? .26 : .12)*wD);
-      c.beginPath();
-      c.moveTo(cx + dx6*dr, cy + dy6*dr); c.lineTo(ox,oy);
-      c.stroke();
-      c.fillStyle = A(P.cyan,(qtr ? .17 : .09)*wD);
-      c.beginPath(); c.arc(ox,oy,unit*(qtr ? .012 : .0078),0,TAU); c.fill();
-      c.fillStyle = A(HOTC,(qtr ? .7 : .38)*wD);
-      c.beginPath(); c.arc(ox,oy,unit*.0034,0,TAU); c.fill();
-    }
-    /* Twelve bearings is a dial, so the close keeps the time on it: the one
-       thing moving on this page that is nobody's doing. A band with one side
-       and a minute that comes back to where it started are the same joke told
-       twice, which is the right number of times. */
-    var nowT = new Date();
-    var secs = nowT.getSeconds() + nowT.getMilliseconds()/1000;
-    var sang = -Math.PI/2 + (secs/60)*TAU;
-    var sdx = Math.cos(sang), sdy = Math.sin(sang);
-    var srim = ea*eb/Math.hypot(eb*sdx, ea*sdy)*1.2;
-    var shx = cx + sdx*DR, shy = cy + sdy*DR;
-    c.strokeStyle = A(FLASH,.50*wD); c.lineWidth = 1.5;
-    c.beginPath();
-    c.moveTo(cx + sdx*srim, cy + sdy*srim); c.lineTo(shx,shy);
-    c.stroke();
-    c.fillStyle = A(P.cyan,.26*wD);
-    c.beginPath(); c.arc(shx,shy,unit*.017,0,TAU); c.fill();
-    c.fillStyle = A(FLASH,.95*wD);
-    c.beginPath(); c.arc(shx,shy,unit*.0054,0,TAU); c.fill();
-  }
-  c.restore();
-
-  /* --- the subject. Far arcs first, and each arc is an opaque core that hides
-     what is behind it followed by three additive passes: the room it lights,
-     the body of the tube, and the hot filament down its middle. Nothing here
-     is a line drawn on a ground; every visible value is light added to one.
-     Arcs meet end to end rather than overlapping, so the additive passes butt
-     instead of doubling and the loop reads as one continuous emission. --- */
-  /* --- the cloud, put through the same camera and drawn in hue buckets so a
-     frame is a few dozen fills rather than a few thousand. Two passes each:
-     the light the point throws, and the point. Additive throughout, so the
-     order it comes out in does not matter and depth is carried by brightness
-     and size alone. --- */
-  c.save();
-  c.globalCompositeOperation = BLEND;
-  var pfar = [], pnear = [], hb;
-  for (hb=0; hb<ARCS; hb++){ pfar.push(null); pnear.push(null); }
-  var pk, p3, tx0, ty0, tz0, sxp, syp, dsc, rsz;
-  var dt = ptStep;
-  for (pk=0; pk<PN; pk++){
-    p3 = pk*3;
-    /* where this point is asked to stand right now */
-    if (p < 1){       var f2 = ease(p);
-      tx0 = PA[p3] + (PB[p3]-PA[p3])*f2;
-      ty0 = PA[p3+1] + (PB[p3+1]-PA[p3+1])*f2;
-      tz0 = PA[p3+2] + (PB[p3+2]-PA[p3+2])*f2;
-    } else if (p < 2){ var f3 = ease(p-1);
-      tx0 = PB[p3] + (PC[p3]-PB[p3])*f3;
-      ty0 = PB[p3+1] + (PC[p3+1]-PB[p3+1])*f3;
-      tz0 = PB[p3+2] + (PC[p3+2]-PB[p3+2])*f3;
-    } else {           var f4 = ease(p-2);
-      tx0 = PC[p3] + (PD[p3]-PC[p3])*f4;
-      ty0 = PC[p3+1] + (PD[p3+1]-PC[p3+1])*f4;
-      tz0 = PC[p3+2] + (PD[p3+2]-PC[p3+2])*f4;
-    }
-    /* the point is at its place, plus whatever the last whoosh left on it.
-       Damped hard enough to come home without ringing: this is the difference
-       between a shove that recovers and one that wobbles. */
-    var sk = .118*dt, sd = Math.pow(.845, dt);
-    PVX[pk] = (PVX[pk] - POX[pk]*sk)*sd;
-    PVY[pk] = (PVY[pk] - POY[pk]*sk)*sd;
-    PVZ[pk] = (PVZ[pk] - POZ[pk]*sk)*sd;
-    POX[pk] += PVX[pk]*dt; POY[pk] += PVY[pk]*dt; POZ[pk] += PVZ[pk]*dt;
-
-    var qx = tx0 + POX[pk], qy = ty0 + POY[pk], qz = tz0 + POZ[pk];
-    PLX[pk] = qx; PLY[pk] = qy; PLZ[pk] = qz;
-    var qx1 = qx*cyw + qz*syw, qz1 = -qx*syw + qz*cyw;
-    sxp = cx + qx1*S;
-    syp = cy - (qy*cp - qz1*sp)*S;
-    dsc = cl1(.5 + (qy*sp + qz1*cp)*.24);          /* 0 far, 1 near */
-    rsz = unit*(.00075 + .00135*dsc)*PSZ[pk];
-    hb = PHU[pk];
-    if (!pnear[hb]){ pnear[hb] = new Path2D(); pfar[hb] = new Path2D(); }
-    pnear[hb].moveTo(sxp+rsz, syp); pnear[hb].arc(sxp, syp, rsz, 0, TAU);
-    var gsz = rsz*3.1;
-    pfar[hb].moveTo(sxp+gsz, syp); pfar[hb].arc(sxp, syp, gsz, 0, TAU);
-  }
-  for (hb=0; hb<ARCS; hb++){
-    if (!pnear[hb]) continue;
-    c.fillStyle = A(HUE[hb], (LIGHT ? .042 : .075)*RETA);
-    c.fill(pfar[hb]);
-    c.fillStyle = A(HOT[hb], .74*RETA);
-    c.fill(pnear[hb]);
-  }
-  c.globalCompositeOperation = "source-over";
-  c.restore();
-
-  /* The strand itself is no longer drawn. It stays computed, because the
-     pulse still runs along it and the shapes are still cut from it, but the
-     subject the reader sees is the cloud: a line and a cloud in the same
-     place only ever fight, and the cloud is the one that can be thrown. */
-  c.save();
-  c.globalCompositeOperation = BLEND;
-
-  /* --- what the code found, over the subject: two checks that fired, and
-     the chain of corrections laid between them. --- */
-  if (wB > .012){
-    /* a fresh pair is lit at once, its chain walked out from one to the other
-       over CDRAW, held, and then let down to the resting pair it now is */
-    var ci, ch = [], mr = unit*.0125, cw, ct = CT0 ? performance.now() - CT0 : -1;
-    var cn = (DI<0?-DI:DI) + (DJ<0?-DJ:DJ), cq = ct < 0 ? cn : cn*cl1(ct/CDRAW);
-    var hl = ct < 0 ? 0 : 1 - span(ct, CDRAW + CHOLD, CDUR), cm = Math.ceil(cq*8);
-    c.beginPath();
-    for (ci=0; ci<=cm; ci++){
-      cw = ctp(Math.min(ci/8, cq)); pj(cw[0],cw[1],cw[2]);
-      if (ci) c.lineTo(pjx,pjy); else c.moveTo(pjx,pjy);
-    }
-    if (hl > 0){ c.strokeStyle = A(P.cyan,.20*hl*wB); c.lineWidth = 7; c.stroke(); }
-    c.strokeStyle = A(P.cyan,(.55 + .40*hl)*wB); c.lineWidth = 2.4;
-    c.stroke();
-    cw = ctp(0); pj(cw[0],cw[1],cw[2]); ch.push(pjx, pjy);
-    cw = ctp(cn); pj(cw[0],cw[1],cw[2]); ch.push(pjx, pjy);
-    for (ci=0; ci<4; ci+=2){
-      var ex = ch[ci], ey = ch[ci+1];
-      c.fillStyle = A(P.mag,(.22 + .25*hl)*wB);
-      c.beginPath(); c.arc(ex,ey,mr*2.4,0,TAU); c.fill();
-      c.strokeStyle = A(P.mag,.9*wB); c.lineWidth = 1.4;
-      c.beginPath(); c.arc(ex,ey,mr,0,TAU); c.stroke();
-      c.beginPath();
-      c.moveTo(ex-mr*.55,ey-mr*.55); c.lineTo(ex+mr*.55,ey+mr*.55);
-      c.moveTo(ex+mr*.55,ey-mr*.55); c.lineTo(ex-mr*.55,ey+mr*.55);
-      c.stroke();
-    }
-  }
-
-  /* --- crossings, marked where the strand passes itself. Only the trefoil
-     has any to resolve: the cycle on the patch is a simple closed curve, the
-     tree walk retraces its own branches rather than crossing them, and the
-     unknot has given every crossing up. --- */
-  if (wA > .35){
-    var found = [];
-    for (i=0;i<NS;i+=7){
-      for (var j=i+60;j<NS;j+=7){
-        var ddx = SX[i]-SX[j], ddy = SY[i]-SY[j];
-        if (ddx*ddx + ddy*ddy < tw*tw*.8){
-          var mx = (SX[i]+SX[j])/2, my = (SY[i]+SY[j])/2, ok = 1;
-          for (var f2=0; f2<found.length; f2++){
-            if (Math.hypot(found[f2][0]-mx, found[f2][1]-my) < R*.4){ ok = 0; break; }
-          }
-          if (ok) found.push([mx,my]);
-        }
-      }
-    }
-    var mA = span(wA,.35,.7);
-    for (var fi=0; fi<found.length && fi<4; fi++){
-      var mkx = found[fi][0], mky = found[fi][1], mkr = unit*.0135;
-      c.strokeStyle = A(P.violet,.5*mA); c.lineWidth = 1.1;
-      c.beginPath(); c.arc(mkx,mky,mkr,0,TAU); c.stroke();
-      c.strokeStyle = A(P.cyan,.42*mA); c.lineWidth = 1;
-      c.beginPath();
-      c.moveTo(mkx-mkr*2.1,mky); c.lineTo(mkx-mkr*1.35,mky);
-      c.moveTo(mkx+mkr*1.35,mky); c.lineTo(mkx+mkr*2.1,mky);
-      c.stroke();
-    }
-  }
-  c.restore();
-
-  field(true);
-  if (pt >= 0) drawPulse(c,cx,cy,unit,pt);
-}
-
-/* ---------- the pulse ----------
-   A click puts energy into the strand at the station nearest the pointer. Two
-   fronts leave that station in opposite directions and run the loop, a flare
-   blooms and dies where it went in, and a shock leaves the object and crosses
-   the field. All of it is light added on top, so it can never argue with the
-   morph underneath or take the angle the hand is holding. Over in under a
-   second, and nothing about the object is left changed. */
-function drawPulse(c,cx,cy,unit,pt){
-  var fade = (1-pt)*(1-pt), i, j, k, d;
-  c.save();
-  c.globalCompositeOperation = BLEND;
-  c.lineJoin = "round"; c.lineCap = "round";
-
-  var trav = pt*NS*0.5, wl = Math.max(1.2, unit*0.026);
-  for (d=0; d<2; d++){
-    var dir = d ? -1 : 1;
-    for (k=-4; k<=4; k++){
-      var a = Math.exp(-k*k*0.18)*fade;
-      if (a < .02) continue;
-      var s = Math.round(PI0 + dir*(trav + k*8));
-      var ic = ((s % NS) + NS) % NS;
-      var al = a*(.38 + .62*cl1(.5 + SD[ic]*.26));
-      c.beginPath();
-      for (j=0;j<=8;j++){
-        i = (((s+j) % NS) + NS) % NS;
-        if (j===0) c.moveTo(SX[i],SY[i]); else c.lineTo(SX[i],SY[i]);
-      }
-      c.lineWidth = wl*2.8; c.strokeStyle = A(P.cyan, al*.20); c.stroke();
-      c.lineWidth = wl;     c.strokeStyle = A(FLASH, al*.80); c.stroke();
-    }
-  }
-
-  /* the flare where it went in */
-  var ft = cl1(pt/.30), ff = (1-ft)*(1-ft);
-  if (ff > .015){
-    var fr = unit*(.013 + .125*ft), fx = SX[PI0], fy = SY[PI0];
-    var g = c.createRadialGradient(fx,fy,0,fx,fy,fr);
-    g.addColorStop(0, A(P.white,.62*ff));
-    g.addColorStop(.3, A(P.cyan,.34*ff));
-    g.addColorStop(1, A(P.cyan,0));
-    c.fillStyle = g;
-    c.beginPath(); c.arc(fx,fy,fr,0,TAU); c.fill();
-  }
-
-  /* the shock, leaving the object and crossing the field */
-  c.lineWidth = Math.max(1, unit*.005*(1-pt));
-  c.strokeStyle = A(P.cyan,.26*fade);
-  c.beginPath(); c.arc(cx,cy,unit*(.04 + .60*pt),0,TAU); c.stroke();
-  c.strokeStyle = A(P.violet,.15*fade);
-  c.beginPath(); c.arc(cx,cy,unit*(.04 + .60*cl1(pt*1.5)),0,TAU); c.stroke();
-  c.restore();
-}
-
-/* ---------- driver ----------
-   The object is not in the flow. Two fixed canvases lie under the document and
-   the object is placed inside them by scroll, so there is no box to pin and
-   nothing to re-rasterise when it moves: scroll writes a centre and a size and
-   the next frame emits there. The field canvas is cut once per viewport and
-   left alone; only the object is redrawn. */
-
-var cvF = document.getElementById("field"), ctxF = cvF.getContext("2d", { alpha:false });
-var cv  = document.getElementById("fig"),   ctx  = cv.getContext("2d");
-var grip = document.getElementById("grip");
-var hud = document.getElementById("hud"), veil = document.getElementById("veil");
-var hIx = document.getElementById("hix"), hNm = document.getElementById("hnm");
-var hTl = document.getElementById("htl");
-var barEl = document.querySelector(".bar"), foldEl = document.querySelector(".fold");
-var statusEl = document.querySelector(".status"), colEl = document.querySelector(".hero .col");
-var secQ = document.getElementById("quantum");
-var secA = document.getElementById("ai");
-var secC = document.getElementById("contact");
-
-var STATES = [
-  ["01", "Trefoil 3<sub>1</sub>",
-   "A luminous closed strand suspended in a dark field, tied as a trefoil knot."],
-  ["02", "Toric code d5",
-   "The same strand laid on a torus of five by five stabilisers as one closed cycle that goes the whole way round the hole, with two checks lit and the chain of corrections running between them."],
-  ["03", "The reach",
-   "The same points gathered into a human head in profile facing a machine, with a thread of them crossing the gap between the two and flaring where it comes close to each."],
-  ["04", "Unknot 0<sub>1</sub>",
-   "The same strand with every crossing let go, closed as one ring and widened into a band that takes a half turn on its way round, so it has a single side. A dial of twelve bearings stands off it, keeping the running minute."]
-];
-var AHINT = " Interactive: drag, or use the arrow keys, to turn it; click or press Enter to send a pulse through it.";
-
-var VW = 0, VH = 0, DPR = 1, BARH = 52, NARROW = 0, FOLD = 600, COLB = 0;
-var sW = 0, sH = 0;
-var reduce = matchMedia("(prefers-reduced-motion: reduce)");
-var raf = 0, last = 0, t0 = 0, lastP = -1, lastY = -1, lastF = -1, capI = -1;
-var pxT = 0, pyT = 0, pxC = 0, pyC = 0;
-var T1 = 0, T2 = 0, T3 = 0, D1 = 1, D2 = 1, D3 = 1;
-
-/* The camera sits a little above the subject rather than level with it. Level,
-   every horizontal in the piece is seen edge on: the patch, the levels the
-   search grows through and the ring all collapse to lines, and three of the
-   four states read as drawings. A few degrees of height is what makes them
-   solids without taking the trefoil off the pose it is best in. */
-var YAW0 = -0.13, PITCH0 = 0.28;
-
-/* ---------- the spindle ----------
-   The morph owns which form is lit; the hand owns the angle it is read from.
-   Being independent they compose without argument, and a state transition
-   never takes the reader's angle away. The offset persists; breath and
-   parallax drop the moment a hand arrives and ease back in around wherever
-   the object was left. */
-var uYaw = 0, uPit = 0, vYaw = 0, vPit = 0;
-var grab = 0, lock = 0, gid = -1, gx = 0, gy = 0;
-var idleG = 1, quietAt = 0, live = 0, ptv = 0;
-/* The object turns freely: yaw was always unbounded, and the pitch is now
-   open to very nearly straight down and straight up, so the torus can be
-   looked into from over the hole as well as from the side. It stops just
-   short of the poles, where a turn would only spin the picture in place. */
-var TLO = -1.45, THI = 1.30;
-var YPX = 0.0080, TPX = 0.0035;    /* radians per pixel */
-var FREE = 0.020, STOP = 0.00035;  /* radians per frame */
-
-/* Velocity comes from a window of pointer samples, not per frame: events and
-   frames do not line up, so a per frame delta reads zero on any frame the
-   pointer stood still, and that kills the throw. */
-var smp = [];
-function sample(){
-  var t = performance.now();
-  smp.push(t, uYaw, uPit);
-  while (smp.length > 6 && t - smp[0] > 140) smp.splice(0,3);
-}
-function clv(v,m){ return v < -m ? -m : v > m ? m : v; }
-function toss(){
-  vYaw = 0; vPit = 0;
-  if (smp.length < 6) return;
-  var n = smp.length, dur = smp[n-3] - smp[0];
-  /* held still before letting go means settle here, not fly */
-  if (performance.now() - smp[n-3] > 90 || dur < 8) return;
-  var k = 16.667/dur;
-  vYaw = clv((smp[n-2]-smp[1])*k, .10);
-  vPit = clv((smp[n-1]-smp[2])*k, .05);
-}
-
-/* One law for both axes. Above the free threshold it is on its bearings, the
-   friction is light and a flick runs a couple of seconds; below it the damping
-   goes heavy and it stops rather than creeping. No detent to spring to, so a
-   slow drag stays where it was let go. */
-function decay(v,st){
-  var w = 1 - (v<0?-v:v)/FREE; w = w<0?0:w>1?1:w;
-  v *= Math.pow(.986 - .053*w, st);
-  return (v > -STOP && v < STOP) ? 0 : v;
-}
-function spin(now, st){
-  if (!grab){
-    vYaw = decay(vYaw, st); vPit = decay(vPit, st);
-    uYaw += vYaw*st; uPit += vPit*st;
-    if (uPit < TLO){ uPit = TLO; vPit = 0; }
-    else if (uPit > THI){ uPit = THI; vPit = 0; }
-    if (uYaw > TAU) uYaw -= TAU; else if (uYaw < -TAU) uYaw += TAU;
-  }
-  var busy = grab || vYaw !== 0 || vPit !== 0;
-  if (busy) quietAt = now;
-  /* dropped at once, back over several seconds, slower than its own swing, so
-     a resume never reads as a drift off the angle the reader chose */
-  var want = now - quietAt > 820 ? 1 : 0;
-  idleG += (want - idleG) * (want ? .008 : .24) * st;
-  live = busy;
-}
-
-function hush(){ hud.classList.add("used"); }
-
-/* ---------- the hand ----------
-   A short press that did not travel is a click, and a click fires the pulse
-   into the station nearest the pointer. A press that travelled is a drag and
-   fires nothing, so the two never collide. */
-var pdT = 0, pdX = 0, pdY = 0, moved = 0;
-
-function fire(px,py){
-  if (reduce.matches) return;
-  var best = 0, bd = Infinity, i;
-  for (i=0;i<NS;i+=2){
-    var dx = SX[i]-px, dy = SY[i]-py, d = dx*dx + dy*dy;
-    if (d < bd){ bd = d; best = i; }
-  }
-  PI0 = best; PT0 = performance.now();
-  if (capI === 1) syndrome();   /* on the code, a click is a new pair of checks */
-  blow();
-  hush(); start();
-}
-
-grip.addEventListener("pointerdown", function(ev){
-  if (ev.button > 0) return;
-  grab = 1; gid = ev.pointerId;
-  lock = ev.pointerType === "mouse" ? 1 : 0;
-  try { grip.setPointerCapture(gid); } catch(e1){}
-  grip.classList.add("grabbing");
-  vYaw = 0; vPit = 0;
-  gx = ev.clientX; gy = ev.clientY;
-  pdT = performance.now(); pdX = gx; pdY = gy; moved = 0;
-  smp.length = 0; sample();
-  quietAt = pdT;
-});
-grip.addEventListener("pointermove", function(ev){
-  if (!grab) return;
-  var dx = ev.clientX - gx, dy = ev.clientY - gy;
-  if ((ev.clientX-pdX)*(ev.clientX-pdX) + (ev.clientY-pdY)*(ev.clientY-pdY) > 36) moved = 1;
-  /* pan-y gives the document every upright swipe, so a touch is the object's
-     only once it is plainly sideways, and handed back unturned otherwise */
-  if (!lock){
-    var ax = dx<0?-dx:dx, ay = dy<0?-dy:dy;
-    if (ax + ay < 7) return;
-    if (ay > ax){ letgo(); return; }
-    lock = 1; gx = ev.clientX; gy = ev.clientY; smp.length = 0; sample(); return;
-  }
-  hush();
-  uYaw += dx*YPX;
-  uPit += dy*TPX;
-  if (uPit < TLO) uPit = TLO; else if (uPit > THI) uPit = THI;
-  gx = ev.clientX; gy = ev.clientY;
-  sample();
-  quietAt = performance.now();
-  if (reduce.matches) paint();
-});
-function letgo(){
-  if (!grab) return;
-  grab = 0;
-  grip.classList.remove("grabbing");
-  if (reduce.matches){ vYaw = 0; vPit = 0; } else toss();   /* no momentum there */
-  try { grip.releasePointerCapture(gid); } catch(e2){}
-}
-grip.addEventListener("pointerup", function(ev){
-  var was = grab;
-  letgo();
-  if (was && !moved && performance.now() - pdT < 450) fire(ev.clientX, ev.clientY);
-});
-grip.addEventListener("pointercancel", letgo);
-grip.addEventListener("lostpointercapture", letgo);
-
-grip.addEventListener("keydown", function(ev){
-  var k = ev.key, s = .105;
-  if (k === "Enter" || k === " " || k === "Spacebar"){
-    fire(SX[0], SY[0]); ev.preventDefault(); return;
-  }
-  if (k === "ArrowLeft") uYaw -= s;
-  else if (k === "ArrowRight") uYaw += s;
-  else if (k === "ArrowUp") uPit -= s*.62;
-  else if (k === "ArrowDown") uPit += s*.62;
-  else if (k === "Home"){ uYaw = 0; uPit = 0; }
-  else return;
-  if (uPit < TLO) uPit = TLO; else if (uPit > THI) uPit = THI;
-  vYaw = 0; vPit = 0;   /* a screw, not a throw: one step, then still */
-  quietAt = performance.now();
-  hush(); ev.preventDefault();
-  if (reduce.matches) paint();
-});
-
-/* ---------- measure ----------
-   Each state is fully formed when its section is centred and holds there while
-   it is read. The ramps are sized from the gap between those positions, so
-   neither starts before the other finishes, and the first is held off the top
-   of the document, so the first screen is only ever state 1. */
-function measure(){
-  VW = window.innerWidth; VH = window.innerHeight;
-  BARH = barEl.offsetHeight || 52;
-  NARROW = VW < 1250 ? 1 : 0;
-  FOLD = Math.max(280, foldEl.offsetHeight);
-  var yo = window.pageYOffset;
-  COLB = colEl.getBoundingClientRect().bottom + yo;
-  HW = hud.offsetWidth || 200; HH = hud.offsetHeight || 104;
-  var qr = secQ.getBoundingClientRect(), ar = secA.getBoundingClientRect();
-  var cr = secC.getBoundingClientRect();
-  T1 = qr.top + yo + qr.height/2 - VH/2;
-  T2 = ar.top + yo + ar.height/2 - VH/2;
-  /* the close is the last thing on a short page and may never reach the middle
-     of a tall window, so state 4 is cut when it is on screen to be read */
-  T3 = cr.top + yo - VH*0.55;
-  /* On a window taller than the argument every anchor collapses toward zero,
-     which would open the page on state 4. Held apart and off the top, the
-     degenerate case is only a quick run through, never a wrong first state. */
-  T1 = Math.max(T1, 60);
-  T2 = Math.max(T2, T1 + 140);
-  T3 = Math.max(T3, T2 + 140);
-  /* How much scroll a change of state is given. This used to be capped at 340
-     pixels however far apart the sections were, so the object snapped through
-     each shape early and then sat still for the rest of the section: scroll a
-     little and you would cross two of these ramps at once. It now takes most
-     of the gap it is actually given, so the morph occupies the space between
-     the sections rather than a short run at the start of it. */
-  var gap = Math.max(160, T2 - T1)*0.80;
-  D1 = Math.max(90, Math.min(980, gap, T1));
-  D2 = Math.max(90, Math.min(980, gap));
-  D3 = Math.max(90, Math.min(980, Math.max(160, T3 - T2)*0.80));
-}
-
-function prog(){
-  var y = window.pageYOffset;
-  return span(y, T1-D1, T1) + span(y, T2-D2, T2) + span(y, T3-D3, T3);
-}
-
-/* ---------- where the object is ----------
-   One function of scroll. On the first screen it hangs in the empty right hand
-   column, or under the text where the width affords no column to spare. Past
-   the fold it draws back into the margin the argument is not using, dims, and
-   stays: it is the space the page sits in, so it never leaves. */
-var OCX = 0, OCY = 0, OU = 1, RETA = 1, FOC = 0;
-var KH = .52;   /* the strand's reach above its centre at its tallest turn, in units of its size */
-var HW = 200, HH = 104;
-function place(snapf){
-  var f = ease(span(window.pageYOffset, FOLD*.10, FOLD*.72));
-  if (snapf) f = f < .5 ? 0 : 1;
-  FOC = f;
-  var av = Math.max(120, VH - BARH), hx, hy, hu, tx, ty, tu;
-  if (NARROW){
-    hu = Math.min(VW*1.02, av*.66); hx = VW*.5;   hy = BARH + av*.72;
-    /* the readout rides above the strand here, so the strand drops if the
-       text over it runs long enough to leave the readout no room */
-    hy = Math.max(hy, COLB + 22 + HH + 6 + hu*KH);
-    tu = Math.min(VW*1.04, VH*.72); tx = VW*.5;   ty = VH*.46;
-  } else {
-    hu = Math.min(VW*.52, av*1.04); hx = VW*.66;  hy = BARH + av*.48;
-    tu = Math.min(VW*.46, VH*.94);  tx = VW - Math.min(VW*.27, 430); ty = VH*.44;
-  }
-  OCX = hx + (tx-hx)*f; OCY = hy + (ty-hy)*f; OU = hu + (tu-hu)*f;
-  /* the object used to fall to under a quarter of its light past the fold,
-     which read as it being put away. It stays the loudest thing on the page. */
-  RETA = 1 - f*.32;
-  veil.style.opacity = (f*(NARROW ? .58 : .05)).toFixed(3);
-
-  /* The grab area follows the object and is never taken away. It used to be
-     killed outright once the object slid behind running text on a narrow
-     window, which meant the object went dead from the fold onward on exactly
-     the windows most people read on. The text layer now sits above this, so
-     the object can stay live everywhere and still not steal a link. */
-  var gr = OU*.46;
-  grip.style.width = grip.style.height = Math.round(gr*2) + "px";
-  grip.style.transform = "translate3d(" + (OCX-gr).toFixed(1) + "px," + (OCY-gr).toFixed(1) + "px,0)";
-  /* the readout is the one thing that still stands down, to keep it off the
-     prose where there is no column to carry it */
-  hud.style.visibility = (NARROW && f > .3) ? "hidden" : "";
-
-  var gut = VW < 640 ? 18 : 32;
-  var hx2 = Math.min(Math.max(OCX - OU*.36, gut), Math.max(gut, VW - HW - gut));
-  /* the object is large enough now that on a phone the readout would land on
-     the standing strip at the foot of the first screen, so it stops above it
-     while that strip is on screen */
-  var lim = VH - HH - 12, hy2;
-  if (NARROW){
-    /* With no column beside the strand, the readout under it landed on the
-       strand itself (it stops above the standing strip), so here it sits
-       above the strand instead, clear of both */
-    hy2 = Math.max(OCY - OU*KH - HH - 6, BARH + 10);
-  } else {
-    if (statusEl){
-      var sr = statusEl.getBoundingClientRect();
-      if (sr.top > 0 && sr.top < VH) lim = Math.min(lim, sr.top - HH - 10);
-    }
-    hy2 = Math.min(Math.max(OCY + OU*.30, BARH + 10), Math.max(BARH+10, lim));
-  }
-  hud.style.transform = "translate3d(" + hx2.toFixed(1) + "px," + hy2.toFixed(1) + "px,0)";
-}
-
-function caption(p){
-  var i = p < .5 ? 0 : p < 1.5 ? 1 : p < 2.5 ? 2 : 3;
-  if (i === capI) return;
-  capI = i;
-  hIx.firstChild.nodeValue = STATES[i][0];
-  hNm.innerHTML = STATES[i][1];
-  grip.setAttribute("aria-label", STATES[i][2] + AHINT);
-}
-
-/* the one live datum on the page: the angle the object is being held at,
-   which is the only thing on it the reader can change */
-var tAz = -999, tEl = -999;
-function fw(v){
-  var a = v < 0 ? -v : v;
-  return (v < 0 ? "-" : "+") + (a < 10 ? "00" : a < 100 ? "0" : "") + a.toFixed(1);
-}
-function telem(){
-  var az = ((YAW0 + uYaw) * 57.2958) % 360; if (az < 0) az += 360;
-  var el = Math.round(-(PITCH0 + uPit) * 573)/10;
-  az = Math.round(az*10)/10;
-  if (az === tAz && el === tEl) return;
-  tAz = az; tEl = el;
-  hTl.textContent = "AZ " + fw(az) + "  EL " + fw(el);
-}
-
-/* `force` exists for the theme switch: the viewport has not changed, so the
-   usual early return would leave the old sky painted under the new palette. */
-function size(force){
-  /* the object is light with no hard edge to it, and past 1.5 a phone was
-     paying nearly twice the fill for a sharpness nobody could see */
-  var d = Math.min(window.devicePixelRatio || 1, 1.5);
-  if (!force && VW === sW && VH === sH && d === DPR) return false;
-  sW = VW; sH = VH; DPR = d;
-  cv.width = Math.round(VW*d); cv.height = Math.round(VH*d);
-  ctx.setTransform(d,0,0,d,0,0);
-  /* the field is stars and washes, cut at the same rate and paid for once */
-  var df = Math.min(window.devicePixelRatio || 1, 1.5);
-  cvF.width = Math.round(VW*df); cvF.height = Math.round(VH*df);
-  ctxF.setTransform(df,0,0,df,0,0);
-  paintField(ctxF, VW, VH);
-  return true;
-}
-
-function render(yaw,pitch,p,e,pt){
-  ctx.clearRect(0,0,VW,VH);
-  strand(p);
-  drawKnot(ctx, OCX, OCY, OU, yaw, pitch, p, e, pt);
-}
-
-/* reduced motion: no interpolation and no drift. The state that belongs to the
-   section in view, switched the instant that section takes over, and the object
-   parked in one of two places rather than gliding between them. */
-function snap(){
-  var p = prog();
-  return p < .5 ? 0 : p < 1.5 ? 1 : p < 2.5 ? 2 : 3;
-}
-function still(){
-  var p = snap();
-  place(1);
-  if (p !== lastP || FOC !== lastF || size()){
-    lastP = p; lastF = FOC;
-    caption(p); telem();
-    render(YAW0 + uYaw, PITCH0 + uPit, p, 0, -1);
-  }
-  cv.classList.add("on"); hud.classList.add("on");
-}
-/* reduced motion has no loop: one frame per move, nothing of its own */
-var pq = 0;
-function paint(){
-  if (pq) return; pq = 1;
-  requestAnimationFrame(function(){
-    pq = 0; size(); telem();
-    render(YAW0 + uYaw, PITCH0 + uPit, snap(), 0, -1);
-  });
-}
-
-function loop(now){
-  raf = 0;
-  var p = prog(), y = window.pageYOffset;
-  var pt = PT0 ? (now - PT0)/PDUR : -1;
-  if (pt >= 1){ PT0 = 0; pt = -1; }
-  if (CT0 && now - CT0 >= CDUR) CT0 = 0;
-  var st = ptv ? Math.min((now - ptv)/16.667, 3) : 1;
-  ptv = now;
-  ptStep = st;
-  spin(now, st);
-  var moving = Math.abs(p - lastP) > .0004 || y !== lastY;
-  /* a hand, a throw, a pulse or a chain gets every frame; the breath is content with half */
-  if (!moving && !live && pt < 0 && !CT0 && now - last < 32){ raf = requestAnimationFrame(loop); return; }
-  last = now; lastP = p; lastY = y;
-  if (!t0) t0 = now;
-  var e = (now - t0)/1000;
-  pxC += (pxT - pxC)*.06; pyC += (pyT - pyC)*.06;
-  place(0);
-  /* the hand steadies as the object goes to the margin, and lets go of it
-     entirely while the reader has hold of it */
-  /* The breath used to fall to a third of itself by the last state, which is
-     what made the lower half of the page feel dead. It now barely fades, it
-     runs a slow steady turn under it so the object is never quite still, and
-     the scroll itself carries a quarter turn across the four states: each one
-     arrives on a different bearing instead of all four being posed the
-     same way. */
-  var idle = (1 - cl1(p)*.18)*idleG;
-  caption(p); telem(); size();
-  render(
-    YAW0 + uYaw + p*0.52 + (e*0.075 + Math.sin(e*0.2244)*0.105 + pxC*0.075)*idle,
-    PITCH0 + uPit + (Math.sin(e*0.1571 + 1.1)*0.062 + pyC*0.055)*idle,
-    p, e, pt
-  );
-  cv.classList.add("on"); hud.classList.add("on");
-  raf = requestAnimationFrame(loop);
-}
-
-function start(){
-  if (reduce.matches){ still(); return; }
-  if (!raf) raf = requestAnimationFrame(loop);
-}
-function stop(){
-  if (raf){ cancelAnimationFrame(raf); raf = 0; }
-}
-
-/* The type paints first. The field and the object are cut on the next frame
-   and fade up, so neither sits in front of first contentful paint. */
-document.getElementById("yr").textContent = new Date().getFullYear();
-if (reduce.matches) hud.querySelector("em").textContent = "Drag to spin";
-measure();
-
-requestAnimationFrame(function(){
-  measure(); size();
-  var p = reduce.matches ? snap() : prog();
-  lastP = p; lastY = window.pageYOffset;
-  place(reduce.matches ? 1 : 0);
-  lastF = FOC;
-  caption(p); telem();
-  render(YAW0, PITCH0, p, 0, -1);
-  cv.classList.add("on"); hud.classList.add("on");
-  if (!reduce.matches) start();
-});
-
-if (reduce.matches){
-  var pend = 0;
-  window.addEventListener("scroll", function(){
-    if (pend) return; pend = 1;
-    requestAnimationFrame(function(){ pend = 0; still(); });
-  }, { passive:true });
-} else {
-  document.addEventListener("visibilitychange", function(){
-    if (document.hidden){ letgo(); stop(); } else { t0 = 0; ptv = 0; start(); }
-  });
-  if (matchMedia("(pointer:fine)").matches){
-    window.addEventListener("pointermove", function(ev){
-      if (grab) return;   /* a hand on the object is not a hand passing it */
-      pxT = (ev.clientX / window.innerWidth) * 2 - 1;
-      pyT = (ev.clientY / window.innerHeight) * 2 - 1;
-    }, { passive:true });
-  }
-}
-
-var rt = 0;
-function relayout(){
-  measure(); size();
-  LMX = null;                 /* the type moved, so every letter is re-weighed */
-  lastP = -1; lastY = -1; lastF = -1;
-  if (reduce.matches) still();
-}
-/* ---------- the switch ----------
-   The theme is a property of the document, so the canvases have to be told:
-   swap the palette, rebuild everything derived from it, repaint the ground
-   (which is painted once per size and would otherwise keep the old sky), and
-   force a frame in case the loop is asleep. */
-/* Three settings, not two. What is stored is the PREFERENCE, which may be
-   "auto"; what is on the document is the RESOLVED theme, which is only ever
-   light or dark. Keeping those apart is what lets auto keep following the
-   system after the choice is made, instead of freezing whichever theme
-   happened to be on at the time. */
-var lamp = document.getElementById("lamp"), lamptx = document.getElementById("lamptx");
-var mqLight = matchMedia("(prefers-color-scheme: light)");
-var PREF = document.documentElement.dataset.pref || "auto";
-function sayLamp(){
-  var g = PREF === "auto" ? "&#9680;" : PREF === "light" ? "&#9788;" : "&#9789;";
-  var w = PREF === "auto" ? "Auto" : PREF === "light" ? "Light" : "Dark";
-  lamp.firstElementChild.innerHTML = g;
-  lamptx.textContent = w;
-  lamp.setAttribute("aria-label",
-    "Theme: " + w + (PREF === "auto" ? " (following your system)" : "") + ". Click to change.");
-}
-function applyTheme(){
-  LIGHT = PREF === "auto" ? mqLight.matches : PREF === "light";
-  P = LIGHT ? PPR : PDK;
-  BLEND = LIGHT ? "source-over" : "lighter";
-  var d = document.documentElement;
-  d.dataset.theme = LIGHT ? "light" : "dark";
-  d.dataset.pref = PREF;
-  var mt = document.querySelector('meta[name="theme-color"]');
-  if (mt) mt.setAttribute("content", LIGHT ? "#eef1f8" : "#0b1122");
-  hues();
-  sayLamp();
-  size(true);                 /* repaint the ground under the new palette */
-  if (reduce.matches) still(); else { t0 = 0; ptv = 0; start(); }
-  /* the same event lib/site.js sends, so anything listening on any page hears it */
-  document.dispatchEvent(new CustomEvent("tp-theme", { detail: { theme: d.dataset.theme, pref: PREF } }));
-}
-sayLamp();
-/* the nav on a phone scrolls sideways; its fade marks the edge it continues
-   past and drops at the end, as lib/site.js does on every other page */
-var navEl = document.querySelector(".bar .nav");
-function navEdge(){
-  if (navEl.scrollLeft + navEl.clientWidth >= navEl.scrollWidth - 2) navEl.setAttribute("data-end", "");
-  else navEl.removeAttribute("data-end");
-}
-navEl.addEventListener("scroll", navEdge, { passive:true });
-window.addEventListener("resize", navEdge, { passive:true });
-navEdge();
-lamp.addEventListener("click", function(){
-  PREF = PREF === "auto" ? "light" : PREF === "light" ? "dark" : "auto";
-  try { localStorage.setItem("tp-theme", PREF); } catch(e){}
-  applyTheme();
-});
-/* while on auto, the system changing its mind changes the page */
-if (mqLight.addEventListener) {
-  mqLight.addEventListener("change", function(){ if (PREF === "auto") applyTheme(); });
-}
-
-window.addEventListener("resize", function(){
-  clearTimeout(rt);
-  rt = setTimeout(relayout, 120);
-}, { passive:true });
-window.addEventListener("load", relayout);
-
-reduce.addEventListener && reduce.addEventListener("change", function(){
-  lastP = -1; lastF = -1;
-  if (reduce.matches) { vYaw = 0; vPit = 0; PT0 = 0; CT0 = 0; stop(); still(); } else { ptv = 0; start(); }
-});
-
-/* ---------- analytics, after the page is done painting ----------
-   GA4 is the only request this document makes, and it is not made
-   until load has fired, so it can never sit in front of first paint. */
+/* analytics, after the page is done painting: GA4 is not requested until
+   load has fired, so it never sits in front of first paint */
 window.dataLayer = window.dataLayer || [];
 function gtag(){ dataLayer.push(arguments); }
-window.gtag = gtag;
 gtag("js", new Date());
 gtag("config", "G-DVPGC1C44Z");
 window.addEventListener("load", function(){
@@ -2592,7 +622,6 @@ window.addEventListener("load", function(){
   s.src = "https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z";
   document.head.appendChild(s);
 });
-})();
 </script>
 </body>
 </html>

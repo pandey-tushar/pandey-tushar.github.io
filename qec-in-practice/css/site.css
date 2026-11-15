@@ -2,17 +2,17 @@
    links and the theme come from there. This file keeps the section's own
    inks for the diagrams: X checks, Z checks, errors, the current step. */
 :root {
-  --card: #111a33; --line: rgba(82, 214, 230, 0.16);
+  --card: var(--tp-void2); --line: var(--tp-rule);
   --x: #e0a040; --z: #4f9cff; --good: #39c37a; --bad: #ff5c5c; --focus: #ffd166;
 }
-:root[data-theme="light"] { --card: #f8faff; --line: rgba(10, 111, 128, 0.2); --focus: #b35c00; --good: #1e7f4a; --x: #a8650a; --z: #1f6fe0; --bad: #c62828; }
-.page { max-width: calc(78rem + 2 * var(--tp-gut)); margin: 0 auto; padding: 18px var(--tp-gut) 40px; }
+:root[data-theme="light"] { --focus: #b35c00; --good: #1e7f4a; --x: #a8650a; --z: #1f6fe0; --bad: #c62828; }
+.page { max-width: calc(72rem + 2 * var(--tp-gut)); margin: 0 auto; padding: 18px var(--tp-gut) 40px; }
 #lesson-title { font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.4rem); line-height: 1.1; margin: 14px 0 10px; }
-.panel h2 { font: 400 12px/1.4 var(--tp-mono); letter-spacing: 0.185em; text-transform: uppercase; color: var(--tp-acc); margin: 0 0 10px; }
+.panel h2 { font: 600 var(--tp-t-app)/1.4 var(--tp-sans); letter-spacing: 0.07em; text-transform: uppercase; color: var(--tp-dim); margin: 0 0 10px; }
 .lead { max-width: 110ch; color: var(--tp-text); margin: 0 0 8px; }
 .secnav { display: flex; gap: 4px 22px; flex-wrap: wrap; }
-.secnav a { display: inline-flex; align-items: center; min-height: 32px; font: 12px/1.6 var(--tp-mono); letter-spacing: 0.17em; text-transform: uppercase; color: var(--tp-dim); border-bottom: 1px solid transparent; }
-.secnav a:hover, .secnav a:focus-visible { color: var(--tp-acc); border-bottom-color: var(--tp-a40); }
+.secnav a { display: inline-flex; align-items: center; min-height: 32px; font-size: var(--tp-t-small); color: var(--tp-dim); }
+.secnav a:hover, .secnav a:focus-visible { color: var(--tp-acc); }
 @media (max-width: 600px) { .page { padding-inline: 14px; } }
 .muted { color: var(--tp-dim); }
 .good { color: var(--good); }
@@ -25,14 +25,14 @@
 .hub .lead { font-size: 1.06rem; margin: clamp(14px, 2vh, 22px) 0 10px; max-width: 64ch; }
 .about { max-width: 70ch; margin: 0 0 10px; color: var(--tp-text); }
 .cards { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.lcard { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--tp-ink); }
+.lcard { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--tp-ink); }
 .lcard:hover, .lcard:focus-visible { border-color: var(--tp-acc); }
-.lcard .num { font: 12px var(--tp-mono); letter-spacing: 0.185em; text-transform: uppercase; color: var(--tp-acc); margin-top: 6px; }
+.lcard .num { font: 600 var(--tp-t-app)/1.3 var(--tp-sans); letter-spacing: 0.07em; text-transform: uppercase; color: var(--tp-dim); margin-top: 6px; }
 .lcard b { font-family: var(--tp-serif); font-weight: 400; font-size: 1.25rem; line-height: 1.2; color: var(--tp-head); }
 .lcard span:last-child { color: var(--tp-text); font-size: 0.95rem; }
-.thumb { padding: 10px; }
+.thumb { padding: 0; border: 0; background: none; }
 .thumb svg { width: 100%; height: 118px; }
-.thumb figcaption { margin-top: 8px; letter-spacing: 0.08em; }
+.thumb figcaption { margin-top: 8px; }
 .th-f { stroke-width: 2; }
 .th-sx { stroke: var(--x); }
 .th-sz { stroke: var(--z); }
@@ -145,7 +145,7 @@ button:disabled { opacity: 0.6; cursor: wait; }
 .sw-log { height: 0; width: 16px; border: 0; border-top: 5px solid var(--x); border-radius: 3px; vertical-align: 3px; }
 .sw-inj { border-left: 3px dashed var(--bad); border-radius: 0; width: 4px; }
 .state ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 20px; }
-.state .lbl { color: var(--tp-dim); font: 12px var(--tp-mono); letter-spacing: 0.08em; text-transform: uppercase; margin-right: 6px; }
+.state .lbl { color: var(--tp-dim); font: 600 var(--tp-t-app) var(--tp-sans); letter-spacing: 0.07em; text-transform: uppercase; margin-right: 6px; }
 #error-panel p { margin: 0 0 4px; }
 sub { font-size: 0.7em; }
 

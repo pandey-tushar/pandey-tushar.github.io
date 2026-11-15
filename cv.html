@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#0b1122">
+<meta name="theme-color" content="#0d1320">
 <script>
 (function(){
   var d = document.documentElement;
@@ -18,7 +18,9 @@
   }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
 })();
 </script>
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%23070a14'/%3E%3Cg%20fill='none'%20stroke='%2352d6e6'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/lib/site.css">
 <script src="/lib/site.js" defer></script>
 <!-- Google Analytics (GA4) -->
@@ -35,9 +37,12 @@
 <meta property="og:description" content="Mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between.">
 <meta property="og:type" content="profile">
 <meta property="og:url" content="https://pandey-tushar.com/cv.html">
-<meta property="og:image" content="https://pandey-tushar.com/og-home.png">
+<meta property="og:image" content="https://pandey-tushar.com/og-cv.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Tushar Pandey">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-cv.png">
 <meta name="description" content="Tushar Pandey: mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between.">
 <script type="application/ld+json">
 {
@@ -49,49 +54,49 @@
 }
 </script>
 <style>
-:root{--cv-grad:linear-gradient(100deg,var(--tp-cyan),var(--tp-violet) 58%,var(--tp-mag))}
 body,h1,h2,p,ol,ul,li,dl,dd{margin:0;padding:0}
 ol,ul{list-style:none}
 
 .cv{max-width:52rem;padding-block:clamp(2.4rem,1.2rem + 4vw,4.6rem) clamp(3rem,2rem + 3vw,5rem)}
 
 /* ---------- head ---------- */
-.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(16px,2.6vh,28px);letter-spacing:.3em}
-.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--tp-a22),transparent)}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(16px,2.6vh,28px)}
+.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:var(--tp-rule)}
 h1{font-size:clamp(2.4rem,7vw,4rem);line-height:1;margin-left:-.028em}
-h1 span{background:var(--cv-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.role{margin-top:14px;font-family:var(--tp-serif);font-style:italic;font-size:clamp(1.06rem,1.5vw,1.3rem);line-height:1.46;color:var(--tp-text)}
-.contact{display:flex;flex-wrap:wrap;align-items:center;gap:2px 20px;margin-top:16px;font-family:var(--tp-mono);font-size:12.5px;letter-spacing:.02em;color:var(--tp-dim)}
+.who{display:flex;align-items:center;gap:clamp(16px,3vw,28px)}
+.face{flex:0 0 auto;display:block;width:96px;height:96px;border-radius:50%;object-fit:cover;border:1px solid var(--tp-rule)}
+.role{margin-top:14px;font-size:clamp(1.08rem,1rem + .4vw,1.22rem);line-height:1.5;color:var(--tp-text)}
+.contact{display:flex;flex-wrap:wrap;align-items:center;gap:2px 20px;margin-top:16px;font-size:var(--tp-t-small);color:var(--tp-dim)}
 .contact a{display:inline-flex;align-items:center;min-height:32px;color:var(--tp-text)}
-.contact a span{border-bottom:1px solid var(--tp-a40);transition:color .18s,border-color .18s}
-.contact a:hover span{color:var(--tp-acc);border-color:var(--tp-a70)}
+.contact a span{color:var(--tp-acc);text-decoration:underline 1px;text-decoration-color:var(--tp-a40);text-underline-offset:.2em}
+.contact a:hover span{text-decoration-color:currentColor}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.actions button.tp-btn{cursor:pointer;font:inherit;font-family:var(--tp-mono);font-size:12px;letter-spacing:.17em}
+.actions button.tp-btn{cursor:pointer}
 .lead{margin-top:28px;max-width:40em;font-size:1.06rem;line-height:1.66;color:var(--tp-text)}
 .lead b{font-weight:600;color:var(--tp-head)}
-.lead .accent{background:var(--cv-grad);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+.lead .accent{font-weight:600;color:var(--tp-head)}
 
 /* ---------- sections ---------- */
-.cv section{margin-top:clamp(2rem,1.4rem + 2vw,3rem);padding-top:clamp(1.4rem,1rem + 1vw,2rem);border-top:1px solid var(--tp-a14)}
+.cv section{margin-top:clamp(2rem,1.4rem + 2vw,3rem);padding-top:clamp(1.4rem,1rem + 1vw,2rem);border-top:1px solid var(--tp-rule)}
 .cv h2{font-size:clamp(1.3rem,1rem + 1vw,1.7rem);margin-bottom:1rem}
 .hl li{position:relative;padding:.5rem 0 .5rem 1.5rem;line-height:1.58;color:var(--tp-text)}
-.hl li::before{content:"";position:absolute;left:2px;top:1.08em;width:6px;height:6px;transform:rotate(45deg);border:1px solid var(--tp-acc)}
+.hl li::before{content:"";position:absolute;left:3px;top:1.25em;width:6px;height:1.5px;background:var(--tp-acc)}
 .hl b{font-weight:600;color:var(--tp-head)}
-a.lk{font-family:var(--tp-mono);font-size:12px;letter-spacing:.02em;color:var(--tp-acc);white-space:nowrap;border-bottom:1px solid transparent;transition:border-color .18s}
-a.lk:hover{border-bottom-color:var(--tp-a70)}
+a.lk{font-size:.88em;color:var(--tp-acc);white-space:nowrap;text-decoration:underline 1px;text-decoration-color:var(--tp-a40);text-underline-offset:.2em}
+a.lk:hover{text-decoration-color:currentColor}
 
 .row{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:1.4rem;padding:.75rem 0;align-items:baseline}
-.row + .row{border-top:1px solid var(--tp-a08)}
-.when{font-family:var(--tp-mono);font-size:12px;letter-spacing:.04em;line-height:1.6;color:var(--tp-dim)}
+.row + .row{border-top:1px solid var(--tp-rule)}
+.when{font-size:var(--tp-t-small);line-height:1.6;font-variant-numeric:tabular-nums;color:var(--tp-dim)}
 .what{min-width:0}
 .what .t{display:block;color:var(--tp-head);line-height:1.45}
 .what .t b{font-weight:600}
 .what .n{display:block;margin-top:.25rem;line-height:1.58;color:var(--tp-text)}
 .what cite{font-style:italic;font-family:var(--tp-serif);font-size:1.06em}
-.tag{font-family:var(--tp-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tp-violet)}
+.tag{font-size:var(--tp-t-app);font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--tp-dim)}
 
 .pub{padding:.75rem 0;line-height:1.5}
-.pub + .pub{border-top:1px solid var(--tp-a08)}
+.pub + .pub{border-top:1px solid var(--tp-rule)}
 .pub .ttl{display:block;color:var(--tp-head);transition:color .18s}
 .pub .ttl:hover{color:var(--tp-acc)}
 .pub .meta{display:block;margin-top:.2rem;font-size:.9em;color:var(--tp-dim)}
@@ -104,6 +109,8 @@ a.lk:hover{border-bottom-color:var(--tp-a70)}
   .pub .ttl{display:flex}
 }
 @media (max-width:620px){
+  .who{flex-direction:column;align-items:flex-start;gap:16px}
+  .face{width:72px;height:72px}
   .row{grid-template-columns:minmax(0,1fr);gap:.15rem}
   .eyebrow{letter-spacing:.2em}
 }
@@ -113,11 +120,11 @@ a.lk:hover{border-bottom-color:var(--tp-a70)}
   @page{margin:14mm 16mm}
   html.tp-full{background:#fff;font-size:9.6pt}
   .tp-foot,.actions{display:none!important}
+  .face{display:none!important}
   .tp-wrap{max-width:none;padding:0}
   .cv{max-width:none;padding:0}
   .cv,.cv *{color:#15171c!important}
   h1{font-size:24pt}
-  h1 span,.lead .accent{background:none;-webkit-text-fill-color:#15171c}
   .role{font-size:11pt}
   .lead{margin-top:12px;font-size:10pt}
   .cv a,.cv a span,.lk{color:#1a2b6b!important;border-color:#bbb}
@@ -161,8 +168,13 @@ a.lk:hover{border-bottom-color:var(--tp-a70)}
 
       <header class="cvhead">
         <p class="tp-lbl eyebrow">Curriculum vit&aelig;</p>
-        <h1>Tushar <span>Pandey</span>, PhD</h1>
-        <p class="role">Mathematician and builder, from quantum-topology proofs to production AI.</p>
+        <div class="who">
+          <img class="face" src="/img/tushar-pandey-b-320.webp" srcset="/img/tushar-pandey-b-320.webp 320w, /img/tushar-pandey-b.webp 640w" sizes="(max-width:620px) 72px, 96px" width="640" height="640" decoding="async" alt="Tushar Pandey">
+          <div>
+            <h1>Tushar Pandey, PhD</h1>
+            <p class="role">Mathematician and builder, from quantum-topology proofs to production AI.</p>
+          </div>
+        </div>
         <p class="contact">
           <span>Dallas, TX</span>
           <a href="mailto:wtatushar@gmail.com"><span>wtatushar@gmail.com</span></a>

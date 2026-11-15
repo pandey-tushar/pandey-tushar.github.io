@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="dark light">
-<meta name="theme-color" content="#0b1122">
+<meta name="theme-color" content="#0d1320">
 <script>
 (function(){
   var d = document.documentElement;
@@ -18,7 +18,9 @@
   }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
 })();
 </script>
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Crect%20width='24'%20height='24'%20fill='%23070a14'/%3E%3Cg%20fill='none'%20stroke='%2352d6e6'%20stroke-width='1.4'%3E%3Ccircle%20cx='12'%20cy='7.6'%20r='5.4'/%3E%3Ccircle%20cx='8.2'%20cy='14.2'%20r='5.4'/%3E%3Ccircle%20cx='15.8'%20cy='14.2'%20r='5.4'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/lib/site.css">
 <script src="/lib/site.js" defer></script>
 <!-- Google Analytics (GA4) -->
@@ -37,9 +39,12 @@
 <meta property="og:description" content="Papers and preprints by Tushar Pandey on quantum error correction, quantum machine learning, LLM reasoning, quantum topology and number theory.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://pandey-tushar.com/research.html">
-<meta property="og:image" content="https://pandey-tushar.com/og-home.png">
+<meta property="og:image" content="https://pandey-tushar.com/og-research.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Tushar Pandey">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-research.png">
 <!-- jsonld:start -->
 <script type="application/ld+json">
 {
@@ -456,30 +461,26 @@ ol,ul{list-style:none}
 
 /* ---------- masthead ---------- */
 .masthead{padding-block:clamp(2.4rem,1.2rem + 4vw,4.6rem) 0}
-.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(16px,2.6vh,28px);letter-spacing:.3em}
-.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:linear-gradient(90deg,var(--tp-a22),transparent)}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:clamp(16px,2.6vh,28px)}
+.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:var(--tp-rule)}
 h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
 .lede{
   margin-top:clamp(18px,2.4vw,26px);max-width:34em;
-  font-family:var(--tp-serif);font-style:italic;font-size:clamp(1.06rem,1.5vw,1.34rem);line-height:1.46;
+  font-size:clamp(1.08rem,1rem + .4vw,1.22rem);line-height:1.55;
   color:var(--tp-text);
 }
 .note{
   margin-top:clamp(14px,1.8vw,20px);display:flex;gap:10px;align-items:baseline;max-width:46em;
-  font-family:var(--tp-mono);font-size:12px;line-height:1.7;letter-spacing:.04em;color:var(--tp-dim);
+  font-size:var(--tp-t-small);line-height:1.6;color:var(--tp-dim);
 }
-.note i{color:var(--tp-acc);font-style:normal;flex:0 0 auto}
-.note a{color:var(--tp-text)}
+.note i{display:none}
 
 /* ---------- areas ---------- */
 .list{padding-bottom:clamp(3rem,2rem + 3vw,5rem)}
 .area{padding-top:clamp(2.6rem,1.6rem + 3vw,4.4rem)}
 .area-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(16px,2.4vw,28px);align-items:center;padding-bottom:clamp(1rem,.6rem + 1vw,1.6rem)}
-.motif{padding:10px;color:var(--tp-acc)}
-.motif svg{width:64px;height:64px}
-.motif .v{stroke:var(--tp-violet)}
-.motif .vf{fill:var(--tp-violet);fill-opacity:.16;stroke:none}
-.motif .box{fill:var(--tp-a14)}
+.motif{padding:8px;color:var(--tp-ink)}
+.motif svg{display:block;width:72px;height:72px}
 .area-head .tp-lbl{margin-bottom:.5rem}
 .area-title{font-family:var(--tp-serif);font-size:var(--tp-t-h2);line-height:1.1;letter-spacing:-.014em;color:var(--tp-head);text-wrap:balance}
 .blurb{margin-top:.5rem;max-width:40em;color:var(--tp-text)}
@@ -488,24 +489,24 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
 .paper{
   display:grid;grid-template-columns:minmax(0,1fr);row-gap:1rem;align-items:start;
   padding-block:clamp(1.5rem,1rem + 1.6vw,2.4rem);
-  border-top:1px solid var(--tp-a14);
+  border-top:1px solid var(--tp-rule);
   scroll-margin-top:calc(var(--tp-barh) + 16px);
 }
 .no{
   display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;padding:0;
-  font-family:var(--tp-mono);font-size:13px;letter-spacing:.06em;color:var(--tp-acc);
+  font-size:.9rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--tp-acc);
   transition:background-color .18s;
 }
 .no:hover,.paper:target .no{background:var(--tp-a14)}
 .body{min-width:0}
 .paper h2{font-size:clamp(1.22rem,.95rem + 1vw,1.6rem);line-height:1.22}
 .by{margin-top:.6rem;color:var(--tp-text)}
-.me{font-weight:600;color:var(--tp-head);border-bottom:1px solid var(--tp-a40)}
+.me{font-weight:600;color:var(--tp-head)}
 .sum{margin-top:.6rem;max-width:40em;line-height:1.62;color:var(--tp-text)}
-.claim{margin-top:.7rem;max-width:40em;padding-left:.9rem;border-left:2px solid var(--tp-violet);line-height:1.6;color:var(--tp-text)}
+.claim{margin-top:.7rem;max-width:40em;padding-left:.9rem;border-left:2px solid var(--tp-rule);line-height:1.6;color:var(--tp-text)}
 .spec{display:grid;grid-template-columns:5rem minmax(0,1fr);gap:.4rem 1rem;align-items:baseline;max-width:40em}
-.spec dd{font-family:var(--tp-mono);font-size:12px;letter-spacing:.03em;line-height:1.55;color:var(--tp-text)}
-.links{display:flex;flex-wrap:wrap;gap:.3rem 1.4rem;font-family:var(--tp-mono);font-size:12.5px;letter-spacing:.02em;color:var(--tp-dim)}
+.spec dd{font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-text)}
+.links{display:flex;flex-wrap:wrap;gap:.3rem 1.4rem;font-family:var(--tp-mono);font-size:.82rem;color:var(--tp-dim)}
 .links a{display:inline-flex;align-items:center;min-height:32px}
 @media (pointer:coarse){ .links a,.note a{min-height:44px;display:inline-flex;align-items:center} }
 
@@ -559,7 +560,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
 
 <main id="main">
   <div class="tp-wrap">
-    <div class="masthead tp-lattice">
+    <div class="masthead">
       <p class="tp-lbl eyebrow">Papers and preprints</p>
       <h1>Research</h1>
       <p class="lede">Quantum error correction, quantum algorithms and machine learning, LLM reasoning, quantum topology, and a conjecture in number theory. Each entry says who wrote it, where it stands, and what it shows.</p>
@@ -571,7 +572,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
   <p class="note"><i aria-hidden="true">&#10022;</i><span>Listed here: 14 of Tushar Pandey&rsquo;s 18 papers and preprints, grouped by area, and his doctoral thesis. The other four are earlier arXiv preprints, from 2021 to 2023, listed on <a class="tp-link" href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" rel="noopener">Google Scholar</a>.</span></p>
   <section class="area" aria-labelledby="area-qec">
     <div class="area-head">
-      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><rect x="8" y="8" width="16" height="16" class="vf"/><rect x="40" y="8" width="16" height="16" class="vf"/><rect x="24" y="24" width="16" height="16" class="vf"/><rect x="8" y="40" width="16" height="16" class="vf"/><rect x="40" y="40" width="16" height="16" class="vf"/><path d="M8 8h48v48H8zM24 8v48M40 8v48M8 24h48M8 40h48" stroke-opacity=".55"/><circle cx="8" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="8" cy="24" r="2" fill="currentColor" stroke="none"/><circle cx="8" cy="40" r="2" fill="currentColor" stroke="none"/><circle cx="8" cy="56" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="24" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="40" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="56" r="2" fill="currentColor" stroke="none"/><circle cx="40" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="40" cy="24" r="2" fill="currentColor" stroke="none"/><circle cx="40" cy="40" r="2" fill="currentColor" stroke="none"/><circle cx="40" cy="56" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="8" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="24" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="40" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="56" r="2" fill="currentColor" stroke="none"/></g></svg></figure>
+      <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="45" y="15" width="30" height="30" style="fill:var(--tp-acc, #0b6e7f);fill-opacity:.22;stroke:none"/><rect x="45" y="45" width="30" height="30" style="fill:var(--tp-acc, #0b6e7f);fill-opacity:.22;stroke:none"/><path d="M15,7V113M7,15H113M45,7V113M7,45H113M75,7V113M7,75H113M105,7V113M7,105H113"/><path d="M45,15H75V75H45Z" style="stroke:var(--tp-acc, #0b6e7f)" stroke-width="2.6"/><path d="M45,45H75" style="stroke:var(--tp-acc, #0b6e7f)" stroke-width="2.6"/><circle cx="60" cy="45" r="5.5" style="fill:var(--tp-warm, #b4541a);stroke:var(--tp-warm, #b4541a)"/></svg></figure>
       <div>
         <p class="tp-lbl">Area I &middot; 3 entries</p>
         <p class="area-title" id="area-qec">Quantum error correction</p>
@@ -631,7 +632,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
   </section>
   <section class="area" aria-labelledby="area-qml">
     <div class="area-head">
-      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 16h56M4 32h56M4 48h56" stroke-opacity=".55"/><rect x="10" y="10" width="12" height="12" class="box"/><rect x="10" y="42" width="12" height="12" class="box"/><path d="M32 16v21M46 32v21"/><circle cx="32" cy="16" r="2.4" fill="currentColor" stroke="none"/><circle cx="32" cy="32" r="5" class="v"/><path d="M27 32h10" class="v"/><circle cx="46" cy="32" r="2.4" fill="currentColor" stroke="none"/><circle cx="46" cy="48" r="5" class="v"/><path d="M41 48h10" class="v"/></g></svg></figure>
+      <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8,30H112M8,60H112M8,90H112" opacity=".55"/><rect x="19" y="19" width="22" height="22" rx="2" style="fill:var(--tp-void2, #fffdf8)"/><rect x="19" y="79" width="22" height="22" rx="2" style="fill:var(--tp-void2, #fffdf8)"/><path d="M62,30V69.5"/><circle cx="62" cy="30" r="4.5" style="fill:currentColor"/><circle cx="62" cy="60" r="9.5" style="fill:var(--tp-void2, #fffdf8);stroke:var(--tp-acc, #0b6e7f)"/><path d="M52.5,60H71.5M62,50.5V69.5" style="stroke:var(--tp-acc, #0b6e7f)"/><path d="M90,60V99.5"/><circle cx="90" cy="60" r="4.5" style="fill:currentColor"/><circle cx="90" cy="90" r="9.5" style="fill:var(--tp-void2, #fffdf8);stroke:var(--tp-acc, #0b6e7f)"/><path d="M80.5,90H99.5M90,80.5V99.5" style="stroke:var(--tp-acc, #0b6e7f)"/></svg></figure>
       <div>
         <p class="tp-lbl">Area II &middot; 6 entries</p>
         <p class="area-title" id="area-qml">Quantum algorithms and quantum machine learning</p>
@@ -739,7 +740,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
   </section>
   <section class="area" aria-labelledby="area-ai">
     <div class="area-head">
-      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M32 8 16 26M32 8l16 18M16 26 8 44M16 26l12 18M48 26 36 44M48 26l8 18M8 44l24 14M28 44l4 14M36 44l-4 14M56 44 32 58" stroke-opacity=".55"/><circle cx="32" cy="8" r="3" fill="currentColor" stroke="none"/><circle cx="16" cy="26" r="3" fill="currentColor" stroke="none"/><circle cx="8" cy="44" r="3" fill="currentColor" stroke="none"/><circle cx="28" cy="44" r="3" fill="currentColor" stroke="none"/><circle cx="36" cy="44" r="3" fill="currentColor" stroke="none"/><circle cx="56" cy="44" r="3" fill="currentColor" stroke="none"/><circle cx="32" cy="58" r="3" fill="currentColor" stroke="none"/><circle cx="48" cy="26" r="4.2" class="v"/></g></svg></figure>
+      <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="22.3" y1="55.13" x2="43.7" y2="30.87"/><line x1="24.5" y1="60" x2="41.5" y2="60" style="stroke:var(--tp-acc, #0b6e7f)"/><line x1="22.3" y1="64.87" x2="43.7" y2="89.13"/><line x1="53.66" y1="29.2" x2="72.34" y2="39.8"/><line x1="53.66" y1="56.8" x2="72.34" y2="46.2" style="stroke:var(--tp-acc, #0b6e7f)"/><line x1="54.5" y1="94" x2="71.5" y2="94" stroke-dasharray="3 4" opacity=".55"/><line x1="83.44" y1="46.56" x2="98.56" y2="56.44" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="18" cy="60" r="6.5" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="48" cy="26" r="6.5"/><circle cx="48" cy="60" r="6.5" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="48" cy="94" r="6.5"/><circle cx="78" cy="43" r="6.5" style="fill:var(--tp-acc, #0b6e7f);fill-opacity:.25;stroke:var(--tp-acc, #0b6e7f)"/><circle cx="78" cy="94" r="6.5" stroke-dasharray="3 3" opacity=".55"/><circle cx="104" cy="60" r="6.5" style="fill:var(--tp-warm, #b4541a);stroke:var(--tp-warm, #b4541a)"/></svg></figure>
       <div>
         <p class="tp-lbl">Area III &middot; 2 entries</p>
         <p class="area-title" id="area-ai">LLM reasoning and applied machine learning</p>
@@ -783,7 +784,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
   </section>
   <section class="area" aria-labelledby="area-topo">
     <div class="area-head">
-      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><path d="M59.6 32.0L58.5 39.1L55.4 45.5L50.6 50.6L44.7 54.0L38.3 55.5L32.0 55.0L26.4 52.8L22.0 49.3L19.0 45.0L17.4 40.4L17.3 35.9L18.2 32.0L19.9 28.8L22.2 26.3L24.6 24.6L27.1 23.6L29.6 23.0L32.0 22.8L34.4 23.0L36.9 23.6L39.4 24.6L41.8 26.3L44.1 28.8L45.8 32.0L46.7 35.9L46.6 40.4L45.0 45.0L42.0 49.3L37.6 52.8L32.0 55.0L25.7 55.5L19.3 54.0L13.4 50.6L8.6 45.5L5.5 39.1L4.4 32.0L5.5 24.9L8.6 18.5L13.4 13.4L19.3 10.0L25.7 8.5L32.0 9.0L37.6 11.2L42.0 14.7L45.0 19.0L46.6 23.6L46.7 28.1L45.8 32.0L44.1 35.2L41.8 37.7L39.4 39.4L36.9 40.4L34.4 41.0L32.0 41.2L29.6 41.0L27.1 40.4L24.6 39.4L22.2 37.7L19.9 35.2L18.2 32.0L17.3 28.1L17.4 23.6L19.0 19.0L22.0 14.7L26.4 11.2L32.0 9.0L38.3 8.5L44.7 10.0L50.6 13.4L55.4 18.5L58.5 24.9Z" stroke-width="1.6" stroke-linejoin="round"/></g></svg></figure>
+      <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M75.87 33.19L75.76 36.2L75.16 39.28L74.16 42.38L72.86 45.39L71.37 48.21L69.74 50.75L67.8 52.97L65.62 55.01L63.34 56.99L61.08 59.02L58.85 61.23L56.16 63.52L53.38 65.86L51.03 68.22L49.62 70.58L49.62 72.91L51.03 75.24L53.38 77.57L56.16 79.9L56.16 79.9M63.18 86.95L65.29 89.35L67.41 91.7L69.53 93.96L71.62 96.11L73.63 98.29L75.61 100.4L77.68 102.32L79.94 103.92L82.49 105.15L85.37 106.28L88.45 107.15L91.57 107.53L94.57 107.19L97.39 105.94L100.26 103.88L103.07 101.12L105.65 97.78L107.82 93.94L109.44 89.61L110.65 84.44L111.47 78.7L111.92 72.76L111.98 67.02L111.66 61.72L110.93 56.37L109.82 51.11L108.34 46.19L106.54 41.86L104.45 38.34L102.19 35.51L99.63 33.25L96.58 31.45L92.86 30.02L88.27 28.91L82.66 28.32L76.34 28.15L69.71 28.21L63.14 28.33L56.86 28.33L50.29 28.21L50.29 28.21M39.65 28.22L33.73 28.63L28.74 29.56L24.73 30.88L21.45 32.52L18.72 34.6L16.37 37.2L14.22 40.44L12.3 44.48L10.69 49.21L9.44 54.37L8.57 59.72L8.1 65L8.02 70.57L8.32 76.47L9 82.33L10.06 87.76L11.51 92.39L13.48 96.39L15.93 99.93L18.67 102.92L21.54 105.26L24.36 106.83L27.28 107.5L30.38 107.36L33.49 106.65L36.46 105.59L39.14 104.42L41.5 102.96L43.63 101.15L45.63 99.09L47.62 96.93L49.68 94.77L51.8 92.56L53.91 90.24L56.03 87.85L58.15 85.46L60.27 83.1L62.8 80.77L65.6 78.45L68.17 76.12L69.99 73.79L70.57 71.46L69.63 69.11L67.57 66.75L64.9 64.4L63.84 63.52M56.37 56.74L54.1 54.76L51.94 52.71L50.04 50.45L48.43 47.87L46.96 45.02L45.7 41.99L44.74 38.89L44.2 35.82L44.14 32.8L44.53 29.62L45.3 26.44L46.4 23.42L47.78 20.76L49.46 18.5L51.59 16.4L54.03 14.58L56.59 13.24L59.11 12.53L61.51 12.64L64.05 13.52L66.6 15L68.98 16.9L71.01 19.05L72.59 21.38L73.6 23.42" stroke-width="3"/></svg></figure>
       <div>
         <p class="tp-lbl">Area IV &middot; 3 entries</p>
         <p class="area-title" id="area-topo">Quantum topology</p>
@@ -843,7 +844,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
   </section>
   <section class="area" aria-labelledby="area-nt">
     <div class="area-head">
-      <figure class="motif tp-plate" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="8" cy="8" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="8" r="1.7" fill="currentColor" stroke="none"/><circle cx="24" cy="8" r="3.3" class="v"/><circle cx="24" cy="8" r="1.7" fill="currentColor" stroke="none"/><circle cx="32" cy="8" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="8" r="3.3" class="v"/><circle cx="40" cy="8" r="1.7" fill="currentColor" stroke="none"/><circle cx="48" cy="8" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="8" r="3.3" class="v"/><circle cx="56" cy="8" r="1.7" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="24" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="32" cy="16" r="3.3" class="v"/><circle cx="32" cy="16" r="1.7" fill="currentColor" stroke="none"/><circle cx="40" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="48" cy="16" r="3.3" class="v"/><circle cx="48" cy="16" r="1.7" fill="currentColor" stroke="none"/><circle cx="56" cy="16" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="24" cy="24" r="3.3" class="v"/><circle cx="24" cy="24" r="1.7" fill="currentColor" stroke="none"/><circle cx="32" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="24" r="3.3" class="v"/><circle cx="40" cy="24" r="1.7" fill="currentColor" stroke="none"/><circle cx="48" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="24" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="32" r="1.7" fill="currentColor" stroke="none"/><circle cx="24" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="32" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="48" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="32" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="40" r="3.3" class="v"/><circle cx="8" cy="40" r="1.7" fill="currentColor" stroke="none"/><circle cx="16" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="24" cy="40" r="3.3" class="v"/><circle cx="24" cy="40" r="1.7" fill="currentColor" stroke="none"/><circle cx="32" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="48" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="40" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="16" cy="48" r="1.7" fill="currentColor" stroke="none"/><circle cx="24" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="32" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="48" cy="48" r="3.3" class="v"/><circle cx="48" cy="48" r="1.7" fill="currentColor" stroke="none"/><circle cx="56" cy="48" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="8" cy="56" r="3.3" class="v"/><circle cx="8" cy="56" r="1.7" fill="currentColor" stroke="none"/><circle cx="16" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="24" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="32" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="40" cy="56" r="1.7" fill="currentColor" stroke="none"/><circle cx="48" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/><circle cx="56" cy="56" r=".8" fill="currentColor" fill-opacity=".4" stroke="none"/></g></svg></figure>
+      <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="15" cy="15" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="15" r="3" style="fill:currentColor;stroke:none"/><circle cx="45" cy="15" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="45" cy="15" r="3" style="fill:currentColor;stroke:none"/><circle cx="60" cy="15" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="15" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="75" cy="15" r="3" style="fill:currentColor;stroke:none"/><circle cx="90" cy="15" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="15" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="105" cy="15" r="3" style="fill:currentColor;stroke:none"/><circle cx="15" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="45" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="60" cy="30" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="60" cy="30" r="3" style="fill:currentColor;stroke:none"/><circle cx="75" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="90" cy="30" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="90" cy="30" r="3" style="fill:currentColor;stroke:none"/><circle cx="105" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="45" cy="45" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="45" cy="45" r="3" style="fill:currentColor;stroke:none"/><circle cx="60" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="45" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="75" cy="45" r="3" style="fill:currentColor;stroke:none"/><circle cx="90" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="60" r="3" style="fill:currentColor;stroke:none"/><circle cx="45" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="60" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="90" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="75" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="15" cy="75" r="3" style="fill:currentColor;stroke:none"/><circle cx="30" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="45" cy="75" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="45" cy="75" r="3" style="fill:currentColor;stroke:none"/><circle cx="60" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="90" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="90" r="3" style="fill:currentColor;stroke:none"/><circle cx="45" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="60" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="90" cy="90" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="90" cy="90" r="3" style="fill:currentColor;stroke:none"/><circle cx="105" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="105" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="15" cy="105" r="3" style="fill:currentColor;stroke:none"/><circle cx="30" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="45" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="60" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="105" r="3" style="fill:currentColor;stroke:none"/><circle cx="90" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/></svg></figure>
       <div>
         <p class="tp-lbl">Area V &middot; 1 entry</p>
         <p class="area-title" id="area-nt">Number theory</p>

@@ -1,79 +1,83 @@
-"""Render the share cards og-life.png and og-qec.png (1200x630) at the repo
-root from card.html, with Python Playwright and the system Chrome.
+"""Render the 1200x630 share cards at the repo root from card.html, with
+Python Playwright and the system Chrome:
 
-    python _studio/tools/og/render.py
+    og-home.png og-research.png og-cv.png og-book.png og-life.png og-qec.png
+
+    python _studio/tools/og/render.py            # all cards
+    python _studio/tools/og/render.py og-cv.png  # just one
+
+The figures come from _studio/tools/assets/figures.py; og-cv.png uses
+img/tushar-pandey-b.webp (run _studio/tools/assets/portrait.py first).
 """
-import io, json, pathlib
+import base64, pathlib, sys
 from PIL import Image
 from playwright.sync_api import sync_playwright
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
-front = json.load(io.open(ROOT / '_studio' / 'content' / 'front.unpolarized.json', encoding='utf-8'))
+sys.path.insert(0, str(HERE.parent / 'assets'))
+import figures as F  # noqa: E402
+
+P = F.LIGHT
 
 
-def rings(size, colours, width):
-    c = ''.join(f'<circle cx="{x}" cy="{y}" r="5.4" stroke="{col}"/>'
-                for (x, y), col in zip(((12, 7.6), (8.2, 14.2), (15.8, 14.2)), colours))
-    return (f'<svg width="{size}" height="{size}" viewBox="0 0 24 24" style="overflow:visible">'
-            f'<g fill="none" stroke-width="{width}" opacity=".85">{c}</g></svg>')
+def fig(inner, box=400, size=420):
+    return F.svg(inner, box, size)
 
 
-def patch(size):
-    # the distance 3 patch of qec-in-practice/js/patch.js: X checks amber, Z checks blue, an X error on q4 firing two Z checks
-    S, R, M = 60, 30, 48
-    X = [[0, 1, 3, 4], [4, 5, 7, 8], [2, 5], [3, 6]]
-    Z = [[1, 2, 4, 5], [3, 4, 6, 7], [0, 1], [7, 8]]
-    side = {'2,5': 1, '3,6': 0, '0,1': 1, '7,8': 0}
-    p = lambda i: (M + S * (i % 3), M + S * (i // 3))
-    out = []
-    for typ, stabs, col in (('Z', Z, '#4f9cff'), ('X', X, '#e0a040')):
-        for k, q in enumerate(stabs):
-            x, y = p(q[0])
-            if len(q) == 4:
-                d = f'M{x},{y}h{S}v{S}h{-S}Z'
-            else:
-                bx, by = p(q[1])
-                d = f'M{x},{y}A{R},{R} 0 0 {side[",".join(map(str, q))]} {bx},{by}Z'
-            fire = typ == 'Z' and k in (0, 1)
-            fill = '#ff5c5c' if fire else col
-            out.append(f'<path d="{d}" fill="{fill}" fill-opacity="{.75 if fire else .2}" stroke="{col}" stroke-width="2"/>')
-    for i in range(9):
-        x, y = p(i)
-        out.append(f'<circle cx="{x}" cy="{y}" r="11" fill="{"#ff5c5c" if i == 4 else "#111a33"}" stroke="#e6ecff" stroke-width="2"/>')
-    x, y = p(4)
-    out.append(f'<circle cx="{x}" cy="{y}" r="19" fill="none" stroke="#ff5c5c" stroke-width="3"/>')
-    out.append(f'<line x1="{M}" y1="{M - 8}" x2="{M + 2 * S}" y2="{M - 8}" stroke="#52d6e6" stroke-width="4" stroke-linecap="round"/>')
-    out.append(f'<line x1="{M - 8}" y1="{M}" x2="{M - 8}" y2="{M + 2 * S}" stroke="#9b7bff" stroke-width="4" stroke-linecap="round"/>')
-    return f'<svg width="{size}" height="{size}" viewBox="0 0 216 216" style="opacity:.92">{"".join(out)}</svg>'
+def portrait(size=400):
+    b64 = base64.b64encode((ROOT / 'img' / 'tushar-pandey-b.webp').read_bytes()).decode()
+    r = size / 2
+    return (f'<svg width="{size}" height="{size}" viewBox="0 0 {size} {size}">'
+            f'<defs><clipPath id="pc"><circle cx="{r}" cy="{r}" r="{r - 16}"/></clipPath></defs>'
+            f'<image href="data:image/webp;base64,{b64}" x="16" y="16" width="{size - 32}" height="{size - 32}" clip-path="url(#pc)"/>'
+            f'<circle cx="{r}" cy="{r}" r="{r - 16}" fill="none" stroke="{P["ink"]}" stroke-width="2"/>'
+            f'<circle cx="{r}" cy="{r}" r="{r - 4}" fill="none" stroke="{P["hair"]}" stroke-width="1.5"/></svg>')
 
 
 CARDS = {
-    'og-life.png': {
-        'eyebrow': 'Tushar Pandey &middot; a book',
-        'title': front['cover']['title'].replace('Unpolarized', '<i>Unpolarized</i>'),
-        'sub': front['cover']['sub'].capitalize() + '.',
-        'foot': 'pandey-tushar.com/life',
-        'art': rings(300, ('#52d6e6', '#9b7bff', '#52d6e6'), .32),
-    },
-    'og-qec.png': {
-        'eyebrow': 'Four interactive lessons',
-        'title': 'Quantum error correction <i>in practice</i>',
-        'sub': 'From one surface code patch to a teleported T state.',
-        'foot': 'pandey-tushar.com/qec-in-practice',
-        'art': patch(270),
-    },
+    'og-home.png': dict(
+        title='Tushar Pandey',
+        sub='Senior Software Engineer at DataRobot. Researcher in quantum error correction. Ph.D. in mathematics.',
+        foot='pandey-tushar.com', art=lambda: fig(F.toric(P))),
+    'og-research.png': dict(
+        title='Research',
+        sub='Papers and preprints in quantum error correction, quantum algorithms, LLM reasoning and quantum topology.',
+        foot='pandey-tushar.com/research', art=lambda: fig(F.trefoil(P, width=9), size=400)),
+    'og-cv.png': dict(
+        title='Curriculum Vitae', sub='Tushar Pandey, Ph.D.',
+        foot='pandey-tushar.com/cv', art=lambda: portrait(400)),
+    'og-book.png': dict(
+        title='The Qubit Dialogues', sub='A book of possibilities.',
+        foot='pandey-tushar.com/qubit-dialogues', art=lambda: fig(F.bloch(P))),
+    'og-life.png': dict(
+        title='An Unpolarized Life', sub='A book of questions.',
+        foot='pandey-tushar.com/life', art=lambda: fig(F.rings(P))),
+    'og-qec.png': dict(
+        title='Quantum error correction in practice',
+        sub='Four interactive lessons, from one surface code patch to a teleported T state.',
+        foot='pandey-tushar.com/qec-in-practice', art=lambda: fig(F.surface(P)), size='64px'),
 }
 
+only = set(sys.argv[1:])
 with sync_playwright() as pw:
     browser = pw.chromium.launch(channel='chrome')
     page = browser.new_page(viewport={'width': 1200, 'height': 630})
     for name, card in CARDS.items():
+        if only and name not in only:
+            continue
         page.goto((HERE / 'card.html').as_uri())
+        card = {k: (v() if callable(v) else v) for k, v in card.items()}
+        size = card.pop('size', None)
         page.evaluate('c => { for (const k in c) document.getElementById(k).innerHTML = c[k]; }', card)
+        if size:
+            page.evaluate('s => document.getElementById("title").style.fontSize = s', size)
+        clipped = page.evaluate('''() => [...document.querySelectorAll('h1,.sub,.foot span')]
+            .some(e => e.scrollWidth > e.clientWidth + 1 || e.getBoundingClientRect().right > 1200 - 470)''')
         out = ROOT / name
         page.screenshot(path=str(out))
-        img = Image.open(out).convert('RGB').quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG)
-        img.save(out, optimize=True)
-        print(f'{name}: {out.stat().st_size // 1024} KB')
+        # octree keeps the few exact brand colours that median cut drifts
+        Image.open(out).convert('RGB').quantize(colors=256, method=Image.Quantize.FASTOCTREE,
+                                                dither=Image.Dither.FLOYDSTEINBERG).save(out, optimize=True)
+        print(f'{name}: {out.stat().st_size} bytes' + ('  WARNING: text runs into the figure' if clipped else ''))
     browser.close()

@@ -34,7 +34,7 @@ document.getElementById('main')?.remove();
    follows the stored or system theme, and this undoes each change it makes. */
 const stayDark = (): void => {
   document.documentElement.setAttribute('data-theme', 'dark');
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0b1122');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#0d1320');
 };
 stayDark();
 document.addEventListener('tp-theme', stayDark);
@@ -70,6 +70,10 @@ function makeStage(canto: number, art: CantoArt, track: HTMLElement): HTMLElemen
   return stage;
 }
 
+/* a plate's legend as a figure caption: its number set apart, as on the site */
+const caption = (legend: string): string =>
+  legend.replace(/^(Plate [IVXLC]+|Frontispiece)\.\s*/, '<b>$1</b>');
+
 /* ---------- frontispiece ---------- */
 
 const front = el('header', 'front');
@@ -80,10 +84,11 @@ frontTrack.append(el('div', 'front-type',
   '<p class="kicker">Illustrated edition</p>' +
   '<h1>The Qubit Dialogues</h1>' +
   '<p class="sub">Twenty two cantos between a Seeker and an Oracle, set as plates.</p>' +
-  '<p class="cue">Scroll</p>',
+  '<p class="cue"><a href="#canto-1">Begin reading</a> &middot; ' +
+  '<a href="/qubit-dialogues.html">Text edition</a></p>',
 ));
 front.append(frontTrack);
-if (frontArt) front.append(el('p', 'legend', frontArt.legend));
+if (frontArt) front.append(el('p', 'legend', caption(frontArt.legend)));
 
 /* ---------- cantos ---------- */
 
@@ -132,7 +137,7 @@ function buildCanto(c: Canto): HTMLElement {
     ));
   }
   article.append(track);
-  if (art) article.append(el('p', 'legend', art.legend));
+  if (art) article.append(el('p', 'legend', caption(art.legend)));
 
   const rest = apparatus(c);
   if (rest.length > 0) {
