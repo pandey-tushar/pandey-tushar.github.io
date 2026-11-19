@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DVPGC1C44Z');
+</script>
+<title>Lifted surgery for non-Abelian two-block group-algebra codes &middot; Tushar Pandey</title>
+<meta name="description" content="A plain-language companion to arXiv:2610.05307: what the non-Abelian gain of lifted code surgery is, why it is at most the index of a largest Abelian subgroup, and the certified codes with gain two and three. With the paper's codes to explore.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/papers/lifted-surgery.html">
+<meta property="og:title" content="Lifted surgery for non-Abelian two-block group-algebra codes &middot; Tushar Pandey">
+<meta property="og:description" content="A plain-language companion to arXiv:2610.05307, with the paper's codes to explore.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/papers/lifted-surgery.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-research.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-research.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "ScholarlyArticle",
+ "name": "Lifted surgery for non-Abelian two-block group-algebra codes",
+ "headline": "Lifted surgery for non-Abelian two-block group-algebra codes",
+ "author": {"@type": "Person", "@id": "https://pandey-tushar.com/#person", "name": "Tushar Pandey", "url": "https://pandey-tushar.com/"},
+ "datePublished": "2026-10-04",
+ "sameAs": "https://arxiv.org/abs/2610.05307",
+ "url": "https://pandey-tushar.com/papers/lifted-surgery.html"
+}
+</script>
+<link rel="stylesheet" href="/papers/paper.css">
+<style>
+/* page-local figure styles for Fig. 1 (candidates for papers/paper.css) */
+.ls-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 22px; margin: 0 0 8px; }
+.ls-ctl .pc-controls { margin: 0; }
+.ls-ctl select { min-height: 40px; padding: 0 8px; font: inherit; font-size: var(--tp-t-small); color: var(--tp-ink);
+  background: var(--tp-void2); border: 1px solid var(--tp-rule); border-radius: 4px; }
+.ls-ctl input[type=checkbox] { width: 18px; height: 18px; margin: 0; accent-color: var(--tp-acc); }
+.ls-grid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 62rem) { .ls-grid { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); } }
+.ls-detail { min-width: 0; font-size: var(--tp-t-small); color: var(--tp-text); }
+.ls-detail h3 { margin: 0 0 4px; font-size: 1.15rem; }
+.ls-detail .ls-kind { margin: 0 0 8px; color: var(--tp-dim); }
+.ls-detail dl { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 4px 12px; margin: 0; }
+.ls-detail dt { color: var(--tp-dim); }
+.ls-detail dd { margin: 0; color: var(--tp-ink); font-variant-numeric: tabular-nums; }
+.ls-nav { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 0 0 12px; }
+.ls-nav .tp-btn { min-height: 40px; }
+@media (max-width: 30rem) { .ls-detail dl { grid-template-columns: minmax(0, 1fr); gap: 0; } .ls-detail dd { margin-bottom: 6px; } }
+.ls-t1 { --c: var(--tp-acc); }
+.ls-t2 { --c: var(--tp-ink); }
+.ls-open .pc-mark { fill: var(--tp-void2); stroke: var(--c); stroke-width: 1.6; }
+.ls-cand { stroke: var(--tp-dim); stroke-width: 1.2; fill: none; }
+#ls-plot svg { cursor: pointer; }
+.ls-pt { outline: none; }
+.ls-sel-ring { fill: none; stroke: var(--tp-warm); stroke-width: 2; }
+.ls-focus { fill: none; stroke: none; stroke-width: 2; }
+.ls-pt:focus-visible .ls-focus { stroke: var(--tp-acc); }
+</style>
+<script type="module" src="/papers/js/lifted-surgery.js"></script>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="pc">
+ <div class="tp-wrap">
+  <header class="pc-head">
+    <p class="tp-lbl">Paper companion</p>
+    <h1>Lifted surgery for non-Abelian two-block group-algebra codes</h1>
+    <p class="pc-by">Tushar Pandey</p>
+    <p class="pc-status">arXiv preprint, 2026 &middot; <span class="tp-id">arXiv:2610.05307</span></p>
+    <ul class="pc-actions">
+      <li><a class="tp-btn" href="https://arxiv.org/abs/2610.05307" rel="noopener">arXiv</a></li>
+      <li><a class="tp-btn" href="https://arxiv.org/pdf/2610.05307" rel="noopener">PDF</a></li>
+      <li><a class="tp-btn" href="https://github.com/pandey-tushar/liftsurg" rel="noopener">Code</a></li>
+      <li><a class="tp-btn" href="/research.html">All papers</a></li>
+    </ul>
+  </header>
+
+  <article class="pc-essay">
+  <p class="lead">This preprint asks whether a non-commutative symmetry lets one surgery measurement read out more logical operators of a quantum code than any commutative symmetry can. This page explains the paper and lets you explore the codes it certifies.</p>
+
+  <h2>Surgery and lifted surgery</h2>
+  <p>In code surgery, the analogue of lattice surgery (<a class="tp-link" href="/qec-in-practice/lattice-surgery.html">the surface-code version of this idea, interactively</a>) for quantum low-density parity-check (qLDPC) codes, a logical Pauli operator is measured by attaching an ancilla system to its support, running O(d) rounds of syndrome extraction in a merged code, and detaching; d is the code distance. Operators with pairwise disjoint supports can be measured in parallel, so m of them take O(d) rounds instead of O(md).</p>
+  <p>Lifted surgery, from earlier work by Berent, Cohen and Quintavalle, finds such operators on codes built from Abelian (commutative) groups: a translation symmetry maps one logical operator to an orbit of them, and an orbit with pairwise disjoint supports can be measured in one merged code.</p>
+
+  <h2>Two-block codes over non-Abelian groups</h2>
+  <p>A two-block group-algebra (2BGA) code starts from a finite group G and two elements a and b of its group algebra over F<sub>2</sub>, the formal sums of group elements with coefficients 0 or 1. Its checks combine left multiplication by a with right multiplication by b on two blocks of |G| qubits. For Abelian G they include the bivariate-bicycle codes. For non-Abelian G, the left translation by g is a symmetry of the code whenever g commutes with a, and if the support of a is a union of conjugacy classes, the whole group acts this way.</p>
+
+  <h2>Counting the gain fairly</h2>
+  <p>A set of images of one Z-type logical operator under a group S of code symmetries is co-measurable if their supports are pairwise disjoint and they are linearly independent modulo the stabilisers. The co-measurable number &mu;<sub>S</sub> is the size of the largest such set, and one merged code measures all of its operators at once. Both sides are measured against E, the group of block-affine automorphisms: qubit permutations built from the group by translating on either side, applying a group automorphism or inversion, and possibly exchanging the two blocks. The non-Abelian gain &gamma; of a logical is &mu;<sub>E</sub> divided by the largest &mu;<sub>H</sub> over the Abelian subgroups H of E. A code is rigid when its only block-affine automorphisms are the translations.</p>
+  <p>Of 386 codes in which left translations beat every Abelian group of translations, 77 have twisted translations, right translations by different elements on the two blocks, and in 75 of those an Abelian subgroup of E reaches the same number.</p>
+  </article>
+
+  <figure class="tp-plate pc-fig" id="fig-codes">
+    <p class="pc-fallback" id="ls-fallback">This figure needs JavaScript. It plots distance against block length for the 27 codes the paper certifies: 11 with gain exactly two, up to distance 13, and 16 with gain at least three for a best logical, up to [[336,26,12]], next to the 204 rigid gain-two candidates of the code search, whose distances are estimates.</p>
+    <div class="ls-ctl" id="ls-ctl" hidden>
+      <fieldset class="pc-controls">
+        <legend>Gain</legend>
+        <label><input type="radio" name="ls-gain" value="all"> All</label>
+        <label><input type="radio" name="ls-gain" value="2"> Two (Table 1)</label>
+        <label><input type="radio" name="ls-gain" value="3"> Three or more (Table 2)</label>
+      </fieldset>
+      <div class="pc-controls">
+        <label>Group <select id="ls-fam"></select></label>
+        <label><input type="checkbox" id="ls-cand" checked> Search candidates</label>
+      </div>
+    </div>
+    <div class="ls-grid">
+      <div class="pc-plot" id="ls-plot"></div>
+      <div class="ls-detail" id="ls-detail" hidden>
+        <p class="ls-nav"><button type="button" class="tp-btn" id="ls-prev">Previous code</button><button type="button" class="tp-btn" id="ls-next">Next code</button></p>
+        <div id="ls-card"></div>
+      </div>
+    </div>
+    <p class="pc-legend" id="ls-legend" hidden></p>
+    <p class="pc-status" id="ls-status" role="status" aria-live="polite">This figure needs JavaScript.</p>
+    <details class="pc-data" id="ls-data" hidden>
+      <summary>Show data as table</summary>
+      <div id="ls-table"></div>
+    </details>
+    <figcaption><b>Fig. 1</b>Distance d against block length n, after Fig.&nbsp;1 of the paper. Circles: the 11 codes of Table&nbsp;1, with gain exactly two over the full block-affine group. Squares: the 16 codes of Table&nbsp;2, with gain at least three for a best logical, filled where the gain of the whole code is also at least three. Their distances are exact, by the paper&rsquo;s Tables&nbsp;1 and 2. Plus signs: the 204 rigid gain-two candidates of the code search, whose distances are information-set estimates and therefore upper bounds. Codes with the same n and d are drawn side by side. Select a certified code, by click or with the arrow keys, to see its numbers. Data: results/verify_rigid_family.jsonl, verify_gain3.jsonl, verify_mitten_A.jsonl, verify_mitten_B.jsonl, gains_fullgroup.jsonl, ilp_small.jsonl, automorphisms_bruteforce.txt, audit_exhaust_distance.txt and search_rigid.jsonl of the paper&rsquo;s repository<span id="ls-src"></span>.</figcaption>
+  </figure>
+
+  <article class="pc-essay">
+  <h2>What is proved, found and simulated</h2>
+  <p>The paper classifies the block-affine automorphisms that map checks to checks and gives a criterion for rigidity. A coset-cover bound proves that the gain is at most the index of a largest Abelian subgroup of E, so an Abelian subgroup of index two caps the gain at two. A merged-distance lemma shows that the parallel gadget keeps both code distances whenever every ancilla graph has Cheeger constant at least one: every set of at most half its vertices has at least as many edges leaving it as vertices.</p>
+  <p>With E, the co-measurable numbers and the distance computed exactly, a gain of exactly two holds in ten rigid codes with distances from six to thirteen and in one non-rigid code. In four of them, [[72,8,6]], [[84,4,11]], [[108,4,13]] and [[112,4,13]], one merged code reads out every logical qubit, while every Abelian group reaches half of them. In groups built from A<sub>4</sub>, S<sub>4</sub> and SL(2,3), where every Abelian subgroup has index at least three, 16 rigid codes reach gain at least three for a best logical, 13 of them for the code as a whole, up to [[336,26,12]]; one, [[288,20,6]], has gain 10/3. The code search, stopped after 30 of 295 queued groups, found no gain above two, and rigid gain-two codes with estimated distance up to 20, which the paper treats as evidence and not as certified.</p>
+  <p>In circuit-level simulations with Relay-BP decoding, at error rates from 2&times;10<sup>&minus;3</sup> to 5&times;10<sup>&minus;3</sup> (3 and 4&times;10<sup>&minus;3</sup> for [[240,18,10]]), the full gadget on each of the four non-Abelian codes simulated is more reliable than the Abelian gadgets it replaces or indistinguishable from them, and it uses two to three times fewer rounds.</p>
+
+  <h2>What the paper does not claim</h2>
+  <p>The paper does not compute the full permutation automorphism group, so code automorphisms of no group-theoretic origin are not excluded. The gain belongs to a chosen logical, and three of the 16 gain-three codes have gain two at code level. The measured operators are fixed by the symmetry, so the gadget helps to the extent that a computation needs them. The simulated differences are resolved only close to the pseudo-thresholds of the codes, two codes have only 1000 shots per point, the derived sequential baselines are optimistic, and all runs are Z-basis experiments.</p>
+
+  <h2>What you could do next</h2>
+  <p>The paper leaves open whether the gain grows further with the cover bound and whether gains of three persist at distances well above twelve. It names lower error rates, the fault distance of the merged protocol, X-basis experiments and a symmetry-free baseline as still needed. The <a class="tp-link" href="https://github.com/pandey-tushar/liftsurg" rel="noopener">repository</a> maps each table and figure to a script and a results file, with the outputs included, so each step can be checked without rerunning it.</p>
+  </article>
+
+  <section class="pc-cite" aria-labelledby="cite">
+    <h2 id="cite">Cite this paper</h2>
+<pre class="pc-bib" id="bib">@misc{pandey2026lifted,
+  author        = {Tushar Pandey},
+  title         = {Lifted surgery for non-Abelian two-block group-algebra codes},
+  year          = {2026},
+  eprint        = {2610.05307},
+  archivePrefix = {arXiv},
+  primaryClass  = {quant-ph}
+}</pre>
+    <p class="pc-copy"><button type="button" class="tp-btn" id="bib-copy" hidden>Copy BibTeX</button><span id="bib-msg" role="status" aria-live="polite"></span></p>
+    <p class="pc-plain">T. Pandey, &ldquo;Lifted surgery for non-Abelian two-block group-algebra codes,&rdquo; arXiv:2610.05307 (2026).</p>
+    <nav class="pc-more" aria-label="More">
+      <a class="tp-link" href="/research.html">All papers</a>
+      <a class="tp-link" href="/qec-in-practice/lattice-surgery.html">Lesson: lattice surgery</a>
+    </nav>
+  </section>
+ </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

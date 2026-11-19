@@ -39,6 +39,8 @@ $must = @('CNAME','index.html','books.html','cv.html','research.html','qubit-dia
           'qec-in-practice\threshold.html','qec-in-practice\lattice-surgery.html',
           'papers\bb-erasure-baselines.html','papers\paper.css','papers\js\plot.js','papers\js\fss.js',
           'papers\js\bb-erasure-baselines.js','papers\data\bb-erasure-baselines.json',
+          'papers\lifted-surgery.html','papers\js\lifted-surgery.js','papers\js\lifted-surgery-logic.js','papers\data\lifted-surgery.json',
+          'papers\adaptive-graph-of-thoughts.html','papers\js\adaptive-graph-of-thoughts.js','papers\js\agot-logic.js','papers\data\adaptive-graph-of-thoughts.json',
           'og-home.png','og-book.png','og-life.png','og-qec.png','404.html',
           'img\tushar-pandey.webp','img\tushar-pandey-320.webp',
           'lib\site.css','lib\site.js','lib\three-r128.min.js','lib\katex\katex.min.css','lib\katex\fonts',

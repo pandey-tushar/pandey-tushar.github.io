@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DVPGC1C44Z');
+</script>
+<title>Adaptive Graph of Thoughts: test-time reasoning over a graph of subproblems &middot; Tushar Pandey</title>
+<meta name="description" content="A plain-language companion to arXiv:2502.05078: how Adaptive Graph of Thoughts answers a query by building a graph of subproblems at test time, expanding only the ones judged complex, with the paper's results tables to explore.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/papers/adaptive-graph-of-thoughts.html">
+<meta property="og:title" content="Adaptive Graph of Thoughts: test-time reasoning over a graph of subproblems &middot; Tushar Pandey">
+<meta property="og:description" content="A plain-language companion to arXiv:2502.05078, with the paper's results tables to explore.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/papers/adaptive-graph-of-thoughts.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-research.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-research.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "ScholarlyArticle",
+ "name": "Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures",
+ "headline": "Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures",
+ "author": [
+  {"@type": "Person", "@id": "https://pandey-tushar.com/#person", "name": "Tushar Pandey", "url": "https://pandey-tushar.com/"},
+  {"@type": "Person", "name": "Ara Ghukasyan"},
+  {"@type": "Person", "name": "Oktay Goktas"},
+  {"@type": "Person", "name": "Santosh Kumar Radha"}
+ ],
+ "datePublished": "2025-02-07",
+ "sameAs": "https://arxiv.org/abs/2502.05078",
+ "url": "https://pandey-tushar.com/papers/adaptive-graph-of-thoughts.html"
+}
+</script>
+<link rel="stylesheet" href="/papers/paper.css">
+<style>
+/* page-local: the controls and marks of Fig. 1 */
+.agot-ctl { gap: 6px 22px; }
+.agot-sel { flex-wrap: wrap; width: 100%; }
+.agot-sel span { font: 600 var(--tp-t-app)/40px var(--tp-sans); letter-spacing: .07em; text-transform: uppercase; color: var(--tp-dim); }
+.agot-sel select { min-height: 40px; width: min(100%, 27rem); min-width: 0; padding: 0 8px; font: inherit; font-size: var(--tp-t-small);
+  color: var(--tp-ink); background: var(--tp-void2); border: 1px solid var(--tp-rule); border-radius: 4px; }
+.agot-ctl fieldset { display: flex; flex-wrap: wrap; align-items: center; gap: 0 14px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.agot-ctl label:has(input:disabled) { color: var(--tp-dim); }
+.agot-ctl label:has(input:disabled) span::after { content: " (not reported here)"; }
+.agot-plot svg .m-io { --c: var(--tp-dim); }
+.agot-plot svg .m-cot { --c: color-mix(in srgb, var(--tp-acc) 55%, var(--tp-dim)); }
+.agot-plot svg .m-aiot { --c: var(--tp-acc); }
+.agot-plot svg .m-agot { --c: var(--tp-warm); }
+.agot-plot .m-io .pc-mark { fill: var(--tp-void2); stroke: var(--c); stroke-width: 1.6; }
+.agot-plot .pc-line { stroke-width: 2; }
+.agot-val { fill: var(--tp-ink); font-size: 13px; font-variant-numeric: tabular-nums; }
+.agot-delta { fill: var(--tp-text); font-size: 13px; font-variant-numeric: tabular-nums; }
+.agot-b { font-weight: 600; }
+.agot-plot { max-width: 50rem; }
+#agot-table th[scope=row] { text-align: left; }
+</style>
+<script type="module" src="/papers/js/adaptive-graph-of-thoughts.js"></script>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="pc">
+ <div class="tp-wrap">
+  <header class="pc-head">
+    <p class="tp-lbl">Paper companion</p>
+    <h1>Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures</h1>
+    <p class="pc-by">Tushar Pandey, Ara Ghukasyan, Oktay Goktas, Santosh Kumar Radha</p>
+    <p class="pc-status">arXiv preprint, 2025 &middot; <span class="tp-id">arXiv:2502.05078</span></p>
+    <ul class="pc-actions">
+      <li><a class="tp-btn" href="https://arxiv.org/abs/2502.05078" rel="noopener">arXiv</a></li>
+      <li><a class="tp-btn" href="https://arxiv.org/pdf/2502.05078" rel="noopener">PDF</a></li>
+      <li><a class="tp-btn" href="https://github.com/AgnostiqHQ/multi-agent-llm" rel="noopener">Code</a></li>
+      <li><a class="tp-btn" href="/research.html">All papers</a></li>
+    </ul>
+  </header>
+
+  <article class="pc-essay">
+  <p class="lead">How well a large language model (LLM) answers depends on how it is prompted. Fine-tuning and reinforcement learning improve reasoning but cost substantial computation and data. This preprint proposes Adaptive Graph of Thoughts (AGoT), which works only at test time: it changes how a fixed model is queried, not the model.</p>
+
+  <h2>Chains, trees and graphs of thoughts</h2>
+  <p>The paper calls a thought any unit of content that informs the final response, and draws thoughts as nodes of a graph whose edges mean that one thought informs another. Chain of Thought (CoT) reasons in sequential steps, Tree of Thoughts adds branching, and Graph of Thoughts allows arbitrary connections with refinement. Autonomous Iteration of Thought (AIoT), the authors&rsquo; earlier method, iterates a dialogue under dynamic guidance in a nearly linear structure.</p>
+  <p>AGoT keeps its graph acyclic, so every line of reasoning is finite. What sets it apart, in the paper&rsquo;s words, is an LLM-driven complexity check: node by node, the model decides whether a thought needs breaking down further, in a nested graph of its own.</p>
+
+  <h2>How AGoT builds its graph</h2>
+  <p>AGoT starts from an empty graph and adds one layer of nodes at a time, up to <i>l</i><sub>max</sub> layers of at most <i>n</i><sub>max</sub> nodes each. The first layer of the top graph comes from the query alone, without edges. Each layer has a strategy that guides it; later layers also get edges from earlier nodes, chosen by the model given the graph so far.</p>
+  <p>Every new node then goes one of two ways. If the complexity check marks it complex and the nesting depth is below <i>d</i><sub>max</sub>, the node&rsquo;s content becomes the query of a nested graph built the same way, whose final answer becomes the node&rsquo;s answer. Otherwise the node is answered directly. A thought the model marks final is answered and ends the graph early; otherwise, after the last layer, a final thought drawn from the whole graph gives the answer.</p>
+  <p>In the implementation each of the six actions (three kinds of thought generation, the complexity check, answering, and the final thought) is a model call with its own instruction and response schema, which the paper calls an agent.</p>
+
+  <h2>What was tested</h2>
+  <p>The experiments use OpenAI&rsquo;s gpt-4o-mini, and Table&nbsp;1 adds gpt-4o on one benchmark. AGoT ran at temperature 0.3 and the other methods at the client&rsquo;s default settings, with <i>d</i><sub>max</sub>&nbsp;=&nbsp;1, <i>l</i><sub>max</sub>&nbsp;=&nbsp;3 and <i>n</i><sub>max</sub>&nbsp;=&nbsp;3 throughout. The baselines are direct input-output prompting (IO), CoT and AIoT.</p>
+  <p>For reasoning, GPQA Diamond has 198 multiple-choice science questions, run with the answer options in their default order (GPQA<sub>D</sub>), where the first option is always correct, and shuffled (GPQA<sub>S</sub>). For retrieval, three multi-hop question sets, HotpotQA (a random sample of 100 hard questions), MoreHopQA and HybridQA, are scored by exact match (EM), F1 and an LLM-assisted accuracy score (LAAS), in which gpt-4o-mini judges whether two answers mean the same. The explorative tasks are mini-crosswords, scored by letter and word accuracy, and the 20 hardest Game of 24 puzzles, which combine four integers into 24.</p>
+  </article>
+
+  <figure class="tp-plate pc-fig" id="fig-agot">
+    <p class="pc-fallback" id="agot-fallback">This figure needs JavaScript. It shows the scores in the paper&rsquo;s Tables 1 to 3 for each benchmark, model and metric. The headline gain in the paper&rsquo;s abstract, on scientific reasoning: on GPQA Diamond with shuffled answer options, AGoT with gpt-4o scored 57.6% against 39.4% for direct IO, which the paper gives as +46.2%, a relative change.</p>
+    <div class="pc-controls agot-ctl" id="agot-ctl" hidden>
+      <label class="agot-sel"><span>Benchmark</span><select id="agot-ds"></select></label>
+      <fieldset id="agot-model"><legend>Model</legend></fieldset>
+      <fieldset id="agot-metric"><legend>Metric</legend></fieldset>
+    </div>
+    <div class="pc-plot agot-plot" id="agot-plot"></div>
+    <p class="pc-status" id="agot-status" role="status" aria-live="polite">This figure needs JavaScript.</p>
+    <details class="pc-data" id="agot-data" hidden>
+      <summary>Show data as table</summary>
+      <div id="agot-table"></div>
+    </details>
+    <figcaption><b>Fig. 1</b>Scores, in percent, of direct input-output prompting (IO, hollow circle), Chain of Thought (CoT, square), Autonomous Iteration of Thought (AIoT, triangle) and AGoT (diamond), highest first, for the chosen benchmark, model and metric; the dotted line marks IO. The right-hand column is the paper&rsquo;s own percent change against IO; Table&nbsp;3 gives none. Where two tables hold the same scores, the figure shows the one with more methods. Data: Tables 1 to 3 of arXiv:2502.05078v1, parsed from main.tex in its arXiv source<span id="agot-src"></span>.</figcaption>
+  </figure>
+
+  <article class="pc-essay">
+  <h2>Results</h2>
+  <p>The headline +46.2% is a relative gain, on shuffled GPQA Diamond with gpt-4o: AGoT scored 57.6% against 39.4% for direct IO, a difference of 18.2 percentage points (computed here). With gpt-4o-mini on the same set, AGoT scored 49.5% against 37.4% (+32.4%), while CoT and AIoT gained +3.2% and +5.4%. On the default-order version the AGoT gain shrinks to +0.9% (55.1% against 54.6%), and CoT and AIoT score below IO.</p>
+  <p>On retrieval AGoT has the highest LAAS on all three sets (+11.1% to +30.9%), but exact match is most often highest for IO and F1 most often for AIoT. On Game of 24, AGoT solves 50.0% of the puzzles against 10.0% for IO (+400%) and 25.0% for AIoT. On mini-crosswords it reaches 34.7% letter and 11.1% word accuracy, close to AIoT&rsquo;s 33.5% and 11.0%.</p>
+  <p>The paper calls the +46.2% comparable to relative gains reported elsewhere for distillation from DeepSeek-R1, a training-based method.</p>
+
+  <h2>Costs and limits</h2>
+  <p>The settings of <i>d</i><sub>max</sub>, <i>l</i><sub>max</sub> and <i>n</i><sub>max</sub> balance computation time against performance and are not claimed to be optimal; neither is the implementation. The paper reports how many nodes AGoT built per task and what share were complex, but no token counts, prices or run times. Each table entry is a single score, without an interval.</p>
+  <p>The authors cannot verify whether the models saw GPQA Diamond in its default order during training. Comparing IO on the two orders suggests to them a strong bias toward the first option. On crosswords they cannot conclude that AGoT is especially suited, since any sufficiently persistent framework might gain as much. LAAS assumes that gpt-4o-mini judges equivalence accurately. Like other iterative frameworks, AGoT re-reads its own responses, which in the worst case can amplify wrong answers, and its results depend strongly on the underlying model.</p>
+
+  <h2>What you could try next</h2>
+  <p>The paper suggests searching for better values of <i>d</i><sub>max</sub>, <i>l</i><sub>max</sub> and <i>n</i><sub>max</sub>, handing strategy and edge generation to specialized agents, trying other models, using fine-tuning or reinforcement learning to bias edge selection or the complexity check, and reducing hallucination. The code is the open-source <a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" rel="noopener">multi-agent-llm</a> package; its README example runs AGoT with max_depth&nbsp;=&nbsp;1, max_num_layers&nbsp;=&nbsp;3 and max_new_tasks&nbsp;=&nbsp;3, and the repository holds the experimental setups, datasets and results.</p>
+  </article>
+
+  <section class="pc-cite" aria-labelledby="cite">
+    <h2 id="cite">Cite this paper</h2>
+<pre class="pc-bib" id="bib">@misc{pandey2025adaptive,
+  author        = {Pandey, Tushar and Ghukasyan, Ara and Goktas, Oktay and Radha, Santosh Kumar},
+  title         = {Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures},
+  year          = {2025},
+  eprint        = {2502.05078},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url           = {https://arxiv.org/abs/2502.05078}
+}</pre>
+    <p class="pc-copy"><button type="button" class="tp-btn" id="bib-copy" hidden>Copy BibTeX</button><span id="bib-msg" role="status" aria-live="polite"></span></p>
+    <p class="pc-plain">T. Pandey, A. Ghukasyan, O. Goktas and S. K. Radha, &ldquo;Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures,&rdquo; arXiv:2502.05078 (2025).</p>
+    <nav class="pc-more" aria-label="More">
+      <a class="tp-link" href="/research.html">All papers</a>
+      <a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" rel="noopener">Code: multi-agent-llm</a>
+    </nav>
+  </section>
+ </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

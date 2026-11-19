@@ -1,0 +1,615 @@
+{
+ "paper": {
+  "id": "adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif",
+  "arxiv": "2502.05078",
+  "version": "v1",
+  "title": "Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures"
+ },
+ "source": {
+  "abs": "https://arxiv.org/abs/2502.05078",
+  "eprint": "https://arxiv.org/e-print/2502.05078",
+  "file": "main.tex",
+  "sha256": "f984a30b6ac8c6f3641de0513be5960936ca4e475db3ef207769793aa7fc196e",
+  "eprint_sha256": "763327fd8d1fc121175963a6cfac1c87deeba0802bfb5c2440ade2fdbaadaf46",
+  "fetched": "2026-11-19",
+  "extracted": "2026-11-19"
+ },
+ "tables": [
+  {
+   "number": 1,
+   "label": "tab:gpt-gpqa-results",
+   "line": 394,
+   "tabular": [
+    380,
+    392
+   ],
+   "caption": "GQPA answer accuracy of GPT models across dataset variations.",
+   "columns": [
+    "Dataset",
+    "Model",
+    "IO",
+    "AGoT",
+    "delta:AGoT"
+   ],
+   "rows": [
+    {
+     "line": 386,
+     "category": null,
+     "dataset": "GPQA_D",
+     "model": "gpt-4o-mini",
+     "metric": "accuracy",
+     "scores": {
+      "IO": 54.6,
+      "AGoT": 55.1
+     },
+     "delta": {
+      "AGoT": 0.9
+     },
+     "bold": [
+      "55.1"
+     ],
+     "cells": [
+      "GPQA_D",
+      "gpt-4o-mini",
+      "54.6",
+      "55.1",
+      "+0.9%"
+     ]
+    },
+    {
+     "line": 389,
+     "category": null,
+     "dataset": "GPQA_S",
+     "model": "gpt-4o-mini",
+     "metric": "accuracy",
+     "scores": {
+      "IO": 37.4,
+      "AGoT": 49.5
+     },
+     "delta": {
+      "AGoT": 32.4
+     },
+     "bold": [
+      "49.5"
+     ],
+     "cells": [
+      "GPQA_S",
+      "gpt-4o-mini",
+      "37.4",
+      "49.5",
+      "+32.4%"
+     ]
+    },
+    {
+     "line": 390,
+     "category": null,
+     "dataset": "GPQA_S",
+     "model": "gpt-4o",
+     "metric": "accuracy",
+     "scores": {
+      "IO": 39.4,
+      "AGoT": 57.6
+     },
+     "delta": {
+      "AGoT": 46.2
+     },
+     "bold": [
+      "57.6"
+     ],
+     "cells": [
+      "GPQA_S",
+      "gpt-4o",
+      "39.4",
+      "57.6",
+      "+46.2%"
+     ]
+    }
+   ]
+  },
+  {
+   "number": 2,
+   "label": "tab:performance_comparison",
+   "line": 423,
+   "tabular": [
+    403,
+    421
+   ],
+   "caption": "Performance comparison between IO, CoT, AIoT, and AGoT (this work) as inference frameworks with gpt-4o-mini across reasoning, retrieval, and explorative tasks. Values in brackets indicate percent improvement versus direct IO. AGoT attains the highest values across all rows. (GPQA_S and GPQA_D represent the shuffled and unshuffled versions of GPQA Diamond.",
+   "columns": [
+    "Category",
+    "Dataset",
+    "IO",
+    "CoT",
+    "delta:CoT",
+    "AIoT",
+    "delta:AIoT",
+    "AGoT",
+    "delta:AGoT"
+   ],
+   "rows": [
+    {
+     "line": 408,
+     "category": "Reasoning",
+     "dataset": "GPQA_D",
+     "model": "gpt-4o-mini",
+     "metric": "accuracy",
+     "scores": {
+      "IO": 54.6,
+      "CoT": 49.0,
+      "AIoT": 48.0,
+      "AGoT": 55.1
+     },
+     "delta": {
+      "CoT": -10.3,
+      "AIoT": -12.1,
+      "AGoT": 0.9
+     },
+     "bold": [
+      "55.1"
+     ],
+     "cells": [
+      "Reasoning",
+      "GPQA_D",
+      "54.6",
+      "49.0",
+      "-10.3%",
+      "48.0",
+      "-12.1%",
+      "55.1",
+      "+0.9%"
+     ]
+    },
+    {
+     "line": 409,
+     "category": "Reasoning",
+     "dataset": "GPQA_S",
+     "model": "gpt-4o-mini",
+     "metric": "accuracy",
+     "scores": {
+      "IO": 37.4,
+      "CoT": 38.6,
+      "AIoT": 39.4,
+      "AGoT": 49.5
+     },
+     "delta": {
+      "CoT": 3.2,
+      "AIoT": 5.4,
+      "AGoT": 32.4
+     },
+     "bold": [
+      "49.5"
+     ],
+     "cells": [
+      "Reasoning",
+      "GPQA_S",
+      "37.4",
+      "38.6",
+      "+3.2%",
+      "39.4",
+      "+5.4%",
+      "49.5",
+      "+32.4%"
+     ]
+    },
+    {
+     "line": 412,
+     "category": "Retrieval",
+     "dataset": "HotpotQA",
+     "model": "gpt-4o-mini",
+     "metric": "LAAS",
+     "scores": {
+      "IO": 72.0,
+      "CoT": 75.0,
+      "AIoT": 76.0,
+      "AGoT": 80.0
+     },
+     "delta": {
+      "CoT": 4.2,
+      "AIoT": 5.6,
+      "AGoT": 11.1
+     },
+     "bold": [
+      "80.0"
+     ],
+     "cells": [
+      "Retrieval",
+      "HotpotQA",
+      "72.0",
+      "75.0",
+      "+4.2%",
+      "76.0",
+      "+5.6%",
+      "80.0",
+      "+11.1%"
+     ]
+    },
+    {
+     "line": 413,
+     "category": "Retrieval",
+     "dataset": "MoreHopQA",
+     "model": "gpt-4o-mini",
+     "metric": "LAAS",
+     "scores": {
+      "IO": 55.0,
+      "CoT": 63.0,
+      "AIoT": 70.0,
+      "AGoT": 72.0
+     },
+     "delta": {
+      "CoT": 14.5,
+      "AIoT": 27.3,
+      "AGoT": 30.9
+     },
+     "bold": [
+      "72.0"
+     ],
+     "cells": [
+      "Retrieval",
+      "MoreHopQA",
+      "55.0",
+      "63.0",
+      "+14.5%",
+      "70.0",
+      "+27.3%",
+      "72.0",
+      "+30.9%"
+     ]
+    },
+    {
+     "line": 414,
+     "category": "Retrieval",
+     "dataset": "HybridQA",
+     "model": "gpt-4o-mini",
+     "metric": "LAAS",
+     "scores": {
+      "IO": 68.0,
+      "CoT": 64.0,
+      "AIoT": 77.0,
+      "AGoT": 84.0
+     },
+     "delta": {
+      "CoT": -5.9,
+      "AIoT": 13.2,
+      "AGoT": 23.5
+     },
+     "bold": [
+      "84.0"
+     ],
+     "cells": [
+      "Retrieval",
+      "HybridQA",
+      "68.0",
+      "64.0",
+      "-5.9%",
+      "77.0",
+      "+13.2%",
+      "84.0",
+      "+23.5%"
+     ]
+    },
+    {
+     "line": 417,
+     "category": "Explorative",
+     "dataset": "Crossword Letters",
+     "model": "gpt-4o-mini",
+     "metric": "letter accuracy",
+     "scores": {
+      "IO": 18.6,
+      "CoT": 19.2,
+      "AIoT": 33.5,
+      "AGoT": 34.7
+     },
+     "delta": {
+      "CoT": 3.2,
+      "AIoT": 80.1,
+      "AGoT": 86.6
+     },
+     "bold": [
+      "34.7"
+     ],
+     "cells": [
+      "Explorative",
+      "Crossword Letters",
+      "18.6",
+      "19.2",
+      "+3.2%",
+      "33.5",
+      "+80.1%",
+      "34.7",
+      "+86.6%"
+     ]
+    },
+    {
+     "line": 418,
+     "category": "Explorative",
+     "dataset": "Crossword Words",
+     "model": "gpt-4o-mini",
+     "metric": "word accuracy",
+     "scores": {
+      "IO": 2.5,
+      "CoT": 3.0,
+      "AIoT": 11.0,
+      "AGoT": 11.1
+     },
+     "delta": {
+      "CoT": 20.0,
+      "AIoT": 340.0,
+      "AGoT": 344.0
+     },
+     "bold": [
+      "11.1"
+     ],
+     "cells": [
+      "Explorative",
+      "Crossword Words",
+      "2.5",
+      "3.0",
+      "+20.0%",
+      "11.0",
+      "+340.0%",
+      "11.1",
+      "+344.0%"
+     ]
+    },
+    {
+     "line": 419,
+     "category": "Explorative",
+     "dataset": "Game of 24",
+     "model": "gpt-4o-mini",
+     "metric": "accuracy",
+     "scores": {
+      "IO": 10.0,
+      "CoT": 20.0,
+      "AIoT": 25.0,
+      "AGoT": 50.0
+     },
+     "delta": {
+      "CoT": 100.0,
+      "AIoT": 150.0,
+      "AGoT": 400.0
+     },
+     "bold": [
+      "50.0"
+     ],
+     "cells": [
+      "Explorative",
+      "Game of 24",
+      "10.0",
+      "20.0",
+      "+100.0%",
+      "25.0",
+      "+150.0%",
+      "50.0",
+      "+400.0%"
+     ]
+    }
+   ]
+  },
+  {
+   "number": 3,
+   "label": "tab: Retrieval tasks",
+   "line": 450,
+   "tabular": [
+    429,
+    448
+   ],
+   "caption": "Performance comparison using IO, CoT, AIoT, and AGoT (this work) as inference frameworks with gpt-4o-mini on three reasoning datasets across Exact Match (EM), F1, and LLM assisted accuracy scores (LAAS). The best result in each row is emphasized with bold characters.",
+   "columns": [
+    "Dataset",
+    "Metric",
+    "IO",
+    "AIoT",
+    "AGoT"
+   ],
+   "rows": [
+    {
+     "line": 434,
+     "category": null,
+     "dataset": "HotpotQA",
+     "model": "gpt-4o-mini",
+     "metric": "EM",
+     "scores": {
+      "IO": 54.0,
+      "AIoT": 48.0,
+      "AGoT": 51.0
+     },
+     "delta": {},
+     "bold": [
+      "54"
+     ],
+     "cells": [
+      "HotpotQA",
+      "EM",
+      "54",
+      "48",
+      "51"
+     ]
+    },
+    {
+     "line": 435,
+     "category": null,
+     "dataset": "HotpotQA",
+     "model": "gpt-4o-mini",
+     "metric": "F1",
+     "scores": {
+      "IO": 74.4,
+      "AIoT": 73.7,
+      "AGoT": 76.2
+     },
+     "delta": {},
+     "bold": [
+      "76.2"
+     ],
+     "cells": [
+      "HotpotQA",
+      "F1",
+      "74.4",
+      "73.7",
+      "76.2"
+     ]
+    },
+    {
+     "line": 436,
+     "category": null,
+     "dataset": "HotpotQA",
+     "model": "gpt-4o-mini",
+     "metric": "LAAS",
+     "scores": {
+      "IO": 72.0,
+      "AIoT": 76.0,
+      "AGoT": 80.0
+     },
+     "delta": {},
+     "bold": [
+      "80"
+     ],
+     "cells": [
+      "HotpotQA",
+      "LAAS",
+      "72",
+      "76",
+      "80"
+     ]
+    },
+    {
+     "line": 439,
+     "category": null,
+     "dataset": "MoreHopQA",
+     "model": "gpt-4o-mini",
+     "metric": "EM",
+     "scores": {
+      "IO": 41.0,
+      "AIoT": 52.0,
+      "AGoT": 49.0
+     },
+     "delta": {},
+     "bold": [
+      "52"
+     ],
+     "cells": [
+      "MoreHopQA",
+      "EM",
+      "41",
+      "52",
+      "49"
+     ]
+    },
+    {
+     "line": 440,
+     "category": null,
+     "dataset": "MoreHopQA",
+     "model": "gpt-4o-mini",
+     "metric": "F1",
+     "scores": {
+      "IO": 52.9,
+      "AIoT": 63.6,
+      "AGoT": 60.0
+     },
+     "delta": {},
+     "bold": [
+      "63.6"
+     ],
+     "cells": [
+      "MoreHopQA",
+      "F1",
+      "52.9",
+      "63.6",
+      "60.0"
+     ]
+    },
+    {
+     "line": 441,
+     "category": null,
+     "dataset": "MoreHopQA",
+     "model": "gpt-4o-mini",
+     "metric": "LAAS",
+     "scores": {
+      "IO": 55.0,
+      "AIoT": 70.0,
+      "AGoT": 72.0
+     },
+     "delta": {},
+     "bold": [
+      "72"
+     ],
+     "cells": [
+      "MoreHopQA",
+      "LAAS",
+      "55",
+      "70",
+      "72"
+     ]
+    },
+    {
+     "line": 444,
+     "category": null,
+     "dataset": "HybridQA",
+     "model": "gpt-4o-mini",
+     "metric": "EM",
+     "scores": {
+      "IO": 55.0,
+      "AIoT": 52.0,
+      "AGoT": 45.0
+     },
+     "delta": {},
+     "bold": [
+      "55"
+     ],
+     "cells": [
+      "HybridQA",
+      "EM",
+      "55",
+      "52",
+      "45"
+     ]
+    },
+    {
+     "line": 445,
+     "category": null,
+     "dataset": "HybridQA",
+     "model": "gpt-4o-mini",
+     "metric": "F1",
+     "scores": {
+      "IO": 68.4,
+      "AIoT": 68.9,
+      "AGoT": 67.8
+     },
+     "delta": {},
+     "bold": [
+      "68.9"
+     ],
+     "cells": [
+      "HybridQA",
+      "F1",
+      "68.4",
+      "68.9",
+      "67.8"
+     ]
+    },
+    {
+     "line": 446,
+     "category": null,
+     "dataset": "HybridQA",
+     "model": "gpt-4o-mini",
+     "metric": "LAAS",
+     "scores": {
+      "IO": 68.0,
+      "AIoT": 77.0,
+      "AGoT": 84.0
+     },
+     "delta": {},
+     "bold": [
+      "84"
+     ],
+     "cells": [
+      "HybridQA",
+      "LAAS",
+      "68",
+      "77",
+      "84"
+     ]
+    }
+   ]
+  }
+ ]
+}

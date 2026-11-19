@@ -18,11 +18,11 @@ PAGES = ['index.html', 'cv.html', 'research.html', 'books.html', 'qubit-dialogue
          'qec-in-practice/lesson-3.html', 'qec-in-practice/lesson-4.html',
          'qec-in-practice/repetition-code.html', 'qec-in-practice/decoding.html',
          'qec-in-practice/threshold.html', 'qec-in-practice/lattice-surgery.html', '404.html',
-         'papers/bb-erasure-baselines.html']
+         'papers/bb-erasure-baselines.html', 'papers/lifted-surgery.html', 'papers/adaptive-graph-of-thoughts.html']
 FULL = ['index.html', 'cv.html', 'research.html', 'books.html', 'qec-in-practice/index.html',
         'qec-in-practice/lesson-1.html', 'qec-in-practice/repetition-code.html', 'qec-in-practice/decoding.html',
         'qec-in-practice/threshold.html', 'qec-in-practice/lattice-surgery.html', '404.html',
-        'papers/bb-erasure-baselines.html']
+        'papers/bb-erasure-baselines.html', 'papers/lifted-surgery.html', 'papers/adaptive-graph-of-thoughts.html']
 
 NAV = [('Research', '/research.html'), ('Books', '/books.html'), ('Lessons', '/qec-in-practice/'),
        ('CV', '/cv.html'), ('Contact', '/#contact')]
@@ -40,7 +40,8 @@ ICON_FILES = ['favicon.ico', 'favicon.svg', 'apple-touch-icon.png']
 # pages whose share card is their own
 OG = {'index.html': 'og-home.png', 'research.html': 'og-research.png', 'cv.html': 'og-cv.png',
       'books.html': 'og-book.png', 'qec-in-practice/index.html': 'og-qec.png',
-      'papers/bb-erasure-baselines.html': 'og-research.png'}
+      'papers/bb-erasure-baselines.html': 'og-research.png',
+      'papers/lifted-surgery.html': 'og-research.png', 'papers/adaptive-graph-of-thoughts.html': 'og-research.png'}
 
 # leftovers of the old costume and copy that must not come back
 GONE = [r'(?i)quantum (&#215;|&times;|×) AI', r'(?i)systems that ship']

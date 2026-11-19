@@ -37,6 +37,8 @@
       "venue": "arXiv preprint",
       "status": "Preprint",
       "arxiv": "2610.05307",
+      "page": "/papers/lifted-surgery.html",
+      "code": "https://github.com/pandey-tushar/liftsurg",
       "summary": "Extends lifted code surgery to non-Abelian group-algebra qLDPC codes, bounds the gain, and finds codes that measure more logicals in fewer rounds.",
       "selected": true
     },
@@ -140,6 +142,8 @@
       "venue": "arXiv preprint",
       "status": "Preprint",
       "arxiv": "2502.05078",
+      "page": "/papers/adaptive-graph-of-thoughts.html",
+      "code": "https://github.com/AgnostiqHQ/multi-agent-llm",
       "summary": "A test-time LLM reasoning method that recursively breaks a query into a graph of subproblems, expanding only hard ones; up to 46.2% gain on GPQA.",
       "selected": true
     },
