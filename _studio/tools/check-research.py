@@ -75,6 +75,28 @@ for p in papers:
     elif esc(p['title']) in cv:
         fail.append(f"cv.html: unselected paper {p['id']} listed")
 
+    # a companion page (papers/<slug>.html, see README "Paper companion pages") and a code link
+    art_links = re.findall(r'href="([^"]*)"', art)
+    if p.get('code') and p['code'] not in art_links:
+        fail.append(f"research.html: {p['id']} does not link its code {p['code']}")
+    if 'page' in p:
+        if p['page'] not in art_links:
+            fail.append(f"research.html: {p['id']} does not link its companion page {p['page']}")
+        f = ROOT / p['page'].lstrip('/')
+        if not p['page'].startswith('/papers/') or not f.exists():
+            fail.append(f"{p['page']}: companion page missing (want a file under papers/)"); continue
+        page = read(f)
+        hrefs = re.findall(r'href="([^"]*)"', page)
+        if f'<link rel="canonical" href="https://pandey-tushar.com{p["page"]}">' not in page:
+            fail.append(f"{p['page']}: no canonical https://pandey-tushar.com{p['page']}")
+        if p.get('arxiv') and f"https://arxiv.org/abs/{p['arxiv']}" not in hrefs:
+            fail.append(f"{p['page']}: no link to https://arxiv.org/abs/{p['arxiv']}")
+        if p.get('arxiv') and not any('@' in b and p['arxiv'] in b for b in re.findall(r'<pre\b[^>]*>(.*?)</pre>', page, re.S)):
+            fail.append(f"{p['page']}: no BibTeX <pre> block carrying {p['arxiv']}")
+        main = re.search(r'<main\b.*?</main>', page, re.S)
+        if not main or 'href="/research.html"' not in main.group(0):
+            fail.append(f"{p['page']}: no link back to /research.html inside <main>")
+
 items = []
 for block in re.findall(r'<script type="application/ld\+json">(.*?)</script>', research, re.S):
     try:

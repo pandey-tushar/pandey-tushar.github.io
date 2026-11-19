@@ -55,7 +55,7 @@ CARDS = {
         foot='pandey-tushar.com/life', art=lambda: fig(F.rings(P))),
     'og-qec.png': dict(
         title='Quantum error correction in practice',
-        sub='Four interactive lessons, from one surface code patch to a teleported T state.',
+        sub='Eight interactive lessons, from the repetition code to lattice surgery.',
         foot='pandey-tushar.com/qec-in-practice', art=lambda: fig(F.surface(P)), size='64px'),
 }
 

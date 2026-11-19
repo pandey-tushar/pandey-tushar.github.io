@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<title>Lattice surgery · Quantum Error Correction in Practice</title>
+<meta name="description" content="Merge two surface code patches along an edge, then split them: the seam checks measure Z_L Z_L without reading either logical qubit. Step through it on 21 simulated qubits and run 200 shots.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/qec-in-practice/lattice-surgery.html">
+<meta property="og:title" content="Lattice surgery &middot; Quantum Error Correction in Practice">
+<meta property="og:description" content="Merge two surface code patches along an edge, then split them: the seam checks measure Z_L Z_L without reading either logical qubit. Step through it on 21 simulated qubits and run 200 shots.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/qec-in-practice/lattice-surgery.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-qec.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-qec.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pandey-tushar.com/"},
+  {"@type": "ListItem", "position": 2, "name": "Quantum error correction in practice", "item": "https://pandey-tushar.com/qec-in-practice/"},
+  {"@type": "ListItem", "position": 3, "name": "Lattice surgery", "item": "https://pandey-tushar.com/qec-in-practice/lattice-surgery.html"}
+ ]
+}
+</script>
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/surgery.css">
+<script type="module" src="js/surgery-page.js"></script>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="page surgery">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a href="lesson-4.html">&larr; Previous: Lesson 4</a></nav>
+  <article class="essay">
+  <h1 id="lesson-title">Lattice surgery</h1>
+  <p class="lead">Two surface code patches sit side by side. Merge them along the edges that face each other, then split them again, and you have measured the product of their logical Z operators without reading either one. That is lattice surgery. The figure runs it on 21 simulated qubits.</p>
+
+  <h2>Two patches and a seam</h2>
+  <p>Each patch is the distance-3 patch from <a class="tp-link" href="lesson-1.html">lesson 1</a>: nine data qubits, four X checks and four Z checks. The left and right edges carry X checks, the top and bottom edges carry Z checks. X<sub>L</sub> runs along the top row, from one X edge to the other. Z<sub>L</sub> runs down a column, from one Z edge to the other. Multiply a column of Z by the patch's four Z checks and you get another column, so while those checks hold, any column is Z<sub>L</sub>.</p>
+  <p>Put patch B to the right of patch A, with a column of three fresh qubits, the seam, in between. A's right edge and B's left edge, both X edges, now face each other, and the columns that carry Z<sub>L</sub> run parallel to them.</p>
+  </article>
+
+  <figure class="tp-plate surgery-fig" id="fig">
+    <div class="sg-controls" id="sg-controls" hidden>
+      <div class="sg-pick">
+        <label>Patch A <select id="sg-a"><option value="0">|0&#10217;</option><option value="1">|1&#10217;</option><option value="+" selected>|+&#10217;</option><option value="-">|&minus;&#10217;</option></select></label>
+        <label>Patch B <select id="sg-b"><option value="0">|0&#10217;</option><option value="1">|1&#10217;</option><option value="+" selected>|+&#10217;</option><option value="-">|&minus;&#10217;</option></select></label>
+        <label>Read out in <select id="sg-basis"><option value="Z" selected>Z</option><option value="X">X</option></select></label>
+      </div>
+      <ol class="sg-steps" id="sg-steps" aria-label="Stage">
+        <li><button type="button" class="tp-btn" data-step="0">1 Start</button></li>
+        <li><button type="button" class="tp-btn" data-step="1">2 Merge</button></li>
+        <li><button type="button" class="tp-btn" data-step="2">3 Split</button></li>
+        <li><button type="button" class="tp-btn" data-step="3">4 Read out</button></li>
+      </ol>
+      <div class="sg-nav">
+        <button type="button" class="tp-btn" id="sg-back">&larr; Back</button>
+        <button type="button" class="tp-btn" id="sg-next">Next &rarr;</button>
+        <button type="button" class="tp-btn" id="sg-new">New shot</button>
+        <span class="sg-seed" id="sg-seed"></span>
+      </div>
+    </div>
+    <svg id="sg-svg" class="sg-svg" role="img" aria-labelledby="sg-svg-title"><title id="sg-svg-title">Two surface code patches and the seam between them</title></svg>
+    <p class="sg-status" id="sg-status" aria-live="polite">The figure needs JavaScript. The text around it describes every stage.</p>
+    <p class="legend" id="sg-legend" hidden><span class="sw sw-x"></span> X check <span class="sw sw-z"></span> Z check <span class="sw sw-fire"></span> read -1 <span class="sw sw-off"></span> no definite value <span class="sw sw-par"></span> parity checks <span class="sw sw-gate"></span> frame Z</p>
+    <div class="sg-tally" id="sg-tally" hidden>
+      <div class="sg-run"><button type="button" class="tp-btn" id="sg-run">Run 200 shots</button> <span id="sg-run-note" class="muted" role="status"></span></div>
+      <div id="sg-table"></div>
+    </div>
+    <figcaption><b>Fig. 1</b>Two distance-3 patches and the seam, simulated in your browser with a stabilizer tableau, one seeded shot at a time. Orange checks are X checks, blue are Z checks; a check that read -1 is red, one with no definite value is grey. The four seam Z checks whose product is the parity are outlined. Z<sub>L</sub> is drawn on the outer column of each patch. No noise is simulated, so every -1 is a measurement outcome, not an error. Use the arrow keys on the figure to step.</figcaption>
+  </figure>
+
+  <article class="essay">
+  <h2>Merge</h2>
+  <p>Prepare the seam in |+&#10217; and measure the checks of one patch seven columns wide. The two facing X edge checks stop being checks. Six new ones appear across the seam: two X checks and four Z checks, two of them weight two on the top and bottom edges.</p>
+  <p>Multiply the four new Z checks. Every seam qubit appears twice and drops out, which leaves Z on A's right column times Z on B's left column. That is Z<sub>L</sub>(A) Z<sub>L</sub>(B), times A's own Z checks, which hold. Each of the four is random on its own, because each anticommutes with X on some seam qubit, and those were +1. Only the product carries information. The two new X checks are not random: each is an old edge check times X on two seam qubits, all +1.</p>
+  <p>Pick |+&#10217; for both patches. The Z<sub>L</sub> lines are grey from the start: neither has a value. Step to Merge and they stay grey, but their product now has one, and each X<sub>L</sub> line turns grey too, because X<sub>L</sub> of one patch alone does not commute with the measurement.</p>
+
+  <h2>Split</h2>
+  <p>To split, measure each seam qubit in X. The seam Z checks end, but their product touches no seam qubit and keeps its value. The facing edge checks return: A's equals the merged X check on its side times the X outcomes of the two seam qubits it touched, and likewise for B. When that product is -1, Z on A's qubits 5 and 8, or on B's qubit 15, flips it back.</p>
+  <p>One correction is logical. X<sub>L</sub>(A), times X on the top seam qubit, times X<sub>L</sub>(B) commuted with every merged check and kept its value. After the split, X<sub>L</sub>(A) X<sub>L</sub>(B) carries the top seam outcome as a sign, so when it reads -1 you apply Z<sub>L</sub> to A. These Paulis are the frame. Hardware tracks them in software; the figure applies them.</p>
+
+  <h2>What you are left with</h2>
+  <p>After the frame every check holds again, and the pair is in an eigenstate of Z<sub>L</sub>(A) Z<sub>L</sub>(B) with the value the merge reported. Read both patches in Z and the product of the two outcomes is always that value; run 200 shots to see it. For |0&#10217; and |1&#10217; inputs the parity is fixed in advance and the merge confirms it.</p>
+  <p>For |+&#10217;|+&#10217; the parity is +1 or -1 with even odds, and the two Z readouts then agree or disagree every time. Switch the readout to X and X<sub>L</sub>(A) X<sub>L</sub>(B) comes out +1 in every shot, because the measurement commuted with it. Correlated in Z and in X: a logical Bell pair, the state <a class="tp-link" href="lesson-2.html">lesson 2</a> made with a transversal CNOT and <a class="tp-link" href="lesson-4.html">lesson 4</a> spent on teleportation. Here it came from checks between neighbouring qubits, not from gates between matching qubits of two patches.</p>
+
+  <h2>Why surgery matters</h2>
+  <p>A transversal CNOT couples every qubit of one patch to its partner in the other. A planar chip with nearest-neighbour couplings has no such links between two patches side by side. Surgery needs only the local checks along a shared edge. Stack the patches instead, so their Z edges face, put the seam in |0&#10217;, and by the same argument the product of the new X checks gives X<sub>L</sub> X<sub>L</sub>, times X checks the patches already had. With both measurements you have a logical CNOT: take an ancilla patch in |+&#10217;, measure Z<sub>L</sub> Z<sub>L</sub> on control and ancilla, then X<sub>L</sub> X<sub>L</sub> on ancilla and target, read the ancilla in Z, and fix the frame from the three outcomes. That sequence is the standard construction; it is not simulated on this page.</p>
+  <p>The same idea, measuring logical operators by joining codes through new checks, is being generalised to qLDPC codes in current <a class="tp-link" href="/research.html">research</a>.</p>
+
+  <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "Lattice surgery", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/lattice-surgery.html</p>
+  </article>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

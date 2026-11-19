@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<title>Errors, syndromes and decoding · Quantum Error Correction in Practice</title>
+<meta name="description" content="Place X, Z and Y errors on a surface code patch, see which checks fire, and step through a union-find decoder as its clusters grow. Then load an error the decoder gets wrong, and see why checks are measured more than once.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/qec-in-practice/decoding.html">
+<meta property="og:title" content="Errors, syndromes and decoding &middot; Quantum Error Correction in Practice">
+<meta property="og:description" content="Place X, Z and Y errors on a surface code patch, see which checks fire, and step through a union-find decoder as its clusters grow. Then load an error the decoder gets wrong, and see why checks are measured more than once.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/qec-in-practice/decoding.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-qec.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-qec.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pandey-tushar.com/"},
+  {"@type": "ListItem", "position": 2, "name": "Quantum error correction in practice", "item": "https://pandey-tushar.com/qec-in-practice/"},
+  {"@type": "ListItem", "position": 3, "name": "Errors, syndromes and decoding", "item": "https://pandey-tushar.com/qec-in-practice/decoding.html"}
+ ]
+}
+</script>
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/explore.css">
+<script type="module" src="js/decoding-page.js"></script>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="essay">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a href="lesson-1.html">&larr; Previous: Lesson 1</a> <a href="threshold.html">Next: The threshold &rarr;</a></nav>
+  <h1>Errors, syndromes and decoding</h1>
+  <p class="lead">In <a href="lesson-1.html">Lesson 1</a> a 3 by 3 patch of qubits held one logical qubit, watched by four X checks and four Z checks. This page asks what happens after a check fires: how a decoder turns a pattern of fired checks into a correction, and when that correction is wrong.</p>
+
+  <h2>Two kinds of error, two kinds of check</h2>
+  <p>A qubit can suffer a bit flip X, a phase flip Z, or both at once, Y. Each check is a product of Pauli operators on the qubits at the corners of its tile: X on every corner for an X check, Z on every corner for a Z check. A check fires when an odd number of its qubits carry an error that does not commute with it. An X error commutes with X checks and anticommutes with Z checks, so it fires Z checks only. A Z error fires X checks only, and a Y error fires both kinds.</p>
+  <p>The patch below can be made larger, d = 5 or 7, where d is again the distance: the fewest single-qubit errors that change the logical qubit without firing any check. Click a qubit to cycle it through X, Z, Y and back to no error (or use the arrow keys and Enter). Put an X error in the middle, then add X errors on its neighbours in a line, and walk the line to the left or right edge.</p>
+
+  <figure class="tp-plate ex" id="fig-patch">
+    <svg class="code" role="group" aria-label="Surface code patch: data qubits at the corners of X and Z check tiles" hidden></svg>
+    <p class="legend" hidden><span class="sw sw-x"></span> X check <span class="sw sw-z"></span> Z check <span class="sw sw-fire"></span> fired <span class="sw sw-err"></span> error on a qubit</p>
+    <div class="ex-controls" hidden>
+      <label>Distance <select data-d><option value="3">d = 3</option><option value="5" selected>d = 5</option><option value="7">d = 7</option></select></label>
+      <button type="button" class="tp-btn" data-clear>Clear</button>
+    </div>
+    <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
+    <figcaption><b>Fig. 1</b>A rotated surface code patch. Data qubits sit at the corners of the tiles; orange tiles are X checks and blue tiles are Z checks, with two-qubit checks on the edges. Positions are given as (row, column) from the top left.</figcaption>
+  </figure>
+
+  <p>A lone X error in the middle fires the two Z checks that touch it. Add a neighbour in the same row and the Z check they share sees two errors and goes quiet: a chain of errors shows only its two ends. Walk the chain to the left or right edge and one end disappears, because the edge qubits belong to only one Z check. A chain that reaches both edges fires nothing at all. That chain is a logical X, the operator Lesson 1 drew along the top row.</p>
+
+  <h2>The decoder, step by step</h2>
+  <p>The syndrome says where chains end, not where they run, so the decoder has to guess. Many decoders treat the problem as a graph. Each check is a node, each data qubit is an edge between the two checks of one type that it touches, and an edge qubit links its one check to the boundary. Fired checks must be paired up, or paired with the boundary, by paths in this graph.</p>
+  <p>The decoder in this course is the union-find decoder of Delfosse and Nickerson. It starts with each fired check as a cluster of its own. A cluster with an odd number of fired checks cannot be explained from inside, so it grows by half an edge in every direction, the smallest odd clusters first. When two clusters meet they merge. Growth stops once every cluster holds an even number of fired checks or touches the boundary. Then, inside each cluster, the decoder picks a set of edges that links its fired checks in pairs or to the boundary, and flips those qubits.</p>
+  <p>The best-known alternative, minimum-weight perfect matching, searches the whole patch for the pairing with the shortest total length. Union-find only looks inside its clusters, so it is simpler, runs in close to linear time in the worst case, and is less accurate: sometimes it picks a longer correction than matching would. At the sizes used in this course it fails up to about twice as often; the threshold lesson measures the gap. Place some errors or draw random ones, then press Next step and watch the clusters grow.</p>
+
+  <figure class="tp-plate ex" id="fig-uf">
+    <div class="ex-controls ex-setup" hidden>
+      <label>Distance <select data-d><option value="3">d = 3</option><option value="5" selected>d = 5</option><option value="7">d = 7</option></select></label>
+      <label>Noise <select data-model><option value="bitflip">bit flips (X)</option><option value="depolarizing">depolarizing (X, Y, Z)</option></select></label>
+      <label>p <input type="range" data-p min="0.02" max="0.3" step="0.01" value="0.1"> <output data-pout>0.10</output></label>
+      <button type="button" class="tp-btn" data-random>Random errors</button>
+      <button type="button" class="tp-btn" data-clear>Clear</button>
+    </div>
+    <svg class="code" role="group" aria-label="Surface code patch with the union-find decoder" hidden></svg>
+    <p class="legend" hidden><span class="sw sw-fire"></span> fired <span class="sw sw-err"></span> error <span class="sw sw-grow"></span> cluster (filled dot: still odd) <span class="sw sw-corr"></span> correction</p>
+    <div class="ex-controls" hidden>
+      <button type="button" class="tp-btn" data-back>Back</button>
+      <button type="button" class="tp-btn main" data-next>Next step</button>
+      <button type="button" class="tp-btn" data-end>To the end</button>
+    </div>
+    <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
+    <figcaption><b>Fig. 2</b>The union-find decoder run by the course's engine. Each growth round is drawn from the decoder's own record: grown edges in the accent colour, cluster checks as dots. Then the correction, then the verdict on what error and correction leave behind.</figcaption>
+  </figure>
+
+  <p>The correction never needs to match the error qubit for qubit. It only needs to fire the same checks. Error and correction together then fire nothing, which leaves two possibilities. Either they form a product of checks, a <em>stabilizer</em>, which acts trivially on the stored state; or they form a logical operator, a chain from one edge to the opposite edge, and the logical qubit has been changed.</p>
+
+  <h2>Why the decoder can be fooled</h2>
+  <p>Press Load the example. It places X errors on the left (d + 1)/2 qubits of the top row, then step through the decoder to the verdict.</p>
+
+  <figure class="tp-plate ex" id="fig-fool">
+    <div class="ex-controls ex-setup" hidden>
+      <label>Distance <select data-d><option value="3">d = 3</option><option value="5" selected>d = 5</option><option value="7">d = 7</option></select></label>
+      <button type="button" class="tp-btn main" data-preset>Load the example</button>
+      <button type="button" class="tp-btn" data-clear>Clear</button>
+    </div>
+    <svg class="code" role="group" aria-label="Surface code patch with an error the decoder gets wrong" hidden></svg>
+    <p class="legend" hidden><span class="sw sw-fire"></span> fired <span class="sw sw-err"></span> error <span class="sw sw-grow"></span> cluster <span class="sw sw-corr"></span> correction</p>
+    <div class="ex-controls" hidden>
+      <button type="button" class="tp-btn" data-back>Back</button>
+      <button type="button" class="tp-btn main" data-next>Next step</button>
+      <button type="button" class="tp-btn" data-end>To the end</button>
+    </div>
+    <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
+    <figcaption><b>Fig. 3</b>An error of weight (d + 1)/2 that the decoder completes into a logical X. The course's tests run this example at d = 3, 5 and 7 and confirm the failure.</figcaption>
+  </figure>
+
+  <p>The decoder flips the other (d &minus; 1)/2 qubits of the top row. Error and correction together cover the whole row, which is the logical X, so the stored qubit has flipped. Yet the guess fires exactly the same checks as the true error, so both explain the syndrome equally well, and the guess uses fewer flips. When errors are independent and rare, fewer flips is more likely, and the guess is the better bet. This syndrome was simply produced by the less likely of the two. No decoder can tell them apart, which is why a code of distance d is only guaranteed to correct (d &minus; 1)/2 errors.</p>
+
+  <h2>When the checks themselves are wrong</h2>
+  <p>So far every check reported its true value. In hardware a check is measured by a circuit, and that circuit can fail too, reporting a fired check that is not there or missing one that is. A single round of readings cannot tell a misread check from a real error. So the checks are measured over and over, and the decoder looks at <em>detection events</em>: places where a check's reading changes from one round to the next. A data error that appears and stays changes two neighbouring checks once, giving two events side by side in the same round. A misread check is wrong for one round only, giving two events on the same check in consecutive rounds.</p>
+  <p>The figure below shows this on a slice of five qubits in a line, the repetition code from the <a href="repetition-code.html">repetition code lesson</a>, with four checks measured over four rounds; the last round is read without error, as it is when the data qubits themselves are measured at the end. Choose a case.</p>
+
+  <figure class="tp-plate ex" id="fig-time">
+    <div class="ex-controls" role="group" aria-label="Which error" hidden>
+      <button type="button" class="tp-btn" data-case="data" aria-pressed="false">Data error</button>
+      <button type="button" class="tp-btn" data-case="measure" aria-pressed="true">Measurement error</button>
+      <button type="button" class="tp-btn" data-case="both" aria-pressed="false">Both</button>
+    </div>
+    <div class="mgrids" data-grids></div>
+    <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
+    <figcaption><b>Fig. 4</b>Check readings: what each check c1 to c4 reads in each round (red: fired; dashed outline: a reading that is wrong). Check c<sub>k</sub> compares qubits k and k + 1. Detection events: where a reading differs from the round before. The decoder works on the space-time graph of all rounds.</figcaption>
+  </figure>
+
+  <p>A misread check leaves a pair of events stacked in time, and the decoder, working on a graph whose edges run through time as well as space, pairs them with a time edge: no data qubit is flipped. A data error leaves a pair in space and is corrected as before. The surface code works the same way, with a full patch of checks in every round.</p>
+  <p>Every decoder makes the wrong guess sometimes. The question for a real machine is how often, and whether a bigger patch makes it rarer. That is the subject of the next lesson.</p>
+
+  <p class="next"><a href="threshold.html">The threshold &rarr;</a> &nbsp; <a href="/qec-in-practice/">All lessons</a></p>
+  <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "Errors, syndromes and decoding", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/decoding.html</p>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,51 @@
+/* Lattice surgery page. Figure inks (--x, --z, --bad, --focus) come from css/site.css;
+   everything else from the --tp- tokens. Nothing animates. */
+.surgery .essay { max-width: var(--tp-measure); }
+.surgery .essay h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.6rem); line-height: 1.1; margin: 14px 0 12px; }
+.surgery .essay h2 { font-size: 1.45rem; margin: 2rem 0 0.6rem; }
+.surgery .essay p { margin: 0 0 1rem; color: var(--tp-text); }
+.surgery .essay .lead { font-size: 1.06rem; }
+.surgery .cite { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); overflow-wrap: anywhere; }
+.surgery .cite .tp-lbl { display: block; margin-bottom: 4px; }
+
+.surgery-fig { margin: 1.6rem 0 1.4rem; max-width: 52rem; }
+.surgery-fig [hidden] { display: none; }
+.sg-controls { display: grid; gap: 10px; margin-bottom: 8px; }
+.sg-pick { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.sg-pick label { display: inline-flex; gap: 8px; align-items: center; color: var(--tp-text); }
+.sg-pick select { min-height: 40px; }
+.sg-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.sg-steps .tp-btn { min-height: 40px; padding: 0 12px; }
+.sg-steps .tp-btn[aria-current="step"] { color: var(--tp-ink); border-color: var(--tp-acc); box-shadow: inset 0 -3px 0 var(--tp-acc); font-weight: 600; }
+.sg-nav { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.sg-nav .tp-btn { min-height: 40px; padding: 0 12px; }
+.sg-nav .tp-btn:disabled { opacity: 0.5; cursor: default; }
+.sg-seed { color: var(--tp-dim); font: var(--tp-t-small) var(--tp-mono); }
+
+.sg-svg { display: block; width: 100%; max-width: 34rem; height: auto; margin: 6px auto 0; }
+.sg-svg .qdot { stroke-width: 2; }
+.sg-q.seamq .qdot { stroke-dasharray: 4 3; }
+.sg-q.gone .qdot { stroke: var(--tp-dim); }
+.sg-q.gone .sg-num { fill: var(--tp-dim); }
+.sg-num { font-size: 18px; fill: var(--tp-ink); }
+.sg-lab { font-size: 21px; fill: var(--tp-dim); }
+.sg-seam { font-size: 18px; fill: var(--tp-dim); }
+.sg-name { font-size: 18px; font-weight: 600; fill: var(--tp-ink); }
+.sg-par { fill: none; stroke: var(--tp-ink); stroke-width: 3; stroke-dasharray: 7 5; }
+.sg-v, .sg-out { font-size: 18px; font-weight: 700; fill: var(--tp-ink); paint-order: stroke; stroke: var(--tp-void2); stroke-width: 4px; stroke-linejoin: round; }
+.sg-ring { fill: none; stroke: var(--focus); stroke-width: 3; }
+
+.sg-status { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--tp-rule); color: var(--tp-text); min-height: 4.8em; }
+.sg-stage { color: var(--tp-ink); }
+.sw-par { background: transparent; border: 2px dashed var(--tp-ink); }
+.sg-tally { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--tp-rule); }
+.sg-run { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.sg-twrap { max-width: 100%; overflow-x: auto; }
+.surgery .sg-t { min-width: 0; width: auto; margin-top: 10px; font-size: var(--tp-t-small); }
+.surgery .sg-t th, .surgery .sg-t td { white-space: normal; text-align: right; }
+.surgery .sg-t th[scope=row] { min-width: 0; text-align: right; font-family: var(--tp-mono); }
+.surgery .sg-t thead th { font: 600 12px/1.4 var(--tp-sans); text-transform: none; letter-spacing: 0; }
+.surgery .sg-t td { font-family: var(--tp-mono); }
+.sg-sum { margin: 8px 0 0; color: var(--tp-text); }
+.surgery-fig figcaption { max-width: var(--tp-measure); }
+.surgery sub { font-size: max(12px, 0.75em); }

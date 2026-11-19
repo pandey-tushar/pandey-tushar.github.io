@@ -1,0 +1,95 @@
+/* The essay lessons (repetition-code.html, decoding.html). Ground, type and tokens come from
+   /lib/site.css; the X, Z, fired and error inks (--x, --z, --bad) from css/site.css. */
+.essay { max-width: calc(44rem + 2 * var(--tp-gut)); margin: 0 auto; padding: 18px var(--tp-gut) 48px; }
+.essay h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.7rem); line-height: 1.08; margin: 14px 0 14px; }
+.essay h2 { font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.7rem); margin: 2.4rem 0 0.7rem; }
+.essay p, .essay li { max-width: var(--tp-measure); }
+.essay p { margin: 0 0 1em; }
+.essay .lead { font-size: 1.06rem; color: var(--tp-text); }
+.essay a:not(.tp-btn) { color: var(--tp-acc); text-decoration: underline 1px; text-decoration-color: var(--tp-a40); text-underline-offset: 0.2em; }
+.essay a:not(.tp-btn):hover, .essay a:not(.tp-btn):focus-visible { text-decoration-color: currentColor; }
+.essay .secnav a { text-decoration: none; color: var(--tp-dim); }
+.essay .cite { margin-top: 2.4rem; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); color: var(--tp-dim); }
+.essay .next { margin-top: 1.6rem; }
+.essay .formula { font-family: var(--tp-serif); font-size: 1.12rem; color: var(--tp-ink); margin-left: clamp(0px, 4vw, 2em); }
+
+/* a figure with its controls and a status line */
+.ex { margin: 1.5rem 0 1.6rem; }
+.ex [hidden] { display: none !important; }
+.ex svg.code { display: block; width: 100%; height: auto; margin: 0 auto; }
+.ex-controls { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 12px 0 0; }
+.ex-controls label { display: inline-flex; align-items: center; gap: 6px; font-size: var(--tp-t-small); color: var(--tp-dim); }
+.ex-controls select, .ex-controls .tp-btn { min-height: 40px; }
+.ex-controls select { padding: 4px 8px; font-size: var(--tp-t-small); }
+.ex-controls input[type=range] { width: 9rem; max-width: 40vw; height: 40px; margin: 0; accent-color: var(--tp-acc); }
+.ex-controls output { font: var(--tp-t-small) var(--tp-mono); color: var(--tp-ink); min-width: 3.2em; }
+.ex-controls .tp-btn { padding: 0 14px; font-size: var(--tp-t-small); }
+.ex-controls .tp-btn.main { border-color: var(--tp-acc); }
+.ex-controls .tp-btn:disabled, .ex-controls .tp-btn[aria-disabled="true"] { opacity: 0.55; cursor: default; }
+.ex-controls .tp-btn[aria-pressed="true"] { border-color: var(--tp-acc); color: var(--tp-ink); background: var(--tp-a22); }
+.ex-controls .sep { flex-basis: 100%; height: 0; }
+.ex-controls.ex-setup { margin: 0 0 10px; }
+.ex-status { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--tp-rule); min-height: 3.2em; color: var(--tp-text); font-size: 0.95rem; }
+.ex-status b { color: var(--tp-ink); font-weight: 600; }
+.ex .legend { margin: 8px 0 0; }
+.sw-corr { border: 2px dashed var(--tp-acc); border-radius: 50%; background: none; }
+.sw-grow { height: 0; width: 16px; border: 0; border-top: 4px solid var(--tp-acc); border-radius: 2px; vertical-align: 3px; }
+.sw-err { background: color-mix(in srgb, var(--bad) 25%, var(--card)); border-color: var(--bad); border-radius: 50%; }
+@media (max-width: 600px) {
+  .essay { padding-inline: 14px; }
+  .ex.tp-plate { padding: 8px; }
+}
+
+/* the code drawing (js/qec-draw.js) */
+.plaq.x { fill: var(--x); fill-opacity: 0.32; stroke: var(--x); stroke-width: 2; }
+.plaq.z { fill: var(--z); fill-opacity: 0.32; stroke: var(--z); stroke-width: 2; }
+.plaq.fired, .chk.fired { fill: var(--bad); fill-opacity: 0.9; }
+.chk { fill: var(--z); fill-opacity: 0.32; stroke: var(--z); stroke-width: 2; }
+.chk.fired { stroke: var(--bad); }
+.repline { stroke: var(--tp-rule); stroke-width: 3; }
+.qdot.err { fill: color-mix(in srgb, var(--bad) 25%, var(--card)); stroke: var(--bad); stroke-width: 3; }
+.qdot.err.bad { fill: color-mix(in srgb, var(--bad) 50%, var(--card)); }
+.qlab { font: 600 18px var(--tp-sans); fill: var(--tp-ink); }
+.corr { fill: none; stroke: var(--tp-acc); stroke-width: 2.5; stroke-dasharray: 5 4; }
+.clab { font: 700 16px var(--tp-sans); fill: var(--tp-acc); paint-order: stroke; stroke: var(--card); stroke-width: 4; }
+.grow { stroke: var(--tp-acc); stroke-width: 6; stroke-linecap: round; stroke-opacity: 0.85; }
+.cnode { fill: var(--card); stroke: var(--tp-acc); stroke-width: 3; }
+.cnode.odd { fill: var(--tp-acc); }
+.qbtn { cursor: pointer; outline: none; }
+.qhit { fill: #000; fill-opacity: 0; }
+.qring { fill: none; stroke: none; stroke-width: 3; }
+.qbtn:focus-visible .qring { stroke: var(--tp-acc); }
+.qbtn:hover .qring { stroke: var(--tp-a40); }
+
+/* the small plot (repetition-code.html) */
+.plot { display: block; }
+.legend .nw { white-space: nowrap; margin-right: 14px; }
+.plot.lsw { display: inline-block; width: 26px; height: 12px; vertical-align: 0; }
+.plot .axis { stroke: var(--tp-dim); stroke-width: 1.25; }
+.plot .gridl { stroke: var(--tp-rule); stroke-width: 1; }
+.plot text { font: 13px var(--tp-sans); fill: var(--tp-dim); }
+.plot text.dl { fill: var(--tp-ink); font-weight: 600; }
+.plot .curve { fill: none; stroke-width: 2; }
+.plot .curve.d1 { stroke: var(--tp-dim); stroke-dasharray: 5 4; }
+.plot .curve.d3, .plot .d3 .pt, .plot .d3 .bar { stroke: var(--tp-ink); }
+.plot .curve.d5, .plot .d5 .pt, .plot .d5 .bar { stroke: var(--tp-a70); }
+.plot .curve.d5 { stroke-dasharray: 9 4; }
+.plot .curve.d7, .plot .d7 .pt, .plot .d7 .bar { stroke: var(--tp-acc); }
+.plot .curve.d7 { stroke-width: 2.5; }
+.plot .d1 .pt, .plot .d1 .bar { stroke: var(--tp-dim); }
+.plot .pt { fill: var(--card); stroke-width: 2; }
+.plot .bar { stroke-width: 1.5; }
+.plot .half { stroke: var(--tp-dim); stroke-dasharray: 2 4; stroke-width: 1.25; }
+.ex progress { width: 8rem; accent-color: var(--tp-acc); }
+
+/* the space-time grids (decoding.html) */
+.mgrids { display: flex; flex-wrap: wrap; gap: 14px 32px; justify-content: center; }
+.mgrid { display: grid; grid-template-columns: auto repeat(var(--m), 36px); gap: 4px; align-items: center; justify-items: center; }
+.mgrid .hd { grid-column: 1 / -1; justify-self: start; font: 600 var(--tp-t-app)/1.3 var(--tp-sans); letter-spacing: 0.07em; text-transform: uppercase; color: var(--tp-dim); margin-bottom: 4px; }
+.mgrid .rl, .mgrid .cl { font-size: var(--tp-t-small); color: var(--tp-dim); }
+.mgrid .rl { justify-self: end; padding-right: 6px; }
+.mcell { width: 34px; height: 34px; border-radius: 4px; border: 2px solid var(--z); background: color-mix(in srgb, var(--z) 32%, var(--card)); }
+.mcell.on { background: var(--bad); border-color: var(--bad); }
+.mcell.wrong { outline: 2px dashed var(--tp-ink); outline-offset: 2px; }
+.ecell { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--tp-rule); }
+.ecell.on { border: 4px solid var(--tp-acc); background: var(--tp-a22); }

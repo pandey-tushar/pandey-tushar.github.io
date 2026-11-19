@@ -1,0 +1,1173 @@
+{
+ "paper": {
+  "id": "fair-decoder-baselines-and-rigorous-finite-size-scaling-for",
+  "arxiv": "2603.19062"
+ },
+ "source": {
+  "repository": "https://github.com/pandey-tushar/QLDPC",
+  "commit": "704fa323595256629b835325ed2e984ab5bcc895",
+  "extracted": "2026-11-19",
+  "files": [
+   "arxiv_submission/main.tex",
+   "results/baseline_surface_20260115T062510Z_surface_mwpm.csv",
+   "results/baseline_surface_20260318T172201Z_erasure_aware_50k.csv",
+   "results/ci/threshold_ci_table.json",
+   "results/fss_prelim/fss_results.json",
+   "results/scaling_20260115T001322Z.csv",
+   "results/scaling_20260115T064157Z_extended.csv",
+   "results/scaling_20260115T092536Z_extended_large.csv"
+  ]
+ },
+ "paper_fit": {
+  "file": "arxiv_submission/main.tex",
+  "p_star_inf": 0.488,
+  "p_star_inf_pm": 0.001,
+  "line_p_star_inf": 273,
+  "nu": 1.18,
+  "nu_pm": 0.01,
+  "line_nu": 274
+ },
+ "fss_fit": {
+  "file": "results/fss_prelim/fss_results.json",
+  "csv_files": [
+   "results/scaling_20260115T001322Z.csv",
+   "results/scaling_20260115T064157Z_extended.csv",
+   "results/scaling_20260115T092536Z_extended_large.csv"
+  ],
+  "p_star_inf": 0.48783791969410084,
+  "nu": 1.1791192278597502,
+  "p_star_inf_ci95": [
+   0.4876518873972431,
+   0.488004792096029
+  ],
+  "nu_ci95": [
+   1.1737949279341329,
+   1.1841322446061202
+  ],
+  "residual_ss": 0.042653998796917295,
+  "poly_degree": 3,
+  "p_window": 0.06,
+  "bootstrap_iterations": 500,
+  "target_wer": 0.1
+ },
+ "bb": [
+  {
+   "label": "12x6",
+   "L": 12,
+   "M": 6,
+   "N": 144,
+   "K": 12,
+   "files": [
+    "results/scaling_20260115T001322Z.csv"
+   ],
+   "center": 0.37007005899705014,
+   "p_star": 0.37007005899705014,
+   "p_star_ci95": [
+    0.3697102820871394,
+    0.37027950090355505
+   ],
+   "ci_file": "results/ci/threshold_ci_table.json",
+   "points": [
+    {
+     "p": 0.3,
+     "fails": 848,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.32,
+     "fails": 2332,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.34,
+     "fails": 6057,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.36,
+     "fails": 13742,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.37,
+     "fails": 19924,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.3703125,
+     "fails": 20263,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.370625,
+     "fails": 20366,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.37125,
+     "fails": 20797,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.3725,
+     "fails": 21918,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.375,
+     "fails": 23613,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.38,
+     "fails": 27932,
+     "shots": 200000,
+     "fit_count": 1
+    }
+   ]
+  },
+  {
+   "label": "18x9",
+   "L": 18,
+   "M": 9,
+   "N": 324,
+   "K": 8,
+   "files": [
+    "results/scaling_20260115T001322Z.csv",
+    "results/scaling_20260115T064157Z_extended.csv"
+   ],
+   "center": 0.43854997680890534,
+   "p_star": 0.43854997680890534,
+   "p_star_ci95": [
+    0.43804321504920457,
+    0.43866515293626224
+   ],
+   "ci_file": "results/ci/threshold_ci_table.json",
+   "points": [
+    {
+     "p": 0.3,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.32,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.34,
+     "fails": 3,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.36,
+     "fails": 23,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.38,
+     "fails": 162,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.4,
+     "fails": 1172,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.42,
+     "fails": 5933,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.43,
+     "fails": 11741,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.435,
+     "fails": 16399,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4375,
+     "fails": 18811,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.438125,
+     "fails": 19911,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4384375,
+     "fails": 19806,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.43875,
+     "fails": 20345,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.44,
+     "fails": 21768,
+     "shots": 200000,
+     "fit_count": 1
+    }
+   ]
+  },
+  {
+   "label": "24x12",
+   "L": 24,
+   "M": 12,
+   "N": 576,
+   "K": 16,
+   "files": [
+    "results/scaling_20260115T001322Z.csv",
+    "results/scaling_20260115T064157Z_extended.csv"
+   ],
+   "center": 0.4452872522865854,
+   "p_star": 0.4452872522865854,
+   "p_star_ci95": [
+    0.4451970106709255,
+    0.4454533412109164
+   ],
+   "ci_file": "results/ci/threshold_ci_table.json",
+   "points": [
+    {
+     "p": 0.3,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.32,
+     "fails": 1,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.34,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.36,
+     "fails": 7,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.38,
+     "fails": 48,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.4,
+     "fails": 281,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.42,
+     "fails": 2201,
+     "shots": 200000,
+     "fit_count": 2
+    },
+    {
+     "p": 0.44,
+     "fails": 13239,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.445,
+     "fails": 19397,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4453125,
+     "fails": 20053,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.445625,
+     "fails": 20337,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.44625,
+     "fails": 21364,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4475,
+     "fails": 23440,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.45,
+     "fails": 27957,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.46,
+     "fails": 51439,
+     "shots": 200000,
+     "fit_count": 1
+    }
+   ]
+  },
+  {
+   "label": "30x15",
+   "L": 30,
+   "M": 15,
+   "N": 900,
+   "K": 8,
+   "files": [
+    "results/scaling_20260115T092536Z_extended_large.csv"
+   ],
+   "center": 0.4674169146825397,
+   "p_star": 0.4674169146825397,
+   "p_star_ci95": [
+    0.46730021518123604,
+    0.4675563091178817
+   ],
+   "ci_file": "results/ci/threshold_ci_table.json",
+   "points": [
+    {
+     "p": 0.3,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.32,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.34,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.36,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.38,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4,
+     "fails": 1,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.42,
+     "fails": 10,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.44,
+     "fails": 499,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.46,
+     "fails": 9065,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.465,
+     "fails": 15417,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.46625,
+     "fails": 17845,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.466875,
+     "fails": 18797,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4671875,
+     "fails": 19630,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4675,
+     "fails": 20134,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.47,
+     "fails": 25771,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.48,
+     "fails": 56399,
+     "shots": 200000,
+     "fit_count": 1
+    }
+   ]
+  },
+  {
+   "label": "36x18",
+   "L": 36,
+   "M": 18,
+   "N": 1296,
+   "K": 12,
+   "files": [
+    "results/scaling_20260115T092536Z_extended_large.csv"
+   ],
+   "center": 0.47059730428360413,
+   "p_star": 0.47059730428360413,
+   "p_star_ci95": [
+    0.4705104265010211,
+    0.4707008115064609
+   ],
+   "ci_file": "results/ci/threshold_ci_table.json",
+   "points": [
+    {
+     "p": 0.3,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.32,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.34,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.36,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.38,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4,
+     "fails": 0,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.42,
+     "fails": 2,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.44,
+     "fails": 110,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.46,
+     "fails": 4590,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.47,
+     "fails": 18905,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4703125,
+     "fails": 19383,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.470625,
+     "fails": 20060,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.47125,
+     "fails": 21424,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.4725,
+     "fails": 24833,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.475,
+     "fails": 32444,
+     "shots": 200000,
+     "fit_count": 1
+    },
+    {
+     "p": 0.48,
+     "fails": 51687,
+     "shots": 200000,
+     "fit_count": 1
+    }
+   ]
+  }
+ ],
+ "toric": [
+  {
+   "id": "erasure_aware",
+   "label": "Erasure-aware MWPM",
+   "file": "results/baseline_surface_20260318T172201Z_erasure_aware_50k.csv",
+   "shots_per_point": 50000,
+   "sizes": [
+    {
+     "L": 12,
+     "N": 288,
+     "K": 2,
+     "points": [
+      {
+       "p": 0.38,
+       "fails": 1841,
+       "shots": 50000
+      },
+      {
+       "p": 0.4,
+       "fails": 3651,
+       "shots": 50000
+      },
+      {
+       "p": 0.405,
+       "fails": 4307,
+       "shots": 50000
+      },
+      {
+       "p": 0.4075,
+       "fails": 4620,
+       "shots": 50000
+      },
+      {
+       "p": 0.40875,
+       "fails": 4924,
+       "shots": 50000
+      },
+      {
+       "p": 0.4090625,
+       "fails": 4971,
+       "shots": 50000
+      },
+      {
+       "p": 0.40921875,
+       "fails": 4937,
+       "shots": 50000
+      },
+      {
+       "p": 0.409375,
+       "fails": 5066,
+       "shots": 50000
+      },
+      {
+       "p": 0.41,
+       "fails": 5056,
+       "shots": 50000
+      },
+      {
+       "p": 0.42,
+       "fails": 6922,
+       "shots": 50000
+      }
+     ]
+    },
+    {
+     "L": 18,
+     "N": 648,
+     "K": 2,
+     "points": [
+      {
+       "p": 0.38,
+       "fails": 294,
+       "shots": 50000
+      },
+      {
+       "p": 0.42,
+       "fails": 2800,
+       "shots": 50000
+      },
+      {
+       "p": 0.43,
+       "fails": 4500,
+       "shots": 50000
+      },
+      {
+       "p": 0.4325,
+       "fails": 4960,
+       "shots": 50000
+      },
+      {
+       "p": 0.4328125,
+       "fails": 4958,
+       "shots": 50000
+      },
+      {
+       "p": 0.43296875,
+       "fails": 5078,
+       "shots": 50000
+      },
+      {
+       "p": 0.433125,
+       "fails": 5043,
+       "shots": 50000
+      },
+      {
+       "p": 0.43375,
+       "fails": 5065,
+       "shots": 50000
+      },
+      {
+       "p": 0.435,
+       "fails": 5474,
+       "shots": 50000
+      },
+      {
+       "p": 0.44,
+       "fails": 6700,
+       "shots": 50000
+      },
+      {
+       "p": 0.46,
+       "fails": 13620,
+       "shots": 50000
+      }
+     ]
+    },
+    {
+     "L": 24,
+     "N": 1152,
+     "K": 2,
+     "points": [
+      {
+       "p": 0.38,
+       "fails": 49,
+       "shots": 50000
+      },
+      {
+       "p": 0.42,
+       "fails": 1019,
+       "shots": 50000
+      },
+      {
+       "p": 0.44,
+       "fails": 3601,
+       "shots": 50000
+      },
+      {
+       "p": 0.445,
+       "fails": 4734,
+       "shots": 50000
+      },
+      {
+       "p": 0.445625,
+       "fails": 4961,
+       "shots": 50000
+      },
+      {
+       "p": 0.44578125,
+       "fails": 5063,
+       "shots": 50000
+      },
+      {
+       "p": 0.4459375,
+       "fails": 5064,
+       "shots": 50000
+      },
+      {
+       "p": 0.44625,
+       "fails": 5187,
+       "shots": 50000
+      },
+      {
+       "p": 0.4475,
+       "fails": 5569,
+       "shots": 50000
+      },
+      {
+       "p": 0.45,
+       "fails": 6237,
+       "shots": 50000
+      },
+      {
+       "p": 0.46,
+       "fails": 9916,
+       "shots": 50000
+      }
+     ]
+    },
+    {
+     "L": 30,
+     "N": 1800,
+     "K": 2,
+     "points": [
+      {
+       "p": 0.38,
+       "fails": 10,
+       "shots": 50000
+      },
+      {
+       "p": 0.42,
+       "fails": 381,
+       "shots": 50000
+      },
+      {
+       "p": 0.44,
+       "fails": 1847,
+       "shots": 50000
+      },
+      {
+       "p": 0.45,
+       "fails": 3791,
+       "shots": 50000
+      },
+      {
+       "p": 0.4525,
+       "fails": 4520,
+       "shots": 50000
+      },
+      {
+       "p": 0.45375,
+       "fails": 4863,
+       "shots": 50000
+      },
+      {
+       "p": 0.45390625,
+       "fails": 5012,
+       "shots": 50000
+      },
+      {
+       "p": 0.4540625,
+       "fails": 5100,
+       "shots": 50000
+      },
+      {
+       "p": 0.454375,
+       "fails": 5045,
+       "shots": 50000
+      },
+      {
+       "p": 0.455,
+       "fails": 5278,
+       "shots": 50000
+      },
+      {
+       "p": 0.46,
+       "fails": 7048,
+       "shots": 50000
+      }
+     ]
+    },
+    {
+     "L": 36,
+     "N": 2592,
+     "K": 2,
+     "points": [
+      {
+       "p": 0.38,
+       "fails": 1,
+       "shots": 50000
+      },
+      {
+       "p": 0.42,
+       "fails": 126,
+       "shots": 50000
+      },
+      {
+       "p": 0.46,
+       "fails": 4999,
+       "shots": 50000
+      },
+      {
+       "p": 0.46015625,
+       "fails": 5028,
+       "shots": 50000
+      },
+      {
+       "p": 0.4603125,
+       "fails": 5115,
+       "shots": 50000
+      },
+      {
+       "p": 0.460625,
+       "fails": 5306,
+       "shots": 50000
+      },
+      {
+       "p": 0.46125,
+       "fails": 5510,
+       "shots": 50000
+      },
+      {
+       "p": 0.4625,
+       "fails": 6048,
+       "shots": 50000
+      },
+      {
+       "p": 0.465,
+       "fails": 7187,
+       "shots": 50000
+      },
+      {
+       "p": 0.47,
+       "fails": 9807,
+       "shots": 50000
+      },
+      {
+       "p": 0.48,
+       "fails": 16562,
+       "shots": 50000
+      },
+      {
+       "p": 0.5,
+       "fails": 32395,
+       "shots": 50000
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "uninformed",
+   "label": "Uninformed MWPM",
+   "file": "results/baseline_surface_20260115T062510Z_surface_mwpm.csv",
+   "shots_per_point": 20000,
+   "sizes": [
+    {
+     "L": 12,
+     "N": 288,
+     "K": 2,
+     "points": [
+      {
+       "p": 0.3,
+       "fails": 13020,
+       "shots": 20000
+      },
+      {
+       "p": 0.32,
+       "fails": 13783,
+       "shots": 20000
+      },
+      {
+       "p": 0.34,
+       "fails": 14188,
+       "shots": 20000
+      },
+      {
+       "p": 0.36,
+       "fails": 14560,
+       "shots": 20000
+      },
+      {
+       "p": 0.38,
+       "fails": 14740,
+       "shots": 20000
+      },
+      {
+       "p": 0.4,
+       "fails": 14795,
+       "shots": 20000
+      },
+      {
+       "p": 0.42,
+       "fails": 14921,
+       "shots": 20000
+      },
+      {
+       "p": 0.44,
+       "fails": 14938,
+       "shots": 20000
+      },
+      {
+       "p": 0.46,
+       "fails": 15080,
+       "shots": 20000
+      },
+      {
+       "p": 0.48,
+       "fails": 15015,
+       "shots": 20000
+      },
+      {
+       "p": 0.5,
+       "fails": 15045,
+       "shots": 20000
+      },
+      {
+       "p": 0.52,
+       "fails": 14914,
+       "shots": 20000
+      },
+      {
+       "p": 0.54,
+       "fails": 15030,
+       "shots": 20000
+      },
+      {
+       "p": 0.56,
+       "fails": 15024,
+       "shots": 20000
+      },
+      {
+       "p": 0.58,
+       "fails": 15023,
+       "shots": 20000
+      },
+      {
+       "p": 0.6,
+       "fails": 15036,
+       "shots": 20000
+      }
+     ]
+    },
+    {
+     "L": 18,
+     "N": 648,
+     "K": 2,
+     "points": [
+      {
+       "p": 0.3,
+       "fails": 14117,
+       "shots": 20000
+      },
+      {
+       "p": 0.32,
+       "fails": 14528,
+       "shots": 20000
+      },
+      {
+       "p": 0.34,
+       "fails": 14785,
+       "shots": 20000
+      },
+      {
+       "p": 0.36,
+       "fails": 14931,
+       "shots": 20000
+      },
+      {
+       "p": 0.38,
+       "fails": 14909,
+       "shots": 20000
+      },
+      {
+       "p": 0.4,
+       "fails": 14874,
+       "shots": 20000
+      },
+      {
+       "p": 0.42,
+       "fails": 14941,
+       "shots": 20000
+      },
+      {
+       "p": 0.44,
+       "fails": 15006,
+       "shots": 20000
+      },
+      {
+       "p": 0.46,
+       "fails": 15000,
+       "shots": 20000
+      },
+      {
+       "p": 0.48,
+       "fails": 15068,
+       "shots": 20000
+      },
+      {
+       "p": 0.5,
+       "fails": 15030,
+       "shots": 20000
+      },
+      {
+       "p": 0.52,
+       "fails": 15076,
+       "shots": 20000
+      },
+      {
+       "p": 0.54,
+       "fails": 15050,
+       "shots": 20000
+      },
+      {
+       "p": 0.56,
+       "fails": 15056,
+       "shots": 20000
+      },
+      {
+       "p": 0.58,
+       "fails": 15048,
+       "shots": 20000
+      },
+      {
+       "p": 0.6,
+       "fails": 15090,
+       "shots": 20000
+      }
+     ]
+    },
+    {
+     "L": 24,
+     "N": 1152,
+     "K": 2,
+     "points": [
+      {
+       "p": 0.3,
+       "fails": 14585,
+       "shots": 20000
+      },
+      {
+       "p": 0.32,
+       "fails": 14816,
+       "shots": 20000
+      },
+      {
+       "p": 0.34,
+       "fails": 14849,
+       "shots": 20000
+      },
+      {
+       "p": 0.36,
+       "fails": 14991,
+       "shots": 20000
+      },
+      {
+       "p": 0.38,
+       "fails": 15035,
+       "shots": 20000
+      },
+      {
+       "p": 0.4,
+       "fails": 15057,
+       "shots": 20000
+      },
+      {
+       "p": 0.42,
+       "fails": 15031,
+       "shots": 20000
+      },
+      {
+       "p": 0.44,
+       "fails": 14903,
+       "shots": 20000
+      },
+      {
+       "p": 0.46,
+       "fails": 14916,
+       "shots": 20000
+      },
+      {
+       "p": 0.48,
+       "fails": 14909,
+       "shots": 20000
+      },
+      {
+       "p": 0.5,
+       "fails": 14986,
+       "shots": 20000
+      },
+      {
+       "p": 0.52,
+       "fails": 15035,
+       "shots": 20000
+      },
+      {
+       "p": 0.54,
+       "fails": 14917,
+       "shots": 20000
+      },
+      {
+       "p": 0.56,
+       "fails": 14955,
+       "shots": 20000
+      },
+      {
+       "p": 0.58,
+       "fails": 15121,
+       "shots": 20000
+      },
+      {
+       "p": 0.6,
+       "fails": 14928,
+       "shots": 20000
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

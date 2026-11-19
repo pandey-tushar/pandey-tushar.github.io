@@ -73,7 +73,7 @@
 </header>
 
 <main id="main" class="page" data-lesson="1">
-  <nav class="secnav" aria-label="Lessons"><a href="./">All lessons</a> <a id="next" href="lesson-2.html">Lesson 2 &rarr;</a></nav>
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a id="prev" href="repetition-code.html">&larr; Previous: The repetition code</a> <a id="next" href="decoding.html">Next: Errors, syndromes and decoding &rarr;</a></nav>
   <h1 id="lesson-title">Lesson 1: A surface code patch</h1>
   <p class="lead" id="lesson-intro">Nine physical qubits in a 3 by 3 grid hold one logical qubit. An encoder spreads |0&#10217; over all nine, and eight checks (four X, four Z) watch for errors. Pick an error next to the Play button to see which checks fire.</p>
 
@@ -100,6 +100,19 @@
       </div>
     </section>
   </div>
+
+  <section class="panel narrative">
+    <h2>What this lesson shows</h2>
+    <p>The patch is nine data qubits in a 3 by 3 grid, watched by eight checks: four X and four Z. The encoder takes eight steps. Two CNOTs copy q0 along the top row, H makes q4, q5, q6 and q7 the sources of the X checks, and their CNOTs fan out until all eight checks hold and the patch is |0&#10217;&#8203;<sub>L</sub>.</p>
+    <p>An injected error strikes right after encoding. An X error fires the Z checks that share its qubit, a Z error fires the X checks, and a Y error fires both. The page looks the Z syndrome up in a table of single errors and applies X to the qubit it names. A Z error cannot change a Z readout, so here it is harmless.</p>
+    <h2>Things to try</h2>
+    <ul class="try">
+      <li>Pick X on q4 in the Inject an error menu and press Play. Two Z checks fire, and the table points back at q4.</li>
+      <li>Pick X on q6. Only one Z check fires and the table applies X to q3 instead; X on q3 and q6 is itself an X check, so nothing logical changes.</li>
+      <li>Pick Z on q4: two X checks fire and the Z readout stays correct.</li>
+      <li>Drag the slider, or click a block in the strip, to stop on any step.</li>
+    </ul>
+  </section>
 
   <section class="panel" id="circuit-box">
     <h2>The ideal logical circuit</h2>
@@ -130,6 +143,9 @@
     <h2 id="results-head">Results</h2>
     <div id="results"></div>
   </section>
+
+  <nav class="secnav endnav" aria-label="Course, end of lesson"><a href="repetition-code.html">&larr; Previous: The repetition code</a> <a href="decoding.html">Next: Errors, syndromes and decoding &rarr;</a></nav>
+  <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "Lesson 1: A surface code patch", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/lesson-1.html</p>
 </main>
 
 <footer class="tp-foot">

@@ -73,7 +73,7 @@
 </header>
 
 <main id="main" class="page" data-lesson="4">
-  <nav class="secnav" aria-label="Lessons"><a href="./">All lessons</a> <a id="prev" href="lesson-3.html">&larr; Lesson 3</a></nav>
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a id="prev" href="lesson-3.html">&larr; Previous: Lesson 3: Preparing a T state</a> <a id="next" href="lattice-surgery.html">Next: Lattice surgery &rarr;</a></nav>
   <h1 id="lesson-title">Lesson 4: Teleporting the T state</h1>
   <p class="lead" id="lesson-intro">Patch A holds |T&#10217;&#8203;<sub>L</sub> (lesson 3), B and C become a logical Bell pair (lesson 2), then a logical CNOT A to B and the readouts of A in X and B in Z teleport the T state to C, up to a Pauli fix applied to the measured bits.</p>
 
@@ -100,6 +100,17 @@
       </div>
     </section>
   </div>
+
+  <section class="panel narrative">
+    <h2>What this lesson shows</h2>
+    <p>Patch A holds |T&#10217;&#8203;<sub>L</sub>, prepared as in lesson 3. Patches B and C become a logical Bell pair through the logical CNOT of lesson 2. A logical CNOT from A to B then ties the T state to the pair. A is read in X and B in Z, and those two bits say which Pauli fix C needs. C is read in X as well, to check that it now holds the T state. The ideal logical circuit on the page draws the same protocol, with X to the power M2 and Z to the power M1 applied to C.</p>
+    <h2>Things to try</h2>
+    <ul class="try">
+      <li>Click the two transversal CNOT blocks in the strip, B to C and then A to B, to see nine gates between matching qubits in each.</li>
+      <li>Stop just after the CNOT from A to B: the state panel lists all three patches as entangled with the other patches.</li>
+      <li>The Simulated results table reports C read in X and in Y after the Pauli fix, from a noisy simulation on a simulator stand-in, next to the ideal 14.6%.</li>
+    </ul>
+  </section>
 
   <section class="panel" id="circuit-box">
     <h2>The ideal logical circuit</h2>
@@ -132,6 +143,9 @@
     <h2 id="results-head">Results</h2>
     <div id="results"></div>
   </section>
+
+  <nav class="secnav endnav" aria-label="Course, end of lesson"><a href="lesson-3.html">&larr; Previous: Lesson 3: Preparing a T state</a> <a href="lattice-surgery.html">Next: Lattice surgery &rarr;</a></nav>
+  <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "Lesson 4: Teleporting the T state", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/lesson-4.html</p>
 </main>
 
 <footer class="tp-foot">

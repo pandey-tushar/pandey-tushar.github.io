@@ -2,14 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://pandey-tushar.com/</loc><lastmod>2026-11-14</lastmod></url>
   <url><loc>https://pandey-tushar.com/research.html</loc><lastmod>2026-11-14</lastmod></url>
+  <url><loc>https://pandey-tushar.com/papers/bb-erasure-baselines.html</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://pandey-tushar.com/cv.html</loc><lastmod>2026-11-14</lastmod></url>
   <url><loc>https://pandey-tushar.com/books.html</loc><lastmod>2026-11-14</lastmod></url>
   <url><loc>https://pandey-tushar.com/qubit-dialogues.html</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://pandey-tushar.com/life/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://pandey-tushar.com/illustrated/</loc><lastmod>2026-11-12</lastmod></url>
-  <url><loc>https://pandey-tushar.com/qec-in-practice/</loc><lastmod>2026-11-14</lastmod></url>
-  <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-1.html</loc><lastmod>2026-11-14</lastmod></url>
-  <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-2.html</loc><lastmod>2026-11-14</lastmod></url>
-  <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-3.html</loc><lastmod>2026-11-14</lastmod></url>
-  <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-4.html</loc><lastmod>2026-11-14</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-1.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-2.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-3.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-4.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/repetition-code.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/decoding.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/threshold.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/lattice-surgery.html</loc><lastmod>2026-11-19</lastmod></url>
 </urlset>

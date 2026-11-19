@@ -1,0 +1,87 @@
+/* Paper companion pages (papers/*.html): header block, essay, one interactive figure, citation.
+   Ground, type, links and buttons come from /lib/site.css; tokens only. See README "Paper companion pages". */
+.pc { padding-block: clamp(1.6rem, 1rem + 2vw, 3rem) clamp(2.4rem, 1.6rem + 3vw, 4rem); }
+.pc [hidden] { display: none !important; }
+
+/* header block */
+.pc-head { max-width: 52rem; padding-bottom: 1.4rem; border-bottom: 1px solid var(--tp-rule); }
+.pc-head h1 { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.6rem); line-height: 1.12; margin: .6rem 0 .9rem; text-wrap: balance; }
+.pc-by { margin: 0; color: var(--tp-head); font-weight: 600; }
+.pc-status { margin: .2rem 0 0; color: var(--tp-dim); font-size: var(--tp-t-small); }
+.pc-actions { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 1rem 0 0; padding: 0; list-style: none; }
+.pc-actions .tp-btn { min-height: 40px; }
+
+/* essay */
+.pc-essay { max-width: var(--tp-measure); }
+.pc-essay h2 { font-size: 1.45rem; margin: 2rem 0 .6rem; }
+.pc-essay p { margin: 0 0 1rem; color: var(--tp-text); }
+.pc-essay .lead { margin-top: 1.4rem; font-size: 1.06rem; }
+.pc sup, .pc sub { line-height: 0; font-size: max(12px, .75em); }
+
+/* figure */
+.pc-fig { margin: 1.6rem 0 2rem; max-width: 72rem; min-width: 0; }
+.pc-fig figcaption { max-width: var(--tp-measure); }
+.pc-panels { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 62rem) { .pc-panels { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.pc-panel { min-width: 0; display: flex; flex-direction: column; }
+.pc-ptitle { margin: 0 0 6px; font: 600 var(--tp-t-small)/1.4 var(--tp-sans); color: var(--tp-ink); }
+.pc-fallback { margin: 0 0 10px; color: var(--tp-text); font-size: var(--tp-t-small); }
+.pc-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: 0 0 8px; padding: 0; border: 0; min-width: 0;
+  font-size: var(--tp-t-small); color: var(--tp-text); }
+.pc-controls legend { float: left; margin-right: 4px; padding: 0; font: 600 var(--tp-t-app)/40px var(--tp-sans);
+  letter-spacing: .07em; text-transform: uppercase; color: var(--tp-dim); }
+.pc-controls label { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; }
+.pc-controls input[type=radio] { width: 18px; height: 18px; margin: 0; accent-color: var(--tp-acc); }
+.pc-slider { display: grid !important; grid-template-columns: 6.2em minmax(0, 1fr) 3.4em; width: 100%; }
+.pc-slider input[type=range] { width: 100%; min-width: 0; height: 40px; margin: 0; accent-color: var(--tp-acc); }
+.pc-slider output { font-variant-numeric: tabular-nums; color: var(--tp-ink); text-align: right; }
+.pc-plot { width: 100%; min-width: 0; }
+.pc-plot svg { display: block; width: 100%; height: auto; font-family: var(--tp-sans); }
+.pc-readout { margin: 6px 0 0; font-size: var(--tp-t-small); color: var(--tp-text); font-variant-numeric: tabular-nums; }
+.pc-readout b { color: var(--tp-ink); }
+.pc-legend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 12px 0 0; font-size: var(--tp-t-small); color: var(--tp-text); }
+.pc-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.pc-status { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--tp-rule); color: var(--tp-text); font-size: var(--tp-t-small); }
+
+/* plot ink: BB sizes run from muted to strong with N, and each also has its own marker */
+.pc-fig { --s0: var(--tp-dim); --s1: color-mix(in srgb, var(--tp-acc) 55%, var(--tp-dim)); --s2: var(--tp-acc);
+  --s3: color-mix(in srgb, var(--tp-acc) 50%, var(--tp-ink)); --s4: var(--tp-ink); }
+.s0 { --c: var(--s0); } .s1 { --c: var(--s1); } .s2 { --c: var(--s2); } .s3 { --c: var(--s3); } .s4 { --c: var(--s4); }
+.pc-axis { stroke: var(--tp-dim); stroke-width: 1; fill: none; }
+.pc-grid { stroke: var(--tp-rule); stroke-width: 1; }
+.pc-tick { fill: var(--tp-dim); font-size: 13px; }
+.pc-lab { fill: var(--tp-text); font-size: 13px; }
+.pc-line { fill: none; stroke: var(--c); stroke-width: 1.4; vector-effect: non-scaling-stroke; }
+.pc-bar { stroke: var(--c); stroke-width: 1.25; }
+.pc-mark { fill: var(--c); stroke: var(--tp-void2); stroke-width: 1; }
+.pc-base { --c: var(--tp-dim); }
+.pc-base .pc-mark { fill: var(--tp-void2); stroke: var(--c); stroke-width: 1.3; }
+.pc-fit { fill: none; stroke: var(--tp-warm); stroke-width: 1.8; stroke-dasharray: 7 4; }
+.pc-ref { stroke: var(--tp-dim); stroke-width: 1; stroke-dasharray: 2 3; }
+
+/* data table */
+.pc-data { margin: 10px 0 0; font-size: var(--tp-t-small); }
+.pc-data summary { cursor: pointer; min-height: 40px; display: list-item; padding: 8px 0; color: var(--tp-acc); }
+.pc-scroll { overflow-x: auto; max-width: 100%; }
+.pc-fig table { border-collapse: collapse; font-size: var(--tp-t-small); font-variant-numeric: tabular-nums; margin: 6px 0 12px; }
+.pc-fig caption { text-align: left; color: var(--tp-dim); padding: 4px 0; }
+.pc-fig th, .pc-fig td { padding: 4px 12px 4px 0; text-align: right; border-bottom: 1px solid var(--tp-rule); white-space: nowrap; }
+.pc-fig th { font-weight: 600; color: var(--tp-ink); }
+.pc-fig th.pc-group { text-align: left; padding-top: 12px; color: var(--tp-dim); }
+
+/* citation */
+.pc-cite { max-width: var(--tp-measure); margin-top: 2.4rem; padding-top: 1.2rem; border-top: 1px solid var(--tp-rule); }
+.pc-cite h2 { font-size: 1.45rem; margin: 0 0 .8rem; }
+.pc-bib { margin: 0; padding: 12px 14px; background: var(--tp-void2); border: 1px solid var(--tp-rule); border-radius: 4px;
+  font: .84rem/1.55 var(--tp-mono); color: var(--tp-ink); white-space: pre-wrap; overflow-wrap: anywhere; }
+.pc-copy { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 10px 0 0; font-size: var(--tp-t-small); color: var(--tp-dim); }
+.pc-plain { margin: 1rem 0 0; color: var(--tp-text); overflow-wrap: anywhere; }
+.pc-more { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 1.6rem 0 0; }
+.pc-more a { display: inline-flex; align-items: center; min-height: 40px; }
+
+@media (max-width: 600px) {
+  .pc-fig.tp-plate { padding: 10px 8px; margin-inline: -6px; }
+}
+@media print {
+  .pc-controls, .pc-copy, .pc-actions { display: none !important; }
+}

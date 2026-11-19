@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<title>The repetition code · Quantum Error Correction in Practice</title>
+<meta name="description" content="One bit spread over d qubits, parity checks between neighbours, and a decoder that guesses what went wrong. Flip qubits by hand, decode, and measure how the logical error rate falls with d below p = 1/2.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/qec-in-practice/repetition-code.html">
+<meta property="og:title" content="The repetition code &middot; Quantum Error Correction in Practice">
+<meta property="og:description" content="One bit spread over d qubits, parity checks between neighbours, and a decoder that guesses what went wrong. Flip qubits by hand, decode, and measure how the logical error rate falls with d below p = 1/2.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/qec-in-practice/repetition-code.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-qec.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-qec.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pandey-tushar.com/"},
+  {"@type": "ListItem", "position": 2, "name": "Quantum error correction in practice", "item": "https://pandey-tushar.com/qec-in-practice/"},
+  {"@type": "ListItem", "position": 3, "name": "The repetition code", "item": "https://pandey-tushar.com/qec-in-practice/repetition-code.html"}
+ ]
+}
+</script>
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/explore.css">
+<script type="module" src="js/repetition-page.js"></script>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="essay">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a href="lesson-1.html">Next: Lesson 1 &rarr;</a></nav>
+  <h1>The repetition code</h1>
+  <p class="lead">A qubit left alone does not stay put. Now and then something in its surroundings flips it, |0&#10217; to |1&#10217; or back, and nothing tells you that it happened. Error correction starts from a simple idea: store one bit in several qubits, so that one flip can be outvoted. This page builds that idea, the repetition code, and measures how well it works.</p>
+
+  <h2>One bit, written d times</h2>
+  <p>To store a 0, set d qubits to |0&#10217;&#8203;|0&#10217;&#8230;|0&#10217;. To store a 1, set them all to |1&#10217;. The number d is the <em>distance</em> of the code: the fewest flips that turn one codeword into the other. For a quantum state a|0&#10217; + b|1&#10217; the encoding gives a|00&#8230;0&#10217; + b|11&#8230;1&#10217;. That is not d copies of the state, which quantum mechanics forbids; it is one state spread over d qubits.</p>
+  <p>Now the catch. To find a flipped qubit you might read every qubit and take the majority. On a quantum computer that reading destroys the superposition you were trying to protect. The way out is to ask a weaker question. A <em>parity check</em> compares two neighbours and reports only whether they agree. Written as an operator it is Z<sub>i</sub>Z<sub>i+1</sub>, with outcome +1 when the two qubits agree and &minus;1 when they differ. Both |00&#8230;0&#10217; and |11&#8230;1&#10217; give +1 on every check, so measuring the checks says nothing about a or b and leaves the stored state alone.</p>
+  <p>The list of check outcomes is the <em>syndrome</em>. A check that reports &minus;1 has <em>fired</em>. In the figure below, click a qubit (or move to it with the arrow keys and press Enter) to flip it, and watch which checks fire. Try a single flip in the middle, one at the end, and then two or three neighbours in a row.</p>
+
+  <figure class="tp-plate ex" id="fig-flip">
+    <svg class="code" role="group" aria-label="Repetition code: data qubits in a row with a parity check between each pair of neighbours" hidden></svg>
+    <p class="legend" hidden><span class="sw sw-z"></span> check, quiet <span class="sw sw-fire"></span> check fired <span class="sw sw-err"></span> flipped qubit</p>
+    <div class="ex-controls" hidden>
+      <label>Distance <select data-d><option value="3">d = 3</option><option value="5" selected>d = 5</option><option value="7">d = 7</option></select></label>
+      <button type="button" class="tp-btn" data-clear>Clear</button>
+    </div>
+    <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
+    <figcaption><b>Fig. 1</b>Data qubits (circles, showing the bit each one holds) and the parity checks between neighbours (diamonds). The checks are computed by the course's error correction engine from the flips you make.</figcaption>
+  </figure>
+
+  <p>A single flip in the middle fires the two checks on either side of it. A flip on an end qubit fires only one check, because there is no neighbour on the outside. A run of flipped neighbours fires only the checks at its two ends: inside the run, neighbours still agree. The syndrome shows where an error begins and ends, not what lies between.</p>
+
+  <h2>Decoding: a guess from the syndrome</h2>
+  <p>A <em>decoder</em> turns the syndrome into a correction: a set of qubits to flip back. Every syndrome of the repetition code has exactly two explanations, and they are complements of each other. If flipping the qubits in a set E reproduces the syndrome, so does flipping every qubit outside E. One explanation flips k qubits and the other flips d &minus; k. When each qubit flips on its own with a probability p below 1/2, the explanation with fewer flips is the more likely one, so the decoder picks it.</p>
+  <p>The decoder used throughout this course is a union-find decoder, introduced in <a href="decoding.html">Errors, syndromes and decoding</a>. On a line of qubits it gives the same answer as a majority vote; the course's tests check this for every error pattern at d = 3, 5 and 7. Flip some qubits, or draw random flips at rate p, and press Decode. Then try to make it fail: at d = 3, flip two qubits; at d = 5, three.</p>
+
+  <figure class="tp-plate ex" id="fig-decode">
+    <svg class="code" role="group" aria-label="Repetition code with a decoder: flip qubits, then decode" hidden></svg>
+    <p class="legend" hidden><span class="sw sw-fire"></span> check fired <span class="sw sw-err"></span> flipped qubit <span class="sw sw-corr"></span> decoder flips it back</p>
+    <div class="ex-controls" hidden>
+      <label>Distance <select data-d><option value="3" selected>d = 3</option><option value="5">d = 5</option><option value="7">d = 7</option></select></label>
+      <button type="button" class="tp-btn main" data-decode>Decode</button>
+      <button type="button" class="tp-btn" data-clear>Clear</button>
+      <span class="sep"></span>
+      <label>Error rate p <input type="range" data-p min="0.02" max="0.5" step="0.01" value="0.15"> <output data-pout>0.15</output></label>
+      <button type="button" class="tp-btn" data-random>Random errors</button>
+    </div>
+    <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
+    <figcaption><b>Fig. 2</b>The decoder reads only the fired checks and proposes which qubits to flip back (dashed rings). After the correction every qubit reads the same bit; the figure says whether that bit is still 0.</figcaption>
+  </figure>
+
+  <p>With up to (d &minus; 1)/2 flips the decoder always restores 0. With (d + 1)/2 flips or more, the complement has fewer flips, the decoder chooses it, and the correction completes the error: every qubit ends up reading 1. The checks are all quiet again, but the stored bit has changed. That is a <em>logical error</em>, and no decoder can avoid it, because the syndrome is the same whichever of the two explanations is true.</p>
+
+  <h2>Does it help?</h2>
+  <p>So the code fails when more than half of its qubits flip. With independent flips at rate p, that happens with probability</p>
+  <p class="formula">P<sub>L</sub>(d, p) = &sum;<sub>k &gt; d/2</sub> C(d, k) p<sup>k</sup> (1 &minus; p)<sup>d&minus;k</sup>,</p>
+  <p>the chance that a binomial count of flips passes d/2. For d = 3 this is 3p<sup>2</sup> &minus; 2p<sup>3</sup>, which is smaller than p whenever p is below 1/2. The plot draws this formula as lines, with d = 1 (a bare qubit, no code) for comparison. Press Run to add points from a Monte Carlo simulation: the engine draws random flips, decodes each sample and counts the failures, in a background thread so the page stays responsive.</p>
+
+  <figure class="tp-plate ex" id="fig-plot">
+    <div data-plot hidden></div>
+    <p class="legend" data-legend hidden></p>
+    <div class="ex-controls" hidden>
+      <label>Samples per point <select data-shots><option value="2000" selected>2,000</option><option value="20000">20,000</option></select></label>
+      <button type="button" class="tp-btn main" data-run>Run</button>
+      <progress data-progress max="1" value="0" hidden></progress>
+    </div>
+    <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
+    <figcaption><b>Fig. 3</b>Logical error rate P<sub>L</sub> against the flip rate p for the repetition code at d = 1, 3, 5 and 7. Lines: the binomial formula above. Points: simulated rates at 19 values of p, with bars of one standard error.</figcaption>
+  </figure>
+
+  <p>The points sit on the lines, within their error bars. Every curve passes through P<sub>L</sub> = 1/2 at p = 1/2, where a flipped qubit is as likely as an unflipped one and the syndrome carries no information about the stored bit. Below p = 1/2 the curves fan out: more qubits give a lower logical error rate, and the gap grows quickly as p falls, because P<sub>L</sub> scales like p<sup>(d+1)/2</sup> for small p. Above p = 1/2 more qubits make things worse. A point where adding qubits switches from hurting to helping is called a <em>threshold</em>; for the repetition code against independent bit flips it is p = 1/2.</p>
+
+  <h2>What the repetition code cannot do</h2>
+  <p>Bit flips are not the only error a qubit suffers. A <em>phase flip</em>, the operator Z, leaves |0&#10217; alone and sends |1&#10217; to &minus;|1&#10217;. A single phase flip on any one of the d qubits turns a|00&#8230;0&#10217; + b|11&#8230;1&#10217; into a|00&#8230;0&#10217; &minus; b|11&#8230;1&#10217;. Every parity check still reports +1, so nothing fires, and the stored state is wrong. Against phase flips the repetition code is worse than a bare qubit: it offers d places for the error to land instead of one.</p>
+  <p>A quantum code has to catch both kinds at once. The surface code does it with two families of checks laid out on a grid, one for bit flips and one for phase flips, so that each sees the errors the other cannot. The smallest one that can correct an error holds one logical qubit in nine data qubits.</p>
+
+  <p class="next"><a href="lesson-1.html">Lesson 1: A surface code patch &rarr;</a></p>
+  <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "The repetition code", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/repetition-code.html</p>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

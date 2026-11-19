@@ -49,6 +49,8 @@
       "venue": "arXiv preprint",
       "status": "Preprint",
       "arxiv": "2603.19062",
+      "page": "/papers/bb-erasure-baselines.html",
+      "code": "https://github.com/pandey-tushar/QLDPC",
       "summary": "Shows that unfair decoder baselines distort bivariate bicycle code comparisons on erasure noise, and estimates an asymptotic threshold near 0.488 by finite-size scaling.",
       "selected": false
     },

@@ -1,0 +1,94 @@
+/* The threshold lesson. Ground, type and links come from /lib/site.css; this file lays out the essay, the three
+   figures and their controls. Series inks run from muted to strong with d, and each d also has its own marker
+   and dash, so the order survives without colour. */
+.threshold .essay { max-width: var(--tp-measure); }
+.threshold .essay h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.6rem); line-height: 1.1; margin: 14px 0 12px; }
+.threshold .essay h2 { font-size: 1.45rem; margin: 2rem 0 0.6rem; }
+.threshold .essay p { margin: 0 0 1rem; color: var(--tp-text); }
+.threshold .essay .lead { font-size: 1.06rem; }
+.threshold .cite { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); overflow-wrap: anywhere; }
+.threshold .cite .tp-lbl { display: block; margin-bottom: 4px; }
+.thr-next { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 1.6rem 0 0; }
+.thr-next a { display: inline-flex; align-items: center; min-height: 32px; }
+
+.thr-fig {
+  margin: 1.4rem 0 1.6rem; max-width: 60rem; min-width: 0;
+  --d3: var(--tp-dim);
+  --d5: color-mix(in srgb, var(--tp-acc) 55%, var(--tp-dim));
+  --d7: var(--tp-acc);
+  --d9: color-mix(in srgb, var(--tp-acc) 50%, var(--tp-ink));
+  --d11: var(--tp-ink);
+}
+.thr-fig [hidden] { display: none !important; }
+.thr-fig figcaption { max-width: var(--tp-measure); }
+#fig-lambda { max-width: 46rem; }
+
+/* controls */
+.thr-controls { display: grid; gap: 10px; margin: 0 0 12px; font-size: var(--tp-t-small); color: var(--tp-text); }
+.thr-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.thr-group legend { float: left; margin-right: 4px; padding: 0; font: 600 var(--tp-t-app)/1.8 var(--tp-sans); letter-spacing: .07em; text-transform: uppercase; color: var(--tp-dim); }
+.thr-group label { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; }
+.thr-group input[type=radio], .thr-group input[type=checkbox] { width: 18px; height: 18px; margin: 0; accent-color: var(--tp-acc); }
+.thr-controls input[type=number] { width: 5.6em; }
+.thr-controls select, .thr-controls input[type=number] { min-height: 40px; font-size: var(--tp-t-small); }
+.thr-actions { gap: 8px 12px; }
+.thr-fig .tp-btn { min-height: 40px; padding: 6px 16px; color: var(--tp-ink); background: var(--tp-void); border: 1px solid var(--tp-rule); border-radius: 4px; cursor: pointer; }
+.thr-fig .tp-btn.thr-run { border-color: var(--tp-acc); font-weight: 600; }
+.thr-fig .tp-btn:disabled { opacity: .55; cursor: default; color: var(--tp-dim); border-color: var(--tp-rule); }
+.thr-fig progress { width: 9rem; height: 8px; accent-color: var(--tp-acc); }
+.thr-total { color: var(--tp-dim); }
+.thr-note { margin: 0; color: var(--tp-dim); }
+
+/* legend and plot */
+.thr-legend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0 0 6px; font-size: var(--tp-t-small); color: var(--tp-text); }
+.thr-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.thr-legend svg { overflow: visible; }
+.thr-plot { width: 100%; min-width: 0; }
+.thr-plot svg { display: block; width: 100%; height: auto; font-family: var(--tp-sans); }
+.thr-axis { stroke: var(--tp-dim); stroke-width: 1; fill: none; }
+.thr-grid { stroke: var(--tp-rule); stroke-width: 1; }
+.thr-grid-minor { stroke: var(--tp-rule); stroke-width: 1; stroke-dasharray: 2 3; }
+.thr-tick { fill: var(--tp-dim); font-size: 13px; }
+.thr-lab { fill: var(--tp-text); font-size: 13px; }
+.thr-empty { fill: var(--tp-dim); font-size: 14px; }
+.thr-line { fill: none; stroke: var(--c); stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+.thr-bar { stroke: var(--c); stroke-width: 1.25; }
+.thr-mark { fill: var(--c); stroke: var(--tp-void2); stroke-width: 1; }
+.thr-refmark { fill: none; stroke: var(--c); stroke-width: 1.6; }
+.thr-dlab { fill: var(--c); font-size: 13px; font-weight: 600; }
+.thr-cross { stroke: var(--tp-warm); stroke-width: 3; stroke-linecap: round; }
+.thr-cross-tick { stroke: var(--tp-warm); stroke-width: 1.5; }
+.thr-cross-lab { fill: var(--tp-ink); font-size: 12px; }
+.thr-fit { fill: none; stroke: var(--tp-warm); stroke-width: 1.6; stroke-dasharray: 6 4; }
+.s3 { --c: var(--d3); } .s5 { --c: var(--d5); } .s7 { --c: var(--d7); } .s9 { --c: var(--d9); } .s11 { --c: var(--d11); }
+
+.thr-status { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--tp-rule); color: var(--tp-text); font-size: var(--tp-t-small); }
+.thr-readout { margin: 10px 0 0; font-size: var(--tp-t-small); color: var(--tp-text); }
+.thr-readout p { margin: 0 0 6px; }
+.thr-readout ul { margin: 0 0 6px; padding-left: 1.2em; }
+.thr-readout .tp-lbl { display: block; margin: 0 0 4px; color: var(--tp-dim); }
+
+/* tables */
+.thr-data { margin: 10px 0 0; font-size: var(--tp-t-small); }
+.thr-data summary { cursor: pointer; min-height: 32px; display: list-item; padding: 4px 0; color: var(--tp-acc); }
+.thr-table-wrap { overflow-x: auto; max-width: 100%; }
+.thr-fig table { min-width: 0; width: auto; border-collapse: collapse; font-size: var(--tp-t-small); font-variant-numeric: tabular-nums; margin: 6px 0 0; }
+.thr-tcap { margin: 6px 0 4px; color: var(--tp-dim); font-size: var(--tp-t-small); }
+.thr-scroll { overflow-x: auto; max-width: 100%; }
+.thr-fig th.thr-rowgroup { padding-top: 12px; text-align: left; color: var(--tp-dim); font-weight: 600; }
+.thr-fig td, .thr-fig th[scope=row] { vertical-align: top; }
+.thr-fig th[scope=row] { min-width: 0; white-space: nowrap; }
+.thr-fig th, .thr-fig td { padding: 4px 10px 4px 0; text-align: right; border-bottom: 1px solid var(--tp-rule); white-space: nowrap; }
+.thr-fig th { font-weight: 600; color: var(--tp-ink); vertical-align: bottom; }
+.thr-fig th:first-child, .thr-fig td:first-child { text-align: left; }
+.thr-fig thead th { white-space: normal; min-width: 4em; font: 600 var(--tp-t-small)/1.35 var(--tp-sans); letter-spacing: 0; color: var(--tp-ink); }
+
+@media (max-width: 600px) {
+  .thr-fig { margin-inline: -6px; }
+  .thr-fig.tp-plate { padding: 10px 8px; }
+  .thr-fig progress { width: 6rem; }
+  .thr-fig th, .thr-fig td { padding-right: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .thr-fig * { transition: none !important; animation: none !important; }
+}

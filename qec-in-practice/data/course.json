@@ -1,0 +1,24 @@
+{
+  "parts": [
+    {"name": "Errors and decoding", "pages": [
+      {"page": "repetition-code.html", "title": "The repetition code", "picture": "repetition",
+       "card": "Flip qubits in a row, watch the parity checks between neighbours fire, and decode them, which on a line is a majority vote. Then simulate the logical error rate against the physical error rate for d = 1, 3, 5 and 7 and set it beside the exact curve."},
+      {"page": "lesson-1.html", "lesson": 1,
+       "card": "Step through the encoder that spreads |0> over nine qubits and eight checks, then inject an X, Y or Z error on any qubit and see which checks fire and whether the readout survives."},
+      {"page": "decoding.html", "title": "Errors, syndromes and decoding", "picture": "cluster",
+       "card": "Place X, Z and Y errors on a d = 3, 5 or 7 patch and watch a union-find decoder grow clusters step by step. See how (d+1)/2 errors fool it, and why measurement errors need repeated rounds."},
+      {"page": "threshold.html", "title": "The threshold", "picture": "curves",
+       "card": "Run Monte Carlo in the browser to draw the logical against the physical error rate for d = 3, 5, 7 and up and watch the curves cross. Read off the crossing and the suppression factor, switch on measurement errors, and compare with reference numbers from stim and pymatching."}
+    ]},
+    {"name": "Computing with logical qubits", "pages": [
+      {"page": "lesson-2.html", "lesson": 2,
+       "card": "Nine physical CNOTs between two patches act as one logical CNOT and leave a logical Bell pair. Then run the circuit live in the browser with your own noise level and an injected error."},
+      {"page": "lesson-3.html", "lesson": 3,
+       "card": "Make the T state on one qubit with H and T, encode it as |T>_L, and compare the simulated readouts in X and Y with the ideal 14.6%."},
+      {"page": "lesson-4.html", "lesson": 4,
+       "card": "Teleport |T>_L from patch A to patch C through a logical Bell pair on B and C, with a Pauli fix from the measured bits."},
+      {"page": "lattice-surgery.html", "title": "Lattice surgery", "picture": "seam",
+       "card": "Merge two patches along an edge and split them again: the seam checks measure Z_L Z_L without reading either logical qubit. Step through it on 21 simulated qubits and run 200 shots."}
+    ]}
+  ]
+}

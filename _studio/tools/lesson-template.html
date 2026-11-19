@@ -73,7 +73,7 @@
 </header>
 
 <main id="main" class="page" data-lesson="{{n}}">
-  <nav class="secnav" aria-label="Lessons"><a href="./">All lessons</a>{{nav}}</nav>
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a>{{nav}}</nav>
   <h1 id="lesson-title">Lesson {{n}}: {{title}}</h1>
   <p class="lead" id="lesson-intro">{{intro}}</p>
 
@@ -101,6 +101,15 @@
     </section>
   </div>
 
+  <section class="panel narrative">
+    <h2>What this lesson shows</h2>
+{{shows}}
+    <h2>Things to try</h2>
+    <ul class="try">
+{{try}}
+    </ul>
+  </section>
+
   <section class="panel" id="circuit-box">
     <h2>The ideal logical circuit</h2>
     <div id="circuit" class="circuit"></div>
@@ -122,6 +131,9 @@
     <h2 id="results-head">Results</h2>
     <div id="results"></div>
   </section>
+
+  <nav class="secnav endnav" aria-label="Course, end of lesson">{{endnav}}</nav>
+  <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "Lesson {{n}}: {{title}}", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/lesson-{{n}}.html</p>
 </main>
 
 <footer class="tp-foot">

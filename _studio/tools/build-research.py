@@ -48,6 +48,10 @@ def links(p):
         out.append((f"https://arxiv.org/abs/{p['arxiv']}", f"arXiv:{p['arxiv']}"))
     if p.get('data'):
         out.append((f"https://doi.org/{p['data']}", 'Code and data'))
+    if p.get('page'):
+        out.append((p['page'], 'Companion page'))
+    if p.get('code'):
+        out.append((p['code'], 'Code'))
     return out
 
 
@@ -71,7 +75,8 @@ def entry(p, n):
     pid = p['id']
     status = esc(p['status']) + (f" &middot; {esc(p['note'])}" if p.get('note') else '')
     claim = f'\n          <p class="claim">{rich(p["claim"])}</p>' if p.get('claim') else ''
-    lk = ''.join(f'<a class="tp-link" href="{h}" rel="noopener">{esc(t)}</a>' for h, t in links(p))
+    rel = lambda h: ' rel="noopener"' if h.startswith('http') else ''
+    lk = ''.join(f'<a class="tp-link" href="{h}"{rel(h)}>{esc(t)}</a>' for h, t in links(p))
     lk = lk or '<span>No public copy online</span>'
     return f'''      <li>
         <article class="paper" id="{pid}">

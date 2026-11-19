@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<title>The threshold &middot; Quantum Error Correction in Practice</title>
+<meta name="description" content="Below a critical physical error rate, a bigger surface code fails exponentially less often; above it, a bigger code fails more. Run the Monte Carlo in your browser and find the crossing yourself.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/qec-in-practice/threshold.html">
+<meta property="og:title" content="The threshold &middot; Quantum Error Correction in Practice">
+<meta property="og:description" content="Below a critical physical error rate, a bigger surface code fails exponentially less often; above it, a bigger code fails more. Run the Monte Carlo in your browser and find the crossing yourself.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/qec-in-practice/threshold.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-qec.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-qec.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pandey-tushar.com/"},
+  {"@type": "ListItem", "position": 2, "name": "Quantum error correction in practice", "item": "https://pandey-tushar.com/qec-in-practice/"},
+  {"@type": "ListItem", "position": 3, "name": "The threshold", "item": "https://pandey-tushar.com/qec-in-practice/threshold.html"}
+ ]
+}
+</script>
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/threshold.css">
+<script type="module" src="js/threshold-page.js"></script>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="page threshold">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a href="decoding.html">&larr; Previous: Decoding</a> <a href="lesson-2.html">Next: Lesson 2 &rarr;</a></nav>
+  <article class="essay">
+  <h1 id="lesson-title">The threshold</h1>
+  <p class="lead">Error correction pays only if adding qubits makes things better. Below a critical physical error rate, the threshold, a bigger surface code fails exponentially less often. Above it, a bigger code fails more often. Here you find that point yourself: each figure runs a Monte Carlo simulation in your browser when you press Run.</p>
+
+  <h2>The central promise</h2>
+  <p>Every physical qubit fails now and then. A code spreads one logical qubit over many physical ones, checks read out parities of neighbouring qubits, and a decoder uses the checks to guess which errors happened. When the guess is wrong in the wrong way, the logical qubit is flipped. That is a logical error.</p>
+  <p>A distance-d surface code has d &times; d data qubits and fails only when errors, together with the decoder's correction, form a chain across the patch. That takes about d/2 errors, so when each qubit errs with a small probability p, a failure costs roughly p to the power (d+1)/2. A bigger patch also offers more places for a chain to start. At small p the first effect wins, and growing the code drives the logical error rate down as far as you like. At large p the second wins, and growing the code makes things worse. The physical error rate where the two balance is the threshold. It is the promise of error correction in one number: beat it, and you can buy any logical error rate by paying in qubits.</p>
+
+  <h2>Reading the plot</h2>
+  <p>The horizontal axis is the physical error rate p, the chance that a given data qubit suffers an error. The vertical axis is the logical error rate, the fraction of simulated shots in which the errors and the decoder's correction together flipped the logical qubit. Both axes are logarithmic, so a power law is a straight line and each curve is steeper the larger d is. Every point counts failures out of N shots, and its bar is one binomial standard error, the square root of r(1&nbsp;&minus;&nbsp;r)/N for a rate r.</p>
+  <p>The figure starts in the simplest setting, code capacity: each data qubit is flipped independently with probability p, once, and the checks are then read perfectly. The decoder is union-find, from the <a class="tp-link" href="decoding.html">previous lesson</a>: it grows clusters around the lit checks until each cluster can be explained by errors inside it, then corrects within each cluster. Press Run with the defaults and watch the left end of the plot, where p is small, then follow the curves to the right.</p>
+  </article>
+
+  <figure class="tp-plate thr-fig" id="fig-main">
+    <div class="thr-controls" id="thr-controls" hidden>
+      <fieldset class="thr-group">
+        <legend>Measurement</legend>
+        <label><input type="radio" name="thr-mode" value="cc" checked> Perfect (code capacity)</label>
+        <label><input type="radio" name="thr-mode" value="phen"> Noisy, d rounds (phenomenological)</label>
+      </fieldset>
+      <fieldset class="thr-group">
+        <legend>Distances</legend>
+        <label><input type="checkbox" name="thr-d" value="3" checked> 3</label>
+        <label><input type="checkbox" name="thr-d" value="5" checked> 5</label>
+        <label><input type="checkbox" name="thr-d" value="7" checked> 7</label>
+        <label><input type="checkbox" name="thr-d" value="9"> 9</label>
+        <label><input type="checkbox" name="thr-d" value="11"> 11</label>
+      </fieldset>
+      <div class="thr-group thr-row">
+        <label>Noise <select id="thr-model"><option value="bitflip" selected>Bit flip (X only)</option><option value="depolarizing">Depolarizing (X, Y, Z)</option></select></label>
+        <label>Shots per point <select id="thr-shots"></select></label>
+        <label>p from <input type="number" id="thr-pmin" min="0.001" max="0.5" step="any" inputmode="decimal"></label>
+        <label>to <input type="number" id="thr-pmax" min="0.001" max="0.5" step="any" inputmode="decimal"></label>
+        <label>Points <select id="thr-npts"><option>5</option><option>7</option><option selected>9</option><option>11</option><option>13</option></select></label>
+        <label><input type="checkbox" id="thr-ref" checked> Show matching reference</label>
+      </div>
+      <div class="thr-group thr-row thr-actions">
+        <button type="button" class="tp-btn thr-run" id="thr-run">Run</button>
+        <button type="button" class="tp-btn" id="thr-stop" disabled>Stop</button>
+        <progress id="thr-progress" max="1" value="0" aria-label="Progress of the threshold run"></progress>
+        <span class="thr-total" id="thr-total"></span>
+      </div>
+    </div>
+    <p class="thr-legend" id="thr-legend" hidden></p>
+    <div class="thr-plot" id="thr-plot"></div>
+    <p class="thr-status" id="thr-status" role="status" aria-live="polite">The figure needs JavaScript. The text around it says what it shows.</p>
+    <div class="thr-readout" id="thr-cross" hidden></div>
+    <details class="thr-data" id="thr-data" hidden>
+      <summary>Show data as table</summary>
+      <div class="thr-table-wrap" id="thr-table"></div>
+    </details>
+    <figcaption><b>Fig. 1</b>Logical error rate of the rotated surface code against physical error rate p, simulated in your browser with the union-find decoder. Bars are one binomial standard error. Each distance has its own marker and line style. The orange marks along the bottom are this run's estimates of where neighbouring curves cross. Crosses (&times;), when shown, are stored reference rates from stim and pymatching for bit-flip noise.</figcaption>
+  </figure>
+
+  <article class="essay">
+  <p>You should have seen the order flip. Left of the crossing the biggest code is best; right of it, the biggest code is worst. The curves do not meet at exactly one point: small codes carry corrections that fade only as d grows, so the crossing of d&nbsp;=&nbsp;3 with 5 and of 5 with 7 need not agree. The page interpolates each pair of curves in log p to locate the crossing, and widens it to a range using the error bars. Read it as this run's estimate for this decoder, not as the threshold of the surface code.</p>
+  <p>Try depolarizing noise too. Each qubit then suffers X, Y or Z, each with probability p/3, and a shot fails if either logical operator is flipped. This decoder handles the X and Z parts separately, so it does not use the fact that a Y error is both at once. For comparison, known results for minimum-weight perfect matching on large codes put the bit-flip threshold near 10.3% with perfect measurement and near 2.9% with noisy measurement (Dennis, Kitaev, Landahl and Preskill, 2002; Wang, Harrington and Preskill, 2003). Those two numbers come from the literature, not from this page.</p>
+
+  <h2>Below threshold</h2>
+  <p>Pick a p well left of the crossing and read along a vertical line. Each time d grows by 2, the logical error rate falls by roughly the same factor. That factor is often called Lambda. Against d on a log axis the points lie close to a straight line, and its slope gives Lambda. Run the second figure at its default p, then move p toward the crossing and run it again.</p>
+  </article>
+
+  <figure class="tp-plate thr-fig" id="fig-lambda">
+    <div class="thr-controls" id="lam-controls" hidden>
+      <div class="thr-group thr-row">
+        <label>p <input type="number" id="lam-p" min="0.001" max="0.5" step="any" inputmode="decimal"></label>
+        <label>Shots per distance <select id="lam-shots"></select></label>
+        <label><input type="checkbox" id="lam-d11"> Include d = 11</label>
+      </div>
+      <div class="thr-group thr-row thr-actions">
+        <button type="button" class="tp-btn thr-run" id="lam-run">Run</button>
+        <button type="button" class="tp-btn" id="lam-stop" disabled>Stop</button>
+        <progress id="lam-progress" max="1" value="0" aria-label="Progress of the Lambda run"></progress>
+      </div>
+      <p class="thr-note" id="lam-note"></p>
+    </div>
+    <div class="thr-plot thr-plot-small" id="lam-plot"></div>
+    <p class="thr-status" id="lam-status" role="status" aria-live="polite">The figure needs JavaScript.</p>
+    <details class="thr-data" id="lam-data" hidden>
+      <summary>Show data as table</summary>
+      <div class="thr-table-wrap" id="lam-table"></div>
+    </details>
+    <figcaption><b>Fig. 2</b>Logical error rate against code distance at one physical error rate, with the measurement setting and noise chosen in Fig. 1. The orange line is a weighted least-squares fit of the logarithm of the rate against d; Lambda is the factor it falls by per step of 2 in distance. Distances with no failures are left out of the fit.</figcaption>
+  </figure>
+
+  <article class="essay">
+  <p>Near the crossing Lambda falls toward 1, where a bigger code buys nothing. Far below it Lambda is large, and every extra ring of qubits divides the failure rate by that factor. A measured Lambda greater than 1 between two code sizes is what an experiment means when it says it runs below threshold.</p>
+
+  <h2>When the checks themselves are noisy</h2>
+  <p>Code capacity assumes perfect checks. Real readouts are sometimes wrong, and one wrong readout looks like an error that appears and then vanishes. To tell the two apart the checks are repeated for several rounds and the decoder works in space and time at once. The phenomenological model does exactly this: d rounds, each with fresh data errors of probability p and each check readout flipped with probability p, then one final perfect readout taken by measuring the data qubits. Switch Fig. 1 to noisy measurement and press Run; the p range moves down with it.</p>
+  <p>The crossing moves to a much lower p. Each check can now lie, and the decoder must rule out chains through time as well as across the patch.</p>
+
+  <h2>What these models leave out</h2>
+  <p>Neither model is a circuit. On hardware each check is measured by an ancilla qubit coupled to its data qubits by a sequence of two-qubit gates, and every gate can fail. One fault halfway through that sequence can spread to two data qubits; ancillas can be reset wrongly; qubits idle while others are measured. Circuit-level noise includes all of these, and circuit-level thresholds are lower than phenomenological ones by a wide margin. The models here keep the geometry of the problem and drop the circuit.</p>
+
+  <h2>Why the number depends on the decoder</h2>
+  <p>A threshold belongs to a code, a noise model and a decoder together. A decoder that guesses better fails less often at the same p, and its crossing sits further right. The table runs this page's union-find decoder at the points of a reference computed offline with stim, a stabilizer circuit simulator, and pymatching, a minimum-weight perfect matching decoder, for bit-flip noise. Press Run comparison.</p>
+  </article>
+
+  <figure class="tp-plate thr-fig" id="fig-ref">
+    <div class="thr-controls" id="ref-controls" hidden>
+      <div class="thr-group thr-row thr-actions">
+        <label>Shots per point <select id="ref-shots"></select></label>
+        <button type="button" class="tp-btn thr-run" id="ref-run">Run comparison</button>
+        <button type="button" class="tp-btn" id="ref-stop" disabled>Stop</button>
+        <progress id="ref-progress" max="1" value="0" aria-label="Progress of the comparison run"></progress>
+      </div>
+    </div>
+    <div class="thr-table-wrap" id="ref-table"></div>
+    <p class="thr-status" id="ref-status" role="status" aria-live="polite">The table needs JavaScript.</p>
+    <figcaption><b>Fig. 3</b>Surface code, bit-flip noise. The matching column is reference data computed offline with stim and pymatching and stored with this page; the union-find column is computed in your browser when you run it. The last column divides the two.</figcaption>
+  </figure>
+
+  <article class="essay">
+  <p>Union-find should fail more often than matching at every point, and the gap should widen with d. That lost accuracy is what pulls its crossing to a lower p in Fig. 1. The small distances matter as well: crossings between small codes sit below the threshold and move up as d grows, which you can see by adding d = 9 and 11. In exchange union-find is simple and runs in close to linear time in the worst case, which matters when a decoder has to keep pace with a device that produces new check results without pause.</p>
+
+  <nav class="thr-next" aria-label="Lessons">
+    <a class="tp-link" href="/qec-in-practice/">Back to the course</a>
+    <a class="tp-link" href="decoding.html">Previous: Decoding</a>
+    <a class="tp-link" href="lesson-2.html">Next: Lesson 2</a>
+  </nav>
+  <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "The threshold", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/threshold.html</p>
+  </article>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

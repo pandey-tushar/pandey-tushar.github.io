@@ -11,7 +11,7 @@
 .panel h2 { font: 600 var(--tp-t-app)/1.4 var(--tp-sans); letter-spacing: 0.07em; text-transform: uppercase; color: var(--tp-dim); margin: 0 0 10px; }
 .lead { max-width: 110ch; color: var(--tp-text); margin: 0 0 8px; }
 .secnav { display: flex; gap: 4px 22px; flex-wrap: wrap; }
-.secnav a { display: inline-flex; align-items: center; min-height: 32px; font-size: var(--tp-t-small); color: var(--tp-dim); }
+.secnav a { display: inline-flex; align-items: center; min-height: 40px; font-size: var(--tp-t-small); color: var(--tp-dim); }
 .secnav a:hover, .secnav a:focus-visible { color: var(--tp-acc); }
 @media (max-width: 600px) { .page { padding-inline: 14px; } }
 .muted { color: var(--tp-dim); }
@@ -42,6 +42,30 @@
 .th-und { fill: color-mix(in srgb, var(--tp-dim) 22%, var(--card)); }
 .th-err { fill: var(--bad); fill-opacity: 0.25; stroke: var(--bad); stroke-width: 3; }
 .th-head { fill: var(--focus); }
+.th-cluster { fill: var(--tp-a14); stroke: var(--tp-acc); stroke-width: 2.5; }
+.qdot.seam { stroke: var(--tp-acc); stroke-width: 3; }
+.th-axis { fill: none; stroke: var(--tp-dim); stroke-width: 2; }
+.th-tick { stroke: var(--tp-rule); stroke-width: 2; stroke-dasharray: 4 5; }
+.th-curve { stroke-width: 3.5; stroke-linecap: round; }
+.th-d3 { stroke: var(--tp-dim); }
+.th-d5 { stroke: var(--tp-ink); }
+.th-d7 { stroke: var(--tp-acc); }
+.th-cross { fill: var(--card); stroke: var(--tp-ink); stroke-width: 2.5; }
+.th-lab { font: italic 26px var(--tp-serif); fill: var(--tp-dim); }
+.hub .part { margin-top: clamp(28px, 4vw, 44px); }
+.hub .part .tp-lbl { margin: 0 0 6px; }
+.hub .part h2 { margin: 0; font-size: var(--tp-t-h2); }
+.hub .cards { margin-top: 16px; }
+.cite { margin: 2rem 0 0; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); color: var(--tp-text); max-width: 72ch; overflow-wrap: anywhere; }
+.cite .tp-lbl { display: block; margin-bottom: 4px; }
+
+/* the narrative under the player */
+.narrative p, .narrative li { max-width: 70ch; }
+.narrative p { margin: 0 0 10px; }
+.narrative h2 + p, .narrative h2 { margin-top: 0; }
+.narrative p + h2 { margin-top: 16px; }
+.try { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
+.endnav { margin-top: 20px; }
 
 /* the written-out steps under the player */
 .steps { margin: 0; padding-left: 1.4em; display: grid; gap: 6px; }
