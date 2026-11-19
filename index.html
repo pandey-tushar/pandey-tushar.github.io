@@ -75,12 +75,43 @@
  "@context": "https://schema.org",
  "@type": "WebSite",
  "name": "Tushar Pandey",
- "url": "https://pandey-tushar.com/"
+ "url": "https://pandey-tushar.com/",
+ "hasPart": [
+  {
+   "@type": "Course",
+   "name": "Quantum Error Correction in Practice",
+   "url": "https://pandey-tushar.com/qec-in-practice/",
+   "description": "A course in eight interactive lessons, from the repetition code to lattice surgery, with a stabilizer simulator and a union-find decoder running in the browser.",
+   "author": {"@id": "https://pandey-tushar.com/#person"},
+   "provider": {"@id": "https://pandey-tushar.com/#person"}
+  },
+  {
+   "@type": "WebApplication",
+   "name": "Bivariate bicycle code explorer",
+   "url": "https://pandey-tushar.com/tools/bb-codes.html",
+   "author": {"@id": "https://pandey-tushar.com/#person"}
+  },
+  {
+   "@type": "WebPage",
+   "name": "Lifted surgery for non-Abelian two-block group-algebra codes",
+   "url": "https://pandey-tushar.com/papers/lifted-surgery.html"
+  },
+  {
+   "@type": "WebPage",
+   "name": "Fair decoder baselines and finite-size scaling for bivariate bicycle codes",
+   "url": "https://pandey-tushar.com/papers/bb-erasure-baselines.html"
+  },
+  {
+   "@type": "WebPage",
+   "name": "Adaptive Graph of Thoughts: test-time reasoning over a graph of subproblems",
+   "url": "https://pandey-tushar.com/papers/adaptive-graph-of-thoughts.html"
+  }
+ ]
 }
 </script>
 <meta property="og:title" content="Tushar Pandey, PhD &#183; Quantum Error Correction and LLM Reasoning">
 <meta property="og:site_name" content="Tushar Pandey">
-<meta property="og:description" content="Error, corrected. Reasoning that grows. Let's build the improbable.">
+<meta property="og:description" content="Research in quantum error correction and LLM reasoning, and an eight-lesson course on quantum error correction that runs in your browser.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://pandey-tushar.com/">
 <meta property="og:image" content="https://pandey-tushar.com/og-home.png">
@@ -157,9 +188,21 @@ ol,ul{list-style:none}
 .fig .fp{fill:var(--tp-void2)}
 .fig .ft{fill:var(--tp-acc);fill-opacity:.18}
 .fig .fwt{fill:var(--tp-warm);fill-opacity:.16}
+.fig .fa{fill:var(--tp-acc)}
+.fig .pd{fill:none;stroke:var(--tp-dim);stroke-width:1}
 .fig text{font:12px var(--tp-sans);fill:var(--tp-dim)}
 
-/* ---------- 1. selected work ---------- */
+/* ---------- 1. in the browser ---------- */
+/* the course across both columns of the work grid, the tool and the papers below it */
+.play-main{display:grid;grid-template-columns:minmax(0,1fr);gap:1.2rem clamp(1.6rem,3.4vw,3.4rem);align-items:center;margin-bottom:clamp(2.4rem,3vw,3.2rem)}
+@media (min-width:52em){ .play-main{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.play-main .tp-plate svg{width:100%;height:210px}
+.play-main .tp-lbl{margin-bottom:.4rem}
+.play-main h3{font-size:clamp(1.5rem,1.2rem + .9vw,1.9rem)}
+.play-main .tp-lbl + h3 + p{margin-top:.7rem;max-width:var(--tp-measure)}
+.play-main .actions{margin-top:1.3rem}
+
+/* ---------- 2. selected work ---------- */
 .works{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2.4rem,3vw,3.2rem) clamp(1.6rem,3.4vw,3.4rem)}
 @media (min-width:52em){ .works{grid-template-columns:repeat(2,minmax(0,1fr))} }
 .work .tp-plate{margin-bottom:1.2rem}
@@ -171,25 +214,25 @@ ol,ul{list-style:none}
 .links{display:flex;flex-wrap:wrap;gap:.2rem 1.3rem;margin-top:.8rem;font-size:var(--tp-t-small)}
 .links a{display:inline-block;padding-block:4px}
 
-/* ---------- 2. books and lessons ---------- */
-/* one row of jackets, the lessons drawn as a jacket of their own; two by two on a phone */
-.shelf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:2.2rem clamp(1.4rem,4vw,4rem)}
+/* ---------- 3. books ---------- */
+/* one row of three jackets; on a phone, a list with the jacket beside its text */
+.shelf{display:grid;grid-template-columns:repeat(3,minmax(0,15rem));gap:2.2rem clamp(1.4rem,4vw,4rem)}
 .shelf li{position:relative}
 .jacket{display:block;width:100%;height:auto;aspect-ratio:2/3;border:1px solid var(--tp-rule);border-radius:2px;background:var(--tp-void2);
   box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 18px -8px rgba(0,0,0,.22)}
-svg.jacket{background:var(--tp-void)}
-.jacket .fr{fill:none;stroke:var(--tp-rule);stroke-width:1}
-.jacket .t{font:400 18px/1 var(--tp-serif);fill:var(--tp-ink)}
-.jacket .s{font:italic 400 11px/1 var(--tp-serif);fill:var(--tp-dim)}
-.jacket .a{font:400 8.5px/1 var(--tp-sans);letter-spacing:.2em;fill:var(--tp-ink)}
 .shelf h3{margin-top:.95rem;font-size:1.14rem;line-height:1.25}
 .shelf h3 a{color:var(--tp-ink);text-decoration:underline 1px;text-decoration-color:var(--tp-rule);text-underline-offset:.2em}
 .shelf h3 a::after{content:"";position:absolute;inset:0}
 .shelf li:hover h3 a,.shelf h3 a:focus-visible{color:var(--tp-acc);text-decoration-color:currentColor}
 .shelf p{margin-top:.3rem;font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-text)}
-@media (max-width:40em){ .shelf{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.8rem 1.1rem} }
+@media (max-width:40em){
+  .shelf{grid-template-columns:minmax(0,1fr);gap:1.6rem}
+  .shelf li{display:grid;grid-template-columns:6rem minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:1.1rem}
+  .shelf .jacket{grid-row:span 2}
+  .shelf h3{margin-top:0}
+}
 
-/* ---------- 3. record ---------- */
+/* ---------- 4. record ---------- */
 .record{max-width:46rem}
 .record li{display:grid;grid-template-columns:7.5rem minmax(0,1fr);gap:1.4rem;padding:.75rem 0;border-top:1px solid var(--tp-rule)}
 .record li:last-child{border-bottom:1px solid var(--tp-rule)}
@@ -197,7 +240,7 @@ svg.jacket{background:var(--tp-void)}
 .record b{display:block;font-weight:600;color:var(--tp-ink)}
 .record span.r{color:var(--tp-text)}
 
-/* ---------- 4. about and contact ---------- */
+/* ---------- 5. about and contact ---------- */
 .about{display:grid;grid-template-columns:minmax(0,1fr);gap:2rem clamp(2rem,5vw,5rem)}
 @media (min-width:62em){ .about{grid-template-columns:minmax(0,1fr) minmax(0,24rem)} }
 .bio{max-width:var(--tp-measure);font-size:1.06rem;line-height:1.65}
@@ -262,12 +305,82 @@ svg.jacket{background:var(--tp-void)}
         <button class="tp-btn" type="button" id="reset">Reset</button>
       </div>
       <p class="lat-status" id="lat-status" aria-live="polite">Two qubits flipped; <b>four checks</b> lit.</p>
-      <figcaption><b>Fig. 1</b>A distance-5 toric code: qubits on the edges, a check at every vertex, opposite sides identified (the faint copies at right and bottom). Two flipped qubits and the checks that notice. Tap a qubit to flip it; Correct pairs the lit checks by minimum-weight matching.</figcaption>
+      <figcaption><b>Fig. 1</b>A distance-5 toric code: qubits on the edges, a check at every vertex, opposite sides identified (the faint copies at right and bottom). Two flipped qubits and the checks that notice. Tap a qubit to flip it; Correct pairs the lit checks by minimum-weight matching. <a class="tp-link" href="/qec-in-practice/">The course</a> has eight lessons with figures like this one, from the repetition code to lattice surgery.</figcaption>
     </figure>
   </section>
 
+  <section id="try" aria-labelledby="h-try">
+    <div class="sec-head"><span class="n" aria-hidden="true">1</span><h2 id="h-try">Try it in your browser</h2></div>
+
+    <article class="play-main">
+      <figure class="fig tp-plate">
+        <svg viewBox="32 6 292 186" aria-hidden="true" focusable="false">
+          <path class="ln" d="M39 18.2V162.5H319.8"/>
+          <path class="faint" d="M182 91V162.5" stroke-dasharray="3 3"/>
+          <path class="ln" d="M39 148.2L318.5 36.4" stroke-dasharray="1.5 3"/>
+          <path class="ln" d="M62.8 162.5L286 28.6" stroke-dasharray="6 3.5"/>
+          <path class="ln bold acc" d="M92.7 162.5L260 28.6"/>
+          <circle class="fw" cx="182" cy="91" r="3.6"/>
+          <text x="171.6" y="83.2" text-anchor="end">threshold</text>
+          <text x="46.8" y="15.6">logical error rate</text>
+          <text x="319.8" y="187.2" text-anchor="end">physical error rate</text>
+        </svg>
+        <figcaption><b>Fig. 2</b>A sketch of the plot the threshold lesson draws: logical against physical error rate for distance 3 (dotted), 5 (dashed) and 7, crossing at the threshold (warm). Below it a bigger code fails less often; above it, more often.</figcaption>
+      </figure>
+      <div>
+        <p class="tp-lbl">A course in eight lessons</p>
+        <h3>Quantum Error Correction in Practice</h3>
+        <p>Eight lessons take you from the repetition code to lattice surgery. You flip qubits and watch the checks fire, step through a union-find decoder as its clusters grow, and in the threshold lesson run a Monte Carlo simulation that draws the threshold plot as it goes. A stabilizer simulator and the decoder run in the page, with nothing to install.</p>
+        <div class="actions"><a class="tp-btn" href="/qec-in-practice/">Start the course</a></div>
+        <p class="links"><a class="tp-link" href="/qec-in-practice/decoding.html">Step 3: errors, syndromes and decoding</a><a class="tp-link" href="/qec-in-practice/threshold.html">Step 4: the threshold</a></p>
+      </div>
+    </article>
+
+    <div class="works">
+      <article class="work">
+        <figure class="fig tp-plate">
+          <svg viewBox="40 10 180 130" aria-hidden="true" focusable="false">
+            <defs><pattern id="bbcell" x="70" y="15" width="20" height="20" patternUnits="userSpaceOnUse"><path class="faint" d="M0 0H20M0 0V20"/><circle class="pd" cx="14.5" cy="5.5" r="2"/><circle class="pd" cx="5.5" cy="14.5" r="2"/></pattern></defs>
+            <rect x="70" y="15" width="120" height="120" fill="url(#bbcell)"/>
+            <rect class="faint" x="70" y="15" width="120" height="120"/>
+            <path class="ln acc" d="M115.5 60.5L124.5 80.5M115.5 60.5L124.5 100.5M115.5 60.5Q150 44 184.5 60.5M115.5 60.5Q101 95 115.5 129.5M115.5 60.5L135.5 69.5M115.5 60.5L155.5 69.5"/>
+            <circle class="ln acc fa" cx="124.5" cy="80.5" r="3.4"/><circle class="ln acc fa" cx="124.5" cy="100.5" r="3.4"/><circle class="ln acc fa" cx="184.5" cy="60.5" r="3.4"/>
+            <circle class="ln acc fp bold" cx="115.5" cy="129.5" r="3.4"/><circle class="ln acc fp bold" cx="135.5" cy="69.5" r="3.4"/><circle class="ln acc fp bold" cx="155.5" cy="69.5" r="3.4"/>
+            <rect class="fw" x="111.5" y="56.5" width="8" height="8"/>
+          </svg>
+          <figcaption><b>Fig. 3</b>The [[72,12,6]] code, one of the explorer&rsquo;s presets, on its 6 by 6 torus of cells. One X check (warm) acts on six qubits: three L qubits (filled), one for each term of A, and three R qubits (open), one for each term of B.</figcaption>
+        </figure>
+        <p class="tp-lbl">Tool</p>
+        <h3>Bivariate bicycle code explorer</h3>
+        <p>Type the two polynomials of a bivariate bicycle code and the page gives its numbers of physical and logical qubits and its check weights, draws its checks on a torus, and searches for an upper bound on its distance. A link reproduces the code, and its check matrices download as plain text.</p>
+        <p class="links"><a class="tp-link" href="/tools/bb-codes.html">Open the explorer</a></p>
+      </article>
+
+      <article class="work">
+        <figure class="fig tp-plate">
+          <svg viewBox="0 0 260 150" aria-hidden="true" focusable="false">
+            <path class="ln" d="M30 14V125H246M30 100H26M30 40H26M72.6 125V129M143.5 125V129"/>
+            <g class="ln acc ft"><circle cx="44.2" cy="100" r="3.2"/><circle cx="52.7" cy="100" r="3.2"/><circle cx="58.4" cy="60" r="3.2"/><circle cx="61.2" cy="50" r="3.2"/><circle cx="69.7" cy="40" r="3.2"/><circle cx="78.3" cy="30" r="3.2"/><circle cx="81.1" cy="30" r="3.2"/><circle cx="154.9" cy="70" r="3.2"/><circle cx="154.9" cy="40" r="3.2"/></g>
+            <g class="fi"><rect x="100.8" y="97" width="6" height="6"/><rect x="151.9" y="97" width="6" height="6"/><rect x="168.9" y="97" width="6" height="6"/><rect x="168.9" y="77" width="6" height="6"/><rect x="168.9" y="57" width="6" height="6"/><rect x="203" y="97" width="6" height="6"/><rect x="203" y="57" width="6" height="6"/><rect x="237.1" y="57" width="6" height="6"/><rect x="237.1" y="37" width="6" height="6"/></g>
+            <text x="22" y="104" text-anchor="end">6</text>
+            <text x="22" y="44" text-anchor="end">12</text>
+            <text x="72.6" y="142" text-anchor="middle">100</text>
+            <text x="143.5" y="142" text-anchor="middle">200</text>
+            <text x="36" y="12">distance</text>
+            <text x="246" y="142" text-anchor="end">block length</text>
+          </svg>
+          <figcaption><b>Fig. 4</b>Distance against block length for the 27 codes certified in the lifted-surgery paper, from its companion page&rsquo;s data: circles have gain exactly two (Table 1), squares gain at least three for a best logical (Table 2).</figcaption>
+        </figure>
+        <p class="tp-lbl">Paper companions</p>
+        <h3>Three papers, with their data</h3>
+        <p>Each page explains one paper in plain language and has one interactive figure drawn from the paper&rsquo;s own data, with a BibTeX entry and links to the paper and its code.</p>
+        <p class="links"><a class="tp-link" href="/papers/lifted-surgery.html">Lifted surgery</a><a class="tp-link" href="/papers/bb-erasure-baselines.html">Bivariate bicycle codes under erasure</a><a class="tp-link" href="/papers/adaptive-graph-of-thoughts.html">Adaptive Graph of Thoughts</a></p>
+      </article>
+    </div>
+  </section>
+
   <section id="work" aria-labelledby="h-work">
-    <div class="sec-head"><span class="n" aria-hidden="true">1</span><h2 id="h-work">Selected work</h2></div>
+    <div class="sec-head"><span class="n" aria-hidden="true">2</span><h2 id="h-work">Selected work</h2></div>
     <div class="works">
 
       <article class="work">
@@ -279,7 +392,7 @@ svg.jacket{background:var(--tp-void)}
             <path class="ln bold warm" d="M123.8 82.5V65.5L138.5 57L153.2 65.5L167.9 57"/>
             <circle class="fw" cx="123.8" cy="82.5" r="3.6"/><circle class="fw" cx="167.9" cy="57" r="3.6"/>
           </svg>
-          <figcaption><b>Fig. 2</b>The doubled semion ground state is a signed sum over closed loops on the honeycomb lattice, like the two here. An open string (warm) violates the vertices at its ends; those are what error correction has to find.</figcaption>
+          <figcaption><b>Fig. 5</b>The doubled semion ground state is a signed sum over closed loops on the honeycomb lattice, like the two here. An open string (warm) violates the vertices at its ends; those are what error correction has to find.</figcaption>
         </figure>
         <p class="tp-lbl">Quantum error correction</p>
         <h3>Error correction for the doubled semion model</h3>
@@ -303,12 +416,12 @@ svg.jacket{background:var(--tp-void)}
             <text x="116" y="18" text-anchor="end">query</text>
             <text x="130" y="166" text-anchor="middle">answer</text>
           </svg>
-          <figcaption><b>Fig. 3</b>AGoT breaks a query into a graph of subproblems and expands only the hard one (warm) into a nested graph of its own.</figcaption>
+          <figcaption><b>Fig. 6</b>AGoT breaks a query into a graph of subproblems and expands only the hard one (warm) into a nested graph of its own.</figcaption>
         </figure>
         <p class="tp-lbl">LLM reasoning</p>
         <h3>Adaptive Graph of Thoughts</h3>
         <p><b>AGoT</b> grows chains, trees and graphs as it runs. Shipped at Agnostiq as a production agentic-AI blueprint (2024&ndash;25); code open source.</p>
-        <p class="links"><a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">The code, open source</a><a class="tp-link" href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener">The paper, <span class="tp-id">arXiv:2502.05078</span></a></p>
+        <p class="links"><a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">The code, open source</a><a class="tp-link" href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener">The paper, <span class="tp-id">arXiv:2502.05078</span></a><a class="tp-link" href="/papers/adaptive-graph-of-thoughts.html">Companion page</a></p>
       </article>
 
       <article class="work">
@@ -330,7 +443,7 @@ svg.jacket{background:var(--tp-void)}
             <text x="250" y="24" text-anchor="end">token capacity</text>
             <text x="250" y="134" text-anchor="end">time</text>
           </svg>
-          <figcaption><b>Fig. 4</b>Three tenants (outline, hatched, tinted) share one model. Each request is counted by its tokens against one shared capacity.</figcaption>
+          <figcaption><b>Fig. 7</b>Three tenants (outline, hatched, tinted) share one model. Each request is counted by its tokens against one shared capacity.</figcaption>
         </figure>
         <p class="tp-lbl">LLM inference</p>
         <h3>TokenGrid</h3>
@@ -343,7 +456,7 @@ svg.jacket{background:var(--tp-void)}
           <svg viewBox="0 0 160 160" aria-hidden="true" focusable="false">
             <path class="ln bold" d="M100.76 44.94L100.61 48.88L99.82 52.91L98.51 56.95L96.82 60.89L94.87 64.58L92.74 67.9L90.2 70.81L87.35 73.48L84.37 76.06L81.42 78.72L78.49 81.61L74.98 84.61L71.35 87.67L68.28 90.75L66.42 93.84L66.42 96.89L68.28 99.93L71.35 102.98L74.98 106.02L74.98 106.02M84.15 115.25L86.92 118.38L89.69 121.45L92.46 124.41L95.2 127.22L97.82 130.07L100.42 132.83L103.12 135.34L106.08 137.44L109.41 139.05L113.18 140.52L117.2 141.65L121.28 142.15L125.21 141.71L128.89 140.08L132.64 137.38L136.32 133.78L139.69 129.4L142.53 124.38L144.65 118.72L146.23 111.96L147.31 104.45L147.89 96.69L147.97 89.18L147.55 82.24L146.6 75.25L145.15 68.37L143.22 61.94L140.86 56.28L138.13 51.67L135.18 47.97L131.82 45.01L127.83 42.67L122.97 40.8L116.97 39.34L109.63 38.58L101.37 38.35L92.7 38.43L84.11 38.58L75.89 38.58L67.3 38.43L67.3 38.43M53.39 38.44L45.65 38.98L39.12 40.19L33.88 41.92L29.59 44.07L26.02 46.78L22.95 50.19L20.13 54.42L17.62 59.71L15.52 65.89L13.89 72.64L12.74 79.63L12.12 86.53L12.02 93.82L12.42 101.54L13.31 109.2L14.7 116.31L16.59 122.36L19.17 127.58L22.37 132.22L25.96 136.13L29.71 139.18L33.39 141.24L37.22 142.11L41.27 141.93L45.33 141L49.22 139.62L52.73 138.08L55.8 136.18L58.59 133.81L61.21 131.12L63.81 128.29L66.5 125.47L69.27 122.58L72.04 119.54L74.81 116.42L77.58 113.29L80.35 110.21L83.66 107.17L87.32 104.12L90.68 101.08L93.07 98.03L93.83 94.99L92.6 91.91L89.9 88.82L86.41 85.75L85.02 84.61M75.25 75.74L72.28 73.15L69.46 70.47L66.97 67.51L64.88 64.14L62.95 60.41L61.3 56.45L60.05 52.4L59.34 48.39L59.27 44.43L59.77 40.27L60.77 36.11L62.21 32.17L64.01 28.68L66.21 25.73L69 22.98L72.19 20.61L75.55 18.85L78.83 17.93L81.97 18.07L85.29 19.22L88.63 21.15L91.74 23.64L94.4 26.45L96.47 29.5L97.79 32.17"/>
           </svg>
-          <figcaption><b>Fig. 5</b>The figure-eight knot. A generalized Bonahon&ndash;Wong&ndash;Yang volume conjecture is proved for its complement.</figcaption>
+          <figcaption><b>Fig. 8</b>The figure-eight knot. A generalized Bonahon&ndash;Wong&ndash;Yang volume conjecture is proved for its complement.</figcaption>
         </figure>
         <p class="tp-lbl">Quantum topology</p>
         <h3>The volume conjecture</h3>
@@ -356,34 +469,29 @@ svg.jacket{background:var(--tp-void)}
   </section>
 
   <section id="books" aria-labelledby="h-books">
-    <div class="sec-head"><span class="n" aria-hidden="true">2</span><h2 id="h-books">Books and lessons</h2></div>
+    <div class="sec-head"><span class="n" aria-hidden="true">3</span><h2 id="h-books">Books</h2></div>
     <ul class="shelf">
       <li>
-        <img class="jacket" src="/img/covers/qubit-dialogues-300.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="(max-width:40em) 44vw, 220px" width="300" height="450" loading="lazy" decoding="async" alt="">
+        <img class="jacket" src="/img/covers/qubit-dialogues-300.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="(max-width:40em) 96px, 240px" width="300" height="450" loading="lazy" decoding="async" alt="">
         <h3><a href="/qubit-dialogues.html">The Qubit Dialogues</a></h3>
         <p>Twenty-two cantos on quantum computing, about two hours.</p>
       </li>
       <li>
-        <img class="jacket" src="/img/covers/an-unpolarized-life-300.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="(max-width:40em) 44vw, 220px" width="300" height="450" loading="lazy" decoding="async" alt="">
+        <img class="jacket" src="/img/covers/an-unpolarized-life-300.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="(max-width:40em) 96px, 240px" width="300" height="450" loading="lazy" decoding="async" alt="">
         <h3><a href="/life/">An Unpolarized Life</a></h3>
         <p>Twelve chapters, about 35 minutes.</p>
       </li>
       <li>
-        <img class="jacket" src="/img/covers/qubit-dialogues-illustrated-300.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="(max-width:40em) 44vw, 220px" width="300" height="450" loading="lazy" decoding="async" alt="">
+        <img class="jacket" src="/img/covers/qubit-dialogues-illustrated-300.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="(max-width:40em) 96px, 240px" width="300" height="450" loading="lazy" decoding="async" alt="">
         <h3><a href="/illustrated/">The illustrated edition</a></h3>
         <p>The same prose set as plates, about two hours.</p>
-      </li>
-      <li>
-        <svg class="jacket fig" viewBox="0 0 200 300" aria-hidden="true" focusable="false"><rect class="fr" x="9.5" y="9.5" width="181" height="281"/><path class="ln acc bold" d="M92 36H108"/><text class="t" x="100" y="66" text-anchor="middle">Quantum Error</text><text class="t" x="100" y="90" text-anchor="middle">Correction</text><text class="t" x="100" y="114" text-anchor="middle">in Practice</text><text class="s" x="100" y="134" text-anchor="middle">Eight lessons</text><path class="ln ft" d="M68 172h32v32h-32Z"/><path class="ln ft" d="M100 204h32v32h-32Z"/><path class="ln ft" d="M132 172A16.0 16.0 0 0 1 132 204Z"/><path class="ln ft" d="M68 204A16.0 16.0 0 0 0 68 236Z"/><path class="ln fwt warm" d="M100 172h32v32h-32Z"/><path class="ln fwt warm" d="M68 204h32v32h-32Z"/><path class="ln fp" d="M68 172A16.0 16.0 0 0 1 100 172Z"/><path class="ln fp" d="M100 236A16.0 16.0 0 0 0 132 236Z"/><circle class="ln fp" cx="68" cy="172" r="4.5"/><circle class="ln fp" cx="100" cy="172" r="4.5"/><circle class="ln fp" cx="132" cy="172" r="4.5"/><circle class="ln fp" cx="68" cy="204" r="4.5"/><circle class="ln fw" cx="100" cy="204" r="6"/><circle class="ln fp" cx="132" cy="204" r="4.5"/><circle class="ln fp" cx="68" cy="236" r="4.5"/><circle class="ln fp" cx="100" cy="236" r="4.5"/><circle class="ln fp" cx="132" cy="236" r="4.5"/><text class="a" x="100" y="274" text-anchor="middle">TUSHAR PANDEY</text></svg>
-        <h3><a href="/qec-in-practice/">Quantum Error Correction in Practice</a></h3>
-        <p>Eight interactive lessons, from the repetition code to lattice surgery, with a simulator and a decoder running in your browser.</p>
       </li>
     </ul>
     <p class="more"><a class="tp-link" href="/books.html">All three books, to read online or as a PDF</a></p>
   </section>
 
   <section id="record" aria-labelledby="h-record">
-    <div class="sec-head"><span class="n" aria-hidden="true">3</span><h2 id="h-record">Record</h2></div>
+    <div class="sec-head"><span class="n" aria-hidden="true">4</span><h2 id="h-record">Record</h2></div>
     <ol class="record">
       <li><span class="when">2026 &ndash; now</span><span><b>DataRobot</b><span class="r">Senior Software Engineer, LLM inference</span></span></li>
       <li><span class="when">2024 &ndash; 2025</span><span><b>Agnostiq</b><span class="r">Research Software Engineer, gen-AI algorithms</span></span></li>
@@ -394,7 +502,7 @@ svg.jacket{background:var(--tp-void)}
   </section>
 
   <section id="contact" aria-labelledby="h-contact">
-    <div class="sec-head"><span class="n" aria-hidden="true">4</span><h2 id="h-contact">About and contact</h2></div>
+    <div class="sec-head"><span class="n" aria-hidden="true">5</span><h2 id="h-contact">About and contact</h2></div>
     <div class="about">
       <p class="bio">I am a math Ph.D. from Texas A&amp;M University, where I worked under Tian Yang in quantum topology and the volume conjecture, and I did my undergraduate degree at IIT Kanpur in mathematics and scientific computing. I am currently a Senior Software Engineer at DataRobot; before that I worked at Agnostiq as a research software engineer on gen-AI algorithms. I have worked on quantum algorithms, error correction, topological quantum computing, ZX-calculus, machine learning, NLP and gen-AI.</p>
       <dl class="reach">
