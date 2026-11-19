@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DVPGC1C44Z');
+</script>
+<title>Bivariate bicycle code explorer &middot; Tushar Pandey</title>
+<meta name="description" content="Type the two polynomials of a bivariate bicycle code and see n, k, check weights, the layout of its checks and an upper bound on its distance. Share the code by link and download its check matrices.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/tools/bb-codes.html">
+<meta property="og:title" content="Bivariate bicycle code explorer &middot; Tushar Pandey">
+<meta property="og:description" content="Type the two polynomials of a bivariate bicycle code and see its parameters, its layout and an upper bound on its distance, computed in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pandey-tushar.com/tools/bb-codes.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-research.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-research.png">
+<link rel="stylesheet" href="/tools/bb-codes.css">
+<script type="module" src="/tools/js/bb-page.js"></script>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="bb">
+ <div class="tp-wrap">
+  <header class="bb-head">
+    <p class="tp-lbl">Tool</p>
+    <h1>Bivariate bicycle code explorer</h1>
+    <p class="lead">Bivariate bicycle codes are quantum low-density parity-check codes introduced by Bravyi, Cross, Gambetta, Maslov, Rall and Yoder. Each one is fixed by two whole numbers, l and m, and two polynomials, A and B, in the variables x and y. Type them below or pick a code from the paper&rsquo;s table to see how many physical and logical qubits the code has, the weights of its checks and how the checks sit on a torus, and to search for a low-weight logical operator. You can copy a link that reproduces the code and download its check matrices. Everything is computed in your browser.</p>
+  </header>
+
+  <section class="bb-tool" aria-labelledby="tool-h">
+    <h2 id="tool-h">The code</h2>
+    <form class="bb-form" id="bb-form" hidden novalidate>
+      <div class="bb-field bb-wide">
+        <label for="in-preset">Code from the paper&rsquo;s table</label>
+        <select id="in-preset"></select>
+      </div>
+      <div class="bb-field">
+        <label for="in-l">l</label>
+        <input id="in-l" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" aria-describedby="err-l">
+        <p class="bb-err" id="err-l"></p>
+      </div>
+      <div class="bb-field">
+        <label for="in-m">m</label>
+        <input id="in-m" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" aria-describedby="err-m">
+        <p class="bb-err" id="err-m"></p>
+      </div>
+      <div class="bb-field bb-poly">
+        <label for="in-A">A</label>
+        <input id="in-A" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="err-A">
+        <p class="bb-err" id="err-A"></p>
+      </div>
+      <div class="bb-field bb-poly">
+        <label for="in-B">B</label>
+        <input id="in-B" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="err-B">
+        <p class="bb-err" id="err-B"></p>
+      </div>
+      <p class="bb-hint" id="bb-hint">Write a polynomial as a sum of monomials, for example x^3 + y + y^2, 1 + x*y or x^2y^3. Exponents are taken mod l for x and mod m for y, and a monomial written twice cancels. l and m run from 1 to <span id="lim-side">60</span>, with lm at most <span id="lim-cells">1,200</span>.</p>
+    </form>
+    <div class="bb-results" id="bb-results" hidden>
+      <dl class="bb-params" id="bb-params"></dl>
+      <div class="bb-actions">
+        <button type="button" class="tp-btn" id="act-link">Copy link</button>
+        <button type="button" class="tp-btn" id="act-hx"><span>Download H<sub>X</sub></span></button>
+        <button type="button" class="tp-btn" id="act-hz"><span>Download H<sub>Z</sub></span></button>
+        <span class="bb-msg" id="act-msg" role="status" aria-live="polite"></span>
+      </div>
+      <p class="bb-note">The downloads are plain text: a few comment lines starting with #, then one line per check, listing the 0-based column indices of its ones, separated by spaces. Columns 0 to lm&nbsp;&minus;&nbsp;1 are the L qubits and the rest the R qubits; the qubit of cell (i,&nbsp;j) is i&middot;m&nbsp;+&nbsp;j within its block.</p>
+    </div>
+    <p class="bb-status" id="bb-status" role="status" aria-live="polite">This tool needs JavaScript: it builds the check matrices and computes the parameters in your browser. The sections below define the codes and say how each number is computed.</p>
+  </section>
+
+  <figure class="tp-plate bb-fig" id="fig-layout">
+    <div class="bb-controls" id="lay-controls" hidden>
+      <label>Show <select id="lay-kind">
+        <option value="">Nothing selected</option>
+        <option value="X">An X check</option>
+        <option value="Z">A Z check</option>
+        <option value="L">An L qubit</option>
+        <option value="R">An R qubit</option>
+        <option value="logical" disabled>The lowest-weight logical found</option>
+      </select></label>
+      <label>in cell i <input id="lay-i" type="text" inputmode="numeric" autocomplete="off" aria-describedby="lay-err"></label>
+      <label>j <input id="lay-j" type="text" inputmode="numeric" autocomplete="off" aria-describedby="lay-err"></label>
+      <p class="bb-err" id="lay-err"></p>
+    </div>
+    <div class="bb-plot" id="lay-plot"></div>
+    <p class="bb-legend" id="lay-legend" hidden></p>
+    <p class="bb-status" id="lay-status" role="status" aria-live="polite">The layout needs JavaScript.</p>
+    <details class="bb-data" id="lay-data" hidden>
+      <summary>Show data as table</summary>
+      <div class="bb-scroll" id="lay-table"></div>
+    </details>
+    <figcaption><b>Fig. 1</b>The code on an l&nbsp;&times;&nbsp;m torus of cells. Cell (i,&nbsp;j) stands for the monomial x<sup>i</sup>y<sup>j</sup> and holds an X check, an L qubit, an R qubit and a Z check. Select a check to see the qubits it acts on, or a qubit to see its checks, by clicking it or with the controls above; the lines run to the cells they reach without wrapping around the torus, so long-range edges show as long lines. For large l and m the cells are drawn as plain dots.</figcaption>
+  </figure>
+
+  <figure class="tp-plate bb-fig" id="fig-dist">
+    <div class="bb-controls" id="dist-controls" hidden>
+      <label>Seed <input id="dist-seed" type="text" inputmode="numeric" autocomplete="off" value="1" aria-describedby="dist-err"></label>
+      <button type="button" class="tp-btn bb-run" id="dist-run">Run search</button>
+      <button type="button" class="tp-btn" id="dist-stop" disabled>Stop</button>
+      <p class="bb-err" id="dist-err"></p>
+    </div>
+    <p class="bb-readout" id="dist-readout" hidden></p>
+    <p class="bb-status" id="dist-status" role="status" aria-live="polite">The search needs JavaScript.</p>
+    <details class="bb-data" id="dist-data" hidden>
+      <summary>Show data as table</summary>
+      <div class="bb-scroll" id="dist-table"></div>
+    </details>
+    <figcaption><b>Fig. 2</b>A randomized information-set search for low-weight logical operators, run in a background thread. The lowest weight found is an upper bound on the distance, not a proof of it. The same seed repeats the same sequence of trials. The search stops when you press Stop, after two minutes, or when it reaches the distance the paper gives for a code whose distance is known exactly.</figcaption>
+  </figure>
+
+  <article class="bb-essay">
+  <h2>How it works</h2>
+  <p>A bivariate bicycle code is fixed by whole numbers l and m and two polynomials A and B with coefficients in F<sub>2</sub>, the field with two elements. Let S<sub>l</sub> be the l&nbsp;&times;&nbsp;l cyclic shift matrix, whose row i has a single one, in column i&nbsp;+&nbsp;1 mod l. Then x&nbsp;=&nbsp;S<sub>l</sub>&nbsp;&otimes;&nbsp;I<sub>m</sub> and y&nbsp;=&nbsp;I<sub>l</sub>&nbsp;&otimes;&nbsp;S<sub>m</sub> are lm&nbsp;&times;&nbsp;lm matrices with xy&nbsp;=&nbsp;yx and x<sup>l</sup>&nbsp;=&nbsp;y<sup>m</sup>&nbsp;=&nbsp;1, so each monomial x<sup>a</sup>y<sup>b</sup> is a permutation matrix and A and B are sums of them. The check matrices are H<sub>X</sub>&nbsp;=&nbsp;[A&nbsp;|&nbsp;B] and H<sub>Z</sub>&nbsp;=&nbsp;[B<sup>T</sup>&nbsp;|&nbsp;A<sup>T</sup>] on n&nbsp;=&nbsp;2lm qubits: the first lm columns are the left (L) qubits, the rest the right (R) qubits. Since A and B commute, H<sub>X</sub>H<sub>Z</sub><sup>T</sup>&nbsp;=&nbsp;AB&nbsp;+&nbsp;BA&nbsp;=&nbsp;0, so every X check commutes with every Z check; the tool also checks this directly.</p>
+  <p>The number of logical qubits is k&nbsp;=&nbsp;n&nbsp;&minus;&nbsp;rank&nbsp;H<sub>X</sub>&nbsp;&minus;&nbsp;rank&nbsp;H<sub>Z</sub>, with ranks over F<sub>2</sub>; the paper shows that it equals 2&nbsp;dim(ker&nbsp;A&nbsp;&cap;&nbsp;ker&nbsp;B), and the tool computes both. A check has one qubit for each monomial of A and of B, so with three terms in each, as in every code of the paper&rsquo;s table, every check has weight 6. The Tanner graph joins each check to the qubits it acts on, and the tool counts its connected pieces. The paper&rsquo;s net encoding rate, r&nbsp;=&nbsp;k/2n, counts n check qubits as well as the n data qubits.</p>
+  <p>The distance d is the least weight of a logical operator that is not a product of checks; the paper shows that X-type and Z-type logical operators have the same least weight. Computing d exactly is hard in general. The search here repeatedly puts a basis of ker&nbsp;H<sub>X</sub> or ker&nbsp;H<sub>Z</sub> in reduced row echelon form, taking the columns in a random order, and tests each row and each sum of two rows. A candidate counts if it has odd overlap with a logical operator of the other type. The lowest weight found is an upper bound on d. For the codes from the table, d is quoted from Table&nbsp;3 of the paper, where an entry written &le; is itself an upper bound.</p>
+  <p class="bb-src">Source: S. Bravyi, A. W. Cross, J. M. Gambetta, D. Maslov, P. Rall and T. J. Yoder, &ldquo;High-threshold and low-overhead fault-tolerant quantum memory,&rdquo; Nature 627, 778 (2024), <a class="tp-link" href="https://arxiv.org/abs/2308.07915" rel="noopener"><span class="tp-id">arXiv:2308.07915</span></a>.</p>
+
+  <h2>Limits</h2>
+  <p>The tool does not compute the exact distance. The search gives an upper bound, it can miss the true value, and a value it finds proves nothing about lower weights. Nothing here models noise, circuits, decoders or the schedule of syndrome measurements: every number is a property of the check matrices alone. l and m are limited to <span id="lim-side2">60</span> each and lm to <span id="lim-cells2">1,200</span>, so n is at most 2,400; the parameters then still come back in a fraction of a second. The layout turns into plain dots when the cells get small, and the search slows as n grows.</p>
+
+  <h2>Related</h2>
+  <ul class="bb-links">
+    <li><a class="tp-link" href="/papers/bb-erasure-baselines.html">Fair decoder baselines and finite-size scaling for bivariate bicycle codes</a>, a paper companion page</li>
+    <li><a class="tp-link" href="/qec-in-practice/">Quantum Error Correction in Practice</a>, a course of interactive lessons</li>
+  </ul>
+  <p class="bb-cite"><span class="tp-lbl">Cite this tool</span> T. Pandey, Bivariate bicycle code explorer (2026), https://pandey-tushar.com/tools/bb-codes.html</p>
+  </article>
+ </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

@@ -144,7 +144,7 @@
       "arxiv": "2502.05078",
       "page": "/papers/adaptive-graph-of-thoughts.html",
       "code": "https://github.com/AgnostiqHQ/multi-agent-llm",
-      "summary": "A test-time LLM reasoning method that recursively breaks a query into a graph of subproblems, expanding only hard ones; up to 46.2% gain on GPQA.",
+      "summary": "A test-time LLM reasoning method that recursively breaks a query into a graph of subproblems, expanding only complex ones. It solves 50% of the 20 hardest Game of 24 puzzles against 10% for direct prompting (+400%, gpt-4o-mini) and gains 46.2% relative on shuffled GPQA Diamond (gpt-4o).",
       "selected": true
     },
     {

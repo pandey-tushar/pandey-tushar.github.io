@@ -1,0 +1,695 @@
+{
+ "source": "arXiv:2308.07915, Table 3; built by _studio/tools/tests/tools/make_bb_reference.py",
+ "numpy": "2.5.1",
+ "ldpc": "2.4.1",
+ "hash": "sha256 of the rows, each the sorted 0-based column indices of its ones joined by single spaces and ended by a newline",
+ "presets": [
+  {
+   "name": "[[72,12,6]]",
+   "l": 6,
+   "m": 6,
+   "A": [
+    [
+     3,
+     0
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "B": [
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     0
+    ]
+   ],
+   "n": 72,
+   "k": 12,
+   "rankX": 30,
+   "rankZ": 30,
+   "hashX": "4dc68d134e7af18c7336dbd26138633604ce3909b805d0eb56ca1fcbf84241be",
+   "hashZ": "e8a92424c5853374320dc2c8fa85ce0176e616d38c54d221484cafcaf4d6dd1c",
+   "rowWeightsX": [
+    6
+   ],
+   "rowWeightsZ": [
+    6
+   ],
+   "colWeightsX": [
+    3
+   ],
+   "colWeightsZ": [
+    3
+   ]
+  },
+  {
+   "name": "[[90,8,10]]",
+   "l": 15,
+   "m": 3,
+   "A": [
+    [
+     9,
+     0
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "B": [
+    [
+     0,
+     0
+    ],
+    [
+     2,
+     0
+    ],
+    [
+     7,
+     0
+    ]
+   ],
+   "n": 90,
+   "k": 8,
+   "rankX": 41,
+   "rankZ": 41,
+   "hashX": "92e1afff42d2cd8c28e2eb10681b153e7a015745d45448ad8723ea8e796a4703",
+   "hashZ": "9c00813a1db88bdbb288f70d81c12b7b5518b813881d18c2571c995ec154bb1f",
+   "rowWeightsX": [
+    6
+   ],
+   "rowWeightsZ": [
+    6
+   ],
+   "colWeightsX": [
+    3
+   ],
+   "colWeightsZ": [
+    3
+   ]
+  },
+  {
+   "name": "[[108,8,10]]",
+   "l": 9,
+   "m": 6,
+   "A": [
+    [
+     3,
+     0
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "B": [
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     0
+    ]
+   ],
+   "n": 108,
+   "k": 8,
+   "rankX": 50,
+   "rankZ": 50,
+   "hashX": "fb275897ef32e24cfcc2088a6a845a19715c6d8b098419643531467750e2b479",
+   "hashZ": "32a4a1827a492befa7670a49ebe016a24be50557fe5f8b64c5f38b739e029e24",
+   "rowWeightsX": [
+    6
+   ],
+   "rowWeightsZ": [
+    6
+   ],
+   "colWeightsX": [
+    3
+   ],
+   "colWeightsZ": [
+    3
+   ]
+  },
+  {
+   "name": "[[144,12,12]]",
+   "l": 12,
+   "m": 6,
+   "A": [
+    [
+     3,
+     0
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "B": [
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     0
+    ]
+   ],
+   "n": 144,
+   "k": 12,
+   "rankX": 66,
+   "rankZ": 66,
+   "hashX": "25ae143f4f891892029f709aaf590bdeabd4cc385e59ef2df0becdd9234156ee",
+   "hashZ": "68d7143ca65d4aec7983ac7e26098961844da02917da66fb5b74431371b43944",
+   "rowWeightsX": [
+    6
+   ],
+   "rowWeightsZ": [
+    6
+   ],
+   "colWeightsX": [
+    3
+   ],
+   "colWeightsZ": [
+    3
+   ]
+  },
+  {
+   "name": "[[288,12,18]]",
+   "l": 12,
+   "m": 12,
+   "A": [
+    [
+     3,
+     0
+    ],
+    [
+     0,
+     2
+    ],
+    [
+     0,
+     7
+    ]
+   ],
+   "B": [
+    [
+     0,
+     3
+    ],
+    [
+     1,
+     0
+    ],
+    [
+     2,
+     0
+    ]
+   ],
+   "n": 288,
+   "k": 12,
+   "rankX": 138,
+   "rankZ": 138,
+   "hashX": "96012ac0ef2c6bfa8721432c5f0a113d224d1778589acbdc9c56593396e2e64d",
+   "hashZ": "181e0e70f886c5a4af242e5a66bf62d6c1b8b45a368434ee2dd4993de76d765f",
+   "rowWeightsX": [
+    6
+   ],
+   "rowWeightsZ": [
+    6
+   ],
+   "colWeightsX": [
+    3
+   ],
+   "colWeightsZ": [
+    3
+   ]
+  },
+  {
+   "name": "[[360,12,<=24]]",
+   "l": 30,
+   "m": 6,
+   "A": [
+    [
+     9,
+     0
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     0,
+     2
+    ]
+   ],
+   "B": [
+    [
+     0,
+     3
+    ],
+    [
+     25,
+     0
+    ],
+    [
+     26,
+     0
+    ]
+   ],
+   "n": 360,
+   "k": 12,
+   "rankX": 174,
+   "rankZ": 174,
+   "hashX": "a3a778c497e371aefee3c683c29828cefe91c76c1233ccf82b87c3a389bcf349",
+   "hashZ": "1fa7ce849ecab5b0043b5e1a5f53ee99294be982b5596c0f8b17ec0ddf3cf82e",
+   "rowWeightsX": [
+    6
+   ],
+   "rowWeightsZ": [
+    6
+   ],
+   "colWeightsX": [
+    3
+   ],
+   "colWeightsZ": [
+    3
+   ]
+  },
+  {
+   "name": "[[756,16,<=34]]",
+   "l": 21,
+   "m": 18,
+   "A": [
+    [
+     3,
+     0
+    ],
+    [
+     0,
+     10
+    ],
+    [
+     0,
+     17
+    ]
+   ],
+   "B": [
+    [
+     0,
+     5
+    ],
+    [
+     3,
+     0
+    ],
+    [
+     19,
+     0
+    ]
+   ],
+   "n": 756,
+   "k": 16,
+   "rankX": 370,
+   "rankZ": 370,
+   "hashX": "571ae10ae3210496379278a369b190673713ab30f5a92509b7c4fcf984649367",
+   "hashZ": "25957b46068ad0f97ed0eca1ad137e0907a2bcc2defe692bff439de60a4419c4",
+   "rowWeightsX": [
+    6
+   ],
+   "rowWeightsZ": [
+    6
+   ],
+   "colWeightsX": [
+    3
+   ],
+   "colWeightsZ": [
+    3
+   ]
+  }
+ ],
+ "random": [
+  {
+   "l": 8,
+   "m": 9,
+   "A": "y^8 + x^11 y^1",
+   "B": "y^15+x^9y^17+x^7y^7",
+   "n": 144,
+   "k": 0,
+   "rankX": 72,
+   "rankZ": 72,
+   "hashX": "8ec5e4ec3ae798b2b87363f351e53c6855a2f39f2c542543a2734b89113a7155",
+   "hashZ": "a848f44f0191f952931d5c1a4d9d3c883f1980e1240bf59abae7b250839f2929",
+   "rowWeightsX": [
+    5
+   ],
+   "rowWeightsZ": [
+    5
+   ],
+   "colWeightsX": [
+    2,
+    3
+   ],
+   "colWeightsZ": [
+    2,
+    3
+   ]
+  },
+  {
+   "l": 7,
+   "m": 1,
+   "A": "x^2 y^1",
+   "B": "x^6y",
+   "n": 14,
+   "k": 0,
+   "rankX": 7,
+   "rankZ": 7,
+   "hashX": "75f3c32e554ff1dda43d91e2c9ed89f1aa9599b3c851f8945644dd8ea8a412e5",
+   "hashZ": "72a894d08fd8bc100ae5a76cfae90209f05635c079e55ef34bbb6bb819a4f7ff",
+   "rowWeightsX": [
+    2
+   ],
+   "rowWeightsZ": [
+    2
+   ],
+   "colWeightsX": [
+    1
+   ],
+   "colWeightsZ": [
+    1
+   ]
+  },
+  {
+   "l": 6,
+   "m": 1,
+   "A": "x^1 y",
+   "B": "x^7 y^1",
+   "n": 12,
+   "k": 0,
+   "rankX": 6,
+   "rankZ": 6,
+   "hashX": "c75014ef291587393e23f990187ac470411e8616cae3aedc6d63d4acbb5a31e1",
+   "hashZ": "16c0d9267db50c98e282a2f50f58f1085c0c5ba74458a149cc79933bdf75c4c6",
+   "rowWeightsX": [
+    2
+   ],
+   "rowWeightsZ": [
+    2
+   ],
+   "colWeightsX": [
+    1
+   ],
+   "colWeightsZ": [
+    1
+   ]
+  },
+  {
+   "l": 8,
+   "m": 8,
+   "A": "x^7*y^13+y^10+x^15*y^4+x*y^13",
+   "B": "x^15*y^9+x^7 y^7+x^10*y+x^9y^9",
+   "n": 128,
+   "k": 10,
+   "rankX": 59,
+   "rankZ": 59,
+   "hashX": "17f2d3fb2864bff727c0c36d73fdab0c877b5c78af71f9c9decbd6eaca8b8050",
+   "hashZ": "fa65030dd9a980429cc69d063c3dfcffe16c91cc95a8f4b30adbe5676280e3bc",
+   "rowWeightsX": [
+    8
+   ],
+   "rowWeightsZ": [
+    8
+   ],
+   "colWeightsX": [
+    4
+   ],
+   "colWeightsZ": [
+    4
+   ]
+  },
+  {
+   "l": 3,
+   "m": 2,
+   "A": "x^4 + x^4y^3 + x^1 + x^3",
+   "B": "x^3*y^2 + 1 + x + x^5 y^3",
+   "n": 12,
+   "k": 2,
+   "rankX": 5,
+   "rankZ": 5,
+   "hashX": "388d1d184f18caa361f0481365ff0d47335cc8af0b1a6631a164c297829d89e2",
+   "hashZ": "362fb6bcf7875de6ee6691bddbfecb7e906d4fcaff34726075699c0130c6cc5e",
+   "rowWeightsX": [
+    4
+   ],
+   "rowWeightsZ": [
+    4
+   ],
+   "colWeightsX": [
+    2
+   ],
+   "colWeightsZ": [
+    2
+   ]
+  },
+  {
+   "l": 8,
+   "m": 4,
+   "A": "x^13y^3",
+   "B": "xy^7",
+   "n": 64,
+   "k": 0,
+   "rankX": 32,
+   "rankZ": 32,
+   "hashX": "9e00788002999066f9b664abc04edbf582f77128a672d456f78cddaad0d9ee08",
+   "hashZ": "cd1be75d3666745c39da4da34fdd64a74d3c56bdd21ac5f62e2c7ca0b8c8159d",
+   "rowWeightsX": [
+    2
+   ],
+   "rowWeightsZ": [
+    2
+   ],
+   "colWeightsX": [
+    1
+   ],
+   "colWeightsZ": [
+    1
+   ]
+  },
+  {
+   "l": 6,
+   "m": 7,
+   "A": "x^7 y^2 + x^7*y^9 + y^13 + x^4 y^2",
+   "B": "x^11*y^3 + x^4*y^6 + x^10*y^13 + x^7 y^2",
+   "n": 84,
+   "k": 4,
+   "rankX": 40,
+   "rankZ": 40,
+   "hashX": "8360a7a319d003085157afb49c8e5bc2d71e37dea051139279075fbc8058378d",
+   "hashZ": "6c29a330c62f8b063ae8c8a1cd6bc2d7a30dc8465dc88cc6074cbe11304a8b9b",
+   "rowWeightsX": [
+    4
+   ],
+   "rowWeightsZ": [
+    4
+   ],
+   "colWeightsX": [
+    2
+   ],
+   "colWeightsZ": [
+    2
+   ]
+  },
+  {
+   "l": 4,
+   "m": 2,
+   "A": "x^4 + x^7*y^3 + x^6 y",
+   "B": "x^4y^2+x^2*y^3+x^5 y^3+x^5y",
+   "n": 16,
+   "k": 0,
+   "rankX": 8,
+   "rankZ": 8,
+   "hashX": "a2ddf90e19b44e2962fe77451107adb411941a37deb1c9ee17e9737fe3050de0",
+   "hashZ": "b57296004d3efe6303a6558c91a0186949d4aa88f5a7624c917d5ffc4ab0098f",
+   "rowWeightsX": [
+    5
+   ],
+   "rowWeightsZ": [
+    5
+   ],
+   "colWeightsX": [
+    2,
+    3
+   ],
+   "colWeightsZ": [
+    2,
+    3
+   ]
+  },
+  {
+   "l": 8,
+   "m": 4,
+   "A": "x^5*y^2+x^6 y",
+   "B": "x^8 y^3+x^15y^6+x^2 y^6",
+   "n": 64,
+   "k": 0,
+   "rankX": 32,
+   "rankZ": 32,
+   "hashX": "070e173904d27e7657788762ef7fe77837e82ee785d038016e6ff377fa6f85da",
+   "hashZ": "82b7e4981a446d38b3564f417e719f80cf43a28decbcc91581ef8d168293a8b9",
+   "rowWeightsX": [
+    5
+   ],
+   "rowWeightsZ": [
+    5
+   ],
+   "colWeightsX": [
+    2,
+    3
+   ],
+   "colWeightsZ": [
+    2,
+    3
+   ]
+  },
+  {
+   "l": 6,
+   "m": 3,
+   "A": "x^3*y^4+x^6y+x^10 y^3+x^7y^4",
+   "B": "x^2 + x^10*y^5 + x^2*y^2 + x^3*y^2",
+   "n": 36,
+   "k": 2,
+   "rankX": 17,
+   "rankZ": 17,
+   "hashX": "7253d668425a9ee19f334892833a56a25cbea7f8ed9f978046fe1383019c3d25",
+   "hashZ": "18f0f63eb52bc75bd0761f3622e196324803b8e8264415d9850ebd538389e537",
+   "rowWeightsX": [
+    8
+   ],
+   "rowWeightsZ": [
+    8
+   ],
+   "colWeightsX": [
+    4
+   ],
+   "colWeightsZ": [
+    4
+   ]
+  },
+  {
+   "l": 8,
+   "m": 1,
+   "A": "x^12",
+   "B": "x^8*y^1+x^11*y",
+   "n": 16,
+   "k": 0,
+   "rankX": 8,
+   "rankZ": 8,
+   "hashX": "bd2cd44b92478a8472a1c55c5760f8c6859c096f3ae930912b8c001fab8deccd",
+   "hashZ": "d8f008597f48d160c82e340ebd94ff4a20a90d72c5cebcc25ce260020c1b3b52",
+   "rowWeightsX": [
+    3
+   ],
+   "rowWeightsZ": [
+    3
+   ],
+   "colWeightsX": [
+    1,
+    2
+   ],
+   "colWeightsZ": [
+    1,
+    2
+   ]
+  },
+  {
+   "l": 8,
+   "m": 2,
+   "A": "x^3y",
+   "B": "x^3y^2 + xy^3",
+   "n": 32,
+   "k": 0,
+   "rankX": 16,
+   "rankZ": 16,
+   "hashX": "2c964526d1cf9f4c43839af8b91dffe6b5f858bd6b322f359a86917fb9050432",
+   "hashZ": "c87f5d82a38d970702585b042114dc50fa234c0a4ff119d5035c65df4688d841",
+   "rowWeightsX": [
+    3
+   ],
+   "rowWeightsZ": [
+    3
+   ],
+   "colWeightsX": [
+    1,
+    2
+   ],
+   "colWeightsZ": [
+    1,
+    2
+   ]
+  }
+ ],
+ "distance": [
+  {
+   "name": "[[72,12,6]]",
+   "Z": {
+    "noneAtOrBelow": 5,
+    "existsAtOrBelow": 6,
+    "method": "exhaustive meet-in-the-middle"
+   },
+   "X": {
+    "noneAtOrBelow": 5,
+    "existsAtOrBelow": 6,
+    "method": "exhaustive meet-in-the-middle"
+   }
+  },
+  {
+   "name": "[[90,8,10]]",
+   "Z": {
+    "noneAtOrBelow": 9,
+    "isdUpperBound": 10,
+    "isdIterations": 1,
+    "method": "exhaustive meet-in-the-middle for the lower bound, randomized information set (numpy, seed 7) for the upper bound"
+   },
+   "X": {
+    "noneAtOrBelow": 9,
+    "isdUpperBound": 10,
+    "isdIterations": 1,
+    "method": "exhaustive meet-in-the-middle for the lower bound, randomized information set (numpy, seed 7) for the upper bound"
+   }
+  }
+ ]
+}

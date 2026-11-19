@@ -12,6 +12,7 @@ Personal site of Tushar Pandey, served by GitHub Pages from the repo root
 - `life/`, `illustrated/`: An Unpolarized Life and the illustrated edition (built output, see below)
 - `qec-in-practice/`: Quantum Error Correction in Practice, a course of eight interactive lessons
 - `papers/`: paper companion pages, one per paper (see below)
+- `tools/`: interactive tools (see below)
 - `404.html`: served by GitHub Pages for any unknown path
 - `sitemap.xml`, `robots.txt`, `og-*.png` (share cards, 1200x630), the book and resume PDFs
 - `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`: the site icons
@@ -69,6 +70,17 @@ interactive figure from the paper's own data, a BibTeX block and links. The firs
   to `/research.html` inside `<main>`, or is not linked from `research.html`.
 - Also add the page to `PAGES`, `FULL` and `OG` in `check-site.py`, to `sitemap.xml`, and its
   files to the must-exist list in `deploy.ps1`.
+
+## Tools
+
+`tools/bb-codes.html`, the bivariate bicycle code explorer: type l, m, A and B and it computes n, k, the check
+weights and the Tanner graph's components, draws the layout, searches for an upper bound on the distance in a
+worker, and exports H_X and H_Z; the code is kept in the query string. Hand-written, full mode, head, header and
+footer as on `research.html`. The maths is in `tools/js/bb-math.js` (parsing, matrices, ranks; the presets from
+Table 3 of arXiv:2308.07915) and `tools/js/bb-distance.js` (the search), with `bb-worker.js` and the page script
+`bb-page.js`; the tests are `_studio/tools/tests/tools/`. They compare against `bb-reference.json`, written by
+`make_bb_reference.py` there with numpy and ldpc. A new tool gets the same: `PAGES`, `FULL` and `OG` in
+`check-site.py`, `sitemap.xml`, and its files in the must-exist list of `deploy.ps1`.
 
 ## _studio
 
