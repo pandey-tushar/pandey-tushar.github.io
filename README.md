@@ -106,11 +106,12 @@ nothing in it is published. The editions are built from `_studio/apps/*`
 - `check-research.py`: research.html and cv.html in step with papers.json, and each declared
   companion page in place; prints `research ok`
 - `check-lessons.py`: lesson text, narrative and course links present without script, every course page
-  with canonical, h1, cite line and a link back, the index and sitemap in course order; prints `lessons ok`
+  with canonical, h1, cite line, a link back and the end-of-lesson link row, the index and sitemap in course order; prints `lessons ok`
 - `check-notes.py`: each note page, the notes list and the RSS feed in step with notes.json and a
   fresh build, tables equal to their data, links resolving, the sitemap; prints `notes ok`
 - `check-editions.py`: built editions carry their text; prints `editions ok`
-- `check-qd.py`: qubit-dialogues.html loads lib/ and stays small; prints `qd ok`
+- `check-qd.py`: qubit-dialogues.html loads lib/, stays small and its animation driver honours
+  reduced motion (behaviour in `tests/qd/reduced-motion.test.mjs`); prints `qd ok`
 - `check-perf.py`: homepage idle frame cost on a slowed phone; prints `perf ok`
 
 `python _studio/tools/run-tests.py` runs all of them and every `tests/**/*.test.mjs` with

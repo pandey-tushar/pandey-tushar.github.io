@@ -1,7 +1,8 @@
 """Each lesson page must carry its title, intro, step captions, narrative and
 course navigation in the raw HTML, with no script run. Every page of the course
 order in qec-in-practice/data/course.json exists with its canonical, title,
-description, h1, cite line and a link back to the course; the course index
+description, h1, cite line and a link back to the course, and every page but the
+last ends with the shared secnav endnav row (40px tap height); the course index
 lists them all in order with a picture each, and the sitemap lists them.
 Exits non-zero on failure.
 
@@ -43,6 +44,8 @@ for i, e in enumerate(order):
         'link back to /qec-in-practice/': 'href="/qec-in-practice/"' in main,
     }
     fail += [f'{e["page"]}: no {k}' for k, ok in want.items() if not ok]
+    if i < len(order) - 1 and '<nav class="secnav endnav" aria-label="Course, end of lesson">' not in main:
+        fail.append(f'{e["page"]}: no end-of-lesson <nav class="secnav endnav">')
     if 'lesson' not in e:
         continue
     n = str(e['lesson'])
@@ -71,6 +74,8 @@ for i, e in enumerate(order):
     if any(ord(c) < 32 and c not in '\n\t' for c in html):
         fail.append(f'{e["page"]}: control character in the page')
 
+if not re.search(r'^\.secnav a \{[^}]*min-height: 40px', read(QEC / 'css' / 'site.css'), re.M):
+    fail.append('css/site.css: .secnav a has no min-height: 40px tap area')
 hub = read(QEC / 'index.html')
 cards = re.findall(r'<a class="lcard" href="([^"]*)">(.*?)</a></li>', hub, re.S)
 if [h for h, _ in cards] != pages:

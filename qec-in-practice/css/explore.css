@@ -10,7 +10,6 @@
 .essay a:not(.tp-btn):hover, .essay a:not(.tp-btn):focus-visible { text-decoration-color: currentColor; }
 .essay .secnav a { text-decoration: none; color: var(--tp-dim); }
 .essay .cite { margin-top: 2.4rem; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); color: var(--tp-dim); }
-.essay .next { margin-top: 1.6rem; }
 .essay .formula { font-family: var(--tp-serif); font-size: 1.12rem; color: var(--tp-ink); margin-left: clamp(0px, 4vw, 2em); }
 
 /* a figure with its controls and a status line */
@@ -52,6 +51,7 @@
 .qlab { font: 600 18px var(--tp-sans); fill: var(--tp-ink); }
 .corr { fill: none; stroke: var(--tp-acc); stroke-width: 2.5; stroke-dasharray: 5 4; }
 .clab { font: 700 16px var(--tp-sans); fill: var(--tp-acc); paint-order: stroke; stroke: var(--card); stroke-width: 4; }
+@media (max-width: 600px) { .ex .clab { font-size: 18px; } } /* at least 12px rendered at d = 7 down to a 360px phone */
 .grow { stroke: var(--tp-acc); stroke-width: 6; stroke-linecap: round; stroke-opacity: 0.85; }
 .cnode { fill: var(--card); stroke: var(--tp-acc); stroke-width: 3; }
 .cnode.odd { fill: var(--tp-acc); }

@@ -69,6 +69,7 @@
 .bb-tick { fill: var(--tp-dim); font-size: 12px; }
 .bb-node { fill: var(--tp-void2); stroke: var(--tp-dim); stroke-width: 1.1; cursor: pointer; }
 .bb-node.bb-dot { stroke: none; fill: var(--tp-rule); }
+.bb-hit { fill: transparent; stroke: none; cursor: pointer; }
 .bb-glyph { fill: var(--tp-dim); font-size: 12px; pointer-events: none; }
 .bb-node.on { fill: var(--tp-acc); stroke: var(--tp-acc); }
 .bb-node.sel { fill: var(--tp-warm); stroke: var(--tp-warm); }

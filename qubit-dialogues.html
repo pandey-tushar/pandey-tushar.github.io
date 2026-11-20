@@ -412,19 +412,24 @@ document.addEventListener('tp-theme',()=>{readInks();
 
 /* one rAF driver for every animation: a frame body runs only while its element
    intersects the viewport, the tab is visible and ok() holds. ok defaults to
-   "the enclosing canto is expanded". Each change that can flip one wakes the loop. */
-const loops=new Map();
+   "the enclosing canto is expanded". Each change that can flip one wakes the loop.
+   Under prefers-reduced-motion a woken loop draws one still frame at t=STILL and
+   stops; input, clicks and drags in the figure and a resize wake it again. */
+const loops=new Map(),still=matchMedia('(prefers-reduced-motion:reduce)'),STILL=400;
 const live=L=>L.seen&&document.visibilityState==='visible'&&L.ok();
 const wake=L=>{if(!L.id&&live(L))L.id=requestAnimationFrame(L.tick);};
 const onScreen=new IntersectionObserver(es=>es.forEach(e=>{const L=loops.get(e.target);L.seen=e.isIntersecting;wake(L);}));
 document.addEventListener('visibilitychange',()=>loops.forEach(wake));
+still.addEventListener('change',()=>loops.forEach(wake));
 new MutationObserver(()=>loops.forEach(wake)).observe(document.documentElement,
   {attributes:true,subtree:true,attributeFilter:['class','data-theme']});
 function animate(el,frame,ok){
   const canto=el.closest('section.canto');
   const L={seen:false,id:0,ok:ok||(()=>!canto||canto.classList.contains('expanded'))};
-  L.tick=t=>{L.id=0;if(!live(L))return;L.id=requestAnimationFrame(L.tick);frame(t);};
+  L.tick=t=>{L.id=0;if(!live(L))return;if(still.matches){frame(STILL);return;}
+    L.id=requestAnimationFrame(L.tick);frame(t);};
   loops.set(el,L);onScreen.observe(el);
+  for(const k of ['input','click','pointermove'])el.addEventListener(k,e=>{if(k!=='pointermove'||e.buttons)wake(L);});
 }
 
 /* ---------- reusable per-chapter scene mounter ----------
@@ -442,7 +447,8 @@ function makeR(el){
   r.domElement.setAttribute('aria-hidden','true');
   el.insertBefore(r.domElement,el.firstChild);
   const fit=()=>{const w=W(el),h=H(el);if(!w||!h)return;
-    r.setSize(w,h);if(r.__cam){r.__cam.aspect=w/h;r.__cam.updateProjectionMatrix();}};
+    r.setSize(w,h);if(r.__cam){r.__cam.aspect=w/h;r.__cam.updateProjectionMatrix();}
+    if(loops.has(el))wake(loops.get(el));};
   if(typeof ResizeObserver!=='undefined')new ResizeObserver(fit).observe(el);
   addEventListener('resize',fit);
   return r;
@@ -499,7 +505,7 @@ function entangleScene(el){
     A.userData.ar.setDirection(new THREE.Vector3(0,d,0));
     B.userData.ar.setDirection(new THREE.Vector3(0,d,0));
     el.querySelector('.rl').textContent=up?'measured: A=↑  B=↑ (correlated)':'measured: A=↓  B=↓ (correlated)';
-    rt=setTimeout(()=>{spin=true;el.querySelector('.rl').textContent='superposition restored';},2600);
+    rt=setTimeout(()=>{spin=true;el.querySelector('.rl').textContent='superposition restored';wake(loops.get(el));},2600);
   });
   animate(el,(t)=>{
     if(spin){const a=t*0.002;A.userData.ar.setDirection(new THREE.Vector3(Math.sin(a),Math.cos(a),0));

@@ -25,6 +25,10 @@ if '<script defer src="lib/three-r128.min.js"></script>' not in html:
     fail.append('page: no deferred lib/three-r128.min.js')
 if re.search(r'id="loader"|#loader', html):
     fail.append('page: loader overlay still present')
+# the one rAF driver honours reduced motion (behaviour: tests/qd/reduced-motion.test.mjs)
+d = re.search(r'one rAF driver[\s\S]*?function animate\(', html)
+if not d or 'prefers-reduced-motion' not in d.group(0):
+    fail.append('page: animation driver ignores prefers-reduced-motion')
 
 # tools/extract-content.mjs and packages/qa/src/parity.ts read this exact pattern
 m = re.search(r'window\.CANTOS = (\[[\s\S]*?\]);</script>', html)

@@ -8,8 +8,6 @@
 .threshold .essay .lead { font-size: 1.06rem; }
 .threshold .cite { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); overflow-wrap: anywhere; }
 .threshold .cite .tp-lbl { display: block; margin-bottom: 4px; }
-.thr-next { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 1.6rem 0 0; }
-.thr-next a { display: inline-flex; align-items: center; min-height: 32px; }
 
 .thr-fig {
   margin: 1.4rem 0 1.6rem; max-width: 60rem; min-width: 0;

@@ -238,6 +238,7 @@ function drawLayout() {
     const [x, y] = pos(kind, r), st = S.lit.get(`${kind}${r}`) || '';
     const cls = `bb-node${detailed ? '' : ' bb-dot'}${st ? ` ${st}` : ''}`;
     const attrs = { class: cls, 'data-k': `${kind}${r}` };
+    el('rect', { class: 'bb-hit', 'data-k': `${kind}${r}`, x: x - p / 2, y: y - p / 2, width: p, height: p }, g); // the node's p by p quarter of its cell
     if (kind === 'L' || kind === 'R') el('circle', { ...attrs, cx: x, cy: y, r: s * 0.55 }, g);
     else if (kind === 'X') el('rect', { ...attrs, x: x - s / 2, y: y - s / 2, width: s, height: s }, g);
     else el('path', { ...attrs, d: `M${x} ${y - s * 0.62}L${x + s * 0.62} ${y}L${x} ${y + s * 0.62}L${x - s * 0.62} ${y}Z` }, g);
