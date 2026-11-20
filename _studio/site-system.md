@@ -78,7 +78,7 @@ Every URL is root-relative, so the snippets work from any depth on the site and 
 
 Chrome-only (default, for qubit-dialogues.html, life/, illustrated/): link the stylesheet and paste the snippets. Only `tp-` classes are styled; the page's own `:root` variables, body and element rules are untouched. The page reads `html[data-theme]` and has no toggle of its own.
 
-Full (home, books, cv, research, lessons, 404): also put `class="tp-full"` on `<html>`. The page then takes the plain paper ground (no washes, no grid), body type, serif h1 to h3, focus rings, selection and the `a` reset, and the header and footer sit on the `.tp-wrap` column. Page CSS uses `--tp-*` tokens, never its own colours, except a section's own figure inks (the lessons' X and Z checks).
+Full (home, books, cv, research, lessons, notes, 404): also put `class="tp-full"` on `<html>`. The page then takes the plain paper ground (no washes, no grid), body type, serif h1 to h3, focus rings, selection and the `a` reset, and the header and footer sit on the `.tp-wrap` column. Page CSS uses `--tp-*` tokens, never its own colours, except a section's own figure inks (the lessons' X and Z checks).
 
 ## Tokens (`--tp-` + name)
 

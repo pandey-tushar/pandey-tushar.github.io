@@ -13,6 +13,7 @@ Personal site of Tushar Pandey, served by GitHub Pages from the repo root
 - `qec-in-practice/`: Quantum Error Correction in Practice, a course of eight interactive lessons
 - `papers/`: paper companion pages, one per paper (see below)
 - `tools/`: interactive tools (see below)
+- `notes/`: short notes with an RSS feed (see below); not in the primary nav
 - `404.html`: served by GitHub Pages for any unknown path
 - `sitemap.xml`, `robots.txt`, `og-*.png` (share cards, 1200x630), the book and resume PDFs
 - `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`: the site icons
@@ -82,6 +83,18 @@ Table 3 of arXiv:2308.07915) and `tools/js/bb-distance.js` (the search), with `b
 `make_bb_reference.py` there with numpy and ldpc. A new tool gets the same: `PAGES`, `FULL` and `OG` in
 `check-site.py`, `sitemap.xml`, and its files in the must-exist list of `deploy.ps1`.
 
+## Notes
+
+`notes/<slug>.html`, the list `notes/index.html` and the RSS feed `notes/feed.xml` are generated:
+add the note to `_studio/content/notes.json` (slug, title, date, description, body file, and an
+optional data file) with its body in `_studio/content/notes/<slug>.md`, then run
+`python _studio/tools/build-notes.py`. The body is a small subset of markdown (one h1, h2 headings,
+paragraphs, inline links, one pipe table, reference lines `[1]` ...); anything else stops the build.
+A note's table is rendered from its data file and the build fails if the markdown table disagrees.
+The first note's data is written by `_studio/tools/notes/crossings.mjs` (fixed seeds, about 90 s).
+Styles: `papers/paper.css` plus `notes/notes.css`. A new note also needs its page in `sitemap.xml`,
+in `PAGES`, `FULL` and `OG` of `check-site.py`, and in the must-exist list of `deploy.ps1`.
+
 ## _studio
 
 Source and tooling. Jekyll skips folders that start with an underscore, so
@@ -94,6 +107,8 @@ nothing in it is published. The editions are built from `_studio/apps/*`
   companion page in place; prints `research ok`
 - `check-lessons.py`: lesson text, narrative and course links present without script, every course page
   with canonical, h1, cite line and a link back, the index and sitemap in course order; prints `lessons ok`
+- `check-notes.py`: each note page, the notes list and the RSS feed in step with notes.json and a
+  fresh build, tables equal to their data, links resolving, the sitemap; prints `notes ok`
 - `check-editions.py`: built editions carry their text; prints `editions ok`
 - `check-qd.py`: qubit-dialogues.html loads lib/ and stays small; prints `qd ok`
 - `check-perf.py`: homepage idle frame cost on a slowed phone; prints `perf ok`
@@ -101,7 +116,7 @@ nothing in it is published. The editions are built from `_studio/apps/*`
 `python _studio/tools/run-tests.py` runs all of them and every `tests/**/*.test.mjs` with
 `node --test`, one line per suite.
 
-Other tools: `build-lessons.py`, `build-research.py`, `og/render.py` (share cards),
+Other tools: `build-lessons.py`, `build-research.py`, `build-notes.py`, `notes/crossings.mjs`, `og/render.py` (share cards),
 `assets/*.py` (icons, covers, emblems, portrait), `compress-pdf.py`,
 `pdf.mjs` (print the editions to PDF), `extract-content.mjs`, `papers/extract_*.py`
 (companion page data), `deploy.ps1`.

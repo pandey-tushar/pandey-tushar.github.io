@@ -1,0 +1,17 @@
+/* Notes (notes/*.html, written by _studio/tools/build-notes.py). The page frame, essay, figure and
+   plot ink come from /papers/paper.css; these are the few things a note adds. Tokens only. */
+.nt-scroll { overflow-x: auto; max-width: 100%; margin: 0 0 1rem; }
+.nt-table { border-collapse: collapse; font-size: var(--tp-t-small); font-variant-numeric: tabular-nums; }
+.nt-table th, .nt-table td { padding: 5px 16px 5px 0; text-align: left; border-bottom: 1px solid var(--tp-rule); white-space: nowrap; color: var(--tp-text); }
+.nt-table thead th { font-weight: 600; color: var(--tp-ink); }
+.nt-table tbody th { font-weight: 400; }
+.nt-fig .pc-plot { max-width: 27rem; }
+.nt-pts { --c: var(--tp-acc); }
+.nt-ref { overflow-wrap: anywhere; }
+.nt-cite { margin: 2rem 0 0; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); color: var(--tp-text); overflow-wrap: anywhere; }
+.nt-cite .tp-lbl { display: block; margin-bottom: 4px; }
+.nt-list { max-width: var(--tp-measure); margin: 1.4rem 0 0; padding: 0; list-style: none; }
+.nt-list li { padding: 1rem 0; border-bottom: 1px solid var(--tp-rule); }
+.nt-list h2 { font-size: 1.45rem; margin: 0 0 .2rem; }
+.nt-list .pc-status { margin: 0 0 .5rem; padding: 0; border: 0; color: var(--tp-dim); }
+.nt-list p { margin: 0; color: var(--tp-text); }

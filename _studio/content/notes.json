@@ -1,0 +1,12 @@
+{
+ "notes": [
+  {
+   "slug": "crossing-is-not-the-threshold",
+   "title": "The crossing is not the threshold",
+   "date": "2026-11-20",
+   "description": "For the surface code with a union-find decoder, the curves of small code distances cross well below the threshold, and the crossing climbs from 7.4% to about 10% as the distance grows to 21.",
+   "body": "crossing-is-not-the-threshold.md",
+   "data": "crossing-is-not-the-threshold.json"
+  }
+ ]
+}

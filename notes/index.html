@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DVPGC1C44Z');
+</script>
+<title>Notes &middot; Tushar Pandey</title>
+<meta name="description" content="Short notes by Tushar Pandey on measurements and observations in quantum error correction, newest first.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/notes/">
+<link rel="alternate" type="application/rss+xml" title="Notes by Tushar Pandey" href="/notes/feed.xml">
+<meta property="og:title" content="Notes &middot; Tushar Pandey">
+<meta property="og:description" content="Short notes by Tushar Pandey on measurements and observations in quantum error correction, newest first.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pandey-tushar.com/notes/">
+<meta property="og:image" content="https://pandey-tushar.com/og-research.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-research.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Blog",
+ "name": "Notes by Tushar Pandey",
+ "url": "https://pandey-tushar.com/notes/",
+ "author": {
+  "@id": "https://pandey-tushar.com/#person"
+ },
+ "blogPost": [
+  {
+   "@type": "BlogPosting",
+   "headline": "The crossing is not the threshold",
+   "datePublished": "2026-11-20",
+   "url": "https://pandey-tushar.com/notes/crossing-is-not-the-threshold.html"
+  }
+ ]
+}
+</script>
+<link rel="stylesheet" href="/papers/paper.css">
+<link rel="stylesheet" href="/notes/notes.css">
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="pc">
+ <div class="tp-wrap">
+  <header class="pc-head">
+    <h1>Notes</h1>
+    <p class="pc-status">Newest first. <a class="tp-link" href="/notes/feed.xml">RSS feed</a></p>
+  </header>
+
+  <ol class="nt-list">
+      <li>
+        <h2><a class="tp-link" href="/notes/crossing-is-not-the-threshold.html">The crossing is not the threshold</a></h2>
+        <p class="pc-status"><time datetime="2026-11-20">20 November 2026</time></p>
+        <p>For the surface code with a union-find decoder, the curves of small code distances cross well below the threshold, and the crossing climbs from 7.4% to about 10% as the distance grows to 21.</p>
+      </li>
+  </ol>
+ </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

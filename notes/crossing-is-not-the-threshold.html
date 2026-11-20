@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DVPGC1C44Z');
+</script>
+<title>The crossing is not the threshold &middot; Tushar Pandey</title>
+<meta name="description" content="For the surface code with a union-find decoder, the curves of small code distances cross well below the threshold, and the crossing climbs from 7.4% to about 10% as the distance grows to 21.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/notes/crossing-is-not-the-threshold.html">
+<link rel="alternate" type="application/rss+xml" title="Notes by Tushar Pandey" href="/notes/feed.xml">
+<meta property="og:title" content="The crossing is not the threshold &middot; Tushar Pandey">
+<meta property="og:description" content="For the surface code with a union-find decoder, the curves of small code distances cross well below the threshold, and the crossing climbs from 7.4% to about 10% as the distance grows to 21.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/notes/crossing-is-not-the-threshold.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-research.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-research.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BlogPosting",
+ "headline": "The crossing is not the threshold",
+ "description": "For the surface code with a union-find decoder, the curves of small code distances cross well below the threshold, and the crossing climbs from 7.4% to about 10% as the distance grows to 21.",
+ "datePublished": "2026-11-20",
+ "author": {
+  "@id": "https://pandey-tushar.com/#person"
+ },
+ "url": "https://pandey-tushar.com/notes/crossing-is-not-the-threshold.html"
+}
+</script>
+<link rel="stylesheet" href="/papers/paper.css">
+<link rel="stylesheet" href="/notes/notes.css">
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="pc">
+ <div class="tp-wrap">
+  <header class="pc-head">
+    <p class="tp-lbl">Note</p>
+    <h1>The crossing is not the threshold</h1>
+    <p class="pc-status"><time datetime="2026-11-20">20 November 2026</time></p>
+  </header>
+
+  <article class="pc-essay nt-essay">
+  <p>The threshold of a quantum error correcting code is usually read off a plot. One draws the logical error rate against the physical error rate p for a few code distances, and the point where the curves cross is reported as the threshold. This works well when the codes are large. However, most plots one sees, including the one in the <a class="tp-link" href="/qec-in-practice/threshold.html">threshold lesson</a> of our course, use small distances such as 3, 5 and 7, and for these the crossing can sit far from the actual threshold. In this note, we measure how far, for the surface code with a union-find decoder.</p>
+  <h2 id="setup">Setup</h2>
+  <p>We consider the rotated surface code with d x d data qubits. Each data qubit is flipped independently with probability p, once, and the checks are then read perfectly. The decoder is union-find with clusters grown smallest boundary first, the same one that runs in the course. For the 2d toric code with perfect syndrome measurements, Delfosse and Nickerson [1] obtain a threshold of 9.9% for this decoder.</p>
+  <p>Below the threshold a bigger code fails less often, and above it a bigger code fails more often. Therefore the curves of two distances cross, and if all the curves passed through one point, that point would be the threshold. They do not.</p>
+  <h2 id="pairwise-crossings">Pairwise crossings</h2>
+  <p>For each pair of consecutive distances in our list, we find the p at which the two curves cross. We use 100,000 shots per point, with p from 0.06 to 0.11 in steps of 0.005.</p>
+  <div class="nt-scroll">
+  <table class="nt-table">
+    <thead><tr><th scope="col">Distances</th><th scope="col">Crossing</th><th scope="col">One standard error</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">3 and 5</th><td>0.074</td><td>0.070 to 0.077</td></tr>
+      <tr><th scope="row">5 and 7</th><td>0.082</td><td>0.079 to 0.085</td></tr>
+      <tr><th scope="row">7 and 9</th><td>0.088</td><td>0.086 to 0.089</td></tr>
+      <tr><th scope="row">9 and 11</th><td>0.094</td><td>0.091 to 0.096</td></tr>
+      <tr><th scope="row">11 and 13</th><td>not resolved</td><td></td></tr>
+      <tr><th scope="row">13 and 17</th><td>0.100</td><td>0.099 to 0.102</td></tr>
+      <tr><th scope="row">17 and 21</th><td>0.101</td><td>0.098 to 0.103</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <figure class="tp-plate pc-fig nt-fig" id="fig-1">
+  <div class="pc-plot"><svg viewBox="0 0 340 252" role="img" aria-labelledby="fig1-t fig1-d"><title id="fig1-t">Pairwise crossings against the pair of distances</title><desc id="fig1-d">Crossing p with one-standard-error range for each pair of consecutive distances: 3 and 5: 0.074, 0.070 to 0.077; 5 and 7: 0.082, 0.079 to 0.085; 7 and 9: 0.088, 0.086 to 0.089; 9 and 11: 0.094, 0.091 to 0.096; 11 and 13: not resolved; 13 and 17: 0.100, 0.099 to 0.102; 17 and 21: 0.101, 0.098 to 0.103. A dashed line marks the 9.9% threshold of reference 1.</desc>
+<path class="pc-grid" d="M44 185.2H334M44 140.9H334M44 96.7H334M44 52.5H334"/>
+<path class="pc-axis" d="M44 26V194H334"/>
+<text class="pc-tick" x="38" y="189.7" text-anchor="end">0.07</text>
+<text class="pc-tick" x="38" y="145.4" text-anchor="end">0.08</text>
+<text class="pc-tick" x="38" y="101.2" text-anchor="end">0.09</text>
+<text class="pc-tick" x="38" y="57.0" text-anchor="end">0.10</text>
+<path class="pc-ref" d="M44 56.9H334"/>
+<text class="pc-lab" x="50" y="50.9">9.9% [1]</text>
+<text class="pc-tick" x="64.7" y="212" text-anchor="middle">3, 5</text>
+<text class="pc-tick" x="106.1" y="212" text-anchor="middle">5, 7</text>
+<text class="pc-tick" x="147.6" y="212" text-anchor="middle">7, 9</text>
+<text class="pc-tick" x="189.0" y="212" text-anchor="middle">9, 11</text>
+<text class="pc-tick" x="230.4" y="212" text-anchor="middle">11, 13</text>
+<text class="pc-tick" x="230.4" y="110.0" text-anchor="middle" transform="rotate(-90 230.4 110.0)">not resolved</text>
+<text class="pc-tick" x="271.9" y="212" text-anchor="middle">13, 17</text>
+<text class="pc-tick" x="313.3" y="212" text-anchor="middle">17, 21</text>
+<g class="nt-pts"><path class="pc-bar" d="M64.7 186.1V155.3M60.7 155.3h8M60.7 186.1h8"/><circle class="pc-mark" cx="64.7" cy="166.0" r="3.8"/><path class="pc-bar" d="M106.1 144.0V117.1M102.1 117.1h8M102.1 144.0h8"/><circle class="pc-mark" cx="106.1" cy="130.4" r="3.8"/><path class="pc-bar" d="M147.6 114.1V100.2M143.6 100.2h8M143.6 114.1h8"/><circle class="pc-mark" cx="147.6" cy="107.0" r="3.8"/><path class="pc-bar" d="M189.0 90.4V69.2M185.0 69.2h8M185.0 90.4h8"/><circle class="pc-mark" cx="189.0" cy="80.5" r="3.8"/><path class="pc-bar" d="M271.9 56.1V45.8M267.9 45.8h8M267.9 56.1h8"/><circle class="pc-mark" cx="271.9" cy="50.4" r="3.8"/><path class="pc-bar" d="M313.3 62.3V38.9M309.3 38.9h8M309.3 62.3h8"/><circle class="pc-mark" cx="313.3" cy="48.6" r="3.8"/></g>
+<text class="pc-lab" x="4" y="14">crossing p</text>
+<text class="pc-lab" x="334" y="234" text-anchor="end">pair of distances</text>
+</svg></div>
+  <figcaption><b>Fig. 1</b>Where the curves of consecutive distances cross, for union-find on the surface code under bit-flip noise with perfect measurement. Bars are one standard error. The pair 11, 13 is not resolved. The line is the 9.9% threshold of [1].</figcaption>
+  </figure>
+  <p>The crossing climbs from 7.4% to about 10% and then stops moving. The last two rows agree with the 9.9% of [1]. The first row is lower by a quarter. For the pair 11 and 13, the two curves lie within noise of each other from p = 0.09 to 0.11, so we do not report a number.</p>
+  <h2 id="what-goes-wrong-at-small-distances">What goes wrong at small distances</h2>
+  <p>It is easier to see the problem in one column of the data than in the crossings. At p = 0.08, the logical error rates for d = 3, 5 and 7 are 0.092, 0.096 and 0.095. These are equal to within a few percent. If these three codes were all we had, we would conclude that 8% is the threshold, or slightly above it. At d = 21, the logical error rate at the same p is 0.057. So 8% is well below the threshold, and the small codes are not able to show it.</p>
+  <p>This is known as a finite-size effect. Close to the threshold, the logical error rate depends on p and d mostly through the combination (p - p_th) d^(1/nu), where p_th is the threshold and nu is a critical exponent. If this were exact, every curve would pass through the same point at p = p_th. There are correction terms which shrink as d grows, and at d = 3 they are not small. More precisely, a distance 3 patch has nine data qubits, eight of which lie on the boundary, and two errors are already enough for the decoder to guess wrong. Such a patch does not behave like a piece of a large lattice. The crossing of two small codes measures the threshold together with these corrections, and in our case the corrections push it down.</p>
+  <h2 id="the-same-happens-with-matching">The same happens with matching</h2>
+  <p>One may ask whether this is a defect of union-find. It is not, although union-find makes it worse. We have reference data for a minimum-weight perfect matching decoder (pymatching, with samples from stim, 200,000 shots per point) at p = 0.08 and 0.10. Interpolating between these two points, the curves for d = 3 and 5 cross near 0.093, and those for d = 5 and 7 near 0.098. Both values are below the matching threshold of 0.1031 found by Wang, Harrington and Preskill [2]. Note that this interpolation uses only two points, so it is coarse.</p>
+  <p>Therefore the small distance crossing is low for both decoders. It is much lower for union-find: 0.074 against 0.093 for the same pair of codes. We do not have an argument for why the corrections are larger for union-find, and we leave it as an observation.</p>
+  <h2 id="consequences">Consequences</h2>
+  <p>For this code and noise model, a crossing between two small codes is a lower estimate of the threshold and not the threshold itself. If a threshold is quoted from d = 3, 5 and 7, one should check whether the pairwise crossings are still moving. If they are, the number will change with bigger codes.</p>
+  <p>There are two ways around this. One is to go to larger distances. The other is a finite-size scaling fit over several code sizes. We used the second for bivariate bicycle codes on the erasure channel, where large codes are expensive to simulate; see the <a class="tp-link" href="/papers/bb-erasure-baselines.html">companion page</a> of that paper.</p>
+  <p>One can watch the drift directly. In the <a class="tp-link" href="/qec-in-practice/threshold.html">threshold lesson</a>, run the first figure with the default distances, then add d = 9 and 11 and run it again. The crossing moves to the right.</p>
+  <h2 id="details">Details</h2>
+  <p>The crossings are found by linear interpolation in log p of the log ratio of the two logical error rates. The ranges are one binomial standard error and are statistical only. All runs use fixed seeds. The 9.9% of [1] and the 0.1031 of [2] are for the toric code, which has no boundary, so the agreement with the rows at large distance is a consistency check and not a reproduction.</p>
+  <h2 id="references">References</h2>
+  <p class="nt-ref" id="ref-1">[1] N. Delfosse and N. H. Nickerson, &quot;Almost-linear time decoding algorithm for topological codes&quot;, Quantum 5, 595 (2021). <a class="tp-link" href="https://arxiv.org/abs/1709.06218" rel="noopener">arXiv:1709.06218</a>.</p>
+  <p class="nt-ref" id="ref-2">[2] C. Wang, J. Harrington and J. Preskill, &quot;Confinement-Higgs transition in a disordered gauge theory and the accuracy threshold for quantum memory&quot;, Annals of Physics 303, 31-58 (2003). <a class="tp-link" href="https://arxiv.org/abs/quant-ph/0207088" rel="noopener">arXiv:quant-ph/0207088</a>.</p>
+
+  <p class="nt-cite"><span class="tp-lbl">Cite this note</span> T. Pandey, "The crossing is not the threshold" (2026), https://pandey-tushar.com/notes/crossing-is-not-the-threshold.html</p>
+  <nav class="pc-more" aria-label="More">
+    <a class="tp-link" href="/notes/">All notes</a>
+    <a class="tp-link" href="/notes/feed.xml">RSS feed</a>
+  </nav>
+  </article>
+ </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

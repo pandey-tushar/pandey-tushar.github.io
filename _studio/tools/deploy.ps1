@@ -41,6 +41,7 @@ $must = @('CNAME','index.html','books.html','cv.html','research.html','qubit-dia
           'papers\js\bb-erasure-baselines.js','papers\data\bb-erasure-baselines.json',
           'papers\lifted-surgery.html','papers\js\lifted-surgery.js','papers\js\lifted-surgery-logic.js','papers\data\lifted-surgery.json',
           'papers\adaptive-graph-of-thoughts.html','papers\js\adaptive-graph-of-thoughts.js','papers\js\agot-logic.js','papers\data\adaptive-graph-of-thoughts.json',
+          'notes\index.html','notes\feed.xml','notes\notes.css','notes\crossing-is-not-the-threshold.html',
           'tools\bb-codes.html','tools\bb-codes.css','tools\js\bb-page.js','tools\js\bb-math.js','tools\js\bb-distance.js','tools\js\bb-worker.js',
           'og-home.png','og-book.png','og-life.png','og-qec.png','404.html',
           'img\tushar-pandey.webp','img\tushar-pandey-320.webp',

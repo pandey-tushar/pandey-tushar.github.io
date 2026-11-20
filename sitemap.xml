@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://pandey-tushar.com/</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/</loc><lastmod>2026-11-20</lastmod></url>
   <url><loc>https://pandey-tushar.com/research.html</loc><lastmod>2026-11-14</lastmod></url>
   <url><loc>https://pandey-tushar.com/papers/bb-erasure-baselines.html</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://pandey-tushar.com/papers/lifted-surgery.html</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://pandey-tushar.com/papers/adaptive-graph-of-thoughts.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/notes/</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://pandey-tushar.com/notes/crossing-is-not-the-threshold.html</loc><lastmod>2026-11-20</lastmod></url>
   <url><loc>https://pandey-tushar.com/tools/bb-codes.html</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://pandey-tushar.com/cv.html</loc><lastmod>2026-11-14</lastmod></url>
   <url><loc>https://pandey-tushar.com/books.html</loc><lastmod>2026-11-14</lastmod></url>
@@ -18,6 +20,6 @@
   <url><loc>https://pandey-tushar.com/qec-in-practice/lesson-4.html</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://pandey-tushar.com/qec-in-practice/repetition-code.html</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://pandey-tushar.com/qec-in-practice/decoding.html</loc><lastmod>2026-11-19</lastmod></url>
-  <url><loc>https://pandey-tushar.com/qec-in-practice/threshold.html</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://pandey-tushar.com/qec-in-practice/threshold.html</loc><lastmod>2026-11-20</lastmod></url>
   <url><loc>https://pandey-tushar.com/qec-in-practice/lattice-surgery.html</loc><lastmod>2026-11-19</lastmod></url>
 </urlset>
