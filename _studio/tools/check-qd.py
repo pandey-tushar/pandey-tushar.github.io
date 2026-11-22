@@ -30,6 +30,10 @@ d = re.search(r'one rAF driver[\s\S]*?function animate\(', html)
 if not d or 'prefers-reduced-motion' not in d.group(0):
     fail.append('page: animation driver ignores prefers-reduced-motion')
 
+# metadata spells the number with a hyphen; the book text keeps its own spelling
+if re.search(r'twenty two', html.split('</head>')[0], re.I):
+    fail.append('page: "twenty two" in the head metadata, want "twenty-two"')
+
 # tools/extract-content.mjs and packages/qa/src/parity.ts read this exact pattern
 m = re.search(r'window\.CANTOS = (\[[\s\S]*?\]);</script>', html)
 if not m:

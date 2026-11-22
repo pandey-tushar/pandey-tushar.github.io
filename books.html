@@ -57,7 +57,7 @@
     },
     "inLanguage": "en",
     "numberOfPages": 99,
-    "description": "Twenty two cantos in two voices, a Seeker and an Oracle, on superposition, entanglement, error correction and the price of the impossible.",
+    "description": "Twenty-two cantos in two voices, a Seeker and an Oracle, on superposition, entanglement, error correction and the price of the impossible.",
     "isAccessibleForFree": true,
     "workExample": {
      "@type": "Book",
@@ -107,7 +107,7 @@
     },
     "inLanguage": "en",
     "numberOfPages": 96,
-    "description": "The twenty two cantos of The Qubit Dialogues set as engraved plates of generative artwork.",
+    "description": "The twenty-two cantos of The Qubit Dialogues set as engraved plates of generative artwork.",
     "isAccessibleForFree": true,
     "workExample": {
      "@type": "Book",
@@ -231,8 +231,18 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
 .tp-btn .sub{color:var(--tp-dim);font-weight:400}
 /* the first way in: the accent, quietly */
 .tp-btn.go{color:var(--tp-acc);border-color:var(--tp-a40)}
-.tp-btn.go{color:var(--tp-acc);border-color:var(--tp-a40)}
 .tp-btn.go:hover,.tp-btn.go:focus-visible{border-color:var(--tp-acc)}
+
+/* a phone: the cover sits beside the title, as on the homepage shelf, and
+   the text runs full width below them */
+@media (max-width:43.99em){
+  .entry{grid-template-columns:6rem minmax(0,1fr);column-gap:1.1rem;row-gap:1.1rem}
+  .cover{width:6rem;grid-column:1;grid-row:1}
+  .body{display:contents}
+  .head{grid-column:2;grid-row:1;align-self:center}
+  .voice,.what,.spec,.actions{grid-column:1 / -1}
+  .voice,.what{margin-top:0}
+}
 
 /* >= 44em: the cover swings out into a margin column */
 @media (min-width:44em){
@@ -266,6 +276,14 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
   }
   .spec dt{justify-self:end}
   .spec dd + dt{margin-top:.9rem}
+  /* the masthead on the same three columns: the lede over the cover and
+     text columns, the notes set right in the specification column */
+  .masthead{display:grid;grid-template-columns:200px minmax(0,34em) minmax(0,1fr);column-gap:clamp(26px,3.6vw,52px);align-items:end}
+  .masthead .eyebrow{grid-column:1 / -1}
+  .masthead h1,.lede{grid-column:1 / 3}
+  .lede{max-width:none}
+  .notes{grid-column:3;grid-row:2 / span 2;justify-self:end;max-width:22rem;text-align:right}
+  .note{justify-content:flex-end}
 }
 
 @media (max-width:34em){
@@ -307,9 +325,11 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
     <div class="masthead">
       <p class="tp-lbl eyebrow">Catalogue</p>
       <h1>Books</h1>
-      <p class="lede">Two books and one illustrated edition. The Qubit Dialogues argues about quantum computing in two voices, the illustrated edition sets the same text with engraved plates, and An Unpolarized Life is a separate, shorter book that keeps the two voices and leaves the physics out. New here? Start with The Qubit Dialogues, read online.</p>
-      <p class="note"><i>&#10022;</i><span>Every book reads in the browser and downloads as a PDF. Nothing is behind a form, a login or a price.</span></p>
-      <p class="note"><i>&#10022;</i><span>Related reading: <a class="tp-link" href="/qec-in-practice/">Quantum Error Correction in Practice</a>, eight lessons.</span></p>
+      <p class="lede">Two books and one illustrated edition. The Qubit Dialogues argues about quantum computing in two voices, the illustrated edition sets the same text with engraved plates, and An Unpolarized Life is a separate, shorter book that keeps the two voices and leaves the physics out. New here? Start with The Qubit Dialogues, read online. With no physics background, start instead with An Unpolarized Life (about 35 minutes), or read only the dialogue of The Qubit Dialogues (about 80 minutes).</p>
+      <div class="notes">
+        <p class="note"><i>&#10022;</i><span>Every book reads in the browser and downloads as a PDF. Nothing is behind a form, a login or a price.</span></p>
+        <p class="note"><i>&#10022;</i><span>Related reading: <a class="tp-link" href="/qec-in-practice/">Quantum Error Correction in Practice</a>, eight lessons.</span></p>
+      </div>
     </div>
   </div>
 
@@ -318,7 +338,7 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
 
       <li>
         <article class="entry">
-          <img class="cover" src="/img/covers/qubit-dialogues-300.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 132px" width="300" height="450" decoding="async" alt="Cover of The Qubit Dialogues, A Book of Possibilities: a Bloch sphere drawn in line, its state vector in warm ink.">
+          <img class="cover" src="/img/covers/qubit-dialogues-300.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 96px" width="300" height="450" decoding="async" alt="Cover of The Qubit Dialogues, A Book of Possibilities: a Bloch sphere drawn in line, its state vector in warm ink.">
 
           <div class="body">
             <div class="head">
@@ -326,7 +346,7 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
               <h2>The Qubit Dialogues</h2>
             </div>
             <p class="voice">A Seeker stands in front of the quantum machine with every reasonable doubt a careful person carries, and an Oracle from a few decades ahead keeps finding the assumption folded inside the doubt.</p>
-            <p class="what">Twenty two cantos in two voices, on superposition, entanglement, error correction and the price of the impossible. Each canto ends with a prediction, an honest measure of how much to trust it, and a question turned back at you. Where a claim is contested, the book says so in the open.</p>
+            <p class="what">Twenty-two cantos in two voices, on superposition, entanglement, error correction and the price of the impossible. Each canto ends with a prediction, an honest measure of how much to trust it, and a question turned back at you. Where a claim is contested, the book says so in the open.</p>
           </div>
 
           <dl class="spec">
@@ -345,7 +365,7 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
 
       <li>
         <article class="entry">
-          <img class="cover" src="/img/covers/an-unpolarized-life-300.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 132px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of An Unpolarized Life, A Book of Questions: three overlapping circles, their common region tinted.">
+          <img class="cover" src="/img/covers/an-unpolarized-life-300.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 96px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of An Unpolarized Life, A Book of Questions: three overlapping circles, their common region tinted.">
 
           <div class="body">
             <div class="head">
@@ -372,7 +392,7 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
 
       <li>
         <article class="entry">
-          <img class="cover" src="/img/covers/qubit-dialogues-illustrated-300.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 132px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of The Qubit Dialogues, Illustrated Edition: a glowing Bloch sphere on a dark plate.">
+          <img class="cover" src="/img/covers/qubit-dialogues-illustrated-300.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 96px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of The Qubit Dialogues, Illustrated Edition: a glowing Bloch sphere on a dark plate.">
 
           <div class="body">
             <div class="head">
@@ -380,7 +400,7 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
               <h2>The Qubit Dialogues, Illustrated</h2>
             </div>
             <p class="voice">The same cantos cut as engraved plates, each one drawn from a shared vocabulary of motifs and moved by nothing but your own scroll.</p>
-            <p class="what">All twenty two cantos are composed, each one drawn from a shared vocabulary of motifs so the volume reads as one press rather than twenty two separate pictures. Every plate is seeded, so it renders the same on every machine and every visit. The prose is the finished prose from the main edition.</p>
+            <p class="what">Every plate is seeded, so it renders the same on every machine and every visit. The prose is the finished prose from the main edition.</p>
           </div>
 
           <dl class="spec">

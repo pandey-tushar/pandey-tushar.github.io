@@ -13,7 +13,7 @@ In this note, we measure how far, for the surface code with a union-find decoder
 We consider the rotated surface code with d x d data qubits. Each data qubit is flipped
 independently with probability p, once, and the checks are then read perfectly. The
 decoder is union-find with clusters grown smallest boundary first, the same one that
-runs in the course. For the 2d toric code with perfect syndrome measurements, Delfosse
+runs in the course. For the 2D toric code with perfect syndrome measurements, Delfosse
 and Nickerson [1] obtain a threshold of 9.9% for this decoder.
 
 Below the threshold a bigger code fails less often, and above it a bigger code fails
@@ -50,9 +50,9 @@ rate at the same p is 0.057. So 8% is well below the threshold, and the small co
 are not able to show it.
 
 This is known as a finite-size effect. Close to the threshold, the logical error rate
-depends on p and d mostly through the combination (p - p_th) d^(1/nu), where p_th is
-the threshold and nu is a critical exponent. If this were exact, every curve would pass
-through the same point at p = p_th. There are correction terms which shrink as d grows,
+depends on p and d mostly through the combination $(p - p_{th}) d^{1/nu}$, where $p_{th}$ is
+the threshold and $nu$ is a critical exponent. If this were exact, every curve would pass
+through the same point at $p = p_{th}$. There are correction terms which shrink as d grows,
 and at d = 3 they are not small. More precisely, a distance 3 patch has nine data
 qubits, eight of which lie on the boundary, and two errors are already enough for the
 decoder to guess wrong. Such a patch does not behave like a piece of a large lattice.

@@ -1,6 +1,6 @@
 // Pure helpers for the repetition-code and decoding pages, on top of the engine in ./qec/.
 import { repetitionCode } from './qec/codes.js';
-import { syndrome, detectionEvents } from './qec/noise.js';
+import { syndrome, detectionEvents, sampleErrors } from './qec/noise.js';
 import { buildGraph, decode, logicalFailure } from './qec/decoder.js';
 
 // Probability that more than half of d independent bits flip: the repetition code's
@@ -17,6 +17,20 @@ export function repetitionCurve(d, p) {
 export const emptyError = code => ({ x: new Uint8Array(code.n), z: new Uint8Array(code.n) });
 export const pauliAt = (e, q) => (e.x[q] ? (e.z[q] ? 'Y' : 'X') : (e.z[q] ? 'Z' : 'I'));
 const NEXT = { I: [1, 0], X: [0, 1], Z: [1, 1], Y: [0, 0] };
+
+// Names shown on the pages, counted from 0 as in the lessons: q0 on a line, c0 for the check between q0 and q1,
+// (row, column) from the top left on a patch, so at d = 3 the qubit at (r, c) is q(3r + c) of lesson 1.
+export const qubitName = i => `q${i}`;
+export const repCheckName = k => `c${k}`;
+export const rcName = (code, q) => `(${code.coords[q][1]}, ${code.coords[q][0]})`;
+
+// Random errors for a decoder figure: drawn again until at least one qubit has an error, so there is something to decode.
+export function sampleSomeErrors(code, p, rng, model) {
+  for (;;) {
+    const e = sampleErrors(code, p, rng, model);
+    if (e.x.some(Boolean) || e.z.some(Boolean)) return e;
+  }
+}
 
 export function cyclePauli(e, q) {
   const [x, z] = NEXT[pauliAt(e, q)], out = { x: e.x.slice(), z: e.z.slice() };

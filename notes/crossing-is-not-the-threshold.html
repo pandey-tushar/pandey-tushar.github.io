@@ -83,18 +83,37 @@
   <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
-<main id="main" class="pc">
- <div class="tp-wrap">
+<main id="main" class="pc nt-note">
+ <div class="tp-wrap pc-cols">
   <header class="pc-head">
     <p class="tp-lbl">Note</p>
     <h1>The crossing is not the threshold</h1>
     <p class="pc-status"><time datetime="2026-11-20">20 November 2026</time></p>
   </header>
 
+  <aside class="pc-rail" aria-label="Summary and contents">
+    <section class="pc-plainwords" aria-labelledby="plain">
+      <h2 class="pc-rail-h" id="plain">In plain words</h2>
+      <p>Researchers often read how much noise a code tolerates off the point where two curves cross. For small codes that point is too low: here 7.4% instead of about 10%.</p>
+    </section>
+    <nav class="pc-toc" aria-label="On this page">
+      <p class="pc-rail-h">On this page</p>
+      <ol>
+        <li><a href="#setup">Setup</a></li>
+        <li><a href="#pairwise-crossings">Pairwise crossings</a></li>
+        <li><a href="#what-goes-wrong-at-small-distances">What goes wrong at small distances</a></li>
+        <li><a href="#the-same-happens-with-matching">The same happens with matching</a></li>
+        <li><a href="#consequences">Consequences</a></li>
+        <li><a href="#details">Details</a></li>
+        <li><a href="#references">References</a></li>
+      </ol>
+    </nav>
+  </aside>
+
   <article class="pc-essay nt-essay">
   <p>The threshold of a quantum error correcting code is usually read off a plot. One draws the logical error rate against the physical error rate p for a few code distances, and the point where the curves cross is reported as the threshold. This works well when the codes are large. However, most plots one sees, including the one in the <a class="tp-link" href="/qec-in-practice/threshold.html">threshold lesson</a> of our course, use small distances such as 3, 5 and 7, and for these the crossing can sit far from the actual threshold. In this note, we measure how far, for the surface code with a union-find decoder.</p>
   <h2 id="setup">Setup</h2>
-  <p>We consider the rotated surface code with d x d data qubits. Each data qubit is flipped independently with probability p, once, and the checks are then read perfectly. The decoder is union-find with clusters grown smallest boundary first, the same one that runs in the course. For the 2d toric code with perfect syndrome measurements, Delfosse and Nickerson [1] obtain a threshold of 9.9% for this decoder.</p>
+  <p>We consider the rotated surface code with d x d data qubits. Each data qubit is flipped independently with probability p, once, and the checks are then read perfectly. The decoder is union-find with clusters grown smallest boundary first, the same one that runs in the course. For the 2D toric code with perfect syndrome measurements, Delfosse and Nickerson [1] obtain a threshold of 9.9% for this decoder.</p>
   <p>Below the threshold a bigger code fails less often, and above it a bigger code fails more often. Therefore the curves of two distances cross, and if all the curves passed through one point, that point would be the threshold. They do not.</p>
   <h2 id="pairwise-crossings">Pairwise crossings</h2>
   <p>For each pair of consecutive distances in our list, we find the p at which the two curves cross. We use 100,000 shots per point, with p from 0.06 to 0.11 in steps of 0.005.</p>
@@ -114,14 +133,14 @@
   </div>
   <figure class="tp-plate pc-fig nt-fig" id="fig-1">
   <div class="pc-plot"><svg viewBox="0 0 340 252" role="img" aria-labelledby="fig1-t fig1-d"><title id="fig1-t">Pairwise crossings against the pair of distances</title><desc id="fig1-d">Crossing p with one-standard-error range for each pair of consecutive distances: 3 and 5: 0.074, 0.070 to 0.077; 5 and 7: 0.082, 0.079 to 0.085; 7 and 9: 0.088, 0.086 to 0.089; 9 and 11: 0.094, 0.091 to 0.096; 11 and 13: not resolved; 13 and 17: 0.100, 0.099 to 0.102; 17 and 21: 0.101, 0.098 to 0.103. A dashed line marks the 9.9% threshold of reference 1.</desc>
-<path class="pc-grid" d="M44 185.2H334M44 140.9H334M44 96.7H334M44 52.5H334"/>
+<path class="pc-grid" d="M44 173.5H334M44 132.5H334M44 91.6H334M44 50.6H334"/>
 <path class="pc-axis" d="M44 26V194H334"/>
-<text class="pc-tick" x="38" y="189.7" text-anchor="end">0.07</text>
-<text class="pc-tick" x="38" y="145.4" text-anchor="end">0.08</text>
-<text class="pc-tick" x="38" y="101.2" text-anchor="end">0.09</text>
-<text class="pc-tick" x="38" y="57.0" text-anchor="end">0.10</text>
-<path class="pc-ref" d="M44 56.9H334"/>
-<text class="pc-lab" x="50" y="50.9">9.9% [1]</text>
+<text class="pc-tick" x="38" y="178.0" text-anchor="end">0.07</text>
+<text class="pc-tick" x="38" y="137.0" text-anchor="end">0.08</text>
+<text class="pc-tick" x="38" y="96.1" text-anchor="end">0.09</text>
+<text class="pc-tick" x="38" y="55.1" text-anchor="end">0.10</text>
+<path class="pc-ref" d="M44 54.7H334"/>
+<text class="pc-lab" x="50" y="48.7">9.9% [1]</text>
 <text class="pc-tick" x="64.7" y="212" text-anchor="middle">3, 5</text>
 <text class="pc-tick" x="106.1" y="212" text-anchor="middle">5, 7</text>
 <text class="pc-tick" x="147.6" y="212" text-anchor="middle">7, 9</text>
@@ -130,7 +149,7 @@
 <text class="pc-tick" x="230.4" y="110.0" text-anchor="middle" transform="rotate(-90 230.4 110.0)">not resolved</text>
 <text class="pc-tick" x="271.9" y="212" text-anchor="middle">13, 17</text>
 <text class="pc-tick" x="313.3" y="212" text-anchor="middle">17, 21</text>
-<g class="nt-pts"><path class="pc-bar" d="M64.7 186.1V155.3M60.7 155.3h8M60.7 186.1h8"/><circle class="pc-mark" cx="64.7" cy="166.0" r="3.8"/><path class="pc-bar" d="M106.1 144.0V117.1M102.1 117.1h8M102.1 144.0h8"/><circle class="pc-mark" cx="106.1" cy="130.4" r="3.8"/><path class="pc-bar" d="M147.6 114.1V100.2M143.6 100.2h8M143.6 114.1h8"/><circle class="pc-mark" cx="147.6" cy="107.0" r="3.8"/><path class="pc-bar" d="M189.0 90.4V69.2M185.0 69.2h8M185.0 90.4h8"/><circle class="pc-mark" cx="189.0" cy="80.5" r="3.8"/><path class="pc-bar" d="M271.9 56.1V45.8M267.9 45.8h8M267.9 56.1h8"/><circle class="pc-mark" cx="271.9" cy="50.4" r="3.8"/><path class="pc-bar" d="M313.3 62.3V38.9M309.3 38.9h8M309.3 62.3h8"/><circle class="pc-mark" cx="313.3" cy="48.6" r="3.8"/></g>
+<g class="nt-pts"><path class="pc-bar" d="M64.7 174.4V145.8M60.7 145.8h8M60.7 174.4h8"/><circle class="pc-mark" cx="64.7" cy="155.8" r="3.8"/><path class="pc-bar" d="M106.1 135.4V110.4M102.1 110.4h8M102.1 135.4h8"/><circle class="pc-mark" cx="106.1" cy="122.8" r="3.8"/><path class="pc-bar" d="M147.6 107.6V94.7M143.6 94.7h8M143.6 107.6h8"/><circle class="pc-mark" cx="147.6" cy="101.1" r="3.8"/><path class="pc-bar" d="M189.0 85.7V66.1M185.0 66.1h8M185.0 85.7h8"/><circle class="pc-mark" cx="189.0" cy="76.5" r="3.8"/><path class="pc-bar" d="M271.9 53.9V44.3M267.9 44.3h8M267.9 53.9h8"/><circle class="pc-mark" cx="271.9" cy="48.6" r="3.8"/><path class="pc-bar" d="M313.3 59.7V38.0M309.3 38.0h8M309.3 59.7h8"/><circle class="pc-mark" cx="313.3" cy="46.9" r="3.8"/></g>
 <text class="pc-lab" x="4" y="14">crossing p</text>
 <text class="pc-lab" x="334" y="234" text-anchor="end">pair of distances</text>
 </svg></div>
@@ -139,7 +158,7 @@
   <p>The crossing climbs from 7.4% to about 10% and then stops moving. The last two rows agree with the 9.9% of [1]. The first row is lower by a quarter. For the pair 11 and 13, the two curves lie within noise of each other from p = 0.09 to 0.11, so we do not report a number.</p>
   <h2 id="what-goes-wrong-at-small-distances">What goes wrong at small distances</h2>
   <p>It is easier to see the problem in one column of the data than in the crossings. At p = 0.08, the logical error rates for d = 3, 5 and 7 are 0.092, 0.096 and 0.095. These are equal to within a few percent. If these three codes were all we had, we would conclude that 8% is the threshold, or slightly above it. At d = 21, the logical error rate at the same p is 0.057. So 8% is well below the threshold, and the small codes are not able to show it.</p>
-  <p>This is known as a finite-size effect. Close to the threshold, the logical error rate depends on p and d mostly through the combination (p - p_th) d^(1/nu), where p_th is the threshold and nu is a critical exponent. If this were exact, every curve would pass through the same point at p = p_th. There are correction terms which shrink as d grows, and at d = 3 they are not small. More precisely, a distance 3 patch has nine data qubits, eight of which lie on the boundary, and two errors are already enough for the decoder to guess wrong. Such a patch does not behave like a piece of a large lattice. The crossing of two small codes measures the threshold together with these corrections, and in our case the corrections push it down.</p>
+  <p>This is known as a finite-size effect. Close to the threshold, the logical error rate depends on p and d mostly through the combination (p &minus; p<sub>th</sub>) d<sup>1/&nu;</sup>, where p<sub>th</sub> is the threshold and &nu; is a critical exponent. If this were exact, every curve would pass through the same point at p = p<sub>th</sub>. There are correction terms which shrink as d grows, and at d = 3 they are not small. More precisely, a distance 3 patch has nine data qubits, eight of which lie on the boundary, and two errors are already enough for the decoder to guess wrong. Such a patch does not behave like a piece of a large lattice. The crossing of two small codes measures the threshold together with these corrections, and in our case the corrections push it down.</p>
   <h2 id="the-same-happens-with-matching">The same happens with matching</h2>
   <p>One may ask whether this is a defect of union-find. It is not, although union-find makes it worse. We have reference data for a minimum-weight perfect matching decoder (pymatching, with samples from stim, 200,000 shots per point) at p = 0.08 and 0.10. Interpolating between these two points, the curves for d = 3 and 5 cross near 0.093, and those for d = 5 and 7 near 0.098. Both values are below the matching threshold of 0.1031 found by Wang, Harrington and Preskill [2]. Note that this interpolation uses only two points, so it is coarse.</p>
   <p>Therefore the small distance crossing is low for both decoders. It is much lower for union-find: 0.074 against 0.093 for the same pair of codes. We do not have an argument for why the corrections are larger for union-find, and we leave it as an observation.</p>

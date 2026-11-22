@@ -73,8 +73,10 @@
 </header>
 
 <main id="main" class="page" data-lesson="{{n}}">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a>{{nav}}</nav>
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a>{{nav}}</nav>
+  <p class="tp-lbl step-of">{{stepof}}</p>
   <h1 id="lesson-title">Lesson {{n}}: {{title}}</h1>
+  <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">{{plain}}</p></aside>
   <p class="lead" id="lesson-intro">{{intro}}</p>
 
   <div class="stage" id="stage">
@@ -91,6 +93,7 @@
         </div>
         <input type="range" id="slider" class="slider" min="0" max="1" step="any" value="0" aria-label="Position in the circuit (steps)">
         <div class="strip-scroll" id="strip-scroll"><div class="strip" id="strip"></div></div>
+        <p class="scroll-hint strip-hint" id="strip-hint" aria-hidden="true" hidden>Scroll the strip sideways for every step &rarr;</p>
         <p class="caption" id="caption" aria-live="polite"></p>
       </div>
       <div class="layer-text">
@@ -102,12 +105,16 @@
   </div>
 
   <section class="panel narrative">
+    <div>
     <h2>What this lesson shows</h2>
 {{shows}}
+    </div>
+    <div>
     <h2>Things to try</h2>
     <ul class="try">
 {{try}}
     </ul>
+    </div>
   </section>
 
   <section class="panel" id="circuit-box">
@@ -130,6 +137,10 @@
   <section class="panel">
     <h2 id="results-head">Results</h2>
     <div id="results"></div>
+    <div class="results-note">
+      <h3>How to read this table</h3>
+{{results_note}}
+    </div>
   </section>
 
   <nav class="secnav endnav" aria-label="Course, end of lesson">{{endnav}}</nav>

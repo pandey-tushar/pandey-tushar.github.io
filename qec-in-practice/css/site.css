@@ -13,6 +13,19 @@
 .secnav { display: flex; gap: 4px 22px; flex-wrap: wrap; }
 .secnav a { display: inline-flex; align-items: center; min-height: 40px; font-size: var(--tp-t-small); color: var(--tp-dim); }
 .secnav a:hover, .secnav a:focus-visible { color: var(--tp-acc); }
+/* phones: the top course nav keeps one row of short labels; the end-of-lesson row keeps full titles */
+.nav-short { display: none; }
+@media (max-width: 600px) {
+  .secnav:not(.endnav) { gap: 0 16px; }
+  .secnav:not(.endnav) .nav-long { display: none; }
+  .secnav:not(.endnav) .nav-short { display: inline; }
+}
+/* progress over the title, and the plain-words box under it: the card of the paper pages' rail (papers/paper.css) */
+.step-of { margin: 14px 0 0; }
+.step-of + h1, .step-of + #lesson-title { margin-top: 6px; }
+.plain { margin: 0 0 16px; padding: 14px 16px 4px; background: var(--tp-void2); border: 1px solid var(--tp-rule); border-radius: 4px; max-width: 46rem; }
+.plain .tp-lbl { margin: 0 0 6px; }
+.plain .plain-text { margin: 0 0 10px; font-size: 0.95rem; line-height: 1.55; color: var(--tp-text); }
 @media (max-width: 600px) { .page { padding-inline: 14px; } }
 .muted { color: var(--tp-dim); }
 .good { color: var(--good); }
@@ -23,9 +36,20 @@
 .hub .masthead { padding: clamp(1.4rem, 0.8rem + 3vw, 3.4rem) 0 clamp(0.6rem, 2vw, 1.4rem); }
 .hub .masthead .tp-lbl { margin: 0 0 clamp(14px, 2.4vh, 24px); }
 .hub .lead { font-size: 1.06rem; margin: clamp(14px, 2vh, 22px) 0 10px; max-width: 64ch; }
+/* wide screens: the course description on the left, the plain-language panel on the right */
+.why { margin: 18px 0 0; padding: 16px 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); max-width: 40rem; }
+.why h2 { margin: 0 0 10px; font-size: 1.3rem; line-height: 1.25; }
+.why p { margin: 0 0 10px; color: var(--tp-text); }
+.why .why-link { margin: 14px 0 0; }
+@media (min-width: 1100px) {
+  .hub .masthead { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 0 3rem; align-items: start; }
+  .why { margin-top: clamp(2.4rem, 5vw, 4.2rem); }
+}
 .about { max-width: 70ch; margin: 0 0 10px; color: var(--tp-text); }
 .cards { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-.lcard { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--tp-ink); }
+/* each card spans four rows of the list's grid (picture, step, title, text), so titles line up across a row */
+.cards > li { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; }
+.lcard { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: 6px; padding: 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--tp-ink); }
 .lcard:hover, .lcard:focus-visible { border-color: var(--tp-acc); }
 .lcard .num { font: 600 var(--tp-t-app)/1.3 var(--tp-sans); letter-spacing: 0.07em; text-transform: uppercase; color: var(--tp-dim); margin-top: 6px; }
 .lcard b { font-family: var(--tp-serif); font-weight: 400; font-size: 1.25rem; line-height: 1.2; color: var(--tp-head); }
@@ -33,6 +57,7 @@
 .thumb { padding: 0; border: 0; background: none; }
 .thumb svg { width: 100%; height: 118px; }
 .thumb figcaption { margin-top: 8px; }
+.th-rep { stroke: var(--tp-rule); stroke-width: 3; }
 .th-f { stroke-width: 2; }
 .th-sx { stroke: var(--x); }
 .th-sz { stroke: var(--z); }
@@ -59,8 +84,11 @@
 .cite { margin: 2rem 0 0; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); color: var(--tp-text); max-width: 72ch; overflow-wrap: anywhere; }
 .cite .tp-lbl { display: block; margin-bottom: 4px; }
 
-/* the narrative under the player */
+/* the narrative under the player: what it shows and what to try, side by side on a wide screen */
 .narrative p, .narrative li { max-width: 70ch; }
+@media (min-width: 1100px) {
+  .narrative { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 2.4rem; }
+}
 .narrative p { margin: 0 0 10px; }
 .narrative h2 + p, .narrative h2 { margin-top: 0; }
 .narrative p + h2 { margin-top: 16px; }
@@ -96,7 +124,9 @@ button:disabled { opacity: 0.6; cursor: wait; }
     radial-gradient(farthest-side at 100% 50%, var(--tp-a40), transparent) right / 12px 100% no-repeat scroll;
 }
 .scroll-hint { display: none; margin: 6px 0 0; font: 12px/1.5 var(--tp-mono); color: var(--tp-dim); }
-@media (max-width: 660px) { .scroll-hint { display: block; } }
+@media (max-width: 860px) { .scroll-hint { display: block; } }
+.scroll-hint[hidden] { display: none; }
+.strip-hint:not([hidden]) { display: block; }
 .strip { position: relative; }
 .strip.fluid { width: 100%; }
 .phase-row { position: relative; height: 20px; }
@@ -192,6 +222,38 @@ th[scope=row], thead th:first-child { text-align: left; }
 th[scope=row] { white-space: normal; min-width: 11em; }
 thead th { font: 600 12px/1.4 var(--tp-mono); letter-spacing: 0.06em; color: var(--tp-dim); white-space: normal; vertical-align: bottom; }
 .source { font: 12px/1.5 var(--tp-mono); color: var(--tp-dim); margin: 8px 0 0; }
+/* how to read the results table: the paragraphs flow in columns on a wide screen */
+.results-note { margin: 14px 0 0; padding-top: 12px; border-top: 1px solid var(--line); column-width: 30rem; column-gap: 2.4rem; }
+.results-note h3 { column-span: all; margin: 0 0 8px; font: 600 var(--tp-t-app)/1.4 var(--tp-sans); letter-spacing: 0.07em; text-transform: uppercase; color: var(--tp-dim); }
+.results-note p { margin: 0 0 10px; color: var(--tp-text); font-size: 0.95rem; break-inside: avoid; }
+
+/* the essay pages (repetition code, decoding, threshold, lattice surgery, glossary) start on the site column's
+   left edge, like the lessons: text at --essay-col, figures across the main column. From 70em the rail of the
+   paper pages (papers/paper.css) holds the plain-words box and the contents list and stays in view; below it
+   the box sits under the title and the list is hidden. */
+:root { --essay-col: 38rem; }
+.course-essay > .course-rail { max-width: var(--essay-col); }
+.course-essay > .essay-flow { min-width: 0; }
+.course-toc { display: none; font-size: var(--tp-t-small); }
+.course-toc .tp-lbl { margin: 0 0 6px; }
+.course-toc ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--tp-rule); }
+.course-toc a { display: block; padding: 5px 0 5px 12px; line-height: 1.35; color: var(--tp-text); text-decoration: none; }
+.course-toc .toc-fig a { padding-left: 24px; color: var(--tp-dim); }
+.course-toc a:hover, .course-toc a:focus-visible { color: var(--tp-acc); }
+@media (min-width: 70em) {
+  .course-essay { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, 17.5rem);
+    column-gap: clamp(2.5rem, 4vw, 4.5rem); align-items: start; }
+  .course-essay > * { grid-column: 1; }
+  .course-essay > .secnav { grid-column: 1 / -1; }
+  .course-essay > .course-rail { grid-column: 2; grid-row: 2 / span 3; position: sticky; top: calc(var(--tp-barh) + 1.4rem);
+    max-width: none; max-height: calc(100vh - var(--tp-barh) - 2.8rem); overflow-y: auto; margin-top: 14px; }
+  .course-rail .plain { margin: 0; }
+  .course-toc { display: block; margin: 1.6rem 0 0; }
+  .course-toc:first-child { margin-top: 0; }
+}
+.course-end { margin: 1.6rem 0 0; padding: 14px 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); }
+.course-end h2 { margin: 0 0 8px; font-size: 1.3rem; }
+.course-end p { margin: 0; }
 
 /* live */
 .live-form { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-start; }

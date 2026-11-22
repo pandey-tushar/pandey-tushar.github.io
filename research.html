@@ -456,7 +456,7 @@
 </script>
 <!-- jsonld:end -->
 <style>
-body,h1,h2,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
+body,h1,h2,h3,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
 ol,ul{list-style:none}
 
 /* ---------- masthead ---------- */
@@ -482,8 +482,8 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
 .motif{padding:8px;color:var(--tp-ink)}
 .motif svg{display:block;width:72px;height:72px}
 .area-head .tp-lbl{margin-bottom:.5rem}
-.area-title{font-family:var(--tp-serif);font-size:var(--tp-t-h2);line-height:1.1;letter-spacing:-.014em;color:var(--tp-head);text-wrap:balance}
-.blurb{margin-top:.5rem;max-width:40em;color:var(--tp-text)}
+.area h2.area-title{font-family:var(--tp-serif);font-size:var(--tp-t-h2);line-height:1.1;letter-spacing:-.014em;color:var(--tp-head);text-wrap:balance}
+.why,.blurb{margin-top:.5rem;max-width:40em;color:var(--tp-text)}
 
 /* ---------- one entry: number, body, links; the specification in a margin when there is room ---------- */
 .paper{
@@ -499,7 +499,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
 }
 .no:hover,.paper:target .no{background:var(--tp-a14)}
 .body{min-width:0}
-.paper h2{font-size:clamp(1.22rem,.95rem + 1vw,1.6rem);line-height:1.22}
+.paper h3{font-size:clamp(1.22rem,.95rem + 1vw,1.6rem);line-height:1.22}
 .by{margin-top:.6rem;color:var(--tp-text)}
 .me{font-weight:600;color:var(--tp-head)}
 .sum{margin-top:.6rem;max-width:40em;line-height:1.62;color:var(--tp-text)}
@@ -530,7 +530,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
   .motif{justify-self:start}
 }
 @media print{
-  .lede,.note,.blurb,.by,.sum,.claim,.spec dd,.links,.area-title{color:#000}
+  .lede,.note,.why,.blurb,.by,.sum,.claim,.spec dd,.links,.area-title{color:#000}
   .motif{display:none}
   .paper{break-inside:avoid}
 }
@@ -575,7 +575,8 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
       <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="45" y="15" width="30" height="30" style="fill:var(--tp-acc, #0b6e7f);fill-opacity:.22;stroke:none"/><rect x="45" y="45" width="30" height="30" style="fill:var(--tp-acc, #0b6e7f);fill-opacity:.22;stroke:none"/><path d="M15,7V113M7,15H113M45,7V113M7,45H113M75,7V113M7,75H113M105,7V113M7,105H113"/><path d="M45,15H75V75H45Z" style="stroke:var(--tp-acc, #0b6e7f)" stroke-width="2.6"/><path d="M45,45H75" style="stroke:var(--tp-acc, #0b6e7f)" stroke-width="2.6"/><circle cx="60" cy="45" r="5.5" style="fill:var(--tp-warm, #b4541a);stroke:var(--tp-warm, #b4541a)"/></svg></figure>
       <div>
         <p class="tp-lbl">Area I &middot; 3 entries</p>
-        <p class="area-title" id="area-qec">Quantum error correction</p>
+        <h2 class="area-title" id="area-qec">Quantum error correction</h2>
+        <p class="why">Quantum computers make errors far more often than ordinary computers, and error correction is what would let them run long computations anyway.</p>
         <p class="blurb">Topological and qLDPC codes: how they detect errors, how they compute, and how fairly their decoders are compared.</p>
       </div>
     </div>
@@ -584,7 +585,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="topological-phases-of-matter-quantum-error-correction-and-to">
           <a class="no tp-plate" href="#topological-phases-of-matter-quantum-error-correction-and-to" aria-label="Link to entry 1">01</a>
           <div class="body">
-            <h2>Topological phases of matter, quantum error correction, and topological twists</h2>
+            <h3>Topological phases of matter, quantum error correction, and topological twists</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">Reviews anyon condensation and lattice twists through tensor categories, and gives a new explicit error detection and correction algorithm for the doubled semion model.</p>
           </div>
@@ -600,7 +601,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="lifted-surgery-for-non-abelian-two-block-group-algebra-codes">
           <a class="no tp-plate" href="#lifted-surgery-for-non-abelian-two-block-group-algebra-codes" aria-label="Link to entry 2">02</a>
           <div class="body">
-            <h2>Lifted surgery for non-Abelian two-block group-algebra codes</h2>
+            <h3>Lifted surgery for non-Abelian two-block group-algebra codes</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">Extends lifted code surgery to non-Abelian group-algebra qLDPC codes, bounds the gain, and finds codes that measure more logicals in fewer rounds.</p>
           </div>
@@ -616,7 +617,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="fair-decoder-baselines-and-rigorous-finite-size-scaling-for">
           <a class="no tp-plate" href="#fair-decoder-baselines-and-rigorous-finite-size-scaling-for" aria-label="Link to entry 3">03</a>
           <div class="body">
-            <h2>Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel</h2>
+            <h3>Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">Shows that unfair decoder baselines distort bivariate bicycle code comparisons on erasure noise, and estimates an asymptotic threshold near 0.488 by finite-size scaling.</p>
           </div>
@@ -635,7 +636,8 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
       <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8,30H112M8,60H112M8,90H112" opacity=".55"/><rect x="19" y="19" width="22" height="22" rx="2" style="fill:var(--tp-void2, #fffdf8)"/><rect x="19" y="79" width="22" height="22" rx="2" style="fill:var(--tp-void2, #fffdf8)"/><path d="M62,30V69.5"/><circle cx="62" cy="30" r="4.5" style="fill:currentColor"/><circle cx="62" cy="60" r="9.5" style="fill:var(--tp-void2, #fffdf8);stroke:var(--tp-acc, #0b6e7f)"/><path d="M52.5,60H71.5M62,50.5V69.5" style="stroke:var(--tp-acc, #0b6e7f)"/><path d="M90,60V99.5"/><circle cx="90" cy="60" r="4.5" style="fill:currentColor"/><circle cx="90" cy="90" r="9.5" style="fill:var(--tp-void2, #fffdf8);stroke:var(--tp-acc, #0b6e7f)"/><path d="M80.5,90H99.5M90,80.5V99.5" style="stroke:var(--tp-acc, #0b6e7f)"/></svg></figure>
       <div>
         <p class="tp-lbl">Area II &middot; 6 entries</p>
-        <p class="area-title" id="area-qml">Quantum algorithms and quantum machine learning</p>
+        <h2 class="area-title" id="area-qml">Quantum algorithms and quantum machine learning</h2>
+        <p class="why">These papers ask what present quantum processors can do in practice, and whether quantum models still win when the classical ones they are compared with are tuned with the same care.</p>
         <p class="blurb">Variational eigensolvers on hardware, quantum reservoirs and kernels, and machine learning that probes quantum random number generators.</p>
       </div>
     </div>
@@ -644,7 +646,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="efficient-variational-quantum-eigensolver-methodologies-on-q">
           <a class="no tp-plate" href="#efficient-variational-quantum-eigensolver-methodologies-on-q" aria-label="Link to entry 4">04</a>
           <div class="body">
-            <h2>Efficient variational quantum eigensolver methodologies on quantum processors</h2>
+            <h3>Efficient variational quantum eigensolver methodologies on quantum processors</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, Jason Saroni, Abdullah Kazi, Kartik Sharma</p>
             <p class="sum">Compares adaptive VQE, Tetris-ADAPT-VQE and entanglement forging for the BeH2 ground state on IBM hardware, with TREX and ZNE error mitigation.</p>
           </div>
@@ -660,7 +662,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="an-architectural-capacity-ceiling-not-a-barren-plateau-why-a">
           <a class="no tp-plate" href="#an-architectural-capacity-ceiling-not-a-barren-plateau-why-a" aria-label="Link to entry 5">05</a>
           <div class="body">
-            <h2>An architectural capacity ceiling, not a barren plateau: why a fixed-encoding variational quantum circuit cannot fit the Lorenz-63 attractor</h2>
+            <h3>An architectural capacity ceiling, not a barren plateau: why a fixed-encoding variational quantum circuit cannot fit the Lorenz-63 attractor</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">Argues a four-qubit variational circuit fails on Lorenz-63 because its time encoding caps accessible frequencies, not because of barren plateaus.</p>
           </div>
@@ -676,7 +678,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="when-classical-baselines-are-tuned-as-carefully-as-the-quant">
           <a class="no tp-plate" href="#when-classical-baselines-are-tuned-as-carefully-as-the-quant" aria-label="Link to entry 6">06</a>
           <div class="body">
-            <h2>When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?</h2>
+            <h3>When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">With equally tuned classical baselines, two commonly cited quantum reservoir advantages vanish in exact simulations of up to eleven qubits.</p>
           </div>
@@ -692,7 +694,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="a-quantum-reservoir-architecture-for-chaotic-forecasting-and">
           <a class="no tp-plate" href="#a-quantum-reservoir-architecture-for-chaotic-forecasting-and" aria-label="Link to entry 7">07</a>
           <div class="body">
-            <h2>A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps</h2>
+            <h3>A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">Gives a reproducible quantum reservoir recipe for chaotic forecasting and a diagnostic for whether its large feature space genuinely helps.</p>
           </div>
@@ -708,7 +710,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="quantum-kernels-for-parity-structured-classification-a-hybri">
           <a class="no tp-plate" href="#quantum-kernels-for-parity-structured-classification-a-hybri" aria-label="Link to entry 8">08</a>
           <div class="body">
-            <h2>Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline</h2>
+            <h3>Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">A ZZ quantum kernel beats a binary-encoding classical ablation on high-order parity (XOR) classification, with the margin growing with parity complexity.</p>
           </div>
@@ -724,7 +726,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="machine-learning-driven-quantum-hacking-of-chsh-based-qkd">
           <a class="no tp-plate" href="#machine-learning-driven-quantum-hacking-of-chsh-based-qkd" aria-label="Link to entry 9">09</a>
           <div class="body">
-            <h2>Machine Learning-Driven Quantum Hacking of CHSH-Based QKD: Exploiting Entropy Vulnerabilities in Self-testing Protocols</h2>
+            <h3>Machine Learning-Driven Quantum Hacking of CHSH-Based QKD: Exploiting Entropy Vulnerabilities in Self-testing Protocols</h3>
             <p class="by">Hubert Ko&#322;cz, <b class="me">Tushar Pandey</b>, Yug Shah</p>
             <p class="sum">Uses a qGAN, bias detection and neural classifiers on Rigetti and IonQ hardware to detect weak random number generators that could enable attacks on CHSH-based QKD.</p>
           </div>
@@ -743,7 +745,8 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
       <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="22.3" y1="55.13" x2="43.7" y2="30.87"/><line x1="24.5" y1="60" x2="41.5" y2="60" style="stroke:var(--tp-acc, #0b6e7f)"/><line x1="22.3" y1="64.87" x2="43.7" y2="89.13"/><line x1="53.66" y1="29.2" x2="72.34" y2="39.8"/><line x1="53.66" y1="56.8" x2="72.34" y2="46.2" style="stroke:var(--tp-acc, #0b6e7f)"/><line x1="54.5" y1="94" x2="71.5" y2="94" stroke-dasharray="3 4" opacity=".55"/><line x1="83.44" y1="46.56" x2="98.56" y2="56.44" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="18" cy="60" r="6.5" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="48" cy="26" r="6.5"/><circle cx="48" cy="60" r="6.5" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="48" cy="94" r="6.5"/><circle cx="78" cy="43" r="6.5" style="fill:var(--tp-acc, #0b6e7f);fill-opacity:.25;stroke:var(--tp-acc, #0b6e7f)"/><circle cx="78" cy="94" r="6.5" stroke-dasharray="3 3" opacity=".55"/><circle cx="104" cy="60" r="6.5" style="fill:var(--tp-warm, #b4541a);stroke:var(--tp-warm, #b4541a)"/></svg></figure>
       <div>
         <p class="tp-lbl">Area III &middot; 2 entries</p>
-        <p class="area-title" id="area-ai">LLM reasoning and applied machine learning</p>
+        <h2 class="area-title" id="area-ai">LLM reasoning and applied machine learning</h2>
+        <p class="why">Language models still fail at many problems that need several steps of reasoning, and sea level forecasts feed decisions about coasts and the infrastructure on them.</p>
         <p class="blurb">Test-time reasoning for language models, and ensemble forecasting.</p>
       </div>
     </div>
@@ -752,7 +755,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif">
           <a class="no tp-plate" href="#adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif" aria-label="Link to entry 10">10</a>
           <div class="body">
-            <h2>Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures</h2>
+            <h3>Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, Ara Ghukasyan, Oktay Goktas, Santosh Kumar Radha</p>
             <p class="sum">A test-time LLM reasoning method that recursively breaks a query into a graph of subproblems, expanding only complex ones. It solves 50% of the 20 hardest Game of 24 puzzles against 10% for direct prompting (+400%, gpt-4o-mini) and gains 46.2% relative on shuffled GPQA Diamond (gpt-4o).</p>
           </div>
@@ -768,7 +771,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="modeling-sea-level-rise-using-ensemble-techniques">
           <a class="no tp-plate" href="#modeling-sea-level-rise-using-ensemble-techniques" aria-label="Link to entry 11">11</a>
           <div class="body">
-            <h2>Modeling Sea Level Rise Using Ensemble Techniques: Impacts on Coastal Adaptation, Freshwater Ecosystems, Agriculture and Infrastructure</h2>
+            <h3>Modeling Sea Level Rise Using Ensemble Techniques: Impacts on Coastal Adaptation, Freshwater Ecosystems, Agriculture and Infrastructure</h3>
             <p class="by">Sambandh Bhusan Dhal, Rishabh Singh, <b class="me">Tushar Pandey</b>, Sheelabhadra Dey, Stavros Kalafatis, Vivekvardhan Kesireddy</p>
             <p class="sum">A weighted SARIMAX, LSTM and exponential-smoothing ensemble forecasts sea level rise on the US East and Gulf coasts to 2103 and assesses ecological and infrastructure impacts.</p>
           </div>
@@ -787,7 +790,8 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
       <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M75.87 33.19L75.76 36.2L75.16 39.28L74.16 42.38L72.86 45.39L71.37 48.21L69.74 50.75L67.8 52.97L65.62 55.01L63.34 56.99L61.08 59.02L58.85 61.23L56.16 63.52L53.38 65.86L51.03 68.22L49.62 70.58L49.62 72.91L51.03 75.24L53.38 77.57L56.16 79.9L56.16 79.9M63.18 86.95L65.29 89.35L67.41 91.7L69.53 93.96L71.62 96.11L73.63 98.29L75.61 100.4L77.68 102.32L79.94 103.92L82.49 105.15L85.37 106.28L88.45 107.15L91.57 107.53L94.57 107.19L97.39 105.94L100.26 103.88L103.07 101.12L105.65 97.78L107.82 93.94L109.44 89.61L110.65 84.44L111.47 78.7L111.92 72.76L111.98 67.02L111.66 61.72L110.93 56.37L109.82 51.11L108.34 46.19L106.54 41.86L104.45 38.34L102.19 35.51L99.63 33.25L96.58 31.45L92.86 30.02L88.27 28.91L82.66 28.32L76.34 28.15L69.71 28.21L63.14 28.33L56.86 28.33L50.29 28.21L50.29 28.21M39.65 28.22L33.73 28.63L28.74 29.56L24.73 30.88L21.45 32.52L18.72 34.6L16.37 37.2L14.22 40.44L12.3 44.48L10.69 49.21L9.44 54.37L8.57 59.72L8.1 65L8.02 70.57L8.32 76.47L9 82.33L10.06 87.76L11.51 92.39L13.48 96.39L15.93 99.93L18.67 102.92L21.54 105.26L24.36 106.83L27.28 107.5L30.38 107.36L33.49 106.65L36.46 105.59L39.14 104.42L41.5 102.96L43.63 101.15L45.63 99.09L47.62 96.93L49.68 94.77L51.8 92.56L53.91 90.24L56.03 87.85L58.15 85.46L60.27 83.1L62.8 80.77L65.6 78.45L68.17 76.12L69.99 73.79L70.57 71.46L69.63 69.11L67.57 66.75L64.9 64.4L63.84 63.52M56.37 56.74L54.1 54.76L51.94 52.71L50.04 50.45L48.43 47.87L46.96 45.02L45.7 41.99L44.74 38.89L44.2 35.82L44.14 32.8L44.53 29.62L45.3 26.44L46.4 23.42L47.78 20.76L49.46 18.5L51.59 16.4L54.03 14.58L56.59 13.24L59.11 12.53L61.51 12.64L64.05 13.52L66.6 15L68.98 16.9L71.01 19.05L72.59 21.38L73.6 23.42" stroke-width="3"/></svg></figure>
       <div>
         <p class="tp-lbl">Area IV &middot; 3 entries</p>
-        <p class="area-title" id="area-topo">Quantum topology</p>
+        <h2 class="area-title" id="area-topo">Quantum topology</h2>
+        <p class="why">Quantum topology ties quantities from quantum physics to the geometry of shapes, and a volume conjecture predicts that those quantities, taken to a limit, give the volume of a three-dimensional shape.</p>
         <p class="blurb">Bonahon&#8211;Wong&#8211;Yang quantum invariants of surface diffeomorphisms and their volume conjectures.</p>
       </div>
     </div>
@@ -796,7 +800,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i">
           <a class="no tp-plate" href="#generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i" aria-label="Link to entry 12">12</a>
           <div class="body">
-            <h2>Generalized Bonahon&#8211;Wong&#8211;Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure eight knot complement</h2>
+            <h3>Generalized Bonahon&#8211;Wong&#8211;Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure eight knot complement</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, Ka Ho Wong</p>
             <p class="sum">Proposes a generalized Bonahon-Wong-Yang volume conjecture tied to hyperbolic cone structures and proves it for the figure-eight knot complement (word LR).</p>
           </div>
@@ -812,7 +816,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur">
           <a class="no tp-plate" href="#the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur" aria-label="Link to entry 13">13</a>
           <div class="body">
-            <h2>The Bonahon&#8211;Wong&#8211;Yang volume conjecture for the four-puncture sphere</h2>
+            <h3>The Bonahon&#8211;Wong&#8211;Yang volume conjecture for the four-puncture sphere</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">Computes the Bonahon-Wong-Yang invariant for four-puncture sphere diffeomorphisms and verifies the volume conjecture for these bundles under technical conditions.</p>
           </div>
@@ -828,7 +832,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="phd-thesis-a-study-of-bonahon-wong-yang-quantum-invariants">
           <a class="no tp-plate" href="#phd-thesis-a-study-of-bonahon-wong-yang-quantum-invariants" aria-label="Link to entry 14">14</a>
           <div class="body">
-            <h2>A Study of Bonahon&#8211;Wong&#8211;Yang Quantum Invariants</h2>
+            <h3>A Study of Bonahon&#8211;Wong&#8211;Yang Quantum Invariants</h3>
             <p class="by"><b class="me">Tushar Pandey</b></p>
             <p class="sum">Doctoral thesis in mathematics, written under the supervision of Prof. Tian Yang.</p>
           </div>
@@ -847,7 +851,8 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
       <figure class="motif tp-plate" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="15" cy="15" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="15" r="3" style="fill:currentColor;stroke:none"/><circle cx="45" cy="15" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="45" cy="15" r="3" style="fill:currentColor;stroke:none"/><circle cx="60" cy="15" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="15" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="75" cy="15" r="3" style="fill:currentColor;stroke:none"/><circle cx="90" cy="15" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="15" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="105" cy="15" r="3" style="fill:currentColor;stroke:none"/><circle cx="15" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="45" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="60" cy="30" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="60" cy="30" r="3" style="fill:currentColor;stroke:none"/><circle cx="75" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="90" cy="30" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="90" cy="30" r="3" style="fill:currentColor;stroke:none"/><circle cx="105" cy="30" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="45" cy="45" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="45" cy="45" r="3" style="fill:currentColor;stroke:none"/><circle cx="60" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="45" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="75" cy="45" r="3" style="fill:currentColor;stroke:none"/><circle cx="90" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="45" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="60" r="3" style="fill:currentColor;stroke:none"/><circle cx="45" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="60" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="90" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="60" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="75" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="15" cy="75" r="3" style="fill:currentColor;stroke:none"/><circle cx="30" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="45" cy="75" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="45" cy="75" r="3" style="fill:currentColor;stroke:none"/><circle cx="60" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="90" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="75" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="30" cy="90" r="3" style="fill:currentColor;stroke:none"/><circle cx="45" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="60" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="90" cy="90" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="90" cy="90" r="3" style="fill:currentColor;stroke:none"/><circle cx="105" cy="90" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="15" cy="105" r="6" style="stroke:var(--tp-acc, #0b6e7f)"/><circle cx="15" cy="105" r="3" style="fill:currentColor;stroke:none"/><circle cx="30" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="45" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="60" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="75" cy="105" r="3" style="fill:currentColor;stroke:none"/><circle cx="90" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/><circle cx="105" cy="105" r="1.4" style="fill:currentColor;stroke:none" opacity=".4"/></svg></figure>
       <div>
         <p class="tp-lbl">Area V &middot; 1 entry</p>
-        <p class="area-title" id="area-nt">Number theory</p>
+        <h2 class="area-title" id="area-nt">Number theory</h2>
+        <p class="why">Goldbach's conjecture, open since 1742, asks whether every even number greater than 2 is the sum of two primes; the conjecture here asks for more, that from 6 on, one of the two can always be a twin prime.</p>
         <p class="blurb">Primes, twin primes and Goldbach.</p>
       </div>
     </div>
@@ -856,7 +861,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
         <article class="paper" id="an-intermediate-conjecture-between-goldbach-and-dubner-every">
           <a class="no tp-plate" href="#an-intermediate-conjecture-between-goldbach-and-dubner-every" aria-label="Link to entry 15">15</a>
           <div class="body">
-            <h2>An intermediate conjecture between Goldbach and Dubner: every even number is the sum of a prime and a twin prime</h2>
+            <h3>An intermediate conjecture between Goldbach and Dubner: every even number is the sum of a prime and a twin prime</h3>
             <p class="by"><b class="me">Tushar Pandey</b>, sole author</p>
             <p class="sum">Studies the conjecture, proves a conditional positive-density result, and verifies it numerically up to 10<sup>14</sup>.</p>
           <p class="claim">The conjecture itself is not proved. The density theorem assumes a lower bound of Hardy-Littlewood order for twin primes; the statement is checked by computer for every even number from 6 to 10<sup>14</sup>.</p>
@@ -872,7 +877,7 @@ h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
     </ol>
   </section>
 <!-- papers:end -->
-    <p class="note"><i aria-hidden="true">&#10022;</i><span>Talks, surveys and the older record are on the <a class="tp-link" href="https://sites.google.com/view/tusharpandey" rel="noopener">research site</a>. The <a class="tp-link" href="/cv.html">CV</a> carries a short selection.</span></p>
+    <p class="note"><i aria-hidden="true">&#10022;</i><span>Talks, surveys and the older record are on a separate site, <a class="tp-link" href="https://sites.google.com/view/tusharpandey" rel="noopener">Talks and older work</a>. The <a class="tp-link" href="/cv.html">CV</a> carries a short selection.</span></p>
   </div>
 </main>
 

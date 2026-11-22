@@ -2,7 +2,7 @@
 // The mathematics is in bb-math.js and bb-distance.js; the search runs in bb-worker.js. Nothing moves until the
 // reader does.
 import {
-  PRESETS, LIMITS, parsePoly, checkSide, buildCode, analyze, matrixFile, toQuery, fromQuery, matchPreset,
+  PRESETS, LIMITS, parsePoly, checkSide, buildCode, analyze, matrixFile, toQuery, linkState, matchPreset,
 } from './bb-math.js';
 
 const $ = id => document.getElementById(id);
@@ -389,8 +389,8 @@ function init() {
   for (const id of ['lim-side', 'lim-side2']) $(id).textContent = LIMITS.side;
   for (const id of ['lim-cells', 'lim-cells2']) $(id).textContent = nf(LIMITS.cells);
   fillPresets();
-  const q = fromQuery(location.search);
-  if (q) { F.l.value = q.l; F.m.value = q.m; F.A.value = q.A; F.B.value = q.B; } else loadPreset(DEFAULT);
+  const link = linkState(location.search);
+  if (link.status === 'ok') { const { q } = link; F.l.value = q.l; F.m.value = q.m; F.A.value = q.A; F.B.value = q.B; } else loadPreset(DEFAULT);
   $('lay-kind').value = 'X'; $('lay-i').value = '0'; $('lay-j').value = '0';
   $('bb-form').hidden = false;
   $('bb-form').addEventListener('submit', e => e.preventDefault());
@@ -412,5 +412,6 @@ function init() {
   let lastW = 0;
   new ResizeObserver(() => { const w = $('lay-plot').clientWidth; if (Math.abs(w - lastW) > 1) { lastW = w; drawLayout(); } }).observe($('lay-plot'));
   compute(true);
+  if (link.status === 'bad') $('bb-status').textContent = `The link did not give a valid code, so the default code was loaded. ${$('bb-status').textContent}`;
 }
 init();

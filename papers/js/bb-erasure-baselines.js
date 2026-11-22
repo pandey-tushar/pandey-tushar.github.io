@@ -126,8 +126,8 @@ const state = { base: 'erasure_aware', ps: 0.47, nu: 2 };
 let sayTimer = 0;
 function say(text, now) {
   clearTimeout(sayTimer);
-  if (now) $('fss-status').textContent = text;
-  else sayTimer = setTimeout(() => { $('fss-status').textContent = text; }, 600);
+  if (now) $('fss-status').innerHTML = text;
+  else sayTimer = setTimeout(() => { $('fss-status').innerHTML = text; }, 600);
 }
 function rssAt(ps, nu) { return collapse(D.bb, ps, nu, D.fss_fit.p_window, D.fss_fit.poly_degree).rss; }
 
@@ -143,7 +143,7 @@ function collapseWords(r) {
   const ratio = r.c.rss / r.paper;
   const how = ratio < 1.05 ? 'as low as at the paper’s fit: the five sizes lie closest to one curve here'
     : ratio < 2 ? `${ratio.toFixed(1)} times the value at the paper’s fit` : `${ratio.toFixed(1)} times the value at the paper’s fit: the sizes do not line up`;
-  return `p-star-infinity ${state.ps.toFixed(3)}, nu ${state.nu.toFixed(2)}. Residual sum of squares ${r.c.rss.toPrecision(3)}, ${how}.`;
+  return `p*<sub>&infin;</sub> = ${state.ps.toFixed(3)}, &nu; = ${state.nu.toFixed(2)}. Residual sum of squares ${r.c.rss.toPrecision(3)}, ${how}.`;
 }
 function baseWords() {
   const t = D.toric.find(t => t.id === state.base);

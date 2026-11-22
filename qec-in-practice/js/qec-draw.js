@@ -1,7 +1,7 @@
 // SVG drawing of an engine code object (./qec/codes.js) in the inks of the lessons (css/site.css):
 // plaquettes or a line of check squares, data qubits with their errors, fired checks, decoder clusters,
 // the correction. The qubits are one roving tab stop; arrow keys move between them.
-import { nodePoint, pauliAt } from './explore-logic.js';
+import { nodePoint, pauliAt, qubitName, rcName } from './explore-logic.js';
 
 const NS = 'http://www.w3.org/2000/svg', S = 60, M = 44, R = 15;
 
@@ -121,8 +121,7 @@ export function codeFigure(svg, code, { onActivate, interactive = true } = {}) {
   }
 
   function describe(i, st) {
-    const [x, y] = code.coords[i];
-    const where = rep ? `Qubit ${i + 1}` : `Qubit row ${y + 1}, column ${x + 1}`;
+    const where = rep ? `Qubit ${qubitName(i)}` : `Qubit at ${rcName(code, i)}`;
     const p = pauliAt(st.err, i);
     const what = rep ? (st.err.x[i] ? 'flipped' : 'not flipped') : (p === 'I' ? 'no error' : `${p} error`);
     const c = st.correction && pauliAt(st.correction, i) !== 'I' ? `, correction ${pauliAt(st.correction, i)}` : '';

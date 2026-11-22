@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<title>Glossary · Quantum Error Correction in Practice</title>
+<meta name="description" content="The terms of the course Quantum Error Correction in Practice, from qubit and parity check to lattice surgery and the Pauli frame: one plain sentence and one technical sentence each.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/qec-in-practice/glossary.html">
+<meta property="og:title" content="Glossary &middot; Quantum Error Correction in Practice">
+<meta property="og:description" content="The terms of the course Quantum Error Correction in Practice, from qubit and parity check to lattice surgery and the Pauli frame: one plain sentence and one technical sentence each.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/qec-in-practice/glossary.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-qec.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-qec.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://pandey-tushar.com/"},
+  {"@type": "ListItem", "position": 2, "name": "Quantum error correction in practice", "item": "https://pandey-tushar.com/qec-in-practice/"},
+  {"@type": "ListItem", "position": 3, "name": "Glossary", "item": "https://pandey-tushar.com/qec-in-practice/glossary.html"}
+ ]
+}
+</script>
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/explore.css">
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main" class="essay glossary course-essay">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a></nav>
+  <p class="tp-lbl step-of">Quantum error correction in practice</p>
+  <h1>Glossary</h1>
+  <div class="course-rail">
+  <nav class="course-toc" aria-label="Terms"><p class="tp-lbl">Terms</p><ol><li><a href="#qubit">Qubit</a></li><li><a href="#bit-flip">Bit flip</a></li><li><a href="#phase-flip">Phase flip</a></li><li><a href="#check">Parity check, stabilizer</a></li><li><a href="#syndrome">Syndrome</a></li><li><a href="#fired">Fired</a></li><li><a href="#distance">Distance</a></li><li><a href="#logical-qubit">Logical qubit</a></li><li><a href="#patch">Patch</a></li><li><a href="#decoder">Decoder</a></li><li><a href="#union-find">Union-find decoder</a></li><li><a href="#matching">Matching decoder</a></li><li><a href="#threshold">Threshold</a></li><li><a href="#lambda">Lambda</a></li><li><a href="#bell-pair">Bell pair</a></li><li><a href="#t-state">T state</a></li><li><a href="#teleportation">Teleportation</a></li><li><a href="#lattice-surgery">Lattice surgery</a></li><li><a href="#pauli-frame">Pauli frame</a></li></ol></nav>
+  </div>
+  <div class="essay-flow">
+  <p class="lead">The terms the course uses, in the order a reader meets them. Each has one plain sentence and one technical sentence, with a link to the page that introduces it.</p>
+  <dl class="terms">
+    <dt id="qubit">Qubit</dt>
+    <dd>
+      <p class="g-plain">The basic unit of a quantum computer: like a bit it reads 0 or 1, but before it is read it can hold a mix of both.</p>
+      <p class="g-tech">A two-level quantum system with state a|0&#10217; + b|1&#10217;, where |a|<sup>2</sup> + |b|<sup>2</sup> = 1.</p>
+    </dd>
+    <dt id="bit-flip">Bit flip</dt>
+    <dd>
+      <p class="g-plain">An error that swaps 0 and 1.</p>
+      <p class="g-tech">The Pauli operator X, which sends |0&#10217; to |1&#10217; and |1&#10217; to |0&#10217;. See <a href="repetition-code.html">The repetition code</a>.</p>
+    </dd>
+    <dt id="phase-flip">Phase flip</dt>
+    <dd>
+      <p class="g-plain">An error that leaves 0 and 1 alone but changes how they combine in a mix, which a reading of 0 or 1 cannot show.</p>
+      <p class="g-tech">The Pauli operator Z, which leaves |0&#10217; alone and sends |1&#10217; to &minus;|1&#10217;; Y = iXZ is both flips at once. See <a href="repetition-code.html">The repetition code</a>.</p>
+    </dd>
+    <dt id="check">Parity check, stabilizer</dt>
+    <dd>
+      <p class="g-plain">A question asked of a small group of qubits, "do you agree?", whose answer never reveals the stored value.</p>
+      <p class="g-tech">A product of Pauli operators, Z on neighbours in the repetition code and X or Z on the corners of a tile in the surface code, that is +1 on every code state; the group the checks generate is the stabilizer. See <a href="repetition-code.html">The repetition code</a>.</p>
+    </dd>
+    <dt id="syndrome">Syndrome</dt>
+    <dd>
+      <p class="g-plain">The list of answers from one round of checks.</p>
+      <p class="g-tech">The vector of measured check outcomes, each +1 or &minus;1, usually written as bits with 1 for &minus;1. See <a href="repetition-code.html">The repetition code</a>.</p>
+    </dd>
+    <dt id="fired">Fired</dt>
+    <dd>
+      <p class="g-plain">A check fires when it reports a disagreement.</p>
+      <p class="g-tech">A check has fired when it reads &minus;1, which happens when an odd number of its qubits carry an error that anticommutes with it. See <a href="decoding.html">Errors, syndromes and decoding</a>.</p>
+    </dd>
+    <dt id="distance">Distance</dt>
+    <dd>
+      <p class="g-plain">The fewest errors that can change the stored information without any check noticing.</p>
+      <p class="g-tech">The smallest weight of a logical operator; a code of distance d is guaranteed to correct (d &minus; 1)/2 errors for odd d. See <a href="repetition-code.html">The repetition code</a>.</p>
+    </dd>
+    <dt id="logical-qubit">Logical qubit</dt>
+    <dd>
+      <p class="g-plain">The one protected qubit that a code stores across many physical qubits.</p>
+      <p class="g-tech">The encoded qubit, acted on by logical operators X<sub>L</sub> and Z<sub>L</sub> that commute with every check but are not products of checks. See <a href="lesson-1.html">Lesson 1</a>.</p>
+    </dd>
+    <dt id="patch">Patch</dt>
+    <dd>
+      <p class="g-plain">A square block of qubits that together hold one logical qubit.</p>
+      <p class="g-tech">A rotated surface code of distance d: d &times; d data qubits with X and Z checks on alternating tiles and two-qubit checks on the edges; at d = 3 it has nine data qubits and eight checks. See <a href="lesson-1.html">Lesson 1</a>.</p>
+    </dd>
+    <dt id="decoder">Decoder</dt>
+    <dd>
+      <p class="g-plain">The program that reads the fired checks and guesses which errors to undo.</p>
+      <p class="g-tech">A map from syndrome to correction; it succeeds when error and correction together form a product of checks, and fails when they form a logical operator. See <a href="decoding.html">Errors, syndromes and decoding</a>.</p>
+    </dd>
+    <dt id="union-find">Union-find decoder</dt>
+    <dd>
+      <p class="g-plain">A fast decoder that grows regions around fired checks until each region can be explained from inside, then corrects within each region.</p>
+      <p class="g-tech">The decoder of Delfosse and Nickerson: clusters with an odd number of fired checks grow by half edges and merge, then a spanning forest of each cluster is peeled to give the correction, in close to linear time. See <a href="decoding.html">Errors, syndromes and decoding</a>.</p>
+    </dd>
+    <dt id="matching">Matching decoder</dt>
+    <dd>
+      <p class="g-plain">A slower and more accurate decoder that looks for the shortest way to pair up all the fired checks.</p>
+      <p class="g-tech">Minimum-weight perfect matching on the graph of checks; the threshold lesson compares union-find with reference results from pymatching. See <a href="threshold.html">The threshold</a>.</p>
+    </dd>
+    <dt id="threshold">Threshold</dt>
+    <dd>
+      <p class="g-plain">The error rate below which a bigger code helps and above which it hurts.</p>
+      <p class="g-tech">The physical error rate that the crossings of the curves of logical error rate for different distances approach as the distance grows; for small codes the crossing sits lower. It depends on the code, the noise model and the decoder together. See <a href="threshold.html">The threshold</a>.</p>
+    </dd>
+    <dt id="lambda">Lambda</dt>
+    <dd>
+      <p class="g-plain">How many times less often the code fails each time the patch grows by one ring of qubits.</p>
+      <p class="g-tech">The factor by which the logical error rate falls when d grows by 2, read from a straight-line fit of the log of the rate against d. See <a href="threshold.html">The threshold</a>.</p>
+    </dd>
+    <dt id="bell-pair">Bell pair</dt>
+    <dd>
+      <p class="g-plain">Two qubits whose readouts in Z always agree, although each reading on its own is random.</p>
+      <p class="g-tech">The state (|00&#10217; + |11&#10217;)/&radic;2; the course makes a logical Bell pair of two patches with a logical CNOT in lesson 2 and with a merge and split on the lattice surgery page. See <a href="lesson-2.html">Lesson 2</a>.</p>
+    </dd>
+    <dt id="t-state">T state</dt>
+    <dd>
+      <p class="g-plain">A particular one-qubit state, made by H and then T; read in X it gives 1 in about 14.6% of shots.</p>
+      <p class="g-tech">T|+&#10217; = (|0&#10217; + e<sup>i&pi;/4</sup>|1&#10217;)/&radic;2, for which the X readout gives 1 with probability sin<sup>2</sup>(&pi;/8), about 0.146. See <a href="lesson-3.html">Lesson 3</a>.</p>
+    </dd>
+    <dt id="teleportation">Teleportation</dt>
+    <dd>
+      <p class="g-plain">Moving a qubit's state onto another qubit with a shared Bell pair and two measured bits, without sending the qubit itself.</p>
+      <p class="g-tech">A CNOT from the source to one half of a Bell pair, the source read in X and that half in Z, then X<sup>M2</sup> Z<sup>M1</sup> on the other half, as drawn in lesson 4. See <a href="lesson-4.html">Lesson 4</a>.</p>
+    </dd>
+    <dt id="lattice-surgery">Lattice surgery</dt>
+    <dd>
+      <p class="g-plain">Joining two patches along an edge with new checks and then separating them, to measure a joint property of both.</p>
+      <p class="g-tech">Merging two patches through a seam measures Z<sub>L</sub> Z<sub>L</sub> (or X<sub>L</sub> X<sub>L</sub>, with the patches stacked) as the product of the new seam checks; splitting restores the two patches up to a Pauli frame. See <a href="lattice-surgery.html">Lattice surgery</a>.</p>
+    </dd>
+    <dt id="pauli-frame">Pauli frame</dt>
+    <dd>
+      <p class="g-plain">A record of corrections that is kept in software instead of being applied to the qubits.</p>
+      <p class="g-tech">The Pauli operators implied by measured outcomes, such as the corrections after a split, tracked classically and folded into later readouts; the lattice surgery figure applies them so they can be seen. See <a href="lattice-surgery.html">Lattice surgery</a>.</p>
+    </dd>
+  </dl>
+  <p class="cite"><span class="tp-lbl">Cite this page</span> T. Pandey, "Glossary", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/glossary.html</p>
+  </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+</body>
+</html>

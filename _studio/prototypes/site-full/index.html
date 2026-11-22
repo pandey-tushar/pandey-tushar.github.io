@@ -147,7 +147,18 @@ ol,ul{list-style:none}
 .lede{margin-top:1.1rem;max-width:32em;font-size:clamp(1.08rem,1rem + .4vw,1.22rem);line-height:1.55;color:var(--tp-text)}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.7rem}
 .place{margin-top:1.1rem;font-size:var(--tp-t-small);color:var(--tp-dim)}
-@media (max-width:61.99em){ .hero .lat{max-width:32rem} }
+.plain-words{margin-top:1.1rem;max-width:34em;line-height:1.6;color:var(--tp-text)}
+.plain-words b{font-weight:600;color:var(--tp-ink)}
+.hero .links{margin-top:.6rem}
+/* a tablet: the lattice keeps a modest size and its controls and caption
+   stand beside it, so the figure fills the column */
+@media (min-width:40em) and (max-width:61.99em){
+  .hero .lat{display:grid;grid-template-columns:minmax(0,20rem) minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:1.4rem;align-items:start}
+  .hero .lat svg{grid-column:1;grid-row:1 / span 3}
+  .hero .lat > :not(svg){grid-column:2}
+  .hero .lat .lat-ctl{margin-top:0}
+  .hero .lat figcaption{margin-top:4px}
+}
 @media (min-width:62em){
   .hero{grid-template-columns:minmax(0,1fr) minmax(0,29rem)}
 }
@@ -194,6 +205,14 @@ ol,ul{list-style:none}
 .fig text{font:12px var(--tp-sans);fill:var(--tp-dim)}
 .fig .agot text{font-size:13.5px}
 
+/* ---------- start here: three ways in ---------- */
+.start{display:grid;grid-template-columns:minmax(0,1fr);gap:1.2rem clamp(1.6rem,3.4vw,3.4rem);padding-block:clamp(1.8rem,1.2rem + 1.6vw,2.6rem);border-top:1px solid var(--tp-rule)}
+.start h2{font-size:1.2rem;line-height:1.3}
+.start .tp-lbl{margin-bottom:.2rem}
+.start .links{flex-direction:column;align-items:flex-start;gap:0;margin-top:0}
+@media (min-width:40em){ .start{grid-template-columns:repeat(3,minmax(0,1fr))} .start h2{grid-column:1 / -1} }
+@media (min-width:62em){ .start{grid-template-columns:minmax(0,.8fr) repeat(3,minmax(0,1fr))} .start h2{grid-column:auto} }
+
 /* ---------- 1. in the browser ---------- */
 /* the course across both columns of the work grid, the tool and the papers below it */
 .play-main{display:grid;grid-template-columns:minmax(0,1fr);gap:1.2rem clamp(1.6rem,3.4vw,3.4rem);align-items:center;margin-bottom:clamp(2.4rem,3vw,3.2rem)}
@@ -212,6 +231,7 @@ ol,ul{list-style:none}
 .work .tp-lbl{margin-bottom:.4rem}
 .work h3{font-size:clamp(1.25rem,1.1rem + .5vw,1.45rem)}
 .work p{margin-top:.55rem;max-width:var(--tp-measure)}
+.work .plain + p{margin-top:.4rem}
 .work b{font-weight:600;color:var(--tp-ink)}
 .links{display:flex;flex-wrap:wrap;gap:.2rem 1.3rem;margin-top:.8rem;font-size:var(--tp-t-small)}
 .links a{display:inline-block;padding-block:4px}
@@ -227,6 +247,13 @@ ol,ul{list-style:none}
 .shelf h3 a::after{content:"";position:absolute;inset:0}
 .shelf li:hover h3 a,.shelf h3 a:focus-visible{color:var(--tp-acc);text-decoration-color:currentColor}
 .shelf p{margin-top:.3rem;font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-text)}
+/* a wide screen: each jacket beside its text, the three across the column */
+@media (min-width:62em){
+  .shelf{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .shelf li{display:grid;grid-template-columns:minmax(0,10.5rem) minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:1.2rem}
+  .shelf .jacket{grid-row:span 2}
+  .shelf h3{margin-top:0}
+}
 @media (max-width:40em){
   .shelf{grid-template-columns:minmax(0,1fr);gap:1.6rem}
   .shelf li{display:grid;grid-template-columns:6rem minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:1.1rem}
@@ -236,6 +263,11 @@ ol,ul{list-style:none}
 
 /* ---------- 4. record ---------- */
 .record{max-width:46rem}
+/* a wide screen: work on the left, education on the right */
+@media (min-width:62em){
+  .record{max-width:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,auto);grid-auto-flow:column;column-gap:clamp(2rem,4vw,4rem);align-items:start}
+  .record li:nth-child(3){border-bottom:1px solid var(--tp-rule)}
+}
 .record li{display:grid;grid-template-columns:7.5rem minmax(0,1fr);gap:1.4rem;padding:.75rem 0;border-top:1px solid var(--tp-rule)}
 .record li:last-child{border-bottom:1px solid var(--tp-rule)}
 .record .when{font-size:var(--tp-t-small);color:var(--tp-dim);font-variant-numeric:tabular-nums;padding-top:.15rem}
@@ -291,6 +323,8 @@ ol,ul{list-style:none}
       <img class="face" src="/img/tushar-pandey-b-320.webp" srcset="/img/tushar-pandey-b-320.webp 320w, /img/tushar-pandey-b.webp 640w" sizes="(max-width:40em) 112px, 144px" width="640" height="640" decoding="async" alt="Tushar Pandey">
       <h1>Tushar Pandey</h1>
       <p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>
+      <p class="plain-words"><b>In plain words.</b> Quantum computers are built from parts that make errors all the time. Error correction is how those errors are caught and undone without destroying the computation, and it is what I research. At DataRobot I work on the software that serves AI language models to many users at once.</p>
+      <p class="links"><a class="tp-link" href="/life/">With no background, start with An Unpolarized Life: 35 minutes, no physics</a><a class="tp-link" href="/why-error-correction.html">Why quantum computers need error correction</a></p>
       <div class="actions">
         <a class="tp-btn" href="/cv.html">Curriculum Vitae</a>
         <a class="tp-btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
@@ -307,9 +341,25 @@ ol,ul{list-style:none}
         <button class="tp-btn" type="button" id="reset">Reset</button>
       </div>
       <p class="lat-status" id="lat-status" aria-live="polite">Two qubits flipped; <b>four checks</b> lit.</p>
-      <figcaption><b>Fig. 1</b>A distance-5 toric code: qubits on the edges, a check at every vertex, opposite sides identified (the faint copies at right and bottom). Two flipped qubits and the checks that notice. Tap a qubit to flip it; Correct pairs the lit checks by minimum-weight matching. <a class="tp-link" href="/qec-in-practice/">The course</a> has eight lessons with figures like this one, from the repetition code to lattice surgery.</figcaption>
+      <figcaption><b>Fig. 1</b>Each small circle is a qubit and each dot where lines meet is a check: click a qubit to cause an error, the checks that light up show where the code notices it, and Correct makes the decoder&rsquo;s best guess at what went wrong. A distance-5 toric code: qubits on the edges, a check at every vertex, opposite sides identified (the faint copies at right and bottom). Two flipped qubits and the checks that notice. Correct pairs the lit checks by minimum-weight matching. <a class="tp-link" href="/qec-in-practice/">The course</a> has eight lessons with figures like this one, from the repetition code to lattice surgery.</figcaption>
     </figure>
   </section>
+
+  <nav class="start" aria-label="Start here">
+    <h2>Start here</h2>
+    <div>
+      <p class="tp-lbl">Curious</p>
+      <p class="links"><a class="tp-link" href="/why-error-correction.html">Why quantum computers need error correction</a><a class="tp-link" href="/books.html">The books</a></p>
+    </div>
+    <div>
+      <p class="tp-lbl">Engineer</p>
+      <p class="links"><a class="tp-link" href="/qec-in-practice/">The course, eight lessons</a><a class="tp-link" href="/tools/bb-codes.html">The bivariate bicycle code explorer</a></p>
+    </div>
+    <div>
+      <p class="tp-lbl">Researcher</p>
+      <p class="links"><a class="tp-link" href="/research.html">Papers and preprints</a><a class="tp-link" href="#companions">The paper companion pages</a></p>
+    </div>
+  </nav>
 
   <section id="try" aria-labelledby="h-try">
     <div class="sec-head"><span class="n" aria-hidden="true">1</span><h2 id="h-try">Try it in your browser</h2></div>
@@ -358,7 +408,7 @@ ol,ul{list-style:none}
         <p class="links"><a class="tp-link" href="/tools/bb-codes.html">Open the explorer</a></p>
       </article>
 
-      <article class="work">
+      <article class="work" id="companions">
         <figure class="fig tp-plate">
           <svg viewBox="0 0 260 150" aria-hidden="true" focusable="false">
             <path class="ln" d="M30 14V125H246M30 100H26M30 40H26M72.6 125V129M143.5 125V129"/>
@@ -371,7 +421,7 @@ ol,ul{list-style:none}
             <text x="36" y="12">distance</text>
             <text x="246" y="142" text-anchor="end">block length</text>
           </svg>
-          <figcaption><b>Fig. 4</b>Distance against block length for the 27 codes certified in the lifted-surgery paper, from its companion page&rsquo;s data: circles have gain exactly two (Table 1), squares gain at least three for a best logical (Table 2).</figcaption>
+          <figcaption><b>Fig. 4</b>Distance against block length for the 27 codes certified in the lifted-surgery paper, from its companion page&rsquo;s data: circles have gain exactly two (Table 1), squares gain at least three for a best logical (Table 2). Codes with the same block length and distance share a mark, so the 27 codes fill 18 marks.</figcaption>
         </figure>
         <p class="tp-lbl">Paper companions</p>
         <h3>Three papers, with their data</h3>
@@ -398,8 +448,9 @@ ol,ul{list-style:none}
         </figure>
         <p class="tp-lbl">Quantum error correction</p>
         <h3>Error correction for the doubled semion model</h3>
-        <p>Begun at Oak Ridge. Sole author, APL Quantum 2025. <b>Variational eigensolvers</b> on real processors, first author, Physica Scripta 2026.</p>
-        <p class="links"><a class="tp-link" href="https://doi.org/10.1063/5.0255351" target="_blank" rel="noopener">APL Quantum, 2025</a><a class="tp-link" href="https://doi.org/10.1088/1402-4896/ae9e06" target="_blank" rel="noopener">Physica Scripta, 2026</a><a class="tp-link" href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">The record</a></p>
+        <p class="plain">An explicit way to detect and correct errors in the doubled semion model, one of the models in which a quantum state is stored across a whole lattice of qubits.</p>
+        <p>I began this work at Oak Ridge and published it as sole author in APL Quantum in 2025. <b>Variational eigensolvers</b> on real processors, first author, Physica Scripta 2026.</p>
+        <p class="links"><a class="tp-link" href="https://doi.org/10.1063/5.0255351" target="_blank" rel="noopener">APL Quantum, 2025</a><a class="tp-link" href="https://doi.org/10.1088/1402-4896/ae9e06" target="_blank" rel="noopener">Physica Scripta, 2026</a><a class="tp-link" href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">Talks and older work</a></p>
       </article>
 
       <article class="work">
@@ -422,6 +473,7 @@ ol,ul{list-style:none}
         </figure>
         <p class="tp-lbl">LLM reasoning</p>
         <h3>Adaptive Graph of Thoughts</h3>
+        <p class="plain">AGoT lets a language model answer a hard question by splitting it into smaller ones and working harder only on the difficult parts.</p>
         <p><b>AGoT</b> grows chains, trees and graphs as it runs. Shipped at Agnostiq as a production agentic-AI blueprint (2024&ndash;25); code open source.</p>
         <p class="links"><a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">The code, open source</a><a class="tp-link" href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener">The paper, <span class="tp-id">arXiv:2502.05078</span></a><a class="tp-link" href="/papers/adaptive-graph-of-thoughts.html">Companion page</a></p>
       </article>
@@ -449,6 +501,7 @@ ol,ul{list-style:none}
         </figure>
         <p class="tp-lbl">LLM inference</p>
         <h3>TokenGrid</h3>
+        <p class="plain">When several customers share one AI language model, TokenGrid decides how much of its capacity each one gets, measuring every request by its length in tokens.</p>
         <p>LLM inference at DataRobot: co-author of <b>TokenGrid</b>, a token-aware capacity scheduler for multi-tenant model serving.</p>
         <p class="links"><a class="tp-link" href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener">TokenGrid, on the DataRobot blog</a></p>
       </article>
@@ -462,12 +515,13 @@ ol,ul{list-style:none}
         </figure>
         <p class="tp-lbl">Quantum topology</p>
         <h3>The volume conjecture</h3>
+        <p class="plain">The volume conjecture predicts that certain numbers built with tools from quantum physics, taken to a limit, give the volume of a three-dimensional shape.</p>
         <p>Ph.D. work under Tian Yang in quantum topology. A generalized <b>Bonahon&ndash;Wong&ndash;Yang volume conjecture</b>, proved for the figure-eight knot complement with Ka Ho Wong (Algebraic &amp; Geometric Topology, to appear); and, sole author, the conjecture verified for four-puncture sphere bundles under technical conditions.</p>
         <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2402.04483" target="_blank" rel="noopener">Figure-eight knot, <span class="tp-id">arXiv:2402.04483</span></a><a class="tp-link" href="https://arxiv.org/abs/2311.13151" target="_blank" rel="noopener">Four-puncture sphere, <span class="tp-id">arXiv:2311.13151</span></a></p>
       </article>
 
     </div>
-    <p class="more"><a class="tp-link" href="/research.html">Every paper and preprint, with summaries</a></p>
+    <p class="more"><a class="tp-link" href="/research.html">Papers and preprints, with summaries</a></p>
   </section>
 
   <section id="books" aria-labelledby="h-books">
@@ -495,11 +549,11 @@ ol,ul{list-style:none}
   <section id="record" aria-labelledby="h-record">
     <div class="sec-head"><span class="n" aria-hidden="true">4</span><h2 id="h-record">Record</h2></div>
     <ol class="record">
-      <li><span class="when">2026 &ndash; now</span><span><b>DataRobot</b><span class="r">Senior Software Engineer, LLM inference</span></span></li>
+      <li><span class="when">2025 &ndash; now</span><span><b>DataRobot</b><span class="r">Senior Software Engineer (from 2026), LLM inference</span></span></li>
       <li><span class="when">2024 &ndash; 2025</span><span><b>Agnostiq</b><span class="r">Research Software Engineer, gen-AI algorithms</span></span></li>
-      <li><span class="when">2021, 2022</span><span><b>Oak Ridge National Laboratory</b><span class="r">Summer researcher, NSF-MSGI fellow</span></span></li>
+      <li><span class="when">2021, 2022</span><span><b>Oak Ridge National Laboratory</b><span class="r">Summer researcher, fellow of the National Science Foundation Mathematical Sciences Graduate Internship (NSF-MSGI)</span></span></li>
       <li><span class="when">2019 &ndash; 2024</span><span><b>Texas A&amp;M University</b><span class="r">Ph.D., Mathematics, under Tian Yang</span></span></li>
-      <li><span class="when">to 2019</span><span><b>IIT Kanpur</b><span class="r">B.S., Mathematics and Scientific Computing</span></span></li>
+      <li><span class="when">2015 &ndash; 2019</span><span><b>IIT Kanpur</b><span class="r">B.S., Mathematics and Scientific Computing</span></span></li>
     </ol>
   </section>
 
@@ -650,10 +704,12 @@ function render(note){
     if (err[e] !== pressed[e]) { pressed[e] = err[e]; qubits[e].setAttribute("aria-pressed", err[e] ? "true" : "false"); }
   }
   fixB.disabled = lit === 0;
-  if (note) { out.innerHTML = note; return; }
+  /* every check quiet and error plus correction wraps the torus: the stored information changed */
+  var door = !lit && wraps() ? ' Something changed anyway. <a class="tp-link" href="/logical/">Try to beat the decoder.</a>' : "";
+  if (note) { out.innerHTML = note + door; return; }
   if (lit) out.innerHTML = cap(count(flips, "qubit", "qubits")) + " flipped; <b>" + count(lit, "check", "checks") + "</b> lit.";
   else if (flips) out.innerHTML = cap(count(flips, "qubit", "qubits")) + " flipped and no check lit: the flips close into a loop, " +
-    (wraps() ? "one that wraps the torus, a logical error the checks cannot see." : "itself a product of checks, so it does no harm.");
+    (wraps() ? "one that wraps the torus, a logical error the checks cannot see." : "itself a product of checks, so it does no harm.") + door;
   else out.innerHTML = "No qubit flipped; every check is quiet.";
 }
 

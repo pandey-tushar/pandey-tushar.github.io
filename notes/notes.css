@@ -5,13 +5,22 @@
 .nt-table th, .nt-table td { padding: 5px 16px 5px 0; text-align: left; border-bottom: 1px solid var(--tp-rule); white-space: nowrap; color: var(--tp-text); }
 .nt-table thead th { font-weight: 600; color: var(--tp-ink); }
 .nt-table tbody th { font-weight: 400; }
-.nt-fig .pc-plot { max-width: 27rem; }
+.nt-fig .pc-plot { max-width: 27rem; margin-inline: auto; }
 .nt-pts { --c: var(--tp-acc); }
 .nt-ref { overflow-wrap: anywhere; }
 .nt-cite { margin: 2rem 0 0; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); color: var(--tp-text); overflow-wrap: anywhere; }
 .nt-cite .tp-lbl { display: block; margin-bottom: 4px; }
-.nt-list { max-width: var(--tp-measure); margin: 1.4rem 0 0; padding: 0; list-style: none; }
+.nt-list { margin: 1.4rem 0 0; padding: 0; list-style: none; }
 .nt-list li { padding: 1rem 0; border-bottom: 1px solid var(--tp-rule); }
 .nt-list h2 { font-size: 1.45rem; margin: 0 0 .2rem; }
 .nt-list .pc-status { margin: 0 0 .5rem; padding: 0; border: 0; color: var(--tp-dim); }
-.nt-list p { margin: 0; color: var(--tp-text); }
+.nt-list p { max-width: var(--tp-measure); margin: 0; color: var(--tp-text); }
+
+/* the index: what notes are, in the right column from 70em; the page fills the window so the footer sits at the bottom */
+.nt-about p { max-width: var(--tp-measure); margin: 0; color: var(--tp-text); font-size: .95rem; line-height: 1.55; }
+@media (min-width: 70em) { .nt-about { padding-top: 1.4rem; } }
+.tp-full body:has(> main.nt-home) { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+main.nt-home { flex: 1 0 auto; }
+
+/* a note's essay, figure and citation hold the measure, so its header rule does too */
+.nt-note .pc-head { max-width: var(--tp-measure); }

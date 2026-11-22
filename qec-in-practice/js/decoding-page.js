@@ -1,9 +1,9 @@
 // decoding.html: errors and checks on a surface code patch (Fig. 1), the union-find decoder step by step
 // (Fig. 2), an error the decoder gets wrong (Fig. 3), measurement errors in space-time (Fig. 4).
 import { surfaceCode } from './qec/codes.js';
-import { sampleErrors, syndrome } from './qec/noise.js';
+import { syndrome } from './qec/noise.js';
 import { codeFigure } from './qec-draw.js';
-import { emptyError, pauliAt, cyclePauli, graphsFor, decodeError, frames, foolingPreset, measurementDemo } from './explore-logic.js';
+import { emptyError, pauliAt, cyclePauli, graphsFor, decodeError, frames, foolingPreset, measurementDemo, rcName, qubitName, repCheckName, sampleSomeErrors } from './explore-logic.js';
 
 const $ = (root, s) => root.querySelector(s);
 const ones = a => [...a.keys()].filter(i => a[i]);
@@ -17,7 +17,7 @@ function patchFigure(root, { decoder = false, preset = false } = {}) {
   const svg = $(root, 'svg'), status = $(root, '.ex-status'), sel = $(root, '[data-d]');
   const btn = name => $(root, `[data-${name}]`);
   let code, graphs, fig, err, stage = 0, run = null;
-  const where = q => `(${code.coords[q][1] + 1}, ${code.coords[q][0] + 1})`;
+  const where = q => rcName(code, q);
 
   function setD() {
     code = surfaceCode(+sel.value);
@@ -99,7 +99,7 @@ function patchFigure(root, { decoder = false, preset = false } = {}) {
     const p = btn('p'), pout = btn('pout'), model = btn('model');
     p.addEventListener('input', () => { pout.textContent = (+p.value).toFixed(2); });
     btn('random').addEventListener('click', () => {
-      err = sampleErrors(code, +p.value, Math.random, model.value);
+      err = sampleSomeErrors(code, +p.value, Math.random, model.value);
       reset();
       status.textContent = `Random ${model.value === 'bitflip' ? 'bit-flip' : 'depolarizing'} errors at p = ${(+p.value).toFixed(2)}. ${errText()} ${firedText()} Press Next step.`;
     });
@@ -128,7 +128,7 @@ function spaceTime(root) {
     const r = measurementDemo(which), m = r.m;
     const grid = (title, cell) => {
       let h = `<div class="mgrid" style="--m:${m}"><span class="hd">${title}</span><span></span>`;
-      for (let c = 0; c < m; c++) h += `<span class="cl">c${c + 1}</span>`;
+      for (let c = 0; c < m; c++) h += `<span class="cl">${repCheckName(c)}</span>`;
       for (let t = 0; t < r.rounds; t++) {
         h += `<span class="rl">round ${t + 1}</span>`;
         for (let c = 0; c < m; c++) h += cell(t, c);
@@ -138,9 +138,11 @@ function spaceTime(root) {
     box.innerHTML =
       grid('Check readings', (t, c) => `<span class="mcell${r.measured[t][c] ? ' on' : ''}${r.flips[t][c] ? ' wrong' : ''}"></span>`) +
       grid('Detection events', (t, c) => `<span class="ecell${r.events[t * m + c] ? ' on' : ''}"></span>`);
-    const ev = ones(r.events).map(i => `round ${Math.floor(i / m) + 1} at c${(i % m) + 1}`);
-    const fix = ones(r.correction).map(i => `qubit ${i + 1}`);
-    const what = { data: 'Qubit 2 flips before round 2 and stays flipped.', measure: 'Check c4 is misread in round 2 only.', both: 'Qubit 2 flips before round 2, and check c4 is misread in round 2.' }[which];
+    const ev = ones(r.events).map(i => `round ${Math.floor(i / m) + 1} at ${repCheckName(i % m)}`);
+    const fix = ones(r.correction).map(qubitName);
+    // measurementDemo flips qubit 1 before round 2 and misreads check 3 in round 2
+    const q = qubitName(1), c = repCheckName(3);
+    const what = { data: `${q} flips before round 2 and stays flipped.`, measure: `Check ${c} is misread in round 2 only.`, both: `${q} flips before round 2, and check ${c} is misread in round 2.` }[which];
     status.innerHTML = `${what} Detection events: ${list(ev)}. <b>The decoder flips ${fix.length ? list(fix) : 'no data qubit'}</b>${which === 'measure' ? ': it recognises a wrong reading and leaves the data alone' : ''}.`;
   }
   for (const b of btns) b.addEventListener('click', () => show(b.dataset.case));

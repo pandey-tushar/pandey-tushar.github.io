@@ -100,6 +100,27 @@ for n in notes:
         if not re.search(r'<a [^>]*href="' + re.escape(h) + r'"[^>]*>' + t + '</a>', art):
             fail.append(f'{rel}: no "{t}" link to {h}')
 
+    # the rail: In plain words from notes.json and a contents list of every heading of the article
+    if '<div class="tp-wrap pc-cols">' not in html:
+        fail.append(f'{rel}: the column is not the two-column pc-cols grid')
+    rail = re.search(r'</header>\s*<aside class="pc-rail"[^>]*>(.*?)</aside>', html, re.S)
+    if not rail:
+        fail.append(f'{rel}: no rail right after the header')
+    else:
+        if 'plain' not in n:
+            fail.append(f"{n['slug']}: notes.json has no plain")
+        elif not re.search(r'In plain words</h2>\s*<p>' + re.escape(esc(n['plain'])) + '</p>', rail.group(1)):
+            fail.append(f'{rel}: the rail does not hold the plain words of notes.json')
+        hrefs = re.findall(r'href="#([\w-]+)"', rail.group(1))
+        ids = re.findall(r'<h2 id="([\w-]+)"', art)
+        if not ids or hrefs != ids:
+            fail.append(f'{rel}: the contents list {hrefs} is not the headings {ids}')
+    # math is typeset, not left as ASCII notation
+    words = re.sub(r'&\w+;|<[^>]+>', ' ', art)
+    for pat, what in ((r'\bp_th\b', 'p_th'), (r'\^\(', '^('), (r'\bnu\b', 'nu'), (r'\b2d\b', '2d')):
+        if re.search(pat, words):
+            fail.append(f'{rel}: raw {what} in the note body')
+
     # the table equals the data
     if 'data' in n:
         data = json.loads(read(ROOT / '_studio' / 'content' / 'notes' / n['data']))
@@ -113,6 +134,11 @@ for n in notes:
             fail.append(f'{rel}: table is {rows}, the data gives {want}')
         if not re.search(r'<figure class="[^"]*\bnt-fig\b[^"]*"[^>]*>\s*<div class="pc-plot"><svg [^>]*role="img"', html):
             fail.append(f'{rel}: no static SVG figure built from the data')
+        # every closed bar end is drawn as a cap clear of the axis floor
+        axis = re.search(r'<path class="pc-axis" d="M[\d.]+ [\d.]+V([\d.]+)H', html)
+        caps = [float(y) for y in re.findall(r'M[\d.]+ ([\d.]+)h8', html)]
+        if not axis or not caps or max(caps) > float(axis.group(1)) - 12:
+            fail.append(f'{rel}: a bar cap sits on or below the axis floor')
 
 # the index
 idx = ROOT / 'notes' / 'index.html'
@@ -129,6 +155,11 @@ else:
     seen = [m for m in re.findall(r'href="/notes/([\w-]+)\.html"', html) if m in order]
     if list(dict.fromkeys(seen)) != order:
         fail.append('notes/index.html: notes not listed newest first')
+    side = re.search(r'<aside class="nt-about\b[^"]*"[^>]*>(.*?)</aside>', html, re.S)
+    if not side or 'A note is ' not in side.group(1) or 'href="/notes/feed.xml"' not in side.group(1):
+        fail.append('notes/index.html: no aside saying what a note is, with the RSS link')
+    if '<main id="main" class="pc nt-home">' not in html:
+        fail.append('notes/index.html: main is not marked nt-home (the page fills the window)')
     internal_links(idx)
 
 # the feed

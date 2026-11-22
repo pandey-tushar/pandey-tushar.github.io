@@ -23,8 +23,13 @@ def course(qec):
 def state_html(s):
     s = s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
     s = re.sub(r'\|([^|&\s]*?)&gt;', r'|\1&#10217;', s)
-    s = re.sub(r'_L\b', '&#8203;<sub>L</sub>', s)
+    s = re.sub(r'_L\b', '&#8288;<sub>L</sub>', s)  # a word joiner: the L never wraps away from its letter
     return s.replace('sqrt2', '&radic;2')
+
+
+def phase_label(name):
+    """The page name of a phase, as phaseLabel in qec-in-practice/js/strip.js: the readout rotation is H on the patch."""
+    return re.sub(r'^readout rotation (\S+) \(\w\)$', r'H on \1', name)
 
 
 def plain(s):

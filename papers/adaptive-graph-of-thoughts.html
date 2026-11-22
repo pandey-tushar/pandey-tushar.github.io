@@ -82,7 +82,6 @@
 .agot-val { fill: var(--tp-ink); font-size: 13px; font-variant-numeric: tabular-nums; }
 .agot-delta { fill: var(--tp-text); font-size: 13px; font-variant-numeric: tabular-nums; }
 .agot-b { font-weight: 600; }
-.agot-plot { max-width: 50rem; }
 #agot-table th[scope=row] { text-align: left; }
 </style>
 <script type="module" src="/papers/js/adaptive-graph-of-thoughts.js"></script>
@@ -109,7 +108,7 @@
 </header>
 
 <main id="main" class="pc">
- <div class="tp-wrap">
+ <div class="tp-wrap pc-cols">
   <header class="pc-head">
     <p class="tp-lbl">Paper companion</p>
     <h1>Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures</h1>
@@ -123,19 +122,41 @@
     </ul>
   </header>
 
+  <aside class="pc-rail" aria-label="Summary and contents">
+    <section class="pc-plainwords" aria-labelledby="plain">
+      <h2 class="pc-rail-h" id="plain">In plain words</h2>
+      <p>Language models answer better when they are guided to reason in steps. AGoT splits a hard question into smaller ones, and splits again only the parts the model itself judges complex, without retraining the model.</p>
+      <p>On a set of hard multiple-choice science questions, with the answer options shuffled, it raised gpt-4o from 39.4 to 57.6 percent correct.</p>
+    </section>
+    <nav class="pc-toc" aria-label="On this page">
+      <p class="pc-rail-h">On this page</p>
+      <ol>
+        <li><a href="#graphs">Chains, trees and graphs of thoughts</a></li>
+        <li><a href="#method">How AGoT builds its graph</a></li>
+        <li><a href="#tested">What was tested</a></li>
+        <li><a href="#fig-agot">Fig. 1: the scores</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#limits">Costs and limits</a></li>
+        <li><a href="#next">What you could try next</a></li>
+        <li><a href="#cite">Cite this paper</a></li>
+      </ol>
+    </nav>
+    <p class="pc-rail-links"><a class="tp-link" href="https://arxiv.org/abs/2502.05078" rel="noopener">arXiv</a><a class="tp-link" href="https://arxiv.org/pdf/2502.05078" rel="noopener">PDF</a><a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" rel="noopener">Code</a></p>
+  </aside>
+
   <article class="pc-essay">
   <p class="lead">How well a large language model (LLM) answers depends on how it is prompted. Fine-tuning and reinforcement learning improve reasoning but cost substantial computation and data. This preprint proposes Adaptive Graph of Thoughts (AGoT), which works only at test time: it changes how a fixed model is queried, not the model.</p>
 
-  <h2>Chains, trees and graphs of thoughts</h2>
+  <h2 id="graphs">Chains, trees and graphs of thoughts</h2>
   <p>The paper calls a thought any unit of content that informs the final response, and draws thoughts as nodes of a graph whose edges mean that one thought informs another. Chain of Thought (CoT) reasons in sequential steps, Tree of Thoughts adds branching, and Graph of Thoughts allows arbitrary connections with refinement. Autonomous Iteration of Thought (AIoT), the authors&rsquo; earlier method, iterates a dialogue under dynamic guidance in a nearly linear structure.</p>
   <p>AGoT keeps its graph acyclic, so every line of reasoning is finite. What sets it apart, in the paper&rsquo;s words, is an LLM-driven complexity check: node by node, the model decides whether a thought needs breaking down further, in a nested graph of its own.</p>
 
-  <h2>How AGoT builds its graph</h2>
+  <h2 id="method">How AGoT builds its graph</h2>
   <p>AGoT starts from an empty graph and adds one layer of nodes at a time, up to <i>l</i><sub>max</sub> layers of at most <i>n</i><sub>max</sub> nodes each. The first layer of the top graph comes from the query alone, without edges. Each layer has a strategy that guides it; later layers also get edges from earlier nodes, chosen by the model given the graph so far.</p>
   <p>Every new node then goes one of two ways. If the complexity check marks it complex and the nesting depth is below <i>d</i><sub>max</sub>, the node&rsquo;s content becomes the query of a nested graph built the same way, whose final answer becomes the node&rsquo;s answer. Otherwise the node is answered directly. A thought the model marks final is answered and ends the graph early; otherwise, after the last layer, a final thought drawn from the whole graph gives the answer.</p>
   <p>In the implementation each of the six actions (three kinds of thought generation, the complexity check, answering, and the final thought) is a model call with its own instruction and response schema, which the paper calls an agent.</p>
 
-  <h2>What was tested</h2>
+  <h2 id="tested">What was tested</h2>
   <p>The experiments use OpenAI&rsquo;s gpt-4o-mini, and Table&nbsp;1 adds gpt-4o on one benchmark. AGoT ran at temperature 0.3 and the other methods at the client&rsquo;s default settings, with <i>d</i><sub>max</sub>&nbsp;=&nbsp;1, <i>l</i><sub>max</sub>&nbsp;=&nbsp;3 and <i>n</i><sub>max</sub>&nbsp;=&nbsp;3 throughout. The baselines are direct input-output prompting (IO), CoT and AIoT.</p>
   <p>For reasoning, GPQA Diamond has 198 multiple-choice science questions, run with the answer options in their default order (GPQA<sub>D</sub>), where the first option is always correct, and shuffled (GPQA<sub>S</sub>). For retrieval, three multi-hop question sets, HotpotQA (a random sample of 100 hard questions), MoreHopQA and HybridQA, are scored by exact match (EM), F1 and an LLM-assisted accuracy score (LAAS), in which gpt-4o-mini judges whether two answers mean the same. The explorative tasks are mini-crosswords, scored by letter and word accuracy, and the 20 hardest Game of 24 puzzles, which combine four integers into 24.</p>
   </article>
@@ -157,16 +178,16 @@
   </figure>
 
   <article class="pc-essay">
-  <h2>Results</h2>
+  <h2 id="results">Results</h2>
   <p>The headline +46.2% is a relative gain, on shuffled GPQA Diamond with gpt-4o: AGoT scored 57.6% against 39.4% for direct IO, a difference of 18.2 percentage points (computed here). With gpt-4o-mini on the same set, AGoT scored 49.5% against 37.4% (+32.4%), while CoT and AIoT gained +3.2% and +5.4%. On the default-order version the AGoT gain shrinks to +0.9% (55.1% against 54.6%), and CoT and AIoT score below IO.</p>
   <p>On retrieval AGoT has the highest LAAS on all three sets (+11.1% to +30.9%), but exact match is most often highest for IO and F1 most often for AIoT. On Game of 24, AGoT solves 50.0% of the puzzles against 10.0% for IO (+400%) and 25.0% for AIoT. On mini-crosswords it reaches 34.7% letter and 11.1% word accuracy, close to AIoT&rsquo;s 33.5% and 11.0%.</p>
   <p>The paper calls the +46.2% comparable to relative gains reported elsewhere for distillation from DeepSeek-R1, a training-based method.</p>
 
-  <h2>Costs and limits</h2>
+  <h2 id="limits">Costs and limits</h2>
   <p>The settings of <i>d</i><sub>max</sub>, <i>l</i><sub>max</sub> and <i>n</i><sub>max</sub> balance computation time against performance and are not claimed to be optimal; neither is the implementation. The paper reports how many nodes AGoT built per task and what share were complex, but no token counts, prices or run times. Each table entry is a single score, without an interval.</p>
   <p>The authors cannot verify whether the models saw GPQA Diamond in its default order during training. Comparing IO on the two orders suggests to them a strong bias toward the first option. On crosswords they cannot conclude that AGoT is especially suited, since any sufficiently persistent framework might gain as much. LAAS assumes that gpt-4o-mini judges equivalence accurately. Like other iterative frameworks, AGoT re-reads its own responses, which in the worst case can amplify wrong answers, and its results depend strongly on the underlying model.</p>
 
-  <h2>What you could try next</h2>
+  <h2 id="next">What you could try next</h2>
   <p>The paper suggests searching for better values of <i>d</i><sub>max</sub>, <i>l</i><sub>max</sub> and <i>n</i><sub>max</sub>, handing strategy and edge generation to specialized agents, trying other models, using fine-tuning or reinforcement learning to bias edge selection or the complexity check, and reducing hallucination. The code is the open-source <a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" rel="noopener">multi-agent-llm</a> package; its README example runs AGoT with max_depth&nbsp;=&nbsp;1, max_num_layers&nbsp;=&nbsp;3 and max_new_tasks&nbsp;=&nbsp;3, and the repository holds the experimental setups, datasets and results.</p>
   </article>
 

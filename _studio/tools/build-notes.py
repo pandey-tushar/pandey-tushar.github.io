@@ -2,8 +2,9 @@
 notes/index.html (newest first) and the RSS 2.0 feed notes/feed.xml.
 
 A note's body is _studio/content/notes/<body>.md in a small subset of markdown: one
-h1, h2 headings, paragraphs, inline links [text](url), one pipe table and reference
-lines starting [1], [2], ... Anything else stops the build. A note with a "data" file
+h1, h2 headings, paragraphs, inline links [text](url), inline math between dollar signs
+($p_{th}$, $d^{1/nu}$: see math()), one pipe table and reference lines starting [1], [2], ...
+Anything else stops the build. A note with a "data" file
 (the output of _studio/tools/notes/crossings.mjs) has its table rendered from that
 data, after checking it agrees with the markdown table, and gets Fig. 1 drawn from it.
 
@@ -16,6 +17,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 SITE = 'https://pandey-tushar.com'
 CONTENT = ROOT / '_studio' / 'content'
 FEED_TITLE = 'Notes by Tushar Pandey'
+ABOUT = 'A note is a short write-up of one measured result or one argument, with the data and the method behind it.'
 read = lambda p: io.open(p, encoding='utf-8').read()
 
 
@@ -32,7 +34,34 @@ def xesc(s):
     return s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
+def math(src):
+    """Inline math between dollar signs: a_x or a_{xy} is a subscript, a^x or a^{xy} a superscript,
+    the word nu is the Greek letter and - is a minus sign. Nothing else is special."""
+    def word(s):
+        return re.sub(r'\bnu\b', '&nu;', esc(s).replace('-', '&minus;'))
+    def run(s):
+        out, pos = [], 0
+        for m in re.finditer(r'([_^])(?:\{([^{}]*)\}|(\w))', s):
+            out.append(word(s[pos:m.start()]))
+            tag = 'sub' if m.group(1) == '_' else 'sup'
+            out.append(f'<{tag}>{word(m.group(2) if m.group(2) is not None else m.group(3))}</{tag}>')
+            pos = m.end()
+        out.append(word(s[pos:]))
+        return ''.join(out)
+    if re.search(r'[{}_^]', re.sub(r'[_^](\{[^{}]*\}|\w)', '', src)):
+        raise MarkupError(f'unsupported math: {src}')
+    return run(src)
+
+
 def inline(text, where):
+    """Escape a run of text, typeset $math$ and turn [text](url) into links; refuse other markup."""
+    parts = re.split(r'\$([^$]+)\$', text)
+    if '$' in ''.join(parts[::2]):
+        raise MarkupError(f'{where}: unpaired $ in: {text[:60]}')
+    return ''.join(links(p, where) if i % 2 == 0 else math(p) for i, p in enumerate(parts))
+
+
+def links(text, where):
     """Escape a run of text and turn [text](url) into links; refuse other markup."""
     out, pos = [], 0
     for m in re.finditer(r'\[([^\]]+)\]\(([^)\s]+)\)', text):
@@ -122,7 +151,7 @@ def table(head, md_rows, data, where):
 
 def figure(data):
     W, H, L, R, T, B = 340, 252, 44, 334, 26, 194
-    lo_p, hi_p = 0.068, 0.106
+    lo_p, hi_p = 0.065, 0.106
     y = lambda p: B - (p - lo_p) / (hi_p - lo_p) * (B - T)
     cs = data['crossings']
     step = (R - L) / len(cs)
@@ -244,8 +273,8 @@ HEAD = '''<!doctype html>
   <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
-<main id="main" class="pc">
- <div class="tp-wrap">
+<main id="main" class="{main}">
+ <div class="tp-wrap pc-cols">
 '''
 
 FOOT = ''' </div>
@@ -268,8 +297,8 @@ FOOT = ''' </div>
 '''
 
 
-def head(title, desc, url, ogtype, ld):
-    return (HEAD.replace('{title}', title).replace('{desc}', desc).replace('{url}', url)
+def head(title, desc, url, ogtype, ld, main='pc'):
+    return (HEAD.replace('{main}', main).replace('{title}', title).replace('{desc}', desc).replace('{url}', url)
             .replace('{ogtype}', ogtype).replace('{jsonld}', json.dumps(ld, indent=1)))
 
 
@@ -285,10 +314,11 @@ def note_page(n):
         raise MarkupError(f"{where}: h1 {blocks[0][1]!r} is not the title in notes.json {n['title']!r}")
     data = json.loads(read(CONTENT / 'notes' / n['data'])) if 'data' in n else None
     url = f"{SITE}/notes/{n['slug']}.html"
-    body = []
+    body, toc = [], []
     for b in blocks[1:]:
         if b[0] == 'h2':
             body.append(f'  <h2 id="{slugify(b[1])}">{inline(b[1], where)}</h2>')
+            toc.append(f'        <li><a href="#{slugify(b[1])}">{inline(b[1], where)}</a></li>')
         elif b[0] == 'p':
             body.append(f'  <p>{inline(b[1], where)}</p>')
         elif b[0] == 'ref':
@@ -302,12 +332,25 @@ def note_page(n):
           'description': n['description'], 'datePublished': n['date'],
           'author': {'@id': f'{SITE}/#person'}, 'url': url}
     title = f"{esc(n['title'])} &middot; Tushar Pandey"
-    return (head(title, esc(n['description']), url, 'article', ld)
+    return (head(title, esc(n['description']), url, 'article', ld, 'pc nt-note')
             + f'''  <header class="pc-head">
     <p class="tp-lbl">Note</p>
     <h1>{esc(n['title'])}</h1>
     <p class="pc-status"><time datetime="{n['date']}">{day(n['date'])}</time></p>
   </header>
+
+  <aside class="pc-rail" aria-label="Summary and contents">
+    <section class="pc-plainwords" aria-labelledby="plain">
+      <h2 class="pc-rail-h" id="plain">In plain words</h2>
+      <p>{esc(n['plain'])}</p>
+    </section>
+    <nav class="pc-toc" aria-label="On this page">
+      <p class="pc-rail-h">On this page</p>
+      <ol>
+{chr(10).join(toc)}
+      </ol>
+    </nav>
+  </aside>
 
   <article class="pc-essay nt-essay">
 {chr(10).join(body)}
@@ -333,11 +376,15 @@ def index_page(notes):
         <p class="pc-status"><time datetime="{n['date']}">{day(n['date'])}</time></p>
         <p>{esc(n['description'])}</p>
       </li>''' for n in notes)
-    return (head('Notes &middot; Tushar Pandey', esc(desc), url, 'website', ld)
+    return (head('Notes &middot; Tushar Pandey', esc(desc), url, 'website', ld, 'pc nt-home')
             + f'''  <header class="pc-head">
     <h1>Notes</h1>
-    <p class="pc-status">Newest first. <a class="tp-link" href="/notes/feed.xml">RSS feed</a></p>
+    <p class="pc-status">Newest first.</p>
   </header>
+
+  <aside class="nt-about pc-rail" aria-label="About the notes">
+    <p>{ABOUT} New notes also appear in the <a class="tp-link" href="/notes/feed.xml">RSS feed</a>.</p>
+  </aside>
 
   <ol class="nt-list">
 {items}

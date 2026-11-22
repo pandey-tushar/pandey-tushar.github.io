@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DVPGC1C44Z');
+</script>
+<title>Beat the decoder</title>
+<meta name="robots" content="noindex">
+<style>
+body,h1,p,fieldset,figure{margin:0;padding:0}
+.game{padding-block:clamp(2.4rem,1.2rem + 4vw,4.6rem) clamp(3rem,2rem + 3vw,5rem);display:grid;gap:clamp(1.6rem,3vw,3rem);align-items:start}
+@media (min-width:62em){ .game{grid-template-columns:minmax(0,1fr) minmax(0,26rem)} }
+.lede{margin-top:1.1rem;max-width:32em;line-height:1.6;color:var(--tp-text)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+#board{display:block;width:100%;height:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+#board *{vector-effect:non-scaling-stroke}
+#board .ln{stroke:var(--tp-dim);stroke-width:1.25;stroke-opacity:.6}
+#board .pz{fill:var(--tp-a08);stroke:var(--tp-dim);stroke-width:1.25;stroke-opacity:.6}
+#board .px{fill:none;stroke:var(--tp-dim);stroke-width:1.25;stroke-opacity:.6}
+#board .zc .dot{fill:var(--tp-dim)}
+#board .zc .halo{fill:var(--tp-warm);fill-opacity:.16;stroke:var(--tp-warm);stroke-width:1.5;opacity:0}
+#board .zc.on .dot{fill:var(--tp-warm)}
+#board .zc.on .halo{opacity:1}
+#board .q{cursor:pointer;outline:none}
+#board .q .hit{fill:transparent}
+#board .q .d{fill:var(--tp-void2);stroke:var(--tp-dim);stroke-width:1.25}
+#board .q:hover .d{stroke:var(--tp-acc);stroke-width:2}
+#board .q[aria-pressed="true"] .d{fill:var(--tp-acc);stroke:var(--tp-acc)}
+#board .q .ring{fill:none;stroke:var(--tp-ink);stroke-width:2;opacity:0}
+#board .q:focus-visible .ring{opacity:1}
+#board .q .e,#board .q .k{fill:none;opacity:0}
+#board .q .e{stroke:var(--tp-warm);stroke-width:2.5}
+#board .q .k{stroke:var(--tp-ink);stroke-width:1.5;stroke-dasharray:3 3}
+#board .q.err .e,#board .q.dec .k{opacity:1}
+#board.done .q{cursor:default}
+.ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+.ctl .tp-btn:disabled{opacity:.5;cursor:default;color:var(--tp-dim);border-color:var(--tp-rule)}
+.rate{border:0;display:flex;flex-wrap:wrap;align-items:center;gap:0 14px;margin-top:10px}
+.rate legend{float:left;margin-right:4px;padding:0}
+.rate label,.seed label{display:inline-flex;align-items:center;gap:6px;min-height:40px;font-size:var(--tp-t-small);color:var(--tp-text);cursor:pointer}
+.rate input{accent-color:var(--tp-acc);margin:0}
+.seed{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.seed input{width:7.5em;min-height:40px;padding:0 10px;font:400 var(--tp-t-small)/1 var(--tp-mono);color:var(--tp-ink);background:var(--tp-void2);border:1px solid var(--tp-rule);border-radius:6px}
+#status{margin-top:12px;min-height:3em;font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-text)}
+#tally{margin-top:4px;font:600 var(--tp-t-small)/1.5 var(--tp-sans);color:var(--tp-ink);font-variant-numeric:tabular-nums}
+.key{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:8px;font-size:var(--tp-t-small);color:var(--tp-dim)}
+.key[hidden]{display:none}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key svg{width:18px;height:18px}
+</style>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main">
+  <div class="tp-wrap game">
+    <div>
+      <h1>Beat the decoder</h1>
+      <p class="lede">A distance 5 surface code. Some qubits flipped, and you see only the checks that noticed. Mark the flips you think happened, then Check to see whether you or the union-find decoder put the stored bit back.</p>
+    </div>
+    <figure class="tp-plate">
+      <svg id="board" viewBox="-40 -45 320 330" role="group" aria-label="Surface code patch with 25 qubits" aria-describedby="board-help"></svg>
+      <p class="sr" id="board-help">Each qubit is a button: Tab reaches the patch, the arrow keys move between qubits, and Enter or Space marks one. The status line below says how many fired checks are still unexplained.</p>
+      <div class="ctl">
+        <button class="tp-btn" type="button" id="check">Check</button>
+        <button class="tp-btn" type="button" id="new">New round</button>
+      </div>
+      <fieldset class="rate">
+        <legend class="tp-lbl">Error rate</legend>
+        <label><input type="radio" name="rate" value="0">3%</label>
+        <label><input type="radio" name="rate" value="1" checked>7%</label>
+        <label><input type="radio" name="rate" value="2">12%</label>
+      </fieldset>
+      <p class="seed"><label for="seed">Seed</label><input id="seed" type="text" inputmode="numeric" autocomplete="off" spellcheck="false"><button class="tp-btn" type="button" id="replay">Replay</button></p>
+      <p id="status" aria-live="polite"></p>
+      <p id="tally">You 0, Decoder 0</p>
+      <p class="key" id="key" hidden>
+        <span><svg viewBox="-10 -10 20 20" aria-hidden="true"><circle r="7" fill="none" stroke="var(--tp-warm)" stroke-width="2"/></svg>error</span>
+        <span><svg viewBox="-10 -10 20 20" aria-hidden="true"><circle r="5" fill="var(--tp-acc)"/></svg>yours</span>
+        <span><svg viewBox="-10 -10 20 20" aria-hidden="true"><circle r="8" fill="none" stroke="var(--tp-ink)" stroke-width="1.5" stroke-dasharray="3 3"/></svg>decoder's</span>
+      </p>
+    </figure>
+  </div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+
+<script type="module">
+import { LEVELS, code, round, restores, unexplained } from "/logical/logic.js";
+
+var D = code.d, U = 60, NS = "http://www.w3.org/2000/svg";
+var svg = document.getElementById("board"), out = document.getElementById("status"), tally = document.getElementById("tally");
+var checkB = document.getElementById("check"), seedI = document.getElementById("seed"), key = document.getElementById("key");
+var marks = new Uint8Array(code.n), qubits = [], zcs = [], cur = 0, r = null, done = false, you = 0, dec = 0;
+
+function el(n, a, p){ var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+function plural(n, w){ return n + " " + w + (n === 1 ? "" : "s"); }
+
+/* the patch: plaquettes (Z ones tinted), then the check dots, then the qubits */
+var gP = el("g", {}, svg), gC = el("g", {}, svg), gQ = el("g", {}, svg);
+for (var x = 0; x < D; x++) for (var y = 0; y < D; y++) {
+  if (x + 1 < D) el("line", { x1: x * U, y1: y * U, x2: (x + 1) * U, y2: y * U, "class": "ln" }, gP);
+  if (y + 1 < D) el("line", { x1: x * U, y1: y * U, x2: x * U, y2: (y + 1) * U, "class": "ln" }, gP);
+}
+["X", "Z"].forEach(function(t){
+  code.checks[t].forEach(function(s, k){
+    var c = code.checkCoords[t][k], cx = c[0] * U, cy = c[1] * U, dx = 0, dy = 0, shape;
+    if (s.length === 4) shape = el("rect", { x: cx - U / 2, y: cy - U / 2, width: U, height: U }, gP);
+    else {
+      /* a boundary check: a half disc on the outside edge, drawn clockwise so it bulges outward */
+      var a = code.coords[s[0]], b = code.coords[s[1]], p = [a[0] * U, a[1] * U], q = [b[0] * U, b[1] * U];
+      if (c[1] < 0) dy = -1; else if (c[1] > D - 1) dy = 1; else if (c[0] < 0) dx = -1; else dx = 1;
+      if ((dy && (p[0] - q[0]) * dy < 0) || (dx && (q[1] - p[1]) * dx < 0)) { var tmp = p; p = q; q = tmp; }
+      shape = el("path", { d: "M" + p + "A" + U / 2 + " " + U / 2 + " 0 0 1 " + q + "Z" }, gP);
+    }
+    shape.setAttribute("class", t === "Z" ? "pz" : "px");
+    if (t === "Z") {
+      var mx = s.length === 4 ? cx : cx - dx * U / 2 + dx * 13, my = s.length === 4 ? cy : cy - dy * U / 2 + dy * 13;
+      var g = el("g", { "class": "zc" }, gC);
+      el("circle", { cx: mx, cy: my, r: 10, "class": "halo" }, g);
+      el("circle", { cx: mx, cy: my, r: 3.4, "class": "dot" }, g);
+      zcs.push(g);
+    }
+  });
+});
+for (var i = 0; i < code.n; i++) {
+  var qx = code.coords[i][0] * U, qy = code.coords[i][1] * U;
+  var q = el("g", { "class": "q", role: "button", tabindex: i === cur ? 0 : -1, "data-q": i, "aria-pressed": "false",
+    "aria-label": "Qubit" }, gQ);
+  el("circle", { cx: qx, cy: qy, r: 24, "class": "hit" }, q);
+  el("circle", { cx: qx, cy: qy, r: 20, "class": "ring" }, q);
+  el("circle", { cx: qx, cy: qy, r: 17, "class": "k" }, q);
+  el("circle", { cx: qx, cy: qy, r: 12.5, "class": "e" }, q);
+  el("circle", { cx: qx, cy: qy, r: 7, "class": "d" }, q);
+  qubits.push(q);
+}
+
+function name(i){ return "Qubit at row " + (code.coords[i][1] + 1) + ", column " + (code.coords[i][0] + 1); }
+function level(){ return +document.querySelector('input[name="rate"]:checked').value; }
+function show(){
+  var lit = unexplained(r.fired, marks), n = 0, nf = 0, nm = 0;
+  for (var k = 0; k < zcs.length; k++) { n += lit[k]; nf += r.fired[k]; zcs[k].classList.toggle("on", !!lit[k]); }
+  for (var i = 0; i < code.n; i++) { nm += marks[i]; qubits[i].setAttribute("aria-pressed", marks[i] ? "true" : "false"); }
+  if (!done) out.textContent = plural(nf, "check") + " fired" + (nm ? "; " + (n ? n + " still lit." : "none still lit.") : ".");
+  return n;
+}
+function start(seed){
+  seed = Math.max(1, parseInt(seed, 10) || 1) >>> 0;
+  seedI.value = String(seed);
+  r = round(seed, level()); marks.fill(0); done = false;
+  svg.classList.remove("done"); key.hidden = true; checkB.disabled = false;
+  for (var i = 0; i < code.n; i++) { qubits[i].classList.remove("err", "dec"); qubits[i].removeAttribute("aria-disabled"); qubits[i].setAttribute("aria-label", name(i)); }
+  show();
+}
+function judge(){
+  if (done) return;
+  var lit = show(), mine = restores(r.err, marks), theirs = restores(r.err, r.decoder), k = 0;
+  done = true; you += mine; dec += theirs;
+  for (var i = 0; i < code.n; i++) {
+    k += r.err[i];
+    qubits[i].classList.toggle("err", !!r.err[i]); qubits[i].classList.toggle("dec", !!r.decoder[i]);
+    qubits[i].setAttribute("aria-disabled", "true");
+    qubits[i].setAttribute("aria-label", name(i) +
+      (r.err[i] ? ". Flipped" : ". Not flipped") + (r.decoder[i] ? ", in the decoder's correction" : ""));
+  }
+  var why = lit ? "left " + plural(lit, "check") + " lit" : "flipped it";
+  out.textContent = "Errors on " + plural(k, "qubit") + ". " +
+    (mine && theirs ? "Both corrections restored the stored bit." :
+     mine ? "Yours restored the stored bit; the decoder's did not." :
+     theirs ? "The decoder's restored the stored bit; yours " + why + "." :
+     "Neither restored the stored bit; yours " + why + ".");
+  tally.textContent = "You " + you + ", Decoder " + dec;
+  svg.classList.add("done"); key.hidden = false; checkB.disabled = true;
+}
+function mark(i){ if (done) return; marks[i] ^= 1; show(); }
+
+function go(i){ qubits[cur].setAttribute("tabindex", -1); cur = i; qubits[i].setAttribute("tabindex", 0); qubits[i].focus(); }
+svg.addEventListener("keydown", function(ev){
+  var x = cur % D, y = (cur / D) | 0;
+  switch (ev.key) {
+    case "ArrowRight": x = Math.min(D - 1, x + 1); break;
+    case "ArrowLeft": x = Math.max(0, x - 1); break;
+    case "ArrowDown": y = Math.min(D - 1, y + 1); break;
+    case "ArrowUp": y = Math.max(0, y - 1); break;
+    case "Enter": case " ": mark(cur); ev.preventDefault(); return;
+    default: return;
+  }
+  ev.preventDefault(); go(y * D + x);
+});
+svg.addEventListener("focusin", function(ev){
+  var q = ev.target.closest && ev.target.closest(".q");
+  if (q && q !== qubits[cur]) { qubits[cur].setAttribute("tabindex", -1); cur = +q.getAttribute("data-q"); q.setAttribute("tabindex", 0); }
+});
+svg.addEventListener("click", function(ev){
+  var q = ev.target.closest && ev.target.closest(".q");
+  if (!q) return;
+  var i = +q.getAttribute("data-q");
+  qubits[cur].setAttribute("tabindex", -1); cur = i; q.setAttribute("tabindex", 0);
+  mark(i);
+});
+checkB.addEventListener("click", judge);
+document.getElementById("new").addEventListener("click", function(){ start(1 + Math.floor(Math.random() * 999999)); });
+document.getElementById("replay").addEventListener("click", function(){ start(seedI.value); });
+seedI.addEventListener("keydown", function(ev){ if (ev.key === "Enter") start(seedI.value); });
+document.querySelectorAll('input[name="rate"]').forEach(function(b){ b.addEventListener("change", function(){ start(seedI.value); }); });
+start(1 + Math.floor(Math.random() * 999999));
+</script>
+</body>
+</html>

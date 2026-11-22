@@ -16,6 +16,7 @@ from lesson_text import state_html, plain, course, SITE
 QEC = pathlib.Path(__file__).resolve().parents[2] / 'qec-in-practice'
 read = lambda p: io.open(p, encoding='utf-8').read()
 fail = []
+BACK = '<a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a>'
 lessons = json.loads(read(QEC / 'data' / 'lessons.json'))
 order = course(QEC)
 pages = [e['page'] for e in order]
@@ -58,7 +59,7 @@ for i, e in enumerate(order):
             'description': '<meta name="description" content="' + plain(info['intro'].replace('_L', '')) + '">',
             'cite': f'<p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "{state_html(e["title"])}", '
                     f'Quantum Error Correction in Practice (2026), {e["url"]}</p>',
-            'back to the course': '<a href="/qec-in-practice/">&larr; Back to the course</a>',
+            'back to the course': BACK,
             'narrative head 1': '<h2>What this lesson shows</h2>', 'narrative head 2': '<h2>Things to try</h2>'}
     want.update({f'step {k}': state_html(v) for k, v in steps.items()})
     want.update({f'narrative paragraph {k + 1}': f'<p>{state_html(v)}</p>' for k, v in enumerate(info.get('shows', []))})
@@ -74,6 +75,81 @@ for i, e in enumerate(order):
     if any(ord(c) < 32 and c not in '\n\t' for c in html):
         fail.append(f'{e["page"]}: control character in the page')
 
+# Every page: progress, a plain-words box right under the title (on the essay pages, at the top of the rail), a glossary link, and full titles in the
+# previous/next links at the top (short on phones) and at the bottom.
+for i, e in enumerate(order):
+    page = QEC / e['page']
+    if not page.exists():
+        continue
+    main = main_of(read(page))
+    step = f'<p class="tp-lbl step-of">Step {i + 1} of {len(order)}</p>'
+    h1 = re.search(r'<h1[\s>].*?</h1>\s*', main, re.S)
+    if step not in main:
+        fail.append(f'{e["page"]}: no "{step}"')
+    # on the essay pages the box opens the rail, which sits under the title below 70em
+    if not h1 or not re.match(r'(<div class="course-rail">\s*)?<aside class="plain" aria-label="In plain words">', main[h1.end():]):
+        fail.append(f'{e["page"]}: no "In plain words" box right under the h1')
+    top = re.search(r'<nav class="secnav" aria-label="Course">(.*?)</nav>', main, re.S)
+    top = top.group(1) if top else ''
+    end = re.search(r'<nav class="secnav endnav" aria-label="Course, end of lesson">(.*?)</nav>', main, re.S)
+    end = end.group(1) if end else ''
+    if '<a href="glossary.html">Glossary</a>' not in top:
+        fail.append(f'{e["page"]}: no Glossary link in the course nav')
+    for j, rel in ((i - 1, 'prev'), (i + 1, 'next')):
+        if not 0 <= j < len(order):
+            continue
+        o = order[j]
+        t = state_html(o['title'])
+        short, full = (f'&larr; Previous<span class="nav-long">: {t}</span>', f'&larr; Previous: {t}') if rel == 'prev'             else (f'Next<span class="nav-long">: {t}</span>&nbsp;&rarr;', f'Next: {t} &rarr;')
+        if f'<a id="{rel}" href="{o["page"]}">{short}</a>' not in top:
+            fail.append(f'{e["page"]}: top {rel} link is not "{short}"')
+        if f'<a href="{o["page"]}">{full}</a>' not in end:
+            fail.append(f'{e["page"]}: end {rel} link is not "{full}"')
+    if 'lesson' in e:
+        n = str(e['lesson'])
+        note = lessons[n].get('results_note', [])
+        if not note or '<h3>How to read this table</h3>' not in main:
+            fail.append(f'{e["page"]}: no "How to read this table" note')
+        fail += [f'{e["page"]}: no results note paragraph {k + 1}' for k, v in enumerate(note) if f'<p>{state_html(v)}</p>' not in main]
+        if '<p class="plain-text">' + state_html(lessons[n].get('plain', '')) + '</p>' not in main or not lessons[n].get('plain'):
+            fail.append(f'{e["page"]}: plain-words text is not lessons.json "plain"')
+
+last = read(QEC / order[-1]['page'])
+for href in ('/tools/bb-codes.html', '/notes/crossing-is-not-the-threshold.html', '/research.html'):
+    if not re.search(r'<section class="course-end"[^>]*>.*?href="' + re.escape(href) + '"', last, re.S):
+        fail.append(f'{order[-1]["page"]}: the end-of-course block does not link {href}')
+
+# The glossary: the course shell, one entry per term, linked from the index.
+GLOSSARY = ['qubit', 'bit-flip', 'phase-flip', 'check', 'syndrome', 'fired', 'distance', 'logical-qubit', 'patch',
+            'decoder', 'union-find', 'matching', 'threshold', 'lambda', 'bell-pair', 't-state', 'teleportation',
+            'lattice-surgery', 'pauli-frame']
+gpath = QEC / 'glossary.html'
+if not gpath.exists():
+    fail.append('glossary.html: missing')
+else:
+    g = read(gpath)
+    gm = main_of(g)
+    want = {'canonical': f'<link rel="canonical" href="{SITE}glossary.html">' in g,
+            'h1': len(re.findall(r'<h1[\s>]', g)) == 1,
+            'description': re.search(r'<meta name="description" content="[^"]+">', g) is not None,
+            'link back': '<a href="/qec-in-practice/">' in gm,
+            'theme-color': '<meta name="theme-color" content="#0d1320">' in g}
+    fail += [f'glossary.html: no {k}' for k, ok in want.items() if not ok]
+    for t in GLOSSARY:
+        entry = re.search(rf'<dt id="{t}">.*?</dt>\s*<dd>\s*<p class="g-plain">[^<].*?</p>\s*<p class="g-tech">[^<].*?</p>\s*</dd>', gm, re.S)
+        if not entry:
+            fail.append(f'glossary.html: no entry {t} with a plain and a technical sentence')
+
+# Statements the course got wrong once and must not make again.
+WRONG = ['Lessons 3 and 4 also show stored results', 'from the decoding lesson on, a union-find decoder',
+         'used throughout this course is a union-find', 'lit checks', 'over nine qubits and eight checks',
+         'stand-in', 'not from hardware', '&#8203;<sub>L', 'The patch below can be made larger']
+for f in [*QEC.glob('*.html'), QEC / 'data' / 'lessons.json', QEC / 'data' / 'course.json', *QEC.glob('js/*.js')]:
+    text = read(f)
+    fail += [f'{f.name}: still says "{w}"' for w in WRONG if w in text]
+if not re.search(r'Wang, Harrington and Preskill \(2003\)[^.]*10\.3%[^.]*2\.9%', read(QEC / 'threshold.html')):
+    fail.append('threshold.html: 10.3% and 2.9% are not attributed to Wang, Harrington and Preskill (2003)')
+
 if not re.search(r'^\.secnav a \{[^}]*min-height: 40px', read(QEC / 'css' / 'site.css'), re.M):
     fail.append('css/site.css: .secnav a has no min-height: 40px tap area')
 hub = read(QEC / 'index.html')
@@ -82,6 +158,9 @@ if [h for h, _ in cards] != pages:
     fail.append(f'index.html: the cards link to {[h for h, _ in cards]}, not the course order {pages}')
 fail += [f'index.html: no picture on the card for {h}' for h, body in cards if not re.search(r'<figure[^>]*>\s*<svg', body)]
 fail += [f'index.html: no card picture for lesson {n}' for n in lessons if f'<!-- thumb {n} --><figure' not in hub]
+for need in ('href="glossary.html"', 'href="/why-error-correction.html"', 'What is this, and why does it matter?'):
+    if need not in hub:
+        fail.append(f'index.html: no {need}')
 if f'T. Pandey, Quantum Error Correction in Practice (2026), {SITE}' not in hub:
     fail.append('index.html: no "How to cite" line for the course')
 sitemap = read(QEC.parent / 'sitemap.xml')

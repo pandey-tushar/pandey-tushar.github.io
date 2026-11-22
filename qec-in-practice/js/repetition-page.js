@@ -3,12 +3,12 @@
 import { repetitionCode } from './qec/codes.js';
 import { sampleErrors, syndrome } from './qec/noise.js';
 import { codeFigure } from './qec-draw.js';
-import { repetitionCurve, emptyError, graphsFor, decodeError } from './explore-logic.js';
+import { repetitionCurve, emptyError, graphsFor, decodeError, qubitName } from './explore-logic.js';
 
 const $ = (root, s) => root.querySelector(s);
 const list = a => (a.length === 1 ? a[0] : a.length === 2 ? `${a[0]} and ${a[1]}` : `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`);
 const ones = a => [...a.keys()].filter(i => a[i]);
-const checkName = k => `between qubits ${k + 1} and ${k + 2}`;
+const checkName = k => `between ${qubitName(k)} and ${qubitName(k + 1)}`;
 // the drawing, legend and controls start hidden in the HTML, so without scripts only the note and caption show
 const reveal = root => root.querySelectorAll('svg.code, .legend, .ex-controls, [data-plot]').forEach(e => e.removeAttribute('hidden'));
 
@@ -37,7 +37,7 @@ function repFigure(root, withDecoder) {
     dec = null;
     err.x[i] ^= 1;
     draw();
-    status.textContent = `Qubit ${i + 1} ${err.x[i] ? 'flipped to 1' : 'flipped back to 0'}. ${fired()}`;
+    status.textContent = `${qubitName(i)} ${err.x[i] ? 'flipped to 1' : 'flipped back to 0'}. ${fired()}`;
   }
   const clear = () => { err = emptyError(code); dec = null; draw(); };
   sel.addEventListener('change', () => { setD(); status.textContent = `Distance ${code.d}: ${code.d} qubits, ${code.d - 1} checks, every qubit reading 0.`; });
@@ -51,13 +51,13 @@ function repFigure(root, withDecoder) {
       err = sampleErrors(code, +p.value, Math.random);
       draw();
       const f = ones(err.x);
-      status.textContent = `Random flips at p = ${(+p.value).toFixed(2)}: ${f.length ? `qubit${f.length > 1 ? 's' : ''} ${list(f.map(i => i + 1))}` : 'none this time'}. ${fired()} Press Decode.`;
+      status.textContent = `Random flips at p = ${(+p.value).toFixed(2)}: ${f.length ? list(f.map(qubitName)) : 'none this time'}. ${fired()} Press Decode.`;
     });
     $(root, '[data-decode]').addEventListener('click', () => {
       dec = decodeError(code, err, graphs);
       draw();
-      const c = ones(dec.correction.x).map(i => i + 1), k = ones(err.x).length;
-      const what = c.length ? `The decoder flips qubit${c.length > 1 ? 's' : ''} ${list(c)}.` : 'No check fired, so the decoder changes nothing.';
+      const c = ones(dec.correction.x).map(qubitName), k = ones(err.x).length;
+      const what = c.length ? `The decoder flips ${list(c)}.` : 'No check fired, so the decoder changes nothing.';
       const bit = dec.residual.x[0];
       const verdict = bit
         ? `Every qubit now reads 1: the logical bit flipped. ${k} flips out of ${code.d} is more than half, so the decoder chose the other explanation, with ${code.d - k} flip${code.d - k === 1 ? '' : 's'}.`

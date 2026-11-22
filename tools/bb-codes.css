@@ -13,7 +13,7 @@
 .bb-tool h2, .bb-essay h2 { font-size: 1.45rem; margin: 0 0 .8rem; }
 
 /* inputs */
-.bb-form { display: grid; gap: 4px 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: 52rem; margin: 0; }
+.bb-form { display: grid; gap: 4px 16px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: var(--tp-measure); margin: 0; }
 @media (min-width: 46rem) { .bb-form { grid-template-columns: 6rem 6rem minmax(0, 1fr) minmax(0, 1fr); } }
 .bb-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .bb-wide, .bb-hint { grid-column: 1 / -1; }
@@ -33,7 +33,7 @@
 
 /* results */
 .bb-results { margin: 1.2rem 0 0; }
-.bb-params { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin: 0; max-width: 52rem; }
+.bb-params { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin: 0; max-width: var(--tp-measure); }
 @media (min-width: 40rem) { .bb-params { grid-template-columns: 15rem minmax(0, 1fr); } }
 .bb-params dt, .bb-params dd { margin: 0; padding: 7px 0; border-bottom: 1px solid var(--tp-rule); }
 .bb-params dt { font-size: var(--tp-t-small); color: var(--tp-dim); }
@@ -45,13 +45,17 @@
 .bb-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin: 14px 0 0; }
 .bb-msg { font-size: var(--tp-t-small); color: var(--tp-text); }
 .bb-note { margin: 10px 0 0; font-size: var(--tp-t-small); color: var(--tp-dim); max-width: var(--tp-measure); }
-.bb-status { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--tp-rule); color: var(--tp-text); font-size: var(--tp-t-small); max-width: 60rem; }
+.bb-status { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--tp-rule); color: var(--tp-text); font-size: var(--tp-t-small); max-width: var(--tp-measure); }
 .bb .tp-btn:disabled { opacity: .55; cursor: default; color: var(--tp-dim); border-color: var(--tp-rule); }
 .bb .tp-btn.bb-run { border-color: var(--tp-acc); font-weight: 600; }
 
 /* figures */
 .bb-fig { margin: 1.4rem 0 1.6rem; min-width: 0; }
 .bb-fig figcaption { max-width: var(--tp-measure); }
+#fig-layout .bb-status { max-width: none; }
+/* Fig. 2 is a control row and a line of text: it keeps the measure of the form and parameters above it */
+.bb-dist { max-width: var(--tp-measure); }
+.bb-rail + .bb-fig { margin-top: .8rem; }
 .bb-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin: 0 0 10px; font-size: var(--tp-t-small); color: var(--tp-text); }
 .bb-controls label { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; }
 .bb-controls select { width: auto; }
@@ -100,6 +104,40 @@
 .bb-links a { display: inline-block; padding-block: 9px; }
 .bb-cite { margin-top: 1.6rem; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); overflow-wrap: anywhere; }
 .bb-cite .tp-lbl { display: block; margin-bottom: 4px; }
+
+/* the rail, as on the paper companion pages (.pc-rail): "In plain words" sits above Fig. 1; from 70em
+   it moves into a right column with the contents list and stays in view while the main column scrolls, and the
+   tool sets its inputs and what they give side by side across the main column */
+.bb-rail { margin: 1.6rem 0 0; font-size: var(--tp-t-small); }
+.bb-rail .bb-rail-h { margin: 0 0 6px; font: 600 var(--tp-t-app)/1.3 var(--tp-sans); letter-spacing: .07em;
+  text-transform: uppercase; color: var(--tp-dim); }
+.bb-plainwords { max-width: var(--tp-measure); padding: 14px 16px 4px; background: var(--tp-void2);
+  border: 1px solid var(--tp-rule); border-radius: 4px; }
+.bb-plainwords p { margin: 0 0 10px; font-size: .95rem; line-height: 1.55; color: var(--tp-text); }
+.bb-toc { display: none; }
+.bb-toc ol { margin: 0; padding: 0; list-style: none; border-left: 1px solid var(--tp-rule); }
+.bb-toc a { display: block; padding: 5px 0 5px 12px; line-height: 1.35; color: var(--tp-text); }
+.bb-toc a:hover, .bb-toc a:focus-visible { color: var(--tp-acc); }
+@media (min-width: 70em) {
+  .bb-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, 17.5rem);
+    column-gap: clamp(2.5rem, 4vw, 4.5rem); align-items: start; }
+  .bb-cols > * { grid-column: 1; }
+  .bb-cols > .bb-rail { grid-column: 2; grid-row: 1 / span 40; position: sticky; top: calc(var(--tp-barh) + 1.4rem);
+    margin: 0; max-height: calc(100vh - var(--tp-barh) - 2.8rem); overflow-y: auto; }
+  .bb-toc { display: block; margin: 1.6rem 0 0; }
+  .bb-rail + .bb-fig { margin-top: 1.4rem; }
+
+  .bb-tool { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr;
+    column-gap: 2.5rem; align-items: start; }
+  .bb-tool > h2 { grid-column: 1 / -1; }
+  .bb-form { grid-column: 1; grid-row: 2; max-width: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .bb-poly { grid-column: 1 / -1; }
+  .bb-results { grid-column: 2; grid-row: 2 / span 2; margin: 0; }
+  .bb-tool > .bb-status { grid-column: 1; grid-row: 3; margin-top: 18px; }
+  .bb-form[hidden] ~ .bb-status { grid-column: 1 / -1; }
+  .bb-params, .bb-note, .bb-tool > .bb-status, .bb-dist { max-width: none; }
+  .bb-params { grid-template-columns: 10rem minmax(0, 1fr); }
+}
 
 @media (max-width: 600px) {
   .bb-fig.tp-plate { padding: 10px 8px; margin-inline: -6px; }

@@ -144,11 +144,11 @@ export function makePatches(svg, blocks) {
   return { update };
 }
 
-// Text with kets and _L subscripts as safe HTML: "|+>_L" -> "|+&#10217;<sub>L</sub>".
+// Text with kets and _L subscripts as safe HTML: "|+>_L" -> "|+&#10217;&#8288;<sub>L</sub>".
 export function stateHTML(s) {
   const esc = s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   return esc
     .replace(/\|([^|&\s]*?)&gt;/g, '|$1&#10217;')
-    .replace(/_L\b/g, '&#8203;<sub>L</sub>')
+    .replace(/_L\b/g, '&#8288;<sub>L</sub>') // a word joiner: the L never wraps away from its letter
     .replace(/sqrt2/g, '&radic;2');
 }

@@ -73,13 +73,19 @@
   <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
-<main id="main" class="page surgery">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a href="lesson-4.html">&larr; Previous: Lesson 4</a></nav>
-  <article class="essay">
+<main id="main" class="page surgery course-essay">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="lesson-4.html">&larr; Previous<span class="nav-long">: Lesson 4: Teleporting the T state</span></a></nav>
+  <p class="tp-lbl step-of">Step 8 of 8</p>
   <h1 id="lesson-title">Lattice surgery</h1>
+  <div class="course-rail">
+  <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">Patches on a flat chip can only touch their neighbours, so they cannot always be joined by gates between matching qubits. Lattice surgery joins two patches along their shared edge with new checks, then separates them again. The new checks reveal one joint property of the two protected qubits while leaving each one unread.</p></aside>
+  <nav class="course-toc" aria-label="On this page"><p class="tp-lbl">On this page</p><ol><li><a href="#two-patches-and-a-seam">Two patches and a seam</a></li><li class="toc-fig"><a href="#fig">Fig. 1</a></li><li><a href="#merge">Merge</a></li><li><a href="#split">Split</a></li><li><a href="#what-you-are-left-with">What you are left with</a></li><li><a href="#why-surgery-matters">Why surgery matters</a></li></ol></nav>
+  </div>
+  <div class="essay-flow">
+  <article class="essay">
   <p class="lead">Two surface code patches sit side by side. Merge them along the edges that face each other, then split them again, and you have measured the product of their logical Z operators without reading either one. That is lattice surgery. The figure runs it on 21 simulated qubits.</p>
 
-  <h2>Two patches and a seam</h2>
+  <h2 id="two-patches-and-a-seam">Two patches and a seam</h2>
   <p>Each patch is the distance-3 patch from <a class="tp-link" href="lesson-1.html">lesson 1</a>: nine data qubits, four X checks and four Z checks. The left and right edges carry X checks, the top and bottom edges carry Z checks. X<sub>L</sub> runs along the top row, from one X edge to the other. Z<sub>L</sub> runs down a column, from one Z edge to the other. Multiply a column of Z by the patch's four Z checks and you get another column, so while those checks hold, any column is Z<sub>L</sub>.</p>
   <p>Put patch B to the right of patch A, with a column of three fresh qubits, the seam, in between. A's right edge and B's left edge, both X edges, now face each other, and the columns that carry Z<sub>L</sub> run parallel to them.</p>
   </article>
@@ -115,26 +121,31 @@
   </figure>
 
   <article class="essay">
-  <h2>Merge</h2>
+  <h2 id="merge">Merge</h2>
   <p>Prepare the seam in |+&#10217; and measure the checks of one patch seven columns wide. The two facing X edge checks stop being checks. Six new ones appear across the seam: two X checks and four Z checks, two of them weight two on the top and bottom edges.</p>
   <p>Multiply the four new Z checks. Every seam qubit appears twice and drops out, which leaves Z on A's right column times Z on B's left column. That is Z<sub>L</sub>(A) Z<sub>L</sub>(B), times A's own Z checks, which hold. Each of the four is random on its own, because each anticommutes with X on some seam qubit, and those were +1. Only the product carries information. The two new X checks are not random: each is an old edge check times X on two seam qubits, all +1.</p>
   <p>Pick |+&#10217; for both patches. The Z<sub>L</sub> lines are grey from the start: neither has a value. Step to Merge and they stay grey, but their product now has one, and each X<sub>L</sub> line turns grey too, because X<sub>L</sub> of one patch alone does not commute with the measurement.</p>
 
-  <h2>Split</h2>
+  <h2 id="split">Split</h2>
   <p>To split, measure each seam qubit in X. The seam Z checks end, but their product touches no seam qubit and keeps its value. The facing edge checks return: A's equals the merged X check on its side times the X outcomes of the two seam qubits it touched, and likewise for B. When that product is -1, Z on A's qubits 5 and 8, or on B's qubit 15, flips it back.</p>
   <p>One correction is logical. X<sub>L</sub>(A), times X on the top seam qubit, times X<sub>L</sub>(B) commuted with every merged check and kept its value. After the split, X<sub>L</sub>(A) X<sub>L</sub>(B) carries the top seam outcome as a sign, so when it reads -1 you apply Z<sub>L</sub> to A. These Paulis are the frame. Hardware tracks them in software; the figure applies them.</p>
 
-  <h2>What you are left with</h2>
+  <h2 id="what-you-are-left-with">What you are left with</h2>
   <p>After the frame every check holds again, and the pair is in an eigenstate of Z<sub>L</sub>(A) Z<sub>L</sub>(B) with the value the merge reported. Read both patches in Z and the product of the two outcomes is always that value; run 200 shots to see it. For |0&#10217; and |1&#10217; inputs the parity is fixed in advance and the merge confirms it.</p>
   <p>For |+&#10217;|+&#10217; the parity is +1 or -1 with even odds, and the two Z readouts then agree or disagree every time. Switch the readout to X and X<sub>L</sub>(A) X<sub>L</sub>(B) comes out +1 in every shot, because the measurement commuted with it. Correlated in Z and in X: a logical Bell pair, the state <a class="tp-link" href="lesson-2.html">lesson 2</a> made with a transversal CNOT and <a class="tp-link" href="lesson-4.html">lesson 4</a> spent on teleportation. Here it came from checks between neighbouring qubits, not from gates between matching qubits of two patches.</p>
 
-  <h2>Why surgery matters</h2>
+  <h2 id="why-surgery-matters">Why surgery matters</h2>
   <p>A transversal CNOT couples every qubit of one patch to its partner in the other. A planar chip with nearest-neighbour couplings has no such links between two patches side by side. Surgery needs only the local checks along a shared edge. Stack the patches instead, so their Z edges face, put the seam in |0&#10217;, and by the same argument the product of the new X checks gives X<sub>L</sub> X<sub>L</sub>, times X checks the patches already had. With both measurements you have a logical CNOT: take an ancilla patch in |+&#10217;, measure Z<sub>L</sub> Z<sub>L</sub> on control and ancilla, then X<sub>L</sub> X<sub>L</sub> on ancilla and target, read the ancilla in Z, and fix the frame from the three outcomes. That sequence is the standard construction; it is not simulated on this page.</p>
   <p>The same idea, measuring logical operators by joining codes through new checks, is being generalised to qLDPC codes in current <a class="tp-link" href="/research.html">research</a>.</p>
 
   <nav class="secnav endnav" aria-label="Course, end of lesson"><a href="lesson-4.html">&larr; Previous: Lesson 4: Teleporting the T state</a></nav>
+  <section class="course-end" aria-labelledby="course-end-head">
+    <h2 id="course-end-head">End of the course</h2>
+    <p>That was the last of the eight steps. To go further, the <a class="tp-link" href="/tools/bb-codes.html">bivariate bicycle code explorer</a> works with one family of qLDPC codes, <a class="tp-link" href="/notes/crossing-is-not-the-threshold.html">a note on the threshold</a> follows the crossings of the threshold lesson up to d = 21, and the <a class="tp-link" href="/research.html">research</a> page describes current work on surgery for qLDPC codes.</p>
+  </section>
   <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "Lattice surgery", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/lattice-surgery.html</p>
   </article>
+  </div>
 </main>
 
 <footer class="tp-foot">

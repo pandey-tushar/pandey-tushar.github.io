@@ -2,14 +2,19 @@
   "total": 18,
   "areas": [
     {"id": "qec", "motif": "lattice", "title": "Quantum error correction",
+     "why": "Quantum computers make errors far more often than ordinary computers, and error correction is what would let them run long computations anyway.",
      "blurb": "Topological and qLDPC codes: how they detect errors, how they compute, and how fairly their decoders are compared."},
     {"id": "qml", "motif": "circuit", "title": "Quantum algorithms and quantum machine learning",
+     "why": "These papers ask what present quantum processors can do in practice, and whether quantum models still win when the classical ones they are compared with are tuned with the same care.",
      "blurb": "Variational eigensolvers on hardware, quantum reservoirs and kernels, and machine learning that probes quantum random number generators."},
     {"id": "ai", "motif": "graph", "title": "LLM reasoning and applied machine learning",
+     "why": "Language models still fail at many problems that need several steps of reasoning, and sea level forecasts feed decisions about coasts and the infrastructure on them.",
      "blurb": "Test-time reasoning for language models, and ensemble forecasting."},
     {"id": "topo", "motif": "knot", "title": "Quantum topology",
+     "why": "Quantum topology ties quantities from quantum physics to the geometry of shapes, and a volume conjecture predicts that those quantities, taken to a limit, give the volume of a three-dimensional shape.",
      "blurb": "Bonahon–Wong–Yang quantum invariants of surface diffeomorphisms and their volume conjectures."},
     {"id": "nt", "motif": "primes", "title": "Number theory",
+     "why": "Goldbach's conjecture, open since 1742, asks whether every even number greater than 2 is the sum of two primes; the conjecture here asks for more, that from 6 on, one of the two can always be a twin prime.",
      "blurb": "Primes, twin primes and Goldbach."}
   ],
   "papers": [

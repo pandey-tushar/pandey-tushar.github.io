@@ -16,7 +16,14 @@ export function parseGroup(s) {
   return { family: m[1], label: `${m[1]} × Z${m[2]}`, html: `${l}<sub>${i}</sub>` + z };
 }
 
-export const families = codes => ORDER.filter(f => codes.some(c => parseGroup(c.group).family === f));
+// A family as the status line names it: 'S<sub>4</sub> x Z<sub>m</sub>', in the notation of parseGroup's html.
+export function familyHTML(f) {
+  if (f === 'Z9⋊Z12') return 'Z<sub>9</sub>&nbsp;&#8906;&nbsp;Z<sub>12</sub>';
+  const z = '&nbsp;&times;&nbsp;Z<sub>m</sub>';
+  return f === 'SL(2,3)' ? 'SL(2,3)' + z : `${BASES[f][0]}<sub>${BASES[f][1]}</sub>` + z;
+}
+
+export const families =codes => ORDER.filter(f => codes.some(c => parseGroup(c.group).family === f));
 
 const gcd = (a, b) => (b ? gcd(b, a % b) : a);
 export function ratio(mu, base) {

@@ -82,7 +82,7 @@ def entry(p, n):
         <article class="paper" id="{pid}">
           <a class="no tp-plate" href="#{pid}" aria-label="Link to entry {n}">{n:02d}</a>
           <div class="body">
-            <h2>{esc(p['title'])}</h2>
+            <h3>{esc(p['title'])}</h3>
             <p class="by">{byline(p)}</p>
             <p class="sum">{rich(p['summary'])}</p>{claim}
           </div>
@@ -116,7 +116,8 @@ def research_list(data):
       <figure class="motif tp-plate" aria-hidden="true">{motif(area['motif'])}</figure>
       <div>
         <p class="tp-lbl">Area {roman(i)} &middot; {len(ps)} {'entry' if len(ps) == 1 else 'entries'}</p>
-        <p class="area-title" id="area-{area['id']}">{esc(area['title'])}</p>
+        <h2 class="area-title" id="area-{area['id']}">{esc(area['title'])}</h2>
+        <p class="why">{esc(area['why'])}</p>
         <p class="blurb">{esc(area['blurb'])}</p>
       </div>
     </div>
@@ -144,7 +145,7 @@ def selected_list(data):
     return f'''        <ol class="pubs">
 {chr(10).join(items)}
         </ol>
-        <p class="more">Selected from {data['total']} papers and preprints across quantum error correction, quantum algorithms, LLM reasoning, quantum topology and number theory. <a class="tp-link" href="/research.html">The full list, with summaries</a>.</p>'''
+        <p class="more">Selected from {data['total']} papers and preprints across quantum error correction, quantum algorithms, LLM reasoning, quantum topology and number theory. <a class="tp-link" href="/research.html">Summaries on the research page</a>.</p>'''
 
 
 def jsonld(data):

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en" class="tp-full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0d1320">
+<script>
+(function(){
+  var d = document.documentElement;
+  try{
+    var pref = localStorage.getItem("tp-theme");
+    if (pref !== "light" && pref !== "dark") pref = "auto";
+    d.dataset.pref = pref;
+    d.dataset.theme =
+      (pref === "auto" ? matchMedia("(prefers-color-scheme: light)").matches : pref === "light")
+        ? "light" : "dark";
+  }catch(e){ d.dataset.pref = "auto"; d.dataset.theme = "dark"; }
+})();
+</script>
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/lib/site.css">
+<script src="/lib/site.js" defer></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVPGC1C44Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DVPGC1C44Z');
+</script>
+<title>Why quantum computers need error correction &middot; Tushar Pandey</title>
+<meta name="description" content="A plain explanation for anyone: why qubits make mistakes, why a long calculation cannot survive them, and how error correction finds and undoes them without looking. With a figure you can play with.">
+<meta name="author" content="Tushar Pandey">
+<link rel="canonical" href="https://pandey-tushar.com/why-error-correction.html">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "Why quantum computers need error correction",
+ "description": "A plain explanation for anyone: why qubits make mistakes, why a long calculation cannot survive them, and how error correction finds and undoes them without looking.",
+ "url": "https://pandey-tushar.com/why-error-correction.html",
+ "mainEntityOfPage": "https://pandey-tushar.com/why-error-correction.html",
+ "image": "https://pandey-tushar.com/og-qec.png",
+ "inLanguage": "en",
+ "isAccessibleForFree": true,
+ "about": "Quantum error correction",
+ "author": {
+  "@type": "Person",
+  "@id": "https://pandey-tushar.com/#person",
+  "name": "Tushar Pandey",
+  "url": "https://pandey-tushar.com/"
+ }
+}
+</script>
+<meta property="og:title" content="Why quantum computers need error correction &middot; Tushar Pandey">
+<meta property="og:description" content="Qubits make mistakes all the time. A plain explanation of how error correction finds and undoes them without looking, with a figure you can play with.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://pandey-tushar.com/why-error-correction.html">
+<meta property="og:image" content="https://pandey-tushar.com/og-qec.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Tushar Pandey">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why quantum computers need error correction &middot; Tushar Pandey">
+<meta name="twitter:description" content="Qubits make mistakes all the time. A plain explanation of how error correction finds and undoes them without looking, with a figure you can play with.">
+<meta name="twitter:image" content="https://pandey-tushar.com/og-qec.png">
+<link rel="stylesheet" href="/explainer/explainer.css">
+<script type="module" src="/explainer/explainer.js"></script>
+</head>
+<body>
+<a class="tp-skip" href="#main">Skip to content</a>
+<header class="tp-bar">
+  <a class="tp-mark" href="/" aria-label="Tushar Pandey, home">
+    <svg width="19" height="19" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="#52d6e6" stroke-width="1.05" opacity=".9">
+        <circle cx="12" cy="7.6" r="5.4"/><circle cx="8.2" cy="14.2" r="5.4"/><circle cx="15.8" cy="14.2" r="5.4"/>
+      </g>
+    </svg>
+    <span>Tushar Pandey</span>
+  </a>
+  <nav class="tp-nav" aria-label="Primary">
+    <a href="/research.html">Research</a>
+    <a href="/books.html">Books</a>
+    <a href="/qec-in-practice/">Lessons</a>
+    <a href="/cv.html">CV</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
+</header>
+
+<main id="main">
+<div class="tp-wrap">
+<article class="xp">
+
+  <h1>Why quantum computers need error correction</h1>
+  <p class="lede">A short explanation for anyone, with one figure you can play with. No physics needed.</p>
+
+  <h2>Qubits make mistakes</h2>
+  <p>An ordinary computer stores information as bits, each a 0 or a 1, held by tiny electronic switches. These switches almost never make a mistake on their own.</p>
+  <p>A quantum computer stores information in qubits. A qubit can hold more than a plain 0 or 1, and that is part of where its power comes from. Holding that in-between state is also what makes qubits fragile. Heat disturbs them. Stray electric and magnetic fields disturb them. Even the operations the machine performs on them add small mistakes. Qubits make mistakes all the time.</p>
+
+  <h2>Small mistakes add up</h2>
+  <p>A useful quantum calculation needs millions of steps. If each step has even a small chance of going wrong, the chance that every step goes right becomes tiny, and the answer at the end is noise.</p>
+  <p>Better qubits help, but no qubit is perfect. For a long calculation, the mistakes have to be found and undone while it runs. That is what error correction does. Making it work is one of the main obstacles between the quantum computers we have and useful ones.</p>
+
+  <h2>The old remedy is a vote</h2>
+  <p>Engineers solved this problem for ordinary signals long ago. To protect one bit, store it several times. If one copy flips, the others outvote it. With five copies and a majority vote, the stored bit survives any two flips. It is lost only when three or more go wrong.</p>
+
+  <figure class="tp-plate vote" id="fig-vote">
+    <div class="vote-row" data-row role="group" aria-label="Five qubits holding one bit, with a check between each pair of neighbours" hidden></div>
+    <p class="vote-key" hidden><span><i class="k-q" aria-hidden="true"></i> qubit</span> <span><i class="k-q flipped" aria-hidden="true"></i> flipped</span> <span><i class="k-c" aria-hidden="true"></i> check lit: neighbours disagree</span></p>
+    <div class="vote-controls" hidden>
+      <button type="button" class="tp-btn go" data-correct>Correct</button>
+      <button type="button" class="tp-btn" data-random>Random errors</button>
+      <button type="button" class="tp-btn" data-clear>Clear</button>
+    </div>
+    <div class="vote-chance" hidden>
+      <label for="vote-p">Error chance per qubit</label>
+      <span class="vote-slide"><input type="range" id="vote-p" min="0.01" max="0.9" step="0.01" value="0.1"> <output for="vote-p" data-pout>10%</output></span>
+    </div>
+    <p class="vote-status" aria-live="polite">This figure needs JavaScript.</p>
+    <div class="vote-loss" hidden>
+      <p class="tp-lbl">How often the stored bit is lost</p>
+      <table data-loss></table>
+      <p class="vote-trend" data-trend aria-live="polite"></p>
+    </div>
+    <figcaption><b>Fig. 1</b>Five qubits hold one bit. Click a qubit to flip it. The diamonds are checks between neighbours. Correct reads only the checks. The table uses the error chance on the slider. Everything here is computed by the same code as the course.</figcaption>
+  </figure>
+
+  <p>Try it. Flip qubits by hand or press Random errors, then press Correct. The figure tells you whether the stored bit survived.</p>
+  <p>The table asks how often the stored bit is lost when every qubit has the same chance of flipping. When errors are rare, more copies help: with seven qubits the bit is lost far less often than with one. Now move the slider up. Once each qubit is more likely to flip than not, a vote among more copies goes wrong more often, not less.</p>
+  <p>The turning point, where adding qubits stops helping and starts hurting, is called the threshold. For this simple scheme it sits at an error chance of one half. Real codes have a threshold too, and the qubits must be better than it before adding more of them pays off.</p>
+
+  <h2>A quantum computer cannot look</h2>
+  <p>There is a catch. A vote needs you to read every copy. Reading a qubit is a measurement, and measuring a qubit destroys the delicate information it holds.</p>
+  <p>So quantum error correction never asks what a qubit holds. It asks a weaker question about two neighbours: do they agree? The answer says nothing about the stored value, so asking it does no harm. In the figure, the diamonds between the qubits are these checks. A check lights up when its two neighbours disagree.</p>
+  <p>The lit checks are enough. One flipped qubit in the middle lights the two checks on either side of it. From the pattern of lit checks, Correct works out the smallest set of flips that explains it, and undoes them. That gives the same answer as the vote, without reading a single qubit. The figure shows you which qubits flipped so you can follow along. A real machine sees only the checks.</p>
+
+  <h2>Real codes work the same way</h2>
+  <p>Qubits can go wrong in more than one way, so real codes check for more than one kind of error. Many, like the surface code, arrange the qubits on a grid with checks between them. A program called a decoder reads which checks lit up and guesses which errors caused them. The idea is the one in the figure: spread one bit over many qubits, check neighbours without looking, and undo the likely mistakes.</p>
+
+  <h2>Where to go next</h2>
+  <ul class="next">
+    <li><a class="tp-link" href="/qec-in-practice/">Try it properly.</a> Quantum Error Correction in Practice is a course with live simulations of real codes and decoders. It assumes some background.</li>
+    <li><a class="tp-link" href="/qubit-dialogues.html">Read a book instead.</a> The Qubit Dialogues is a conversation about quantum computing in two voices. <a class="tp-link" href="/life/">An Unpolarized Life</a> keeps the two voices and leaves the physics out.</li>
+    <li><a class="tp-link" href="/research.html">What I work on.</a> I research quantum error correction.</li>
+  </ul>
+
+</article>
+</div>
+</main>
+
+<footer class="tp-foot">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/research.html">Research</a></li>
+    <li><a href="/books.html">Books</a></li>
+    <li><a href="/qec-in-practice/">Lessons</a></li>
+    <li><a href="/cv.html">CV</a></li>
+    <li><a href="https://github.com/pandey-tushar" rel="noopener">GitHub</a></li>
+    <li><a href="mailto:wtatushar@gmail.com">Email</a></li>
+  </ul>
+  <p>&copy; 2026 Tushar Pandey</p>
+</footer>
+
+</body>
+</html>

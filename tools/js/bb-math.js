@@ -228,6 +228,20 @@ export function fromQuery(search) {
   for (const k of ['l', 'm', 'A', 'B']) { if (!q.has(k)) return null; out[k] = q.get(k); }
   return out;
 }
+// What a page link asks for: no code ('none'), a valid code ('ok', with its fields), or something that is not one ('bad').
+export function linkState(search) {
+  const s = new URLSearchParams(search || '');
+  if (!['l', 'm', 'A', 'B'].some(k => s.has(k))) return { status: 'none' };
+  const q = fromQuery(search);
+  if (!q) return { status: 'bad' };
+  const L = checkSide(q.l), M = checkSide(q.m);
+  if (L.error || M.error || L.value * M.value > LIMITS.cells) return { status: 'bad' };
+  for (const k of ['A', 'B']) {
+    const p = parsePoly(q[k], L.value, M.value);
+    if (p.error || !p.terms.length) return { status: 'bad' };
+  }
+  return { status: 'ok', q };
+}
 const same = (u, v) => u.length === v.length && u.every((t, i) => t[0] === v[i][0] && t[1] === v[i][1]);
 export function matchPreset(l, m, A, B) {
   return PRESETS.find(p => p.l === l && p.m === m && same(parsePoly(p.A, l, m).terms, A) && same(parsePoly(p.B, l, m).terms, B)) || null;

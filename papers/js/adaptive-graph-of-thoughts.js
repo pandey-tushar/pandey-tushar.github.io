@@ -8,7 +8,7 @@ const SHAPE = { IO: 'circle', CoT: 'square', AIoT: 'triangle', AGoT: 'diamond' }
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const sub = s => esc(s).replace(/_([A-Z0-9])\b/g, '<sub>$1</sub>');
 let D = null;
-const state = { dataset: 'GPQA_S', model: 'gpt-4o', metric: 'accuracy' };
+const state = { dataset: 'GPQA_S', model: 'gpt-4o-mini', metric: 'accuracy' };
 
 // ---------- drawing ----------
 function draw(v) {

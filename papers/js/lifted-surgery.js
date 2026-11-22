@@ -1,7 +1,7 @@
 // Fig. 1 of papers/lifted-surgery.html. Every value shown comes from ../data/lifted-surgery.json, written by
 // _studio/tools/papers/extract_lifted-surgery.py. Nothing moves until the reader does.
 import { el, linScale, niceTicks, markerPath } from './plot.js';
-import { parseGroup, families, ratio, codeGain, bestOrbits, visible, sortCodes, slots, move } from './lifted-surgery-logic.js';
+import { parseGroup, familyHTML, families, ratio, codeGain, bestOrbits, visible, sortCodes, slots, move } from './lifted-surgery-logic.js';
 
 const $ = id => document.getElementById(id);
 const nf = n => n.toLocaleString('en-US');
@@ -98,14 +98,14 @@ function card(c) {
 function words(c) {
   const i = shown.findIndex(s => s.id === c.id) + 1;
   const d = `distance ${c.d}, exact`;
-  return `${nkd(c)} over ${parseGroup(c.group).label}, ${kind(c).replace(/^Table (\d):/, 'Table $1,')}. ${c.mu} operators in one merged code against ${c.base} for the best Abelian subgroup, gain ${ratio(c.mu, c.base)}; ${d}. Code ${i} of ${shown.length} shown.`;
+  return `${nkd(c)} over ${parseGroup(c.group).html}, ${kind(c).replace(/^Table (\d):/, 'Table $1,')}. ${c.mu} operators in one merged code against ${c.base} for the best Abelian subgroup, gain ${ratio(c.mu, c.base)}; ${d}. Code ${i} of ${shown.length} shown.`;
 }
 
 let sayTimer = 0;
 function say(text, now) {
   clearTimeout(sayTimer);
-  if (now) $('ls-status').textContent = text;
-  else sayTimer = setTimeout(() => { $('ls-status').textContent = text; }, 400);
+  if (now) $('ls-status').innerHTML = text;
+  else sayTimer = setTimeout(() => { $('ls-status').innerHTML = text; }, 400);
 }
 
 function choose(id, focus) {
@@ -130,7 +130,7 @@ function refilter() {
   }
   if (!shown.some(c => c.id === state.sel)) state.sel = shown[0].id;
   choose(state.sel, false);
-  const fam = state.family === 'all' ? 'all groups' : `groups ${state.family} × Zm`.replace('Z9⋊Z12 × Zm', 'Z9 ⋊ Z12');
+  const fam = state.family === 'all' ? 'all groups' : `groups ${familyHTML(state.family)}`;
   const cand = state.cand && state.gain !== '3' ? ' Search candidates shown.' : state.cand ? ' Search candidates hidden: they have gain two.' : '';
   say(`Showing ${shown.length} certified codes over ${fam}.${cand} Selected: ${words(shown.find(c => c.id === state.sel))}`, true);
 }

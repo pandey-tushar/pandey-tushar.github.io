@@ -109,9 +109,11 @@ function draw(fig, shot, k, basis) {
   for (const q of SEAM) fig.dots[q].classList.toggle('gone', gone);
   fig.dyn.replaceChildren();
   if (st.name === 'split' || st.name === 'readout') {
+    // each outcome sits above and beside its seam qubit, on the side away from the returned edge checks:
+    // B's left half disc spans rows 1 and 2 on the right, A's right one rows 0 and 1 on the left
     SEAM.forEach((q, i) => {
-      const [x, y] = P(q);
-      el('text', { x: x + 19, y: y - 12, class: 'sg-out' }, fig.dyn).textContent = pm(st.seam[i]);
+      const [x, y] = P(q), left = COORD[q][1] === 2;
+      el('text', { x: left ? x - 19 : x + 19, y: y - 12, class: 'sg-out', 'text-anchor': left ? 'end' : 'start' }, fig.dyn).textContent = pm(st.seam[i]);
     });
   }
   if (st.name === 'split') {

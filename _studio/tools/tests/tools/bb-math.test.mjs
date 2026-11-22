@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import {
   PRESETS, LIMITS, parsePoly, formatPoly, checkSide, buildCode, analyze, packRows, rankGF2,
-  matrixBody, matrixFile, toQuery, fromQuery, matchPreset,
+  matrixBody, matrixFile, toQuery, fromQuery, linkState, matchPreset,
 } from '../../../../tools/js/bb-math.js';
 
 const REF = JSON.parse(readFileSync(new URL('./bb-reference.json', import.meta.url), 'utf8'));
@@ -160,4 +160,15 @@ test('query string round trip and preset matching', () => {
   const p = matchPreset(12, 6, terms('y^2 + x^3 + y', 12, 6), terms('x^2+x+y^3', 12, 6));
   assert.equal(p && p.name, '[[144,12,12]]');
   assert.equal(matchPreset(12, 6, terms('x^3 + y + y^2', 12, 6), terms('y^3 + x', 12, 6)), null);
+});
+
+test('linkState: no code in the link, a valid code, or a link that does not give a valid code', () => {
+  assert.deepEqual(linkState(''), { status: 'none' });
+  assert.deepEqual(linkState('?utm=1'), { status: 'none' });
+  const q = toQuery({ l: 12, m: 6, A: 'x^3 + y + y^2', B: 'y^3 + x + x^2' });
+  assert.deepEqual(linkState(q), { status: 'ok', q: fromQuery(q) });
+  for (const bad of ['?l=abc&m=-1&A=zz', '?l=12', '?l=12&m=6&A=x^3%2By%2By^2&B=q', '?l=0&m=6&A=x&B=y',
+    '?l=60&m=60&A=x&B=y', '?l=2&m=1&A=x%2Bx&B=y']) {
+    assert.deepEqual(linkState(bad), { status: 'bad' }, bad);
+  }
 });

@@ -1,6 +1,6 @@
 // One lesson page: gate-block strip, smooth slider, patches, state panel, error panel, results.
 import { makePatches, stateHTML, checkName, checkCounts, el, X_STABS, Z_STABS } from './patch.js';
-import { phasesOf, drawStrip, fitPhaseLabels } from './strip.js';
+import { phasesOf, drawStrip, fitPhaseLabels, whereText } from './strip.js';
 import { resultsHTML } from './results.js';
 
 
@@ -83,7 +83,9 @@ async function main() {
   const D = await (await fetch(`data/lesson${n}.json`)).json();
 
   const svg = document.getElementById('patches');
-  addEventListener('resize', () => fitPhaseLabels(stripEl));
+  // the hint under the strip shows only while the strip is wider than its box
+  const stripHint = () => { document.getElementById('strip-hint').hidden = scroller.scrollWidth <= scroller.clientWidth + 1; };
+  addEventListener('resize', () => { fitPhaseLabels(stripEl); stripHint(); });
   // narrow screens stack the patches vertically so each stays readable
   const narrow = matchMedia('(max-width: 600px)');
   const layout = () => (narrow.matches ? D.blocks.map((b, i) => ({ ...b, x0: 0, y0: 3.7 * i })) : D.blocks);
@@ -118,6 +120,7 @@ async function main() {
     };
     stripEl.replaceChildren();
     cells = drawStrip(stripEl, L, cur.phases, (t) => { stop(); set(t + 0.99); }, true);
+    stripHint();
     slider.max = cur.T + 1;
     set(Math.min(pos, cur.T + 1));
   }
@@ -154,7 +157,7 @@ async function main() {
       lastK = k;
     }
     const done = pos >= T + 1;
-    where.textContent = done ? `All ${T + 1} steps done` : `Step ${k + 1} of ${T + 1}: ${cur.layers[k].phase}`;
+    where.textContent = whereText(pos, T, cur.layers[k].phase);
     caption.innerHTML = stateHTML(cur.text(k));
     // per patch: how many checks hold, fire, or are undetermined in what the figure shows
     checkline.innerHTML = checkCounts(D.blocks.map((blk) => blk.name), m < 0.5 && !done ? a : b).map((c) =>

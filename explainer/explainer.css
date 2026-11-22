@@ -1,0 +1,92 @@
+/* why-error-correction.html: one column of prose; from 60em the figure sits in a sticky right column
+   beside it. Inks from /lib/site.css: ink for the drawing, the accent for what Correct did, warm for a lit check. */
+
+.xp{padding-block:clamp(2.2rem,1rem + 4vw,4.4rem) clamp(3rem,2rem + 3vw,5rem)}
+.xp > *{max-width:40rem}
+.xp h1{margin-left:-.02em}
+.xp .lede{margin:clamp(14px,2vw,22px) 0 0;font-size:clamp(1.08rem,1rem + .35vw,1.2rem);line-height:1.55;color:var(--tp-text)}
+.xp h2{margin-top:2.1em}
+.xp p{margin:.85em 0 0;line-height:1.65}
+.xp h2 + p{margin-top:.6em}
+
+.next{list-style:none;margin:.8em 0 0;padding:0}
+.next li{margin:0 0 .75em;line-height:1.6}
+.next li > a:first-child{font-weight:500}
+
+/* ---------- the figure ---------- */
+.vote{margin:1.6rem 0 .4rem;padding:16px 16px 14px}
+.vote [hidden]{display:none!important}
+
+.vote-row{
+  position:relative;display:flex;align-items:center;justify-content:space-between;
+  max-width:26rem;margin:6px auto 4px;padding:6px 0;
+}
+.vote-row::before{content:"";position:absolute;left:22px;right:22px;top:50%;border-top:1px solid var(--tp-dim);z-index:0}
+.vote .q{
+  position:relative;z-index:1;flex:0 0 auto;
+  width:44px;height:44px;border-radius:50%;padding:0;cursor:pointer;
+  font:500 var(--tp-t-small)/1 var(--tp-sans);color:var(--tp-dim);
+  background:var(--tp-void2);border:1.5px solid var(--tp-ink);
+}
+.vote .q:hover{border-color:var(--tp-acc)}
+.vote .q:focus-visible{outline:2px solid var(--tp-acc);outline-offset:3px}
+.vote .q[aria-pressed="true"]{background:var(--tp-ink);color:var(--tp-void)}
+.vote .q.fixed{box-shadow:0 0 0 3px var(--tp-void2),0 0 0 4.5px var(--tp-acc)}
+.vote .chk{
+  position:relative;z-index:1;flex:0 0 auto;width:15px;height:15px;transform:rotate(45deg);
+  background:var(--tp-void2);border:1.25px solid var(--tp-dim);
+}
+.vote .chk.lit{background:var(--tp-warm);border-color:var(--tp-warm)}
+
+.vote-key{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px 8px;
+  margin:4px 0 0;font-size:var(--tp-t-small);color:var(--tp-dim)}
+.vote-key > span{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;margin-inline:4px}
+.vote-key i{display:inline-block;flex:0 0 auto}
+.vote-key .k-q{width:13px;height:13px;border-radius:50%;border:1.25px solid var(--tp-ink);background:var(--tp-void2)}
+.vote-key .k-q.flipped{background:var(--tp-ink)}
+.vote-key .k-c{width:10px;height:10px;transform:rotate(45deg);margin-inline:2px;background:var(--tp-warm)}
+
+.vote-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.vote .tp-btn.go{color:var(--tp-acc);border-color:var(--tp-a40)}
+.vote .tp-btn.go:hover,.vote .tp-btn.go:focus-visible{border-color:var(--tp-acc)}
+
+.vote-chance{display:flex;align-items:center;flex-wrap:wrap;gap:4px 12px;margin-top:12px;font-size:var(--tp-t-small);color:var(--tp-text)}
+.vote-slide{display:flex;align-items:center;gap:12px;flex:1 1 12rem;min-width:0}
+.vote-chance input{flex:1 1 auto;min-width:0;height:40px;margin:0;accent-color:var(--tp-acc);cursor:pointer}
+.vote-chance output{min-width:3.5ch;text-align:right;font-variant-numeric:tabular-nums;color:var(--tp-ink);font-weight:600}
+
+.vote-status{min-height:3.2em;margin:12px 0 0!important;font-size:var(--tp-t-small);line-height:1.5!important;color:var(--tp-ink)}
+
+.vote-loss{margin-top:14px;padding-top:12px;border-top:1px solid var(--tp-rule)}
+.vote-loss .tp-lbl{margin:0 0 6px}
+.vote-loss table{width:100%;border-collapse:collapse;font-size:var(--tp-t-small);font-variant-numeric:tabular-nums}
+.vote-loss th{text-align:left;font-weight:400;color:var(--tp-text);white-space:nowrap;padding:3px 10px 3px 0;width:1%}
+.vote-loss td{padding:3px 0}
+.vote-loss td:last-child{text-align:right;white-space:nowrap;color:var(--tp-ink);padding-left:10px;width:1%}
+.vote-loss .bar{position:relative}
+.vote-loss .bar::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid var(--tp-rule)}
+.vote-loss .bar span{position:relative;display:block;height:8px;min-width:1.5px;background:var(--tp-acc)}
+.vote-loss tr.this th,.vote-loss tr.this td:last-child{font-weight:600;color:var(--tp-ink)}
+.vote-trend{margin:8px 0 0!important;font-size:var(--tp-t-small);color:var(--tp-text)}
+.vote figcaption{margin-top:12px}
+
+/* wide: prose on the left at a reading measure, the figure held in view on the right */
+@media (min-width:60em){
+  .xp{
+    display:grid;align-items:start;justify-content:space-between;
+    grid-template-columns:minmax(0,40rem) minmax(20rem,29rem);column-gap:clamp(40px,5vw,88px);
+  }
+  .xp > *{grid-column:1}
+  .xp > .vote{
+    grid-column:2;grid-row:1 / span 60;margin:0;
+    position:sticky;top:calc(var(--tp-barh) + 24px);
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .vote *{transition:none!important}
+}
+@media print{
+  .vote-controls,.vote-chance{display:none!important}
+  .xp > .vote{position:static}
+}

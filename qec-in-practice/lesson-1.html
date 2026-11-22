@@ -73,8 +73,10 @@
 </header>
 
 <main id="main" class="page" data-lesson="1">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a id="prev" href="repetition-code.html">&larr; Previous: The repetition code</a> <a id="next" href="decoding.html">Next: Errors, syndromes and decoding &rarr;</a></nav>
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="repetition-code.html">&larr; Previous<span class="nav-long">: The repetition code</span></a> <a id="next" href="decoding.html">Next<span class="nav-long">: Errors, syndromes and decoding</span>&nbsp;&rarr;</a></nav>
+  <p class="tp-lbl step-of">Step 2 of 8</p>
   <h1 id="lesson-title">Lesson 1: A surface code patch</h1>
+  <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">A real quantum code has to catch two kinds of error, bit flips and phase flips. This page builds the smallest surface code: nine qubits in a square that together hold one protected qubit, watched by eight checks. You can strike any qubit with an error and see which checks notice it.</p></aside>
   <p class="lead" id="lesson-intro">Nine physical qubits in a 3 by 3 grid hold one logical qubit. An encoder spreads |0&#10217; over all nine, and eight checks (four X, four Z) watch for errors. Pick an error next to the Play button to see which checks fire.</p>
 
   <div class="stage" id="stage">
@@ -91,6 +93,7 @@
         </div>
         <input type="range" id="slider" class="slider" min="0" max="1" step="any" value="0" aria-label="Position in the circuit (steps)">
         <div class="strip-scroll" id="strip-scroll"><div class="strip" id="strip"></div></div>
+        <p class="scroll-hint strip-hint" id="strip-hint" aria-hidden="true" hidden>Scroll the strip sideways for every step &rarr;</p>
         <p class="caption" id="caption" aria-live="polite"></p>
       </div>
       <div class="layer-text">
@@ -102,9 +105,12 @@
   </div>
 
   <section class="panel narrative">
+    <div>
     <h2>What this lesson shows</h2>
-    <p>The patch is nine data qubits in a 3 by 3 grid, watched by eight checks: four X and four Z. The encoder takes eight steps. Two CNOTs copy q0 along the top row, H makes q4, q5, q6 and q7 the sources of the X checks, and their CNOTs fan out until all eight checks hold and the patch is |0&#10217;&#8203;<sub>L</sub>.</p>
+    <p>The patch is nine data qubits in a 3 by 3 grid, watched by eight checks: four X and four Z. The encoder takes eight steps. Two CNOTs copy q0 along the top row, H makes q4, q5, q6 and q7 the sources of the X checks, and their CNOTs fan out until all eight checks hold and the patch is |0&#10217;&#8288;<sub>L</sub>.</p>
     <p>An injected error strikes right after encoding. An X error fires the Z checks that share its qubit, a Z error fires the X checks, and a Y error fires both. The page looks the Z syndrome up in a table of single errors and applies X to the qubit it names. A Z error cannot change a Z readout, so here it is harmless.</p>
+    </div>
+    <div>
     <h2>Things to try</h2>
     <ul class="try">
       <li>Pick X on q4 in the Inject an error menu and press Play. Two Z checks fire, and the table points back at q4.</li>
@@ -112,6 +118,7 @@
       <li>Pick Z on q4: two X checks fire and the Z readout stays correct.</li>
       <li>Drag the slider, or click a block in the strip, to stop on any step.</li>
     </ul>
+    </div>
   </section>
 
   <section class="panel" id="circuit-box">
@@ -128,13 +135,13 @@
     <h2>Step by step</h2>
     <ol class="steps">
       <li><b>encode A.</b> CNOT q0 → q1 starts copying q0 along the top row. H on q4, q5, q6, q7 makes them the sources of the X checks.</li>
-      <li><b>encode A.</b> CNOT q0 → q2 finishes the copy. Had q0 been |1&#10217;, the top row would now carry X on all three qubits: that is X&#8203;<sub>L</sub>, the logical flip.</li>
+      <li><b>encode A.</b> CNOT q0 → q2 finishes the copy. Had q0 been |1&#10217;, the top row would now carry X on all three qubits: that is X&#8288;<sub>L</sub>, the logical flip.</li>
       <li><b>encode A.</b> The sources fan out: CNOT q4 → q0, q5 → q2.</li>
       <li><b>encode A.</b> The sources fan out: CNOT q4 → q1, q7 → q0.</li>
       <li><b>encode A.</b> The sources fan out: CNOT q4 → q3, q7 → q1.</li>
       <li><b>encode A.</b> The sources fan out: CNOT q6 → q3, q7 → q2.</li>
       <li><b>encode A.</b> The sources fan out: CNOT q7 → q3.</li>
-      <li><b>encode A.</b> CNOT q7 → q8 completes the fan-out: all eight checks hold and A is |0&#10217;&#8203;<sub>L</sub>. Whatever state q0 starts in, the encoder makes it the logical state.</li>
+      <li><b>encode A.</b> CNOT q7 → q8 completes the fan-out: all eight checks hold and A is |0&#10217;&#8288;<sub>L</sub>. Whatever state q0 starts in, the encoder makes it the logical state.</li>
       <li><b>measure.</b> Every qubit is measured in Z. Only the checks that are Z parities can still be read.</li>
     </ol>
   </section>
@@ -142,6 +149,11 @@
   <section class="panel">
     <h2 id="results-head">Results</h2>
     <div id="results"></div>
+    <div class="results-note">
+      <h3>How to read this table</h3>
+      <p>Every shot ends with all data qubits measured, and the checks are worked out from those bits. Clean shots only gives the rate over the shots in which no check fired. Corrected by the code is the share of shots in which checks fired and a table of single errors named a qubit to flip back; After correction is the rate over all kept shots once that flip is made. Discarded by the checks is the share of shots whose fired checks are not in the table at all: those shots are dropped. No correction reads the raw bits of every shot. Bare qubits runs the same logical circuit with one unprotected qubit in place of each patch: no encoder and no checks. Each rate comes with one binomial standard error.</p>
+      <p>Why the code loses here: the noise in this simulation acts only on gates, as the line under the table says. The bare row reads a qubit left in |0&#10217; with no gate acting on it, so no noise reaches it: it is a trivial control, not a fair rival. The patch goes through the twelve CNOTs of the encoder, and one faulty CNOT can leave errors on two qubits that the table of single errors then completes into a logical flip. The encoder is not fault tolerant: in the course's own stabilizer simulator, 44 of the 180 ways a single CNOT of the lesson 1 encoder can fail (each of its 12 CNOTs followed by one of the 15 two-qubit Pauli errors) end in a wrong logical readout after the table's correction.</p>
+    </div>
   </section>
 
   <nav class="secnav endnav" aria-label="Course, end of lesson"><a href="repetition-code.html">&larr; Previous: The repetition code</a> <a href="decoding.html">Next: Errors, syndromes and decoding &rarr;</a></nav>

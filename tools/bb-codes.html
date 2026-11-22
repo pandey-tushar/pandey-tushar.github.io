@@ -70,7 +70,7 @@
 </header>
 
 <main id="main" class="bb">
- <div class="tp-wrap">
+ <div class="tp-wrap bb-cols">
   <header class="bb-head">
     <p class="tp-lbl">Tool</p>
     <h1>Bivariate bicycle code explorer</h1>
@@ -119,6 +119,24 @@
     <p class="bb-status" id="bb-status" role="status" aria-live="polite">This tool needs JavaScript: it builds the check matrices and computes the parameters in your browser. The sections below define the codes and say how each number is computed.</p>
   </section>
 
+  <aside class="bb-rail" aria-label="Summary and contents">
+    <section class="bb-plainwords" aria-labelledby="plain">
+      <h2 class="bb-rail-h" id="plain">In plain words</h2>
+      <p>Each cell of the grid below holds two qubits and two checks. Click a check to see the qubits it acts on, or a qubit to see the checks that act on it.</p>
+    </section>
+    <nav class="bb-toc" aria-label="On this page">
+      <p class="bb-rail-h">On this page</p>
+      <ol>
+        <li><a href="#tool-h">The code</a></li>
+        <li><a href="#fig-layout">Fig. 1: the layout</a></li>
+        <li><a href="#fig-dist">Fig. 2: the distance search</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#limits">Limits</a></li>
+        <li><a href="#related">Related</a></li>
+        <li><a href="#cite">Cite this tool</a></li>
+      </ol>
+    </nav>
+  </aside>
   <figure class="tp-plate bb-fig" id="fig-layout">
     <div class="bb-controls" id="lay-controls" hidden>
       <label>Show <select id="lay-kind">
@@ -143,7 +161,7 @@
     <figcaption><b>Fig. 1</b>The code on an l&nbsp;&times;&nbsp;m torus of cells. Cell (i,&nbsp;j) stands for the monomial x<sup>i</sup>y<sup>j</sup> and holds an X check, an L qubit, an R qubit and a Z check. Select a check to see the qubits it acts on, or a qubit to see its checks, by clicking it or with the controls above; the lines run to the cells they reach without wrapping around the torus, so long-range edges show as long lines. For large l and m the cells are drawn as plain dots.</figcaption>
   </figure>
 
-  <figure class="tp-plate bb-fig" id="fig-dist">
+  <figure class="tp-plate bb-fig bb-dist" id="fig-dist">
     <div class="bb-controls" id="dist-controls" hidden>
       <label>Seed <input id="dist-seed" type="text" inputmode="numeric" autocomplete="off" value="1" aria-describedby="dist-err"></label>
       <button type="button" class="tp-btn bb-run" id="dist-run">Run search</button>
@@ -160,21 +178,21 @@
   </figure>
 
   <article class="bb-essay">
-  <h2>How it works</h2>
+  <h2 id="how">How it works</h2>
   <p>A bivariate bicycle code is fixed by whole numbers l and m and two polynomials A and B with coefficients in F<sub>2</sub>, the field with two elements. Let S<sub>l</sub> be the l&nbsp;&times;&nbsp;l cyclic shift matrix, whose row i has a single one, in column i&nbsp;+&nbsp;1 mod l. Then x&nbsp;=&nbsp;S<sub>l</sub>&nbsp;&otimes;&nbsp;I<sub>m</sub> and y&nbsp;=&nbsp;I<sub>l</sub>&nbsp;&otimes;&nbsp;S<sub>m</sub> are lm&nbsp;&times;&nbsp;lm matrices with xy&nbsp;=&nbsp;yx and x<sup>l</sup>&nbsp;=&nbsp;y<sup>m</sup>&nbsp;=&nbsp;1, so each monomial x<sup>a</sup>y<sup>b</sup> is a permutation matrix and A and B are sums of them. The check matrices are H<sub>X</sub>&nbsp;=&nbsp;[A&nbsp;|&nbsp;B] and H<sub>Z</sub>&nbsp;=&nbsp;[B<sup>T</sup>&nbsp;|&nbsp;A<sup>T</sup>] on n&nbsp;=&nbsp;2lm qubits: the first lm columns are the left (L) qubits, the rest the right (R) qubits. Since A and B commute, H<sub>X</sub>H<sub>Z</sub><sup>T</sup>&nbsp;=&nbsp;AB&nbsp;+&nbsp;BA&nbsp;=&nbsp;0, so every X check commutes with every Z check; the tool also checks this directly.</p>
   <p>The number of logical qubits is k&nbsp;=&nbsp;n&nbsp;&minus;&nbsp;rank&nbsp;H<sub>X</sub>&nbsp;&minus;&nbsp;rank&nbsp;H<sub>Z</sub>, with ranks over F<sub>2</sub>; the paper shows that it equals 2&nbsp;dim(ker&nbsp;A&nbsp;&cap;&nbsp;ker&nbsp;B), and the tool computes both. A check has one qubit for each monomial of A and of B, so with three terms in each, as in every code of the paper&rsquo;s table, every check has weight 6. The Tanner graph joins each check to the qubits it acts on, and the tool counts its connected pieces. The paper&rsquo;s net encoding rate, r&nbsp;=&nbsp;k/2n, counts n check qubits as well as the n data qubits.</p>
   <p>The distance d is the least weight of a logical operator that is not a product of checks; the paper shows that X-type and Z-type logical operators have the same least weight. Computing d exactly is hard in general. The search here repeatedly puts a basis of ker&nbsp;H<sub>X</sub> or ker&nbsp;H<sub>Z</sub> in reduced row echelon form, taking the columns in a random order, and tests each row and each sum of two rows. A candidate counts if it has odd overlap with a logical operator of the other type. The lowest weight found is an upper bound on d. For the codes from the table, d is quoted from Table&nbsp;3 of the paper, where an entry written &le; is itself an upper bound.</p>
   <p class="bb-src">Source: S. Bravyi, A. W. Cross, J. M. Gambetta, D. Maslov, P. Rall and T. J. Yoder, &ldquo;High-threshold and low-overhead fault-tolerant quantum memory,&rdquo; Nature 627, 778 (2024), <a class="tp-link" href="https://arxiv.org/abs/2308.07915" rel="noopener"><span class="tp-id">arXiv:2308.07915</span></a>.</p>
 
-  <h2>Limits</h2>
+  <h2 id="limits">Limits</h2>
   <p>The tool does not compute the exact distance. The search gives an upper bound, it can miss the true value, and a value it finds proves nothing about lower weights. Nothing here models noise, circuits, decoders or the schedule of syndrome measurements: every number is a property of the check matrices alone. l and m are limited to <span id="lim-side2">60</span> each and lm to <span id="lim-cells2">1,200</span>, so n is at most 2,400; the parameters then still come back in a fraction of a second. The layout turns into plain dots when the cells get small, and the search slows as n grows.</p>
 
-  <h2>Related</h2>
+  <h2 id="related">Related</h2>
   <ul class="bb-links">
     <li><a class="tp-link" href="/papers/bb-erasure-baselines.html">Fair decoder baselines and finite-size scaling for bivariate bicycle codes</a>, a paper companion page</li>
     <li><a class="tp-link" href="/qec-in-practice/">Quantum Error Correction in Practice</a>, a course of interactive lessons</li>
   </ul>
-  <p class="bb-cite"><span class="tp-lbl">Cite this tool</span> T. Pandey, Bivariate bicycle code explorer (2026), https://pandey-tushar.com/tools/bb-codes.html</p>
+  <p class="bb-cite" id="cite"><span class="tp-lbl">Cite this tool</span> T. Pandey, Bivariate bicycle code explorer (2026), https://pandey-tushar.com/tools/bb-codes.html</p>
   </article>
  </div>
 </main>

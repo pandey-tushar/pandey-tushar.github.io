@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { parseGroup, families, ratio, codeGain, bestOrbits, visible, sortCodes, slots, move } from '../../../../papers/js/lifted-surgery-logic.js';
+import { parseGroup, familyHTML, families, ratio, codeGain, bestOrbits, visible, sortCodes, slots, move } from '../../../../papers/js/lifted-surgery-logic.js';
 
 const DATA = JSON.parse(readFileSync(new URL('../../../../papers/data/lifted-surgery.json', import.meta.url), 'utf8'));
 const T2 = DATA.certified.filter(c => c.table === 2);
@@ -89,4 +89,10 @@ test('move steps through a list with arrow keys, Home and End, and ignores other
   assert.equal(move(2, 'Home', 5), 0);
   assert.equal(move(2, 'End', 5), 4);
   assert.equal(move(2, 'a', 5), null);
+});
+
+test('familyHTML writes a family of groups with subscripts, as the detail card does', () => {
+  assert.equal(familyHTML('S4'), 'S<sub>4</sub>&nbsp;&times;&nbsp;Z<sub>m</sub>');
+  assert.equal(familyHTML('SL(2,3)'), 'SL(2,3)&nbsp;&times;&nbsp;Z<sub>m</sub>');
+  assert.equal(familyHTML('Z9⋊Z12'), 'Z<sub>9</sub>&nbsp;&#8906;&nbsp;Z<sub>12</sub>');
 });

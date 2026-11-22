@@ -1,8 +1,8 @@
 /* The threshold lesson. Ground, type and links come from /lib/site.css; this file lays out the essay, the three
    figures and their controls. Series inks run from muted to strong with d, and each d also has its own marker
    and dash, so the order survives without colour. */
-.threshold .essay { max-width: var(--tp-measure); }
-.threshold .essay h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.6rem); line-height: 1.1; margin: 14px 0 12px; }
+.threshold .essay { max-width: var(--essay-col); }
+.threshold h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.6rem); line-height: 1.1; margin: 14px 0 12px; }
 .threshold .essay h2 { font-size: 1.45rem; margin: 2rem 0 0.6rem; }
 .threshold .essay p { margin: 0 0 1rem; color: var(--tp-text); }
 .threshold .essay .lead { font-size: 1.06rem; }
@@ -18,7 +18,7 @@
   --d11: var(--tp-ink);
 }
 .thr-fig [hidden] { display: none !important; }
-.thr-fig figcaption { max-width: var(--tp-measure); }
+.thr-fig figcaption { max-width: var(--essay-col); }
 #fig-lambda { max-width: 46rem; }
 
 /* controls */

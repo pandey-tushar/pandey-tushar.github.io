@@ -1,7 +1,7 @@
 /* Lattice surgery page. Figure inks (--x, --z, --bad, --focus) come from css/site.css;
    everything else from the --tp- tokens. Nothing animates. */
-.surgery .essay { max-width: var(--tp-measure); }
-.surgery .essay h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.6rem); line-height: 1.1; margin: 14px 0 12px; }
+.surgery .essay { max-width: var(--essay-col); }
+.surgery h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.6rem); line-height: 1.1; margin: 14px 0 12px; }
 .surgery .essay h2 { font-size: 1.45rem; margin: 2rem 0 0.6rem; }
 .surgery .essay p { margin: 0 0 1rem; color: var(--tp-text); }
 .surgery .essay .lead { font-size: 1.06rem; }
@@ -47,5 +47,9 @@
 .surgery .sg-t thead th { font: 600 12px/1.4 var(--tp-sans); text-transform: none; letter-spacing: 0; }
 .surgery .sg-t td { font-family: var(--tp-mono); }
 .sg-sum { margin: 8px 0 0; color: var(--tp-text); }
-.surgery-fig figcaption { max-width: var(--tp-measure); }
+.surgery-fig figcaption { max-width: var(--essay-col); }
+/* the 200-shot tally sits centred under the figure */
+.sg-run { justify-content: center; }
+.surgery .sg-t { margin-inline: auto; }
+.sg-sum { text-align: center; }
 .surgery sub { font-size: max(12px, 0.75em); }

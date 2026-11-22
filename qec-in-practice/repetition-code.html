@@ -73,12 +73,18 @@
   <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
-<main id="main" class="essay">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a href="lesson-1.html">Next: Lesson 1 &rarr;</a></nav>
+<main id="main" class="essay course-essay">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="next" href="lesson-1.html">Next<span class="nav-long">: Lesson 1: A surface code patch</span>&nbsp;&rarr;</a></nav>
+  <p class="tp-lbl step-of">Step 1 of 8</p>
   <h1>The repetition code</h1>
+  <div class="course-rail">
+  <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">A qubit can be flipped by noise without anyone noticing. Here we store one bit in a row of qubits and compare neighbours, so a single flip shows up as a disagreement and can be outvoted. You can flip qubits yourself and see when the vote goes wrong.</p></aside>
+  <nav class="course-toc" aria-label="On this page"><p class="tp-lbl">On this page</p><ol><li><a href="#one-bit-written-d-times">One bit, written d times</a></li><li class="toc-fig"><a href="#fig-flip">Fig. 1</a></li><li><a href="#decoding-a-guess-from-the-syndrome">Decoding: a guess from the syndrome</a></li><li class="toc-fig"><a href="#fig-decode">Fig. 2</a></li><li><a href="#does-it-help">Does it help?</a></li><li class="toc-fig"><a href="#fig-plot">Fig. 3</a></li><li><a href="#what-the-repetition-code-cannot-do">What the repetition code cannot do</a></li></ol></nav>
+  </div>
+  <div class="essay-flow">
   <p class="lead">A qubit left alone does not stay put. Now and then something in its surroundings flips it, |0&#10217; to |1&#10217; or back, and nothing tells you that it happened. Error correction starts from a simple idea: store one bit in several qubits, so that one flip can be outvoted. This page builds that idea, the repetition code, and measures how well it works.</p>
 
-  <h2>One bit, written d times</h2>
+  <h2 id="one-bit-written-d-times">One bit, written d times</h2>
   <p>To store a 0, set d qubits to |0&#10217;&#8203;|0&#10217;&#8230;|0&#10217;. To store a 1, set them all to |1&#10217;. The number d is the <em>distance</em> of the code: the fewest flips that turn one codeword into the other. For a quantum state a|0&#10217; + b|1&#10217; the encoding gives a|00&#8230;0&#10217; + b|11&#8230;1&#10217;. That is not d copies of the state, which quantum mechanics forbids; it is one state spread over d qubits.</p>
   <p>Now the catch. To find a flipped qubit you might read every qubit and take the majority. On a quantum computer that reading destroys the superposition you were trying to protect. The way out is to ask a weaker question. A <em>parity check</em> compares two neighbours and reports only whether they agree. Written as an operator it is Z<sub>i</sub>Z<sub>i+1</sub>, with outcome +1 when the two qubits agree and &minus;1 when they differ. Both |00&#8230;0&#10217; and |11&#8230;1&#10217; give +1 on every check, so measuring the checks says nothing about a or b and leaves the stored state alone.</p>
   <p>The list of check outcomes is the <em>syndrome</em>. A check that reports &minus;1 has <em>fired</em>. In the figure below, click a qubit (or move to it with the arrow keys and press Enter) to flip it, and watch which checks fire. Try a single flip in the middle, one at the end, and then two or three neighbours in a row.</p>
@@ -96,9 +102,9 @@
 
   <p>A single flip in the middle fires the two checks on either side of it. A flip on an end qubit fires only one check, because there is no neighbour on the outside. A run of flipped neighbours fires only the checks at its two ends: inside the run, neighbours still agree. The syndrome shows where an error begins and ends, not what lies between.</p>
 
-  <h2>Decoding: a guess from the syndrome</h2>
+  <h2 id="decoding-a-guess-from-the-syndrome">Decoding: a guess from the syndrome</h2>
   <p>A <em>decoder</em> turns the syndrome into a correction: a set of qubits to flip back. Every syndrome of the repetition code has exactly two explanations, and they are complements of each other. If flipping the qubits in a set E reproduces the syndrome, so does flipping every qubit outside E. One explanation flips k qubits and the other flips d &minus; k. When each qubit flips on its own with a probability p below 1/2, the explanation with fewer flips is the more likely one, so the decoder picks it.</p>
-  <p>The decoder used throughout this course is a union-find decoder, introduced in <a href="decoding.html">Errors, syndromes and decoding</a>. On a line of qubits it gives the same answer as a majority vote; the course's tests check this for every error pattern at d = 3, 5 and 7. Flip some qubits, or draw random flips at rate p, and press Decode. Then try to make it fail: at d = 3, flip two qubits; at d = 5, three.</p>
+  <p>The decoder on this page is a union-find decoder, the one the decoding and threshold pages use; <a href="decoding.html">Errors, syndromes and decoding</a> introduces it. Lesson 1, next, corrects with a simpler lookup table instead. On a line of qubits it gives the same answer as a majority vote; the course's tests check this for every error pattern at d = 3, 5 and 7. Flip some qubits, or draw random flips at rate p, and press Decode. Then try to make it fail: at d = 3, flip two qubits; at d = 5, three.</p>
 
   <figure class="tp-plate ex" id="fig-decode">
     <svg class="code" role="group" aria-label="Repetition code with a decoder: flip qubits, then decode" hidden></svg>
@@ -117,7 +123,7 @@
 
   <p>With up to (d &minus; 1)/2 flips the decoder always restores 0. With (d + 1)/2 flips or more, the complement has fewer flips, the decoder chooses it, and the correction completes the error: every qubit ends up reading 1. The checks are all quiet again, but the stored bit has changed. That is a <em>logical error</em>, and no decoder can avoid it, because the syndrome is the same whichever of the two explanations is true.</p>
 
-  <h2>Does it help?</h2>
+  <h2 id="does-it-help">Does it help?</h2>
   <p>So the code fails when more than half of its qubits flip. With independent flips at rate p, that happens with probability</p>
   <p class="formula">P<sub>L</sub>(d, p) = &sum;<sub>k &gt; d/2</sub> C(d, k) p<sup>k</sup> (1 &minus; p)<sup>d&minus;k</sup>,</p>
   <p>the chance that a binomial count of flips passes d/2. For d = 3 this is 3p<sup>2</sup> &minus; 2p<sup>3</sup>, which is smaller than p whenever p is below 1/2. The plot draws this formula as lines, with d = 1 (a bare qubit, no code) for comparison. Press Run to add points from a Monte Carlo simulation: the engine draws random flips, decodes each sample and counts the failures, in a background thread so the page stays responsive.</p>
@@ -136,12 +142,13 @@
 
   <p>The points sit on the lines, within their error bars. Every curve passes through P<sub>L</sub> = 1/2 at p = 1/2, where a flipped qubit is as likely as an unflipped one and the syndrome carries no information about the stored bit. Below p = 1/2 the curves fan out: more qubits give a lower logical error rate, and the gap grows quickly as p falls, because P<sub>L</sub> scales like p<sup>(d+1)/2</sup> for small p. Above p = 1/2 more qubits make things worse. A point where adding qubits switches from hurting to helping is called a <em>threshold</em>; for the repetition code against independent bit flips it is p = 1/2.</p>
 
-  <h2>What the repetition code cannot do</h2>
+  <h2 id="what-the-repetition-code-cannot-do">What the repetition code cannot do</h2>
   <p>Bit flips are not the only error a qubit suffers. A <em>phase flip</em>, the operator Z, leaves |0&#10217; alone and sends |1&#10217; to &minus;|1&#10217;. A single phase flip on any one of the d qubits turns a|00&#8230;0&#10217; + b|11&#8230;1&#10217; into a|00&#8230;0&#10217; &minus; b|11&#8230;1&#10217;. Every parity check still reports +1, so nothing fires, and the stored state is wrong. Against phase flips the repetition code is worse than a bare qubit: it offers d places for the error to land instead of one.</p>
   <p>A quantum code has to catch both kinds at once. The surface code does it with two families of checks laid out on a grid, one for bit flips and one for phase flips, so that each sees the errors the other cannot. The smallest one that can correct an error holds one logical qubit in nine data qubits.</p>
 
   <nav class="secnav endnav" aria-label="Course, end of lesson"><a href="lesson-1.html">Next: Lesson 1: A surface code patch &rarr;</a></nav>
   <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "The repetition code", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/repetition-code.html</p>
+  </div>
 </main>
 
 <footer class="tp-foot">

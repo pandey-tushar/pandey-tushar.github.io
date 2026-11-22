@@ -1,19 +1,25 @@
 /* The essay lessons (repetition-code.html, decoding.html). Ground, type and tokens come from
    /lib/site.css; the X, Z, fired and error inks (--x, --z, --bad) from css/site.css. */
-.essay { max-width: calc(44rem + 2 * var(--tp-gut)); margin: 0 auto; padding: 18px var(--tp-gut) 48px; }
-.essay h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.7rem); line-height: 1.08; margin: 14px 0 14px; }
-.essay h2 { font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.7rem); margin: 2.4rem 0 0.7rem; }
-.essay p, .essay li { max-width: var(--tp-measure); }
-.essay p { margin: 0 0 1em; }
+.essay { max-width: calc(72rem + 2 * var(--tp-gut)); margin: 0 auto; padding: 18px var(--tp-gut) 48px; }
+/* the text column of css/site.css (--essay-col) on the left; figures across the main column */
+.essay-flow > * { max-width: var(--essay-col); }
+.essay-flow > figure.ex { max-width: none; }
+.essay h1 { font-size: clamp(1.9rem, 1.3rem + 2vw, 2.7rem); line-height: 1.08; margin-block: 14px 14px; }
+.essay h2 { font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.7rem); margin-block: 2.4rem 0.7rem; }
+.essay li { max-width: var(--tp-measure); }
+.essay p { margin-block: 0 1em; }
 .essay .lead { font-size: 1.06rem; color: var(--tp-text); }
 .essay a:not(.tp-btn) { color: var(--tp-acc); text-decoration: underline 1px; text-decoration-color: var(--tp-a40); text-underline-offset: 0.2em; }
 .essay a:not(.tp-btn):hover, .essay a:not(.tp-btn):focus-visible { text-decoration-color: currentColor; }
 .essay .secnav a { text-decoration: none; color: var(--tp-dim); }
-.essay .cite { margin-top: 2.4rem; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); color: var(--tp-dim); }
-.essay .formula { font-family: var(--tp-serif); font-size: 1.12rem; color: var(--tp-ink); margin-left: clamp(0px, 4vw, 2em); }
+.essay .course-toc a { text-decoration: none; color: var(--tp-text); }
+.essay .toc-fig a { color: var(--tp-dim); }
+.essay .course-toc a:hover, .essay .course-toc a:focus-visible { color: var(--tp-acc); }
+.essay .cite { margin-block: 2.4rem 0; padding-top: 1rem; border-top: 1px solid var(--tp-rule); font-size: var(--tp-t-small); color: var(--tp-dim); }
+.essay .formula { font-family: var(--tp-serif); font-size: 1.12rem; color: var(--tp-ink); padding-left: clamp(0px, 4vw, 2em); }
 
 /* a figure with its controls and a status line */
-.ex { margin: 1.5rem 0 1.6rem; }
+.ex { margin-block: 1.5rem 1.6rem; }
 .ex [hidden] { display: none !important; }
 .ex svg.code { display: block; width: 100%; height: auto; margin: 0 auto; }
 .ex-controls { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 12px 0 0; }
@@ -93,3 +99,9 @@
 .mcell.wrong { outline: 2px dashed var(--tp-ink); outline-offset: 2px; }
 .ecell { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--tp-rule); }
 .ecell.on { border: 4px solid var(--tp-acc); background: var(--tp-a22); }
+
+/* the glossary */
+.terms dt { font: 400 1.25rem/1.3 var(--tp-serif); color: var(--tp-head); margin: 1.4rem 0 0.3rem; scroll-margin-top: 1rem; }
+.terms dd { margin: 0; }
+.terms dd p { margin-block: 0 0.4em; }
+.terms .g-tech { color: var(--tp-dim); font-size: 0.95rem; }

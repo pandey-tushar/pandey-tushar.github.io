@@ -73,14 +73,20 @@
   <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
-<main id="main" class="essay">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a href="lesson-1.html">&larr; Previous: Lesson 1</a> <a href="threshold.html">Next: The threshold &rarr;</a></nav>
+<main id="main" class="essay course-essay">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="lesson-1.html">&larr; Previous<span class="nav-long">: Lesson 1: A surface code patch</span></a> <a id="next" href="threshold.html">Next<span class="nav-long">: The threshold</span>&nbsp;&rarr;</a></nav>
+  <p class="tp-lbl step-of">Step 3 of 8</p>
   <h1>Errors, syndromes and decoding</h1>
+  <div class="course-rail">
+  <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">The checks only say that something went wrong nearby, not exactly where. A decoder is the program that turns the pattern of fired checks into a guess at the error and undoes it. Here you watch one decoder work step by step, and see an error it gets wrong.</p></aside>
+  <nav class="course-toc" aria-label="On this page"><p class="tp-lbl">On this page</p><ol><li><a href="#two-kinds-of-error-two-kinds-of-check">Two kinds of error, two kinds of check</a></li><li class="toc-fig"><a href="#fig-patch">Fig. 1</a></li><li><a href="#the-decoder-step-by-step">The decoder, step by step</a></li><li class="toc-fig"><a href="#fig-uf">Fig. 2</a></li><li><a href="#why-the-decoder-can-be-fooled">Why the decoder can be fooled</a></li><li class="toc-fig"><a href="#fig-fool">Fig. 3</a></li><li><a href="#when-the-checks-themselves-are-wrong">When the checks themselves are wrong</a></li><li class="toc-fig"><a href="#fig-time">Fig. 4</a></li></ol></nav>
+  </div>
+  <div class="essay-flow">
   <p class="lead">In <a href="lesson-1.html">Lesson 1</a> a 3 by 3 patch of qubits held one logical qubit, watched by four X checks and four Z checks. This page asks what happens after a check fires: how a decoder turns a pattern of fired checks into a correction, and when that correction is wrong.</p>
 
-  <h2>Two kinds of error, two kinds of check</h2>
+  <h2 id="two-kinds-of-error-two-kinds-of-check">Two kinds of error, two kinds of check</h2>
   <p>A qubit can suffer a bit flip X, a phase flip Z, or both at once, Y. Each check is a product of Pauli operators on the qubits at the corners of its tile: X on every corner for an X check, Z on every corner for a Z check. A check fires when an odd number of its qubits carry an error that does not commute with it. An X error commutes with X checks and anticommutes with Z checks, so it fires Z checks only. A Z error fires X checks only, and a Y error fires both kinds.</p>
-  <p>The patch below can be made larger, d = 5 or 7, where d is again the distance: the fewest single-qubit errors that change the logical qubit without firing any check. Click a qubit to cycle it through X, Z, Y and back to no error (or use the arrow keys and Enter). Put an X error in the middle, then add X errors on its neighbours in a line, and walk the line to the left or right edge.</p>
+  <p>The patch below has d = 5, and can be set to d = 3, the size of Lesson 1, or to d = 7. Here d is again the distance: the fewest single-qubit errors that change the logical qubit without firing any check. Click a qubit to cycle it through X, Z, Y and back to no error (or use the arrow keys and Enter). Put an X error in the middle, then add X errors on its neighbours in a line, and walk the line to the left or right edge.</p>
 
   <figure class="tp-plate ex" id="fig-patch">
     <svg class="code" role="group" aria-label="Surface code patch: data qubits at the corners of X and Z check tiles" hidden></svg>
@@ -90,12 +96,12 @@
       <button type="button" class="tp-btn" data-clear>Clear</button>
     </div>
     <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
-    <figcaption><b>Fig. 1</b>A rotated surface code patch. Data qubits sit at the corners of the tiles; orange tiles are X checks and blue tiles are Z checks, with two-qubit checks on the edges. Positions are given as (row, column) from the top left.</figcaption>
+    <figcaption><b>Fig. 1</b>A rotated surface code patch. Data qubits sit at the corners of the tiles; orange tiles are X checks and blue tiles are Z checks, with two-qubit checks on the edges. Positions are given as (row, column), counted from (0, 0) at the top left, so at d = 3 the qubit at (r, c) is q(3r + c) of Lesson 1.</figcaption>
   </figure>
 
   <p>A lone X error in the middle fires the two Z checks that touch it. Add a neighbour in the same row and the Z check they share sees two errors and goes quiet: a chain of errors shows only its two ends. Walk the chain to the left or right edge and one end disappears, because the edge qubits belong to only one Z check. A chain that reaches both edges fires nothing at all. That chain is a logical X, the operator Lesson 1 drew along the top row.</p>
 
-  <h2>The decoder, step by step</h2>
+  <h2 id="the-decoder-step-by-step">The decoder, step by step</h2>
   <p>The syndrome says where chains end, not where they run, so the decoder has to guess. Many decoders treat the problem as a graph. Each check is a node, each data qubit is an edge between the two checks of one type that it touches, and an edge qubit links its one check to the boundary. Fired checks must be paired up, or paired with the boundary, by paths in this graph.</p>
   <p>The decoder in this course is the union-find decoder of Delfosse and Nickerson. It starts with each fired check as a cluster of its own. A cluster with an odd number of fired checks cannot be explained from inside, so it grows by half an edge in every direction, the smallest odd clusters first. When two clusters meet they merge. Growth stops once every cluster holds an even number of fired checks or touches the boundary. Then, inside each cluster, the decoder picks a set of edges that links its fired checks in pairs or to the boundary, and flips those qubits.</p>
   <p>The best-known alternative, minimum-weight perfect matching, searches the whole patch for the pairing with the shortest total length. Union-find only looks inside its clusters, so it is simpler, runs in close to linear time in the worst case, and is less accurate: sometimes it picks a longer correction than matching would. At the sizes used in this course it fails up to about twice as often; the threshold lesson measures the gap. Place some errors or draw random ones, then press Next step and watch the clusters grow.</p>
@@ -121,7 +127,7 @@
 
   <p>The correction never needs to match the error qubit for qubit. It only needs to fire the same checks. Error and correction together then fire nothing, which leaves two possibilities. Either they form a product of checks, a <em>stabilizer</em>, which acts trivially on the stored state; or they form a logical operator, a chain from one edge to the opposite edge, and the logical qubit has been changed.</p>
 
-  <h2>Why the decoder can be fooled</h2>
+  <h2 id="why-the-decoder-can-be-fooled">Why the decoder can be fooled</h2>
   <p>Press Load the example. It places X errors on the left (d + 1)/2 qubits of the top row, then step through the decoder to the verdict.</p>
 
   <figure class="tp-plate ex" id="fig-fool">
@@ -143,7 +149,7 @@
 
   <p>The decoder flips the other (d &minus; 1)/2 qubits of the top row. Error and correction together cover the whole row, which is the logical X, so the stored qubit has flipped. Yet the guess fires exactly the same checks as the true error, so both explain the syndrome equally well, and the guess uses fewer flips. When errors are independent and rare, fewer flips is more likely, and the guess is the better bet. This syndrome was simply produced by the less likely of the two. No decoder can tell them apart, which is why a code of distance d is only guaranteed to correct (d &minus; 1)/2 errors.</p>
 
-  <h2>When the checks themselves are wrong</h2>
+  <h2 id="when-the-checks-themselves-are-wrong">When the checks themselves are wrong</h2>
   <p>So far every check reported its true value. In hardware a check is measured by a circuit, and that circuit can fail too, reporting a fired check that is not there or missing one that is. A single round of readings cannot tell a misread check from a real error. So the checks are measured over and over, and the decoder looks at <em>detection events</em>: places where a check's reading changes from one round to the next. A data error that appears and stays changes two neighbouring checks once, giving two events side by side in the same round. A misread check is wrong for one round only, giving two events on the same check in consecutive rounds.</p>
   <p>The figure below shows this on a slice of five qubits in a line, the repetition code from the <a href="repetition-code.html">repetition code lesson</a>, with four checks measured over four rounds; the last round is read without error, as it is when the data qubits themselves are measured at the end. Choose a case.</p>
 
@@ -155,7 +161,7 @@
     </div>
     <div class="mgrids" data-grids></div>
     <p class="ex-status" aria-live="polite">This figure needs JavaScript.</p>
-    <figcaption><b>Fig. 4</b>Check readings: what each check c1 to c4 reads in each round (red: fired; dashed outline: a reading that is wrong). Check c<sub>k</sub> compares qubits k and k + 1. Detection events: where a reading differs from the round before. The decoder works on the space-time graph of all rounds.</figcaption>
+    <figcaption><b>Fig. 4</b>Check readings: what each check c0 to c3 reads in each round (red: fired; dashed outline: a reading that is wrong). Check c<sub>k</sub> compares qubits q<sub>k</sub> and q<sub>k+1</sub>, numbered from q0 as on the repetition code page. Detection events: where a reading differs from the round before. The decoder works on the space-time graph of all rounds.</figcaption>
   </figure>
 
   <p>A misread check leaves a pair of events stacked in time, and the decoder, working on a graph whose edges run through time as well as space, pairs them with a time edge: no data qubit is flipped. A data error leaves a pair in space and is corrected as before. The surface code works the same way, with a full patch of checks in every round.</p>
@@ -163,6 +169,7 @@
 
   <nav class="secnav endnav" aria-label="Course, end of lesson"><a href="lesson-1.html">&larr; Previous: Lesson 1: A surface code patch</a> <a href="threshold.html">Next: The threshold &rarr;</a></nav>
   <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "Errors, syndromes and decoding", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/decoding.html</p>
+  </div>
 </main>
 
 <footer class="tp-foot">

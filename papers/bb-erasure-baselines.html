@@ -82,7 +82,7 @@
 </header>
 
 <main id="main" class="pc">
- <div class="tp-wrap">
+ <div class="tp-wrap pc-cols">
   <header class="pc-head">
     <p class="tp-lbl">Paper companion</p>
     <h1>Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel</h1>
@@ -96,19 +96,41 @@
     </ul>
   </header>
 
+  <aside class="pc-rail" aria-label="Summary and contents">
+    <section class="pc-plainwords" aria-labelledby="plain">
+      <h2 class="pc-rail-h" id="plain">In plain words</h2>
+      <p>Quantum computers need error-correcting codes, which spread information over many qubits. This paper studies one family, bivariate bicycle codes, when qubits are lost at places the decoder knows.</p>
+      <p>A comparison in which the standard code&rsquo;s decoder ignores where the losses are is unfair: that decoder does no better than guessing. With a fair comparison, these codes tolerate losing about 47 percent of their qubits at the largest size tried, and about 49 percent in the limit of large sizes. That is only slightly better than the standard toric code, but with 12 times fewer qubits per protected qubit.</p>
+    </section>
+    <nav class="pc-toc" aria-label="On this page">
+      <p class="pc-rail-h">On this page</p>
+      <ol>
+        <li><a href="#codes">The codes and the noise</a></li>
+        <li><a href="#baseline">What makes a baseline fair</a></li>
+        <li><a href="#measured">What was measured</a></li>
+        <li><a href="#fig-fss">Fig. 1: the scaling fit</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#limits">What the paper does not claim</a></li>
+        <li><a href="#next">What you could do next</a></li>
+        <li><a href="#cite">Cite this paper</a></li>
+      </ol>
+    </nav>
+    <p class="pc-rail-links"><a class="tp-link" href="https://arxiv.org/abs/2603.19062" rel="noopener">arXiv</a><a class="tp-link" href="https://arxiv.org/pdf/2603.19062" rel="noopener">PDF</a><a class="tp-link" href="https://github.com/pandey-tushar/QLDPC" rel="noopener">Code</a></p>
+  </aside>
+
   <article class="pc-essay">
   <p class="lead">This preprint asks two things about one family of quantum codes on one kind of noise: how to compare them fairly with a standard code, and where their <a class="tp-link" href="/qec-in-practice/threshold.html">threshold</a> lies once the size of the codes is taken into account. A threshold is the noise level below which a larger code fails less often. This page explains the paper and lets you work its scaling fit with its own data.</p>
 
-  <h2>The codes and the noise</h2>
+  <h2 id="codes">The codes and the noise</h2>
   <p>Bivariate bicycle (BB) codes are quantum low-density parity-check codes introduced by Bravyi and colleagues. Each code in the family is built from two polynomials, A&nbsp;=&nbsp;x<sup>3</sup>&nbsp;+&nbsp;y&nbsp;+&nbsp;y<sup>2</sup> and B&nbsp;=&nbsp;y<sup>3</sup>&nbsp;+&nbsp;x&nbsp;+&nbsp;x<sup>2</sup>, on an L&nbsp;&times;&nbsp;M grid, and uses N&nbsp;=&nbsp;2LM physical qubits. The smallest code studied, at L&nbsp;=&nbsp;12 and M&nbsp;=&nbsp;6, is the [[144,12,12]] Gross code.</p>
   <p>The noise is the quantum erasure channel: each qubit is erased independently with probability p, the erasure rate, and the decoder knows which qubits were erased. An erased qubit then carries an X error and a Z error, each with probability 0.5. The word error rate (WER) is the fraction of trials in which a logical error remains in either the X or the Z sector after decoding.</p>
   <p>For one code size the paper uses the pseudo-threshold p*, the erasure rate at which the WER equals 0.10. The pseudo-threshold depends on the size; the asymptotic threshold p*<sub>&infin;</sub> is what the paper extrapolates for codes of unbounded size.</p>
 
-  <h2>What makes a baseline fair</h2>
+  <h2 id="baseline">What makes a baseline fair</h2>
   <p>The comparison code is the toric code, decoded by minimum-weight perfect matching (MWPM). One way to run matching on erasure noise converts p to a depolarizing rate p/2 and gives every edge the same weight, so the decoder never uses the erasure locations. The paper finds that this uninformed decoder sits at a WER of about 0.75 across p&nbsp;=&nbsp;0.30 to 0.60 (0.65 to 0.76 in the data plotted below), which is what random guessing gives for a code with two logical qubits: 1&nbsp;&minus;&nbsp;(1/2)<sup>2</sup>&nbsp;=&nbsp;0.75. Beating that baseline says something about the decoders, not the codes.</p>
   <p>The fair baseline gives erased qubits weight 0 and the others a large weight, so matching is forced through the known erasure locations. Both sides then use the erasure locations, and that is what the paper calls the fair comparison.</p>
 
-  <h2>What was measured</h2>
+  <h2 id="measured">What was measured</h2>
   <p>The BB codes are decoded by BP-OSD, belief propagation followed by ordered-statistics decoding, from the bposd package, with OSD order 10, at most 50 iterations, and the erasures given to the decoder as priors. Five sizes were simulated, from N&nbsp;=&nbsp;144 to N&nbsp;=&nbsp;1296, with 200,000 shots per point. Each pseudo-threshold was located by an adaptive search and given a 95% confidence interval by 5,000 bootstrap resamples. The erasure-aware toric baseline used 50,000 shots per point, and its largest size was confirmed with 200,000.</p>
   <p>Finite-size scaling (FSS) extrapolates to unbounded size from the way the curves of different sizes change near the threshold. The paper assumes WER(p,&nbsp;N)&nbsp;&asymp;&nbsp;f[(p&nbsp;&minus;&nbsp;p*<sub>&infin;</sub>)&nbsp;N<sup>1/&nu;</sup>], where &nu; is a critical exponent and f an unknown function. It approximates f by a cubic polynomial and fits p*<sub>&infin;</sub> and &nu; by least squares to the data within 0.06 of each size&rsquo;s pseudo-threshold. In Fig.&nbsp;1(b) you can do that fit by hand.</p>
   </article>
@@ -147,15 +169,15 @@
   </figure>
 
   <article class="pc-essay">
-  <h2>Results</h2>
-  <p>The pseudo-thresholds rise with size, from 0.370 at N&nbsp;=&nbsp;144 to 0.471 at N&nbsp;=&nbsp;1296, and the gain from N&nbsp;=&nbsp;900 to N&nbsp;=&nbsp;1296 is only 0.004. The FSS fit to all five sizes gives p*<sub>&infin;</sub>&nbsp;=&nbsp;0.488&nbsp;&plusmn;&nbsp;0.001 and &nu;&nbsp;=&nbsp;1.18&nbsp;&plusmn;&nbsp;0.01, both 95% bootstrap intervals. The paper says the systematic errors from the ansatz and from finite-size corrections are not fully controlled; refitting with windows of 0.04 and 0.08 suggests &lsim;&nbsp;0.005. An independent linear fit of p*(N) against N<sup>&minus;1/&nu;</sup> gives 0.490&nbsp;&plusmn;&nbsp;0.003. The paper takes the zero-rate bound p&nbsp;=&nbsp;0.5 as the benchmark, and 0.488 is 97.6% of it, reached with BP-OSD and without maximum-likelihood decoding.</p>
+  <h2 id="results">Results</h2>
+  <p>The pseudo-thresholds rise with size, from 0.370 at N&nbsp;=&nbsp;144 to 0.471 at N&nbsp;=&nbsp;1296, and the gain from N&nbsp;=&nbsp;900 to N&nbsp;=&nbsp;1296 is only 0.004. The FSS fit to all five sizes gives p*<sub>&infin;</sub>&nbsp;=&nbsp;0.488&nbsp;&plusmn;&nbsp;0.001 and &nu;&nbsp;=&nbsp;1.18&nbsp;&plusmn;&nbsp;0.01, both 95% bootstrap intervals. The paper says the systematic errors from the ansatz and from finite-size corrections are not fully controlled; refitting with windows of 0.04 and 0.08 shifts p*<sub>&infin;</sub> by &lsim;&nbsp;0.004, consistent with its stated systematic uncertainty of &lsim;&nbsp;0.005. An independent linear fit of p*(N) against N<sup>&minus;1/&nu;</sup> gives 0.490&nbsp;&plusmn;&nbsp;0.003. The paper takes the zero-rate bound p&nbsp;=&nbsp;0.5 as the benchmark, and 0.488 is 97.6% of it, reached with BP-OSD and without maximum-likelihood decoding.</p>
   <p>On the fair baseline, the BB code with N&nbsp;=&nbsp;1296 reaches p*&nbsp;=&nbsp;0.471 against 0.460 for the toric code with N&nbsp;=&nbsp;2592, a modest gap of about 0.011. The larger difference is overhead: the BB code uses 108 physical qubits per logical qubit and that toric code 1296, a 12&times; reduction in normalized overhead.</p>
   <p>The paper also adds a mixed channel in which every qubit suffers depolarizing errors at a rate &delta;/&epsilon; times p on top of the erasures. There the pseudo-threshold at N&nbsp;=&nbsp;1296 falls to about 0.247 at &delta;/&epsilon;&nbsp;=&nbsp;0.1 and to about 0.072 at equal mixing (these runs use OSD order 5 and 50,000 shots).</p>
 
-  <h2>What the paper does not claim</h2>
+  <h2 id="limits">What the paper does not claim</h2>
   <p>All results are for code capacity: there are no measurement errors and no syndrome-extraction circuits, and the paper notes that circuit-level thresholds are typically lower. The decoder settings are fixed, and other decoders may reach higher thresholds. Only one polynomial pair is studied, and other BB families may behave differently. BB codes are non-local and the toric code has periodic boundaries, so the 12&times; figure is a difference in code efficiency in this setting, not a universal hardware advantage. The paper does not claim universality for its scaling function, and it calls the comparison of &nu;&nbsp;&asymp;&nbsp;1.18 with the random-bond Ising value 4/3 suggestive, not definitive. For the mixed channel it calls the asymptotic extrapolation indicative at small &delta;/&epsilon;, where finite-size effects remain strong.</p>
 
-  <h2>What you could do next</h2>
+  <h2 id="next">What you could do next</h2>
   <p>The paper leaves the value of &nu; and the size of corrections to scaling open, and says that settling them needs larger N. It names other polynomial families as an important direction, and says hardware-specific overhead claims would need circuit-level simulations. Every run records its seeds and package versions, and the data and scripts are in the <a class="tp-link" href="https://github.com/pandey-tushar/QLDPC" rel="noopener">repository</a>, so a new decoder or code family can be tested against these numbers directly.</p>
   </article>
 

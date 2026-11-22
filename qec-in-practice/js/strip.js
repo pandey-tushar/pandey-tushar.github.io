@@ -23,10 +23,21 @@ export function blockLabel(gates) {
 // An encoder shown as one step (lessons after the first) is labelled 'enc' instead of its twelve CNOTs.
 export const cellLabel = (L) => (L.summary ? ['enc'] : blockLabel(L.gates));
 
-// Short phase names for the strip; the full name stays in the tooltip and in the layer label.
+// The name a phase goes by on the page: the readout rotation is called by its gate, H on the patch, in the
+// strip, the step label and the written-out steps alike (_studio/tools/lesson_text.py phase_label mirrors this).
+export const phaseLabel = (name) => name.replace(/^readout rotation (\S+) \(\w\)$/, 'H on $1');
+
+// Short phase names for the strip; the page name stays in the tooltip and in the layer label.
 export function shortPhase(name) {
-  return name.replace(/^prepare /, 'prep ').replace(/^transversal CNOT /, 'CNOT ')
-    .replace(/^readout rotation (\S+).*/, 'H on $1').replace(/^measure$/, 'meas').replace(/^inject .*/, 'error');
+  return phaseLabel(name).replace(/^prepare /, 'prep ').replace(/^transversal CNOT /, 'CNOT ')
+    .replace(/^measure$/, 'meas').replace(/^inject .*/, 'error');
+}
+
+// The player's position label. Position 0 shows the state before the first step, so it gets its own name.
+export function whereText(pos, T, phase) {
+  if (pos >= T + 1) return `All ${T + 1} steps done`;
+  if (pos <= 0) return `Start: before step 1 of ${T + 1}`;
+  return `Step ${Math.min(Math.floor(pos), T) + 1} of ${T + 1}: ${phaseLabel(phase)}`;
 }
 
 // Hide a phase name that does not fit its span instead of cutting it.
@@ -44,7 +55,10 @@ export function drawStrip(root, layers, phases, onPick, fluid = false) {
   const at = (t) => (fluid ? `${(100 * t) / n}%` : `${t * BW}px`);
   root.classList.toggle('fluid', fluid);
   root.style.width = fluid ? '' : `${n * BW}px`;
-  root.style.minWidth = fluid ? `${n * 24}px` : '';
+  // fluid: wide enough that every short phase name fits over its blocks (12px mono, about 7.5px a character),
+  // so on a phone the strip scrolls with readable names instead of squeezing them out
+  const need = Math.max(34, ...phases.map((p) => Math.ceil((shortPhase(p.name).length * 7.5 + 14) / (p.t1 - p.t0 + 1))));
+  root.style.minWidth = fluid ? `${n * need}px` : '';
   const prow = document.createElement('div');
   prow.className = 'phase-row';
   for (const p of phases) {
@@ -53,7 +67,7 @@ export function drawStrip(root, layers, phases, onPick, fluid = false) {
     d.style.left = at(p.t0);
     d.style.width = at(p.t1 - p.t0 + 1);
     d.textContent = shortPhase(p.name);
-    d.title = p.name;
+    d.title = phaseLabel(p.name);
     prow.appendChild(d);
   }
   const brow = document.createElement('div');
@@ -63,8 +77,8 @@ export function drawStrip(root, layers, phases, onPick, fluid = false) {
     b.type = 'button';
     b.className = 'gblock' + (L.gates.some((g) => g.role === 'inject') ? ' inject' : '');
     b.innerHTML = cellLabel(L).map((s) => `<span>${s}</span>`).join('');
-    b.title = `Step ${t + 1}: ${L.phase}`;
-    b.setAttribute('aria-label', `Step ${t + 1}, ${L.phase}, ${cellLabel(L).join(' ')}`);
+    b.title = `Step ${t + 1}: ${phaseLabel(L.phase)}`;
+    b.setAttribute('aria-label', `Step ${t + 1}, ${phaseLabel(L.phase)}, ${cellLabel(L).join(' ')}`);
     if (onPick) b.addEventListener('click', () => onPick(t));
     else b.tabIndex = -1;
     brow.appendChild(b);

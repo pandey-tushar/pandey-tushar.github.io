@@ -32,7 +32,7 @@
   gtag('config', 'G-DVPGC1C44Z');
 </script>
 <title>The Qubit Dialogues · A Book of Possibilities</title>
-<meta name="description" content="A dialogue between a skeptical Seeker and an Oracle from decades ahead: twenty two cantos on quantum computing, with interactive figures and a free PDF.">
+<meta name="description" content="A dialogue between a skeptical Seeker and an Oracle from decades ahead: twenty-two cantos on quantum computing, with interactive figures and a free PDF.">
 <meta name="author" content="Tushar Pandey">
 <meta property="og:title" content="The Qubit Dialogues">
 <meta property="og:description" content="Twenty-two cantos on quantum computing, told as a dialogue between a Seeker and an Oracle. Every prediction labelled by confidence.">
@@ -58,7 +58,7 @@
  },
  "inLanguage": "en",
  "numberOfPages": 99,
- "description": "Twenty two cantos in two voices, a Seeker and an Oracle, on superposition, entanglement, error correction and the price of the impossible.",
+ "description": "Twenty-two cantos in two voices, a Seeker and an Oracle, on superposition, entanglement, error correction and the price of the impossible.",
  "isAccessibleForFree": true,
  "workExample": {
   "@type": "Book",
@@ -87,6 +87,11 @@ main :focus-visible{outline:2px solid var(--tp-acc);outline-offset:3px}
 ::selection{background:var(--tp-a22)}
 canvas{display:block}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* the site bar and footer on the column of the full-mode pages (lib/site.css,
+   .tp-full .tp-bar), without the rest of full mode: 72rem at full mode's 17px
+   root is 76.5rem at this page's 16px */
+@media(min-width:601px){body>.tp-bar{padding-inline:max(var(--tp-gut),calc((100% - 76.5rem) / 2))}}
+body>.tp-foot{margin-inline:max(var(--tp-gut),calc((100% - 76.5rem) / 2))}
 
 /* ---------- title page ---------- */
 #cover{min-height:calc(100svh - var(--tp-barh));display:flex;flex-direction:column;align-items:center;
@@ -128,6 +133,12 @@ section.canto.acc{padding:0;scroll-margin-top:var(--tp-barh)}
 .contents a{display:flex;gap:.9em;align-items:baseline;padding:.32rem 0;color:var(--tp-ink);text-decoration:none}
 .contents a .n{flex:0 0 1.6em;text-align:right;font:400 .8125rem/1 var(--tp-sans);font-variant-numeric:tabular-nums;color:var(--tp-dim)}
 .contents a:hover .t,.contents a:focus-visible .t{color:var(--tp-acc);text-decoration:underline 1px var(--tp-a40);text-underline-offset:.18em}
+.contents-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin:0 0 1.4rem}
+.contents-top h2{margin:0}
+.contents .open-all{margin:-.75rem 0;padding:.75rem 0 .75rem .75rem;background:none;border:0;cursor:pointer;
+  font:400 .875rem/1.3 var(--tp-sans);color:var(--tp-acc);text-decoration:underline 1px var(--tp-a40);text-underline-offset:.18em}
+.contents .open-all:hover{text-decoration-color:currentColor}
+.contents .open-all:focus-visible{outline:2px solid var(--tp-acc);outline-offset:2px}
 
 /* chapter openings: a label, the title, a hairline */
 .canto-num{display:block;font:600 var(--tp-t-app)/1.3 var(--tp-sans);letter-spacing:.07em;text-transform:uppercase;color:var(--tp-dim)}
@@ -140,7 +151,7 @@ section.canto.acc{padding:0;scroll-margin-top:var(--tp-barh)}
   cursor:pointer;color:inherit;font:inherit;padding:2.6rem 3rem 1.25rem 0;position:relative}
 .canto-head:focus-visible{outline:2px solid var(--tp-acc);outline-offset:4px}
 .canto-head .caret{position:absolute;right:0;bottom:1.15rem;width:2rem;height:2rem;display:flex;align-items:center;
-  justify-content:center;font:400 1.25rem/1 var(--tp-sans);color:var(--tp-dim);transition:transform .3s ease}
+  justify-content:center;font:400 1.5rem/1 var(--tp-sans);color:var(--tp-text);transition:transform .3s ease}
 .canto-head:hover .canto-title{color:var(--tp-acc)}
 .canto-head:hover .caret{color:var(--tp-acc)}
 .canto.expanded>.canto-h .caret{transform:rotate(90deg)}
@@ -178,6 +189,9 @@ section.canto.acc{padding:0;scroll-margin-top:var(--tp-barh)}
 .science .eqblock{font-family:var(--tp-mono);color:var(--tp-ink)}
 .eqblock{display:block;text-align:center;margin:1.1em 0;overflow-x:auto;overflow-y:hidden}
 .eqblock .katex-display{margin:.3em 0}
+/* a display too wide for the measure breaks after a relation or an operator,
+   where KaTeX ends each of its .base boxes, rather than scrolling sideways */
+.eqblock .katex-display>.katex{white-space:normal}
 .eqblock .katex{color:var(--tp-ink);font-size:1.1em}
 .eqi{white-space:nowrap}
 .eqi .katex{color:var(--tp-ink)}
@@ -215,9 +229,8 @@ section.canto.acc{padding:0;scroll-margin-top:var(--tp-barh)}
 hr.rule{border:0;height:1px;background:var(--tp-rule);margin:2.5em 0}
 
 /* the figures: a raised panel, the controls under the drawing, a caption */
-#book{counter-reset:fig}
 .scene{--stage:330px;position:relative;display:flex;flex-direction:column;margin:2.2em 0;
-  background:var(--tp-void2);border:1px solid var(--tp-rule);border-radius:4px;overflow:hidden;counter-increment:fig}
+  background:var(--tp-void2);border:1px solid var(--tp-rule);border-radius:4px;overflow:hidden}
 @media(max-width:600px){.scene{--stage:270px}}
 .scene>canvas{flex:none}
 .scene[data-scene=bloch]>canvas{cursor:grab}
@@ -231,7 +244,10 @@ hr.rule{border:0;height:1px;background:var(--tp-rule);margin:2.5em 0}
 .scene input[type=range]{width:140px;accent-color:var(--tp-acc)}
 .scene .rl{font:400 .8125rem/1.4 var(--tp-sans);color:var(--tp-text)}
 .scene .hint{order:2;padding:8px 14px 12px;font:400 .875rem/1.45 var(--tp-sans);color:var(--tp-dim)}
-.scene .hint::before{content:"Fig. " counter(fig) ".";font-weight:600;color:var(--tp-ink);margin-right:.45em}
+/* the number is written by the engine: a CSS counter would stop counting
+   inside a closed canto, whose hidden="until-found" contains its style */
+.scene .hint b{font-weight:600;color:var(--tp-ink);margin-right:.45em}
+.scene .hint b::after{content:"."}
 
 .colophon{text-align:center;padding:4rem 0 3rem;border-top:1px solid var(--tp-rule);
   font:400 .875rem/1.75 var(--tp-sans);color:var(--tp-dim)}
@@ -257,6 +273,7 @@ hr.rule{border:0;height:1px;background:var(--tp-rule);margin:2.5em 0}
   section.canto{break-before:page;page-break-before:always;padding:0 !important}
   .canto-wrap,.canto.expanded>.canto-wrap{display:block !important;grid-template-rows:1fr !important;
     overflow:visible !important;transition:none !important}
+  .canto-wrap[hidden]{content-visibility:visible !important}
   .canto-body,.canto.expanded>.canto-wrap>.canto-body{overflow:visible !important;padding:0 !important}
   .canto-head{padding:0 0 .5em !important;border-bottom:.4pt solid #999;break-after:avoid;page-break-after:avoid}
   .canto-title{font-size:19pt;color:#111 !important}
@@ -332,7 +349,8 @@ hr.rule{border:0;height:1px;background:var(--tp-rule);margin:2.5em 0}
 
 <div id="book">
   <nav class="contents" id="contents" aria-labelledby="contents-h" hidden>
-    <h2 id="contents-h">Contents</h2>
+    <div class="contents-top"><h2 id="contents-h">Contents</h2>
+      <button type="button" class="open-all" aria-controls="content">Open all</button></div>
     <ol></ol>
   </nav>
 
@@ -625,7 +643,12 @@ function globeScene(el){
   const r=makeR(el),sc=new THREE.Scene();
   const cam=new THREE.PerspectiveCamera(45,asp(el),.1,100);cam.position.z=6;r.__cam=cam;
   const grp=new THREE.Group();sc.add(grp);
-  grp.add(new THREE.Mesh(new THREE.SphereGeometry(2,24,16),basic('dim',{wireframe:true,transparent:true,opacity:.09})));
+  /* the Earth is the figure here, not scaffolding: on paper its dim wireframe
+     needs more weight than on the night ground to read at all */
+  const earth=basic('dim',{wireframe:true,transparent:true});
+  const earthOp=()=>{earth.opacity=document.documentElement.dataset.theme==='light'?.3:.09;};
+  earthOp();onTheme.push(earthOp);
+  grp.add(new THREE.Mesh(new THREE.SphereGeometry(2,24,16),earth));
   const city=basic('ink');
   const cities=[];for(let i=0;i<14;i++){const th=Math.acos(2*Math.random()-1),ph=Math.random()*Math.PI*2;
     const v=new THREE.Vector3(Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph),Math.cos(th)).multiplyScalar(2);
@@ -753,6 +776,22 @@ document.querySelectorAll('section.canto.expanded').forEach(sec=>window.SCENES.m
   const toc = document.querySelector('#contents ol');
   const esc = s => (s==null?'':String(s));
 
+  /* figure captions: what to do with the figure, or for one that moves on its
+     own, what it does. These replace the hints in CANTOS, which stays the
+     byte-for-byte twin of content/en.json. Numbered here, not by a CSS counter. */
+  const CAPTION = {
+    bloch: 'Drag to steer the qubit around its sphere.',
+    entangle: 'Measure one qubit and watch its partner settle.',
+    decohere: 'Raise the rate and watch the phase drain away.',
+    toric: 'Pick X or Z, then tap or click an edge. Opposite sides are joined: this lattice is a torus.',
+    biascat: 'Watch the poles hold while only the equator trembles.',
+    modular: 'Watch light link the modules: a photon runs from each in turn to the hub.',
+    globe: 'Watch entangled links arc between cities across a turning Earth.',
+    lock: 'Watch the lock dissolve into its factors and close again, on a slow loop that runs by itself.',
+    cosmos: 'Watch the view pull out from a single qubit until it becomes the cosmos, and back.'
+  };
+  let fig = 0;
+
   function block(b){
     switch(b.t){
       case 'move':
@@ -782,7 +821,7 @@ document.querySelectorAll('section.canto.expanded').forEach(sec=>window.SCENES.m
       }
       case 'scene':
         return `<div class="scene" data-scene="${esc(b.kind)}">${b.controls||''}
-          <div class="hint">${esc(b.hint||'')}</div></div>`;
+          <div class="hint"><b>Fig. ${++fig}</b>${esc(CAPTION[b.kind]||b.hint||'')}</div></div>`;
       case 'reflect':
         return `<div class="reflect"><span class="r-label">A Question For You</span>${esc(b.text)}</div>`;
       case 'note':
@@ -817,7 +856,7 @@ document.querySelectorAll('section.canto.expanded').forEach(sec=>window.SCENES.m
     body += (c.blocks||[]).map(block).join('');
     sec.innerHTML = pre +
       `<h2 class="canto-h"><button type="button" class="canto-head" aria-expanded="false" aria-controls="canto-body-${c.n}">${head}</button></h2>` +
-      `<div class="canto-wrap" inert><div class="canto-body" id="canto-body-${c.n}">${body}</div></div>`;
+      `<div class="canto-wrap" hidden="until-found"><div class="canto-body" id="canto-body-${c.n}">${body}</div></div>`;
     content.appendChild(sec);
   });
   list += `<li class="mv">Appendix</li>` + item('#references','','Sources and References');
@@ -844,11 +883,32 @@ document.querySelectorAll('section.canto.expanded').forEach(sec=>window.SCENES.m
 
   function initScenes(root){ if(window.SCENES) window.SCENES.mount(root); }
 
+  /* a closed canto is hidden="until-found": out of the layout and the tab
+     order, but find-in-page still reaches it and its beforematch opens it.
+     A closing canto stays inert until its collapse has run. */
+  function show(sec){
+    const wrap=sec.querySelector('.canto-wrap');
+    clearTimeout(wrap.hideT); wrap.removeAttribute('hidden'); wrap.inert=false;
+    sec.classList.add('expanded');
+    sec.querySelector('.canto-head').setAttribute('aria-expanded','true');
+  }
+  function collapse(sec,now){
+    const wrap=sec.querySelector('.canto-wrap');
+    sec.classList.remove('expanded');
+    sec.querySelector('.canto-head').setAttribute('aria-expanded','false');
+    wrap.inert=true;
+    const done=()=>{ if(!sec.classList.contains('expanded')){ wrap.inert=false; wrap.setAttribute('hidden','until-found'); } };
+    clearTimeout(wrap.hideT);
+    if(now||reduce) done(); else wrap.hideT=setTimeout(done,450);
+  }
+
   /* accordion: exactly one open at a time, compensate scroll when a card above
-     the anchor collapses so the reader's visible text stays put. */
-  let current=null;
+     the anchor collapses so the reader's visible text stays put. "Open all"
+     suspends it: every canto opens and nothing closes until "Close all". */
+  let current=null, all=false;
   function expand(sec,opts){
     opts=opts||{};
+    if(all){ show(sec); initScenes(sec); if(opts.scroll) sec.scrollIntoView(); return; }
     if(sec===current){ if(opts.scroll) sec.scrollIntoView(); return; }
     const prev=current; current=sec;
     /* anchor on the target head so its viewport position is preserved */
@@ -860,14 +920,10 @@ document.querySelectorAll('section.canto.expanded').forEach(sec=>window.SCENES.m
       const above=prev.getBoundingClientRect().top < before;
       const wrap=prev.querySelector('.canto-wrap');
       if(above && !reduce){ wrap.style.transition='none'; }
-      prev.classList.remove('expanded');
-      prev.querySelector('.canto-head').setAttribute('aria-expanded','false');
-      wrap.inert=true;
+      collapse(prev,above);
       if(above && !reduce){ wrap.getBoundingClientRect(); wrap.style.transition=''; }
     }
-    sec.classList.add('expanded');
-    head.setAttribute('aria-expanded','true');
-    sec.querySelector('.canto-wrap').inert=false;
+    show(sec);
     /* same-frame scroll compensation. 'instant' bypasses the css smooth scroll */
     const after=head.getBoundingClientRect().top;
     if(after!==before) scrollTo({top:scrollY+(after-before),behavior:'instant'});
@@ -883,6 +939,15 @@ document.querySelectorAll('section.canto.expanded').forEach(sec=>window.SCENES.m
 
   accs.forEach(sec=>{
     sec.querySelector('.canto-head').addEventListener('click',()=>openExplicit(sec));
+    sec.querySelector('.canto-wrap').addEventListener('beforematch',()=>openExplicit(sec));
+  });
+
+  const allBtn=document.querySelector('#contents .open-all');
+  allBtn.addEventListener('click',()=>{
+    all=!all;
+    allBtn.textContent=all?'Close all':'Open all';
+    if(all) accs.forEach(sec=>{ show(sec); initScenes(sec); });
+    else { accs.forEach(sec=>collapse(sec,true)); current=null; }
   });
 
   /* a contents entry opens its canto, lands on it and moves focus to its head */
@@ -902,6 +967,7 @@ document.querySelectorAll('section.canto.expanded').forEach(sec=>window.SCENES.m
   function pickCanto(){
     /* one settle is skipped after an explicit open, then scrolling is free */
     if(performance.now()<suppressUntil){ suppressUntil=0; return; }
+    if(all) return;
     const line=scrollY+innerHeight/2;
     let best=null;
     for(const s of accs){

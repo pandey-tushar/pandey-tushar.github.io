@@ -73,9 +73,11 @@
 </header>
 
 <main id="main" class="page" data-lesson="2">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a id="prev" href="threshold.html">&larr; Previous: The threshold</a> <a id="next" href="lesson-3.html">Next: Lesson 3: Preparing a T state &rarr;</a></nav>
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="threshold.html">&larr; Previous<span class="nav-long">: The threshold</span></a> <a id="next" href="lesson-3.html">Next<span class="nav-long">: Lesson 3: Preparing a T state</span>&nbsp;&rarr;</a></nav>
+  <p class="tp-lbl step-of">Step 5 of 8</p>
   <h1 id="lesson-title">Lesson 2: Logical CNOT between two patches</h1>
-  <p class="lead" id="lesson-intro">Both patches use the encoder from lesson 1: A becomes |+&#10217;&#8203;<sub>L</sub>, B becomes |0&#10217;&#8203;<sub>L</sub>. Nine physical CNOTs, one between each pair of matching qubits, then act as one logical CNOT and leave a logical Bell pair.</p>
+  <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">To compute, protected qubits have to act on each other. Here two patches of nine qubits are joined by nine ordinary CNOT gates, one per matching pair, and together these act as one CNOT on the two protected qubits. The result is a Bell pair: two protected qubits whose readouts in Z always agree.</p></aside>
+  <p class="lead" id="lesson-intro">Both patches use the encoder from lesson 1: A becomes |+&#10217;&#8288;<sub>L</sub>, B becomes |0&#10217;&#8288;<sub>L</sub>. Nine physical CNOTs, one between each pair of matching qubits, then act as one logical CNOT and leave a logical Bell pair.</p>
 
   <div class="stage" id="stage">
     <section class="panel player">
@@ -91,6 +93,7 @@
         </div>
         <input type="range" id="slider" class="slider" min="0" max="1" step="any" value="0" aria-label="Position in the circuit (steps)">
         <div class="strip-scroll" id="strip-scroll"><div class="strip" id="strip"></div></div>
+        <p class="scroll-hint strip-hint" id="strip-hint" aria-hidden="true" hidden>Scroll the strip sideways for every step &rarr;</p>
         <p class="caption" id="caption" aria-live="polite"></p>
       </div>
       <div class="layer-text">
@@ -102,14 +105,18 @@
   </div>
 
   <section class="panel narrative">
+    <div>
     <h2>What this lesson shows</h2>
-    <p>Patch A is encoded as |+&#10217;&#8203;<sub>L</sub> and patch B as |0&#10217;&#8203;<sub>L</sub>, both with the encoder from lesson 1. Nine CNOTs, one from each qubit of A to the matching qubit of B, then act as one logical CNOT. Each copies X forward and Z backward, so X&#8203;<sub>L</sub> of A becomes X&#8203;<sub>L</sub> of A times X&#8203;<sub>L</sub> of B, and Z&#8203;<sub>L</sub> of B becomes Z&#8203;<sub>L</sub> of A times Z&#8203;<sub>L</sub> of B. Checks map to checks, so all sixteen still hold, and one faulty CNOT hits each patch at most once. The result is a logical Bell pair: read in Z, the two logical bits come out random but always equal.</p>
+    <p>Patch A is encoded as |+&#10217;&#8288;<sub>L</sub> and patch B as |0&#10217;&#8288;<sub>L</sub>, both with the encoder from lesson 1. Nine CNOTs, one from each qubit of A to the matching qubit of B, then act as one logical CNOT. Each copies X forward and Z backward, so X&#8288;<sub>L</sub> of A becomes X&#8288;<sub>L</sub> of A times X&#8288;<sub>L</sub> of B, and Z&#8288;<sub>L</sub> of B becomes Z&#8288;<sub>L</sub> of A times Z&#8288;<sub>L</sub> of B. Checks map to checks, so all sixteen still hold, and one faulty CNOT hits each patch at most once. The result is a logical Bell pair: read in Z, the two logical bits come out random but always equal.</p>
+    </div>
+    <div>
     <h2>Things to try</h2>
     <ul class="try">
-      <li>Press Play and follow the state panel under the figure: A becomes |+&#10217;&#8203;<sub>L</sub>, B becomes |0&#10217;&#8203;<sub>L</sub>, and after the CNOT layer both are listed as a Bell pair.</li>
+      <li>Press Play and follow the state panel under the figure: A becomes |+&#10217;&#8288;<sub>L</sub>, B becomes |0&#10217;&#8288;<sub>L</sub>, and after the CNOT layer both are listed as a Bell pair.</li>
       <li>In Run it live, set the shots, the readout basis and the noise per gate, then press Run. A stabilizer simulator runs the circuit in your browser and reports how often the two logical bits agree and how many shots the checks discard.</li>
       <li>Tick Inject one error, choose a Pauli, a qubit and the layer it follows, and run again. The heatmap shows how often each of the sixteen checks fired in each layer.</li>
     </ul>
+    </div>
   </section>
 
   <section class="panel" id="circuit-box">
@@ -125,10 +132,10 @@
   <section class="panel">
     <h2>Step by step</h2>
     <ol class="steps">
-      <li><b>prepare A.</b> H puts q0 of A in |+&#10217;. A CNOT acting on |0&#10217;&#8203;<sub>L</sub> would do nothing; with A in |+&#10217;&#8203;<sub>L</sub> it makes a Bell pair.</li>
-      <li><b>encode A.</b> Encode A with the encoder from lesson 1. It turns q0 = |0&#10217; into |0&#10217;&#8203;<sub>L</sub> and q0 = |1&#10217; into X&#8203;<sub>L</sub>|0&#10217;&#8203;<sub>L</sub> = |1&#10217;&#8203;<sub>L</sub>, so q0 = |+&#10217; becomes |+&#10217;&#8203;<sub>L</sub>: X&#8203;<sub>L</sub> holds, Z&#8203;<sub>L</sub> does not.</li>
-      <li><b>encode B.</b> Encode B the same way from q0 = |0&#10217;: |0&#10217;&#8203;<sub>L</sub>, so Z&#8203;<sub>L</sub> holds.</li>
-      <li><b>transversal CNOT A→B.</b> Nine CNOTs, qi of A → qi of B. Each copies X forward and Z backward: X&#8203;<sub>L</sub> of A becomes X&#8203;<sub>L</sub> of A · X&#8203;<sub>L</sub> of B, Z&#8203;<sub>L</sub> of B becomes Z&#8203;<sub>L</sub> of A · Z&#8203;<sub>L</sub> of B. That is a logical CNOT. Checks map to checks, so all sixteen hold, and one faulty CNOT hits each patch at most once.</li>
+      <li><b>prepare A.</b> H puts q0 of A in |+&#10217;. A CNOT acting on |0&#10217;&#8288;<sub>L</sub> would do nothing; with A in |+&#10217;&#8288;<sub>L</sub> it makes a Bell pair.</li>
+      <li><b>encode A.</b> Encode A with the encoder from lesson 1. It turns q0 = |0&#10217; into |0&#10217;&#8288;<sub>L</sub> and q0 = |1&#10217; into X&#8288;<sub>L</sub>|0&#10217;&#8288;<sub>L</sub> = |1&#10217;&#8288;<sub>L</sub>, so q0 = |+&#10217; becomes |+&#10217;&#8288;<sub>L</sub>: X&#8288;<sub>L</sub> holds, Z&#8288;<sub>L</sub> does not.</li>
+      <li><b>encode B.</b> Encode B the same way from q0 = |0&#10217;: |0&#10217;&#8288;<sub>L</sub>, so Z&#8288;<sub>L</sub> holds.</li>
+      <li><b>transversal CNOT A→B.</b> Nine CNOTs, qi of A → qi of B. Each copies X forward and Z backward: X&#8288;<sub>L</sub> of A becomes X&#8288;<sub>L</sub> of A · X&#8288;<sub>L</sub> of B, Z&#8288;<sub>L</sub> of B becomes Z&#8288;<sub>L</sub> of A · Z&#8288;<sub>L</sub> of B. That is a logical CNOT. Checks map to checks, so all sixteen hold, and one faulty CNOT hits each patch at most once.</li>
       <li><b>measure.</b> Every qubit is measured in Z. Only the checks that are Z parities can still be read. The two logical bits come out random, but always equal.</li>
     </ol>
   </section>
@@ -136,6 +143,12 @@
   <section class="panel">
     <h2 id="results-head">Results</h2>
     <div id="results"></div>
+    <div class="results-note">
+      <h3>How to read this table</h3>
+      <p>Every shot ends with all data qubits measured, and the checks are worked out from those bits. Clean shots only gives the rate over the shots in which no check fired. Corrected by the code is the share of shots in which checks fired and a table of single errors named a qubit to flip back; After correction is the rate over all kept shots once that flip is made. Discarded by the checks is the share of shots whose fired checks are not in the table at all: those shots are dropped. No correction reads the raw bits of every shot. Bare qubits runs the same logical circuit with one unprotected qubit in place of each patch: no encoder and no checks. Each rate comes with one binomial standard error.</p>
+      <p>The first row reads a single patch prepared as |+&#10217;&#8288;<sub>L</sub> in X, with no CNOT: the starting state of patch A, kept as a reference for the two-patch rows.</p>
+      <p>Why the code loses here: the noise in this simulation acts only on gates, as the line under the table says. Both patches come from the lesson 1 encoder, and the two-patch rows add the nine transversal CNOTs on top. The bare rows use one qubit per patch and none of those CNOTs, so far less noise reaches them. The encoder is not fault tolerant: in the course's own stabilizer simulator, 44 of the 180 ways a single CNOT of the lesson 1 encoder can fail (each of its 12 CNOTs followed by one of the 15 two-qubit Pauli errors) end in a wrong logical readout after the table's correction.</p>
+    </div>
   </section>
 
   <nav class="secnav endnav" aria-label="Course, end of lesson"><a href="threshold.html">&larr; Previous: The threshold</a> <a href="lesson-3.html">Next: Lesson 3: Preparing a T state &rarr;</a></nav>

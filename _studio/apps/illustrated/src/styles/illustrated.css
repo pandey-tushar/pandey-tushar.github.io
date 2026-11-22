@@ -112,11 +112,14 @@ body {
   margin-top: calc(var(--plate) * -1);
 }
 
+/* overflow-x: clip keeps the bloom below from widening the page; body's
+   overflow-x: hidden alone is not honoured by every browser (iPad Safari) */
 .beat {
   min-height: var(--plate);
   display: grid;
   align-content: center;
   padding: 10svh var(--pad);
+  overflow-x: clip;
 }
 
 .beat:nth-child(odd) { justify-items: start; }
@@ -379,25 +382,35 @@ a:hover, a:focus-visible { text-decoration-color: currentColor; }
 
 /* ---------- rail ---------- */
 
+/* inside the plate, clear of its frame line: the stage's own padding, then a
+   gap. Each mark is a tall link and the 2px bar it shows is drawn inside it. */
 .rail {
   position: fixed;
-  right: max(.7rem, env(safe-area-inset-right));
+  right: max(calc(clamp(10px, 1.6vw, 22px) + 10px), env(safe-area-inset-right));
   top: 50%;
   transform: translateY(-50%);
   z-index: 40;
   display: grid;
-  gap: 7px;
 }
 
 .rail .mark {
+  position: relative;
   display: block;
+  width: 24px;
+  height: clamp(12px, calc((100svh - var(--tp-barh) - 2rem) / 22), 24px);
+}
+.rail .mark::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(50% - 1px);
   width: 12px;
   height: 2px;
   background: var(--tp-rule);
   transition: background .2s ease, width .2s ease;
 }
-.rail .mark.is-composed { background: var(--tp-dim); }
-.rail .mark.is-here { background: var(--tp-acc); width: 20px; }
+.rail .mark.is-composed::before { background: var(--tp-dim); }
+.rail .mark.is-here::before { background: var(--tp-acc); width: 20px; }
 
 /* ---------- footer ---------- */
 
@@ -421,6 +434,12 @@ a:hover, a:focus-visible { text-decoration-color: currentColor; }
   font-size: .9375rem;
 }
 .foot .editions a { display: inline-block; padding-block: 10px; }
+
+/* the site bar and footer on the column of the full-mode pages (lib/site.css,
+   .tp-full .tp-bar), as in life/: 72rem at full mode's 17px root is 76.5rem at
+   this page's 16px */
+@media (min-width: 601px) { body > .tp-bar { padding-inline: max(var(--tp-gut), calc((100% - 76.5rem) / 2)); } }
+body > .tp-foot { margin-inline: max(var(--tp-gut), calc((100% - 76.5rem) / 2)); }
 
 /* ---------- unstyled cantos ---------- */
 

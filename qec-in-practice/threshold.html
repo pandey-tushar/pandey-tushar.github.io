@@ -73,19 +73,25 @@
   <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
-<main id="main" class="page threshold">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr; Back to the course</a> <a href="decoding.html">&larr; Previous: Decoding</a> <a href="lesson-2.html">Next: Lesson 2 &rarr;</a></nav>
-  <article class="essay">
+<main id="main" class="page threshold course-essay">
+  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="decoding.html">&larr; Previous<span class="nav-long">: Errors, syndromes and decoding</span></a> <a id="next" href="lesson-2.html">Next<span class="nav-long">: Lesson 2: Logical CNOT between two patches</span>&nbsp;&rarr;</a></nav>
+  <p class="tp-lbl step-of">Step 4 of 8</p>
   <h1 id="lesson-title">The threshold</h1>
+  <div class="course-rail">
+  <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">Adding qubits to a code only helps if each qubit is good enough. Below a certain error rate, the threshold, a bigger code fails much less often; above it, a bigger code fails more often. This page lets you find that point with simulations that run in your browser.</p></aside>
+  <nav class="course-toc" aria-label="On this page"><p class="tp-lbl">On this page</p><ol><li><a href="#the-central-promise">The central promise</a></li><li><a href="#reading-the-plot">Reading the plot</a></li><li class="toc-fig"><a href="#fig-main">Fig. 1</a></li><li><a href="#below-threshold">Below threshold</a></li><li class="toc-fig"><a href="#fig-lambda">Fig. 2</a></li><li><a href="#when-the-checks-themselves-are-noisy">When the checks themselves are noisy</a></li><li><a href="#what-these-models-leave-out">What these models leave out</a></li><li><a href="#why-the-number-depends-on-the-decoder">Why the number depends on the decoder</a></li><li class="toc-fig"><a href="#fig-ref">Fig. 3</a></li></ol></nav>
+  </div>
+  <div class="essay-flow">
+  <article class="essay">
   <p class="lead">Error correction pays only if adding qubits makes things better. Below a critical physical error rate, the threshold, a bigger surface code fails exponentially less often. Above it, a bigger code fails more often. Here you find that point yourself: each figure runs a Monte Carlo simulation in your browser when you press Run.</p>
 
-  <h2>The central promise</h2>
+  <h2 id="the-central-promise">The central promise</h2>
   <p>Every physical qubit fails now and then. A code spreads one logical qubit over many physical ones, checks read out parities of neighbouring qubits, and a decoder uses the checks to guess which errors happened. When the guess is wrong in the wrong way, the logical qubit is flipped. That is a logical error.</p>
   <p>A distance-d surface code has d &times; d data qubits and fails only when errors, together with the decoder's correction, form a chain across the patch. That takes about d/2 errors, so when each qubit errs with a small probability p, a failure costs roughly p to the power (d+1)/2. A bigger patch also offers more places for a chain to start. At small p the first effect wins, and growing the code drives the logical error rate down as far as you like. At large p the second wins, and growing the code makes things worse. The physical error rate where the two balance is the threshold. It is the promise of error correction in one number: beat it, and you can buy any logical error rate by paying in qubits.</p>
 
-  <h2>Reading the plot</h2>
+  <h2 id="reading-the-plot">Reading the plot</h2>
   <p>The horizontal axis is the physical error rate p, the chance that a given data qubit suffers an error. The vertical axis is the logical error rate, the fraction of simulated shots in which the errors and the decoder's correction together flipped the logical qubit. Both axes are logarithmic, so a power law is a straight line and each curve is steeper the larger d is. Every point counts failures out of N shots, and its bar is one binomial standard error, the square root of r(1&nbsp;&minus;&nbsp;r)/N for a rate r.</p>
-  <p>The figure starts in the simplest setting, code capacity: each data qubit is flipped independently with probability p, once, and the checks are then read perfectly. The decoder is union-find, from the <a class="tp-link" href="decoding.html">previous lesson</a>: it grows clusters around the lit checks until each cluster can be explained by errors inside it, then corrects within each cluster. Press Run with the defaults and watch the left end of the plot, where p is small, then follow the curves to the right.</p>
+  <p>The figure starts in the simplest setting, code capacity: each data qubit is flipped independently with probability p, once, and the checks are then read perfectly. The decoder is union-find, from the <a class="tp-link" href="decoding.html">previous lesson</a>: it grows clusters around the fired checks until each cluster can be explained by errors inside it, then corrects within each cluster. Press Run with the defaults and watch the left end of the plot, where p is small, then follow the curves to the right.</p>
   </article>
 
   <figure class="tp-plate thr-fig" id="fig-main">
@@ -131,9 +137,9 @@
 
   <article class="essay">
   <p>You should have seen the order flip. Left of the crossing the biggest code is best; right of it, the biggest code is worst. The curves do not meet at exactly one point: small codes carry corrections that fade only as d grows, so the crossing of d&nbsp;=&nbsp;3 with 5 and of 5 with 7 need not agree. The page interpolates each pair of curves in log p to locate the crossing, and widens it to a range using the error bars. Read it as this run's estimate for this decoder, not as the threshold of the surface code.</p>
-  <p>Try depolarizing noise too. Each qubit then suffers X, Y or Z, each with probability p/3, and a shot fails if either logical operator is flipped. This decoder handles the X and Z parts separately, so it does not use the fact that a Y error is both at once. For comparison, known results for minimum-weight perfect matching on large codes put the bit-flip threshold near 10.3% with perfect measurement and near 2.9% with noisy measurement (Dennis, Kitaev, Landahl and Preskill, 2002; Wang, Harrington and Preskill, 2003). Those two numbers come from the literature, not from this page.</p>
+  <p>Try depolarizing noise too. Each qubit then suffers X, Y or Z, each with probability p/3, and a shot fails if either logical operator is flipped. This decoder handles the X and Z parts separately, so it does not use the fact that a Y error is both at once. For comparison, Dennis, Kitaev, Landahl and Preskill (2002) tied the threshold of the surface code to a phase transition in a disordered model from statistical physics, and Wang, Harrington and Preskill (2003) computed where minimum-weight matching stops working: near 10.3% when the checks are read perfectly, and near 2.9% when the readings are noisy. Both are lower bounds on the best possible threshold. Those two numbers come from the literature, not from this page.</p>
 
-  <h2>Below threshold</h2>
+  <h2 id="below-threshold">Below threshold</h2>
   <p>Pick a p well left of the crossing and read along a vertical line. Each time d grows by 2, the logical error rate falls by roughly the same factor. That factor is often called Lambda. Against d on a log axis the points lie close to a straight line, and its slope gives Lambda. Run the second figure at its default p, then move p toward the crossing and run it again.</p>
   </article>
 
@@ -163,14 +169,14 @@
   <article class="essay">
   <p>Near the crossing Lambda falls toward 1, where a bigger code buys nothing. Far below it Lambda is large, and every extra ring of qubits divides the failure rate by that factor. A measured Lambda greater than 1 between two code sizes is what an experiment means when it says it runs below threshold.</p>
 
-  <h2>When the checks themselves are noisy</h2>
+  <h2 id="when-the-checks-themselves-are-noisy">When the checks themselves are noisy</h2>
   <p>Code capacity assumes perfect checks. Real readouts are sometimes wrong, and one wrong readout looks like an error that appears and then vanishes. To tell the two apart the checks are repeated for several rounds and the decoder works in space and time at once. The phenomenological model does exactly this: d rounds, each with fresh data errors of probability p and each check readout flipped with probability p, then one final perfect readout taken by measuring the data qubits. Switch Fig. 1 to noisy measurement and press Run; the p range moves down with it.</p>
   <p>The crossing moves to a much lower p. Each check can now lie, and the decoder must rule out chains through time as well as across the patch.</p>
 
-  <h2>What these models leave out</h2>
+  <h2 id="what-these-models-leave-out">What these models leave out</h2>
   <p>Neither model is a circuit. On hardware each check is measured by an ancilla qubit coupled to its data qubits by a sequence of two-qubit gates, and every gate can fail. One fault halfway through that sequence can spread to two data qubits; ancillas can be reset wrongly; qubits idle while others are measured. Circuit-level noise includes all of these, and circuit-level thresholds are lower than phenomenological ones by a wide margin. The models here keep the geometry of the problem and drop the circuit.</p>
 
-  <h2>Why the number depends on the decoder</h2>
+  <h2 id="why-the-number-depends-on-the-decoder">Why the number depends on the decoder</h2>
   <p>A threshold belongs to a code, a noise model and a decoder together. A decoder that guesses better fails less often at the same p, and its crossing sits further right. The table runs this page's union-find decoder at the points of a reference computed offline with stim, a stabilizer circuit simulator, and pymatching, a minimum-weight perfect matching decoder, for bit-flip noise. Press Run comparison.</p>
   </article>
 
@@ -194,6 +200,7 @@
   <nav class="secnav endnav" aria-label="Course, end of lesson"><a href="decoding.html">&larr; Previous: Errors, syndromes and decoding</a> <a href="lesson-2.html">Next: Lesson 2: Logical CNOT between two patches &rarr;</a></nav>
   <p class="cite"><span class="tp-lbl">Cite this lesson</span> T. Pandey, "The threshold", Quantum Error Correction in Practice (2026), https://pandey-tushar.com/qec-in-practice/threshold.html</p>
   </article>
+  </div>
 </main>
 
 <footer class="tp-foot">

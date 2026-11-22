@@ -15,7 +15,7 @@ import io, json, pathlib, re, sys
 
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from lesson_text import state_html, plain, course
+from lesson_text import state_html, plain, course, phase_label
 
 QEC = HERE.parents[1] / 'qec-in-practice'
 read = lambda p: io.open(p, encoding='utf-8').read()
@@ -28,6 +28,7 @@ X_STABS = [[0, 1, 3, 4], [4, 5, 7, 8], [2, 5], [3, 6]]
 Z_STABS = [[1, 2, 4, 5], [3, 4, 6, 7], [0, 1], [7, 8]]
 SHAPE = {'2,5': 'right', '3,6': 'left', '0,1': 'top', '7,8': 'bottom'}
 S, R, M = 60, 30, 48
+TIGHT = {4: (3.2, 36)}  # lesson: (patch spacing in units of S, side margin) for the card picture
 num = lambda v: f'{v:g}'
 
 # lesson: (time slice of the checks, gate layer drawn, inject variant, caption)
@@ -59,15 +60,18 @@ def thumb(n, data):
         t = inj['t'] + 1
     checks, logicals = src['checks'][t], src['logicals'][t]
     gates = [o for o in ops if o['t'] == layer] if layer is not None else []
-    blocks = data['blocks']
-    W = (max(b['x0'] for b in blocks) + 2) * S + 2 * M
+    # three patches at the lesson's own spacing would draw each one a third smaller than on the other cards,
+    # so the lesson 4 still sets them closer, with a narrower side margin
+    step, mx = TIGHT.get(n, (None, M))
+    blocks = [dict(b, x0=k * step) if step else b for k, b in enumerate(data['blocks'])]
+    W = (max(b['x0'] for b in blocks) + 2) * S + 2 * mx
     H = 2 * S + 2 * M
     out = [f'<svg viewBox="0 0 {num(W)} {num(H)}" aria-hidden="true" focusable="false">']
     if gates:
         out.append(f'<defs><marker id="th-ah-{n}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" class="th-head"/></marker></defs>')
     pos = {}
     for bi, b in enumerate(blocks):
-        x0, y0 = M + b['x0'] * S, M + b['y0'] * S
+        x0, y0 = mx + b['x0'] * S, M + b['y0'] * S
         for i, qid in enumerate(b['data']):
             pos[qid] = (x0 + S * (i % 3), y0 + S * (i // 3))
         for typ, stabs in (('Z', Z_STABS), ('X', X_STABS)):
@@ -133,12 +137,14 @@ def svg(w, h, body):
 
 def repetition():
     """d = 5: Z Z checks between neighbours (codes.js repetitionCode); an X error on q2 fires the two beside it."""
-    d, hit = 5, 2
+    d, hit, h = 5, 2, 15
     x = lambda i: M + S * i
-    out = []
+    out = [f'<line x1="{num(x(0))}" y1="{num(M)}" x2="{num(x(d - 1))}" y2="{num(M)}" class="th-rep"/>']
     for i in range(1, d):
+        # a diamond between neighbours, as qec-draw.js draws the checks on the page
         state = 'fire' if hit in (i - 1, i) else 'z'
-        out.append(f'<rect x="{num(x(i - 1))}" y="{num(M - 14)}" width="{S}" height="28" rx="14" class="th-f th-{state} th-sz"/>')
+        cx = x(i) - S / 2
+        out.append(f'<path d="M{num(cx)},{num(M - h)}L{num(cx + h)},{num(M)}L{num(cx)},{num(M + h)}L{num(cx - h)},{num(M)}Z" class="th-f th-{state} th-sz"/>')
     out += [f'<circle cx="{num(x(i))}" cy="{num(M)}" r="12" class="qdot{" hit" if i == hit else ""}"/>' for i in range(d)]
     out.append(f'<circle cx="{num(x(hit))}" cy="{num(M)}" r="19" class="th-err"/>')
     return svg(2 * M + S * (d - 1), 2 * M, out), 'An X error on q2 fires the two checks beside it'
@@ -215,8 +221,15 @@ def figure(art):
 
 
 def link(e, rel):
-    before, after = ('&larr; Previous: ', '') if rel == 'prev' else ('Next: ', ' &rarr;')
-    return f'<a id="{rel}" href="{e["page"]}">{before}{state_html(e["title"])}{after}</a>'
+    """The top nav link: the full title, cut to Previous or Next on a phone (css/site.css .nav-long)."""
+    t = state_html(e['title'])
+    text = f'&larr; Previous<span class="nav-long">: {t}</span>' if rel == 'prev' else f'Next<span class="nav-long">: {t}</span>&nbsp;&rarr;'
+    return f'<a id="{rel}" href="{e["page"]}">{text}</a>'
+
+
+def endlink(e, rel):
+    t = state_html(e['title'])
+    return f'<a href="{e["page"]}">' + (f'&larr; Previous: {t}' if rel == 'prev' else f'Next: {t} &rarr;') + '</a>'
 
 
 thumbs = {}
@@ -230,7 +243,7 @@ for i, e in enumerate(order):
     thumbs[e['page']] = (str(n), thumb(n, data))
     phase = {t: p['name'] for p in data['phases'] for t in range(p['t0'], p['t1'] + 1)}
     steps = '\n'.join(
-        f'      <li><b>{state_html(phase[int(t)])}.</b> {state_html(text)}</li>'
+        f'      <li><b>{state_html(phase_label(phase[int(t)]))}.</b> {state_html(text)}</li>'
         for t, text in sorted(data['layer_text'].items(), key=lambda kv: int(kv[0])))
     near = ([(order[i - 1], 'prev')] if i > 0 else []) + ([(order[i + 1], 'next')] if i < len(order) - 1 else [])
     page = template
@@ -239,7 +252,9 @@ for i, e in enumerate(order):
         '{{intro}}': state_html(info['intro']),
         '{{description}}': plain(info['intro'].replace('_L', '')), '{{steps}}': steps,
         '{{nav}}': ''.join(' ' + link(o, rel) for o, rel in near),
-        '{{endnav}}': ' '.join(link(o, rel).replace(f' id="{rel}"', '') for o, rel in near),
+        '{{endnav}}': ' '.join(endlink(o, rel) for o, rel in near),
+        '{{stepof}}': f'Step {i + 1} of {len(order)}', '{{plain}}': state_html(info['plain']),
+        '{{results_note}}': '\n'.join(f'      <p>{state_html(p)}</p>' for p in info['results_note']),
         '{{shows}}': '\n'.join(f'    <p>{state_html(p)}</p>' for p in info['shows']),
         '{{try}}': '\n'.join(f'      <li>{state_html(p)}</li>' for p in info['try']),
     }.items():
@@ -253,8 +268,10 @@ for j, name in enumerate(dict.fromkeys(e['part'] for e in order)):
     for e in (e for e in order if e['part'] == name):
         k += 1
         key, fig = thumbs[e['page']]
+        # the step is the place in the course; a numbered lesson keeps its number next to it and its own title below
+        num, title = (f'Step {k} &middot; Lesson {e["lesson"]}', lessons[str(e['lesson'])]['title']) if 'lesson' in e else (f'Step {k}', e['title'])
         cards.append(f'      <li><a class="lcard" href="{e["page"]}"><!-- thumb {key} -->{fig}<!-- /thumb -->'
-                     f'<span class="num">Step {k}</span><b>{state_html(e["title"])}</b><span>{state_html(e["card"])}</span></a></li>')
+                     f'<span class="num">{num}</span><b>{state_html(title)}</b><span>{state_html(e["card"])}</span></a></li>')
     first = k - len(cards) + 1
     parts.append(f'  <section class="part" aria-labelledby="part-{j + 1}">\n'
                  f'    <p class="tp-lbl">Part {j + 1}, steps {first} to {k}</p>\n'

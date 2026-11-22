@@ -19,12 +19,14 @@ PAGES = ['index.html', 'cv.html', 'research.html', 'books.html', 'qubit-dialogue
          'qec-in-practice/repetition-code.html', 'qec-in-practice/decoding.html',
          'qec-in-practice/threshold.html', 'qec-in-practice/lattice-surgery.html', '404.html',
          'papers/bb-erasure-baselines.html', 'papers/lifted-surgery.html', 'papers/adaptive-graph-of-thoughts.html',
-         'tools/bb-codes.html', 'notes/index.html', 'notes/crossing-is-not-the-threshold.html']
+         'tools/bb-codes.html', 'notes/index.html', 'notes/crossing-is-not-the-threshold.html',
+         'why-error-correction.html', 'qec-in-practice/glossary.html', 'logical/index.html']
 FULL = ['index.html', 'cv.html', 'research.html', 'books.html', 'qec-in-practice/index.html',
         'qec-in-practice/lesson-1.html', 'qec-in-practice/repetition-code.html', 'qec-in-practice/decoding.html',
         'qec-in-practice/threshold.html', 'qec-in-practice/lattice-surgery.html', '404.html',
         'papers/bb-erasure-baselines.html', 'papers/lifted-surgery.html', 'papers/adaptive-graph-of-thoughts.html',
-        'tools/bb-codes.html', 'notes/index.html', 'notes/crossing-is-not-the-threshold.html']
+        'tools/bb-codes.html', 'notes/index.html', 'notes/crossing-is-not-the-threshold.html',
+        'why-error-correction.html', 'qec-in-practice/glossary.html', 'logical/index.html']
 
 NAV = [('Research', '/research.html'), ('Books', '/books.html'), ('Lessons', '/qec-in-practice/'),
        ('CV', '/cv.html'), ('Contact', '/#contact')]
@@ -45,7 +47,8 @@ OG = {'index.html': 'og-home.png', 'research.html': 'og-research.png', 'cv.html'
       'papers/bb-erasure-baselines.html': 'og-research.png',
       'papers/lifted-surgery.html': 'og-research.png', 'papers/adaptive-graph-of-thoughts.html': 'og-research.png',
       'tools/bb-codes.html': 'og-research.png', 'notes/index.html': 'og-research.png',
-      'notes/crossing-is-not-the-threshold.html': 'og-research.png'}
+      'notes/crossing-is-not-the-threshold.html': 'og-research.png',
+      'why-error-correction.html': 'og-qec.png'}
 
 # leftovers of the old costume and copy that must not come back
 GONE = [r'(?i)quantum (&#215;|&times;|×) AI', r'(?i)systems that ship']
@@ -240,6 +243,51 @@ if len(inlined) != len(heads):
     fail.append(f'research.html: {len(heads) - len(inlined)} of {len(heads)} area emblems are not from img/figures/')
 if '--tp-accent' in research or any('--tp-accent' in s for s in figs.values()):
     fail.append('img/figures: uses --tp-accent, which is not a token (--tp-acc)')
+
+# copy that must hold on the owned pages: (page, pattern, wanted present, reason)
+COPY = [
+    ('index.html', r'2015 &ndash; 2019</span><span><b>IIT Kanpur', True, 'IIT Kanpur row is not 2015 - 2019'),
+    ('index.html', r'2025 &ndash; now</span><span><b>DataRobot', True, 'DataRobot row does not start 2025'),
+    ('index.html', r'National Science Foundation Mathematical Sciences Graduate Internship', True, 'NSF-MSGI not expanded'),
+    ('index.html', r'Every paper and preprint', False, 'research link claims completeness'),
+    ('cv.html', r'The full list, with summaries', False, 'research link claims completeness'),
+    ('cv.html', r'Co-organizer', False, 'Co-organizer, not Organizer'),
+    ('cv.html', r'>[^<]*Q-Volution', False, 'Q-Volution breaks at its hyphen'),
+    ('cv.html', r'<meta name="description" content="[^"]*Senior Software Engineer at DataRobot', True, 'description does not name role and employer'),
+    ('cv.html', r'<meta property="og:description" content="[^"]*Senior Software Engineer at DataRobot', True, 'og:description does not name role and employer'),
+    ('books.html', r'(?i)twenty two', False, '"twenty two" without the hyphen'),
+    ('books.html', r'An Unpolarized Life \(about 35 minutes\)', True, 'lede does not offer An Unpolarized Life to new readers'),
+    ('index.html', r'some codes share a mark|share a mark', True, 'Fig. 4 caption does not explain 18 marks for 27 codes'),
+    ('index.html', r'Begun at Oak Ridge\. Sole author', False, 'semion card still reads as fragments'),
+    ('index.html', r'>The record<', False, 'Google Site link still labelled "The record"'),
+    ('index.html', r'href="https://sites.google.com/view/tusharpandey"[^>]*>Talks and older work<', True, 'Google Site link not labelled "Talks and older work"'),
+    ('research.html', r'href="https://sites.google.com/view/tusharpandey"[^>]*>Talks and older work<', True, 'Google Site link not labelled "Talks and older work"'),
+    ('index.html', r'In plain words', True, 'no plain-words paragraph under the hero'),
+    ('index.html', r'href="/why-error-correction.html"[^>]*>Why quantum computers need error correction<', True, 'no link to the explainer'),
+    ('index.html', r'aria-label="Start here"', True, 'no Start here strip'),
+    ('research.html', r'<p class="area-title"', False, 'area titles are not headings'),
+    ('research.html', r'<h2 class="area-title"', True, 'area titles are not h2'),
+    ('research.html', r'<p class="why">', True, 'no plain why-it-matters line under the area titles'),
+]
+for page in ('index.html', 'cv.html', 'books.html', 'research.html', '404.html'):
+    for bad in ('Lead author', '30 to 40 percent', 'tripled', 'systems that ship', 'Dynamo'):
+        if bad in read(ROOT / page):
+            fail.append(f'{page}: says "{bad}"')
+for page, pat, want, why in COPY:
+    if (re.search(pat, read(ROOT / page)) is not None) != want:
+        fail.append(f'{page}: {why}')
+# the start-here strip offers the three paths
+start = re.search(r'<nav class="start".*?</nav>', home, re.S)
+for h in ('/why-error-correction.html', '/books.html', '/qec-in-practice/', '/tools/bb-codes.html', '/research.html', '#companions'):
+    if not start or f'href="{h}"' not in start.group(0):
+        fail.append(f'index.html: Start here strip has no link to {h}')
+if len(re.findall(r'<article class="work">.*?<p class="plain">', home.split('id="work"')[-1], re.S)) != 4:
+    fail.append('index.html: a selected-work card has no plain sentence before its citation')
+# research: every paper title sits under its area's h2
+if re.search(r'<article class="paper"[^>]*>.*?<h2>', research, re.S) or research.count('<p class="why">') != 5:
+    fail.append('research.html: paper titles are not h3 under the area h2, or an area lacks its why line')
+if books.count('.tp-btn.go{') != 1:
+    fail.append('books.html: .tp-btn.go declared more than once')
 
 if re.search(r'background-clip:\s*text|backdrop-filter|tp-lattice', css):
     fail.append('lib/site.css: gradient text, backdrop blur or the lattice wash')

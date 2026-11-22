@@ -127,11 +127,13 @@ section.canto.acc { scroll-margin-top: var(--tp-barh) }
 .foot-note { font: 400 .8125rem/1.65 var(--tp-sans); letter-spacing: 0; color: var(--tp-dim); border-top-color: var(--tp-rule) }
 .foot-note strong { color: var(--tp-ink) !important; letter-spacing: .04em !important }
 
+/* on the text column (31em of --bs, which is in rem, so this box's own
+   smaller font does not shrink it), centred under the colophon */
 .editions {
-  max-width: calc(31em * 1.1875 + 2 * var(--tp-gut)); margin: 0 auto; padding: 2rem var(--tp-gut) 1.4rem;
-  font: 400 .9375rem/1.6 var(--tp-sans);
+  max-width: calc(31 * var(--bs) + 2 * var(--tp-gut)); margin: 0 auto; padding: 2rem var(--tp-gut) 1.4rem;
+  font: 400 .9375rem/1.6 var(--tp-sans); text-align: center;
 }
-.editions ul { display: flex; flex-wrap: wrap; gap: .4rem 1.8rem; margin: 0; padding: 0; list-style: none }
+.editions ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 1.8rem; margin: 0; padding: 0; list-style: none }
 .editions a {
   display: inline-block; padding-block: 10px; color: var(--tp-acc);
   text-decoration: underline 1px var(--tp-a40); text-underline-offset: .18em;
@@ -139,6 +141,11 @@ section.canto.acc { scroll-margin-top: var(--tp-barh) }
 .editions a:hover, .editions a:focus-visible { text-decoration-color: currentColor }
 /* the reader styles every footer element; the site footer keeps its own */
 .tp-foot { letter-spacing: normal; text-align: left; z-index: auto }
+/* the site bar and footer on the column of the full-mode pages (lib/site.css,
+   .tp-full .tp-bar), without the rest of full mode: 72rem at full mode's 17px
+   root is 76.5rem at this page's 16px */
+@media (min-width: 601px) { body > .tp-bar { padding-inline: max(var(--tp-gut), calc((100% - 76.5rem) / 2)) } }
+#end > .tp-foot { margin-inline: max(var(--tp-gut), calc((100% - 76.5rem) / 2)) }
 
 @media print {
   #cover { min-height: 0; padding: 2em 0 }

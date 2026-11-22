@@ -66,7 +66,7 @@ for p in papers:
     if not m:
         fail.append(f"research.html: no entry for {p['id']}"); continue
     art = m.group(0)
-    want = {'title': f"<h2>{esc(p['title'])}</h2>", 'year': str(p['year']), 'summary': rich(p['summary'])}
+    want = {'title': f"<h3>{esc(p['title'])}</h3>", 'year': str(p['year']), 'summary': rich(p['summary'])}
     want.update({f'author {a}': esc(a) for a in p['authors']})
     fail += [f"research.html: {p['id']} lacks its {k}" for k, v in want.items() if v not in art]
     if p.get('selected'):

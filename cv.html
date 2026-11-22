@@ -34,7 +34,7 @@
 <title>Tushar Pandey, PhD · Curriculum Vitæ</title>
 <link rel="canonical" href="https://pandey-tushar.com/cv.html">
 <meta property="og:title" content="Tushar Pandey, PhD · Curriculum Vitæ">
-<meta property="og:description" content="Mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between.">
+<meta property="og:description" content="CV of Tushar Pandey, PhD, Senior Software Engineer at DataRobot working on LLM inference, and a researcher in quantum error correction, quantum topology and LLM reasoning.">
 <meta property="og:type" content="profile">
 <meta property="og:url" content="https://pandey-tushar.com/cv.html">
 <meta property="og:image" content="https://pandey-tushar.com/og-cv.png">
@@ -43,7 +43,7 @@
 <meta property="og:site_name" content="Tushar Pandey">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://pandey-tushar.com/og-cv.png">
-<meta name="description" content="Tushar Pandey: mathematician and builder. Quantum-topology proofs to production AI: research, systems, and the work in between.">
+<meta name="description" content="CV of Tushar Pandey, PhD, Senior Software Engineer at DataRobot working on LLM inference, and a researcher in quantum error correction, quantum topology and LLM reasoning.">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -102,6 +102,22 @@ a.lk:hover{text-decoration-color:currentColor}
 .pub .meta{display:block;margin-top:.2rem;font-size:.9em;color:var(--tp-dim)}
 .more{margin-top:1rem;max-width:40em;color:var(--tp-text)}
 .oneline{max-width:40em;line-height:1.62;color:var(--tp-text)}
+
+/* a wide screen: the CV fills the column. Contact and the resume buttons
+   stand beside the summary; each section heading takes a margin column and
+   its rows run to the right edge, the text inside them still held to a measure */
+@media screen and (min-width:70em){
+  .cv{max-width:none}
+  .cvhead{display:grid;grid-template-columns:minmax(0,40em) minmax(0,1fr);column-gap:clamp(2.4rem,4vw,4.5rem);align-items:start}
+  .cvhead .eyebrow,.who{grid-column:1 / -1}
+  .lead{grid-column:1;grid-row:3 / span 2;margin-top:28px}
+  .contact{grid-column:2;grid-row:3;flex-direction:column;align-items:flex-start;margin-top:28px;padding-left:1.4rem;border-left:1px solid var(--tp-rule)}
+  .actions{grid-column:2;grid-row:4;align-self:start;padding-left:1.4rem}
+  .cv section{display:grid;grid-template-columns:13rem minmax(0,1fr);column-gap:clamp(2rem,3vw,3rem);align-items:start}
+  .cv section > h2{grid-column:1;grid-row:1 / span 3;margin-bottom:0}
+  .cv section > :not(h2){grid-column:2}
+  .what,.hl li{max-width:44em}
+}
 
 @media (pointer:coarse){
   .contact a,.lk,.pub .ttl,.more a{min-height:44px;display:inline-flex;align-items:center}
@@ -187,7 +203,7 @@ a.lk:hover{text-decoration-color:currentColor}
           <a class="tp-btn" href="/Tushar_Pandey_Resume_AI.pdf" download>R&eacute;sum&eacute; &middot; AI</a>
           <button class="tp-btn" type="button" id="print" hidden>Print / Save PDF</button>
         </p>
-        <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: an error-correction algorithm for the doubled semion model, begun at Oak Ridge; a test-time reasoning framework shipped at Agnostiq; and LLM inference infrastructure at DataRobot that serves many tenants at scale and is being hardened for government-grade security. Along the way I won the 2026 Global Industry Challenge at Quantum World Congress, a challenge at the 2025 IBM Quantum Developer Conference, the Classiq challenge at MIT iQuHACK 2024, and first prize at the Q-Volution Hackathon 2026.</p>
+        <p class="lead">I prove theorems and ship systems. My doctoral work produced original results at the frontier of <b>quantum topology</b>, including a <span class="accent">sole-authored proof of a volume conjecture</span>. I carried that rigor into applied quantum computing and AI: an error-correction algorithm for the doubled semion model, begun at Oak Ridge; a test-time reasoning framework shipped at Agnostiq; and LLM inference infrastructure at DataRobot that serves many tenants at scale and is being hardened for government-grade security. Along the way I won the 2026 Global Industry Challenge at Quantum World Congress, a challenge at the 2025 IBM Quantum Developer Conference, the Classiq challenge at MIT iQuHACK 2024, and first prize at the Q&#8209;Volution Hackathon 2026.</p>
       </header>
 
       <section aria-labelledby="h-highlights">
@@ -198,7 +214,7 @@ a.lk:hover{text-decoration-color:currentColor}
           <li><b>Built production multi-tenant LLM inference at scale</b> at DataRobot: co-author of TokenGrid, a token-aware capacity scheduler; now building disaggregated LLM serving and hardening the platform for government-grade deployments. <a class="lk" href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" rel="noopener">DataRobot blog</a></li>
           <li><b>Cut LLM fine-tuning cost by 99%</b> at Agnostiq with a CPU-first, federated architecture that matched quality at a fraction of the spend.</li>
           <li><b>Gave a new explicit error detection and correction algorithm for the doubled semion model</b>, in a review of topological phases of matter and lattice twists begun as an NSF-MSGI researcher at Oak Ridge National Laboratory; sole author, APL Quantum 2025. <a class="lk" href="https://doi.org/10.1063/5.0255351" rel="noopener">doi:10.1063/5.0255351</a></li>
-          <li><b>Won four quantum challenges and hackathons</b>: the 2026 Global Industry Challenge at Quantum World Congress (600+ applicants from 50+ countries), the Schwinger-model hadron dynamics challenge at the IBM Quantum Developer Conference 2025, the Classiq general-arithmetic challenge at MIT iQuHACK 2024, and first prize at the Q-Volution Hackathon 2026. <a class="lk" href="https://www.quantumworldcongress.com/news/from-challenge-to-proof-2026-global-industry-challenge-winners" rel="noopener">QWC winners</a></li>
+          <li><b>Won four quantum challenges and hackathons</b>: the 2026 Global Industry Challenge at Quantum World Congress (600+ applicants from 50+ countries), the Schwinger-model hadron dynamics challenge at the IBM Quantum Developer Conference 2025, the Classiq general-arithmetic challenge at MIT iQuHACK 2024, and first prize at the Q&#8209;Volution Hackathon 2026. <a class="lk" href="https://www.quantumworldcongress.com/news/from-challenge-to-proof-2026-global-industry-challenge-winners" rel="noopener">QWC winners</a></li>
         </ul>
       </section>
 
@@ -231,7 +247,7 @@ a.lk:hover{text-decoration-color:currentColor}
           <li class="pub"><a class="ttl" href="/research.html#the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur">The Bonahon&#8211;Wong&#8211;Yang volume conjecture for the four-puncture sphere</a>
             <span class="meta">arXiv preprint, 2023 &middot; sole author &middot; <a class="lk" href="https://arxiv.org/abs/2311.13151" rel="noopener">arXiv:2311.13151</a></span></li>
         </ol>
-        <p class="more">Selected from 18 papers and preprints across quantum error correction, quantum algorithms, LLM reasoning, quantum topology and number theory. <a class="tp-link" href="/research.html">The full list, with summaries</a>.</p>
+        <p class="more">Selected from 18 papers and preprints across quantum error correction, quantum algorithms, LLM reasoning, quantum topology and number theory. <a class="tp-link" href="/research.html">Summaries on the research page</a>.</p>
 <!-- selected:end -->
       </section>
 
@@ -239,7 +255,7 @@ a.lk:hover{text-decoration-color:currentColor}
         <h2 id="h-recognition">Recognition</h2>
         <ol>
           <li class="row"><span class="when">2026</span><span class="what"><span class="t"><b>Winner</b>, 2026 Global Industry Challenge, Quantum World Congress</span></span></li>
-          <li class="row"><span class="when">2026</span><span class="what"><span class="t"><b>1st prize</b>, Q-Volution Hackathon (GiQ)</span></span></li>
+          <li class="row"><span class="when">2026</span><span class="what"><span class="t"><b>1st prize</b>, Q&#8209;Volution Hackathon (GiQ)</span></span></li>
           <li class="row"><span class="when">2025</span><span class="what"><span class="t"><b>Challenge winner</b>, Schwinger-model hadron dynamics, IBM Quantum Developer Conference</span></span></li>
           <li class="row"><span class="when">2024</span><span class="what"><span class="t"><b>1st prize</b>, Classiq general-arithmetic challenge, MIT iQuHACK</span></span></li>
           <li class="row"><span class="when">2023</span><span class="what"><span class="t"><b>Guseman Prize</b>, TAMU Mathematics</span></span></li>
@@ -254,7 +270,7 @@ a.lk:hover{text-decoration-color:currentColor}
           <li class="row"><span class="when">Sep 2026</span><span class="what"><span class="t">Invited speaker, IEEE Quantum Week (QCE 2026), Toronto</span></span></li>
           <li class="row"><span class="when">Apr 2026</span><span class="what"><span class="t"><span class="tag">Poster</span> &middot; QCTiP 2026, Oxford</span></span></li>
           <li class="row"><span class="when">Apr 2026</span><span class="what"><span class="t">Invited speaker, Workshop on Applied Quantum Computing and Quantum Circuits &amp; Systems (AQ-QCAS), SMU, Dallas</span></span></li>
-          <li class="row"><span class="when">Oct 2025</span><span class="what"><span class="t"><span class="tag">Co-organizer</span> &middot; Special session <cite>New Horizons for Quantum Error Correction: Categorical Approaches to Topological Codes</cite>, <a class="tp-link" href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" rel="noopener">AMS Fall Eastern Sectional Meeting</a> (online)</span></span></li>
+          <li class="row"><span class="when">Oct 2025</span><span class="what"><span class="t"><span class="tag">Organizer</span> &middot; Special session <cite>New Horizons for Quantum Error Correction: Categorical Approaches to Topological Codes</cite>, <a class="tp-link" href="https://www.ams.org/meetings/sectional/2330_program_ss15.html#title" rel="noopener">AMS Fall Eastern Sectional Meeting</a> (online)</span></span></li>
           <li class="row"><span class="when">Feb 2024</span><span class="what"><span class="t"><cite>Toric code: A blend of physics, math, and (maybe) computer science</cite>, Texas A&amp;M University</span></span></li>
           <li class="row"><span class="when">Feb 2024</span><span class="what"><span class="t">Invited speaker, Algebra and Combinatorics Seminar, Texas A&amp;M University</span></span></li>
           <li class="row"><span class="when">Jan 2024</span><span class="what"><span class="t"><cite>BWY volume conjecture for incomplete structures for surface diffeomorphisms I</cite>, JMM 2024, special session on Knots, skein modules and categorification, San Francisco</span></span></li>
@@ -282,7 +298,7 @@ a.lk:hover{text-decoration-color:currentColor}
 
       <section aria-labelledby="h-service">
         <h2 id="h-service">Service</h2>
-        <p class="oneline">Reviewer for Quantum Science and Technology and Physica Scripta. Co-organizer of the AMS 2025 special session above. Mentored 20+ students.</p>
+        <p class="oneline">Reviewer for Quantum Science and Technology and Physica Scripta. Organizer of the AMS 2025 special session above. Mentored 20+ students.</p>
       </section>
 
       <section aria-labelledby="h-skills">
