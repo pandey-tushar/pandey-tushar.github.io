@@ -274,6 +274,11 @@ for pat, why in ((r'class="n"', 'section numbers'), (r'<b>Fig\.', 'figure number
         fail.append(f'index.html: still has {why}')
 if re.findall(r'<section[^>]*?(?:id|class)="([^"]+)"', home) != ['hero', 'work', 'contact']:
     fail.append('index.html: sections are not hero, work, contact')
+hero = re.search(r'<section class="hero".*?</section>', home, re.S).group(0)
+if re.findall(r'<dt>([^<]+)</dt>', hero) != ['Engineering', 'Research', 'Writing'] or 'class="lede"' in hero:
+    fail.append('index.html: the hero does not say what I do in three lines (Engineering, Research, Writing)')
+if [h for h in re.findall(r'<h3>([^<]+)</h3>', home)] != ['TokenGrid', 'Error correction for the doubled semion model', 'Adaptive Graph of Thoughts', 'The volume conjecture']:
+    fail.append('index.html: work cards are not TokenGrid, semion, AGoT, volume conjecture')
 if home.count('<article class="work">') != 4:
     fail.append('index.html: not four selected-work cards')
 # research: every paper title sits under its area's h2

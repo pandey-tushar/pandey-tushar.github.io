@@ -143,7 +143,13 @@ ol,ul{list-style:none}
 /* the text column and the figure panel share one centre line */
 .hero{display:grid;gap:clamp(2.2rem,4vw,4.5rem);align-items:center}
 .face{display:block;width:144px;height:144px;border-radius:50%;object-fit:cover;border:1px solid var(--tp-rule);margin-bottom:1.6rem}
-.lede{margin-top:1.1rem;max-width:32em;font-size:clamp(1.08rem,1rem + .4vw,1.22rem);line-height:1.55;color:var(--tp-text)}
+.facets{margin-top:1.3rem;max-width:32em;font-size:clamp(1.04rem,1rem + .3vw,1.16rem);line-height:1.5}
+.facets div{display:grid;grid-template-columns:7.2rem minmax(0,1fr);gap:1rem;padding:.45rem 0;border-top:1px solid var(--tp-rule)}
+.facets div:last-child{border-bottom:1px solid var(--tp-rule)}
+.facets dt{font-size:var(--tp-t-small);color:var(--tp-dim);padding-top:.15rem}
+.facets dd{color:var(--tp-text)}
+.facets a{color:var(--tp-ink);text-decoration:underline 1px;text-decoration-color:var(--tp-rule);text-underline-offset:.2em}
+.facets a:hover,.facets a:focus-visible{color:var(--tp-acc);text-decoration-color:currentColor}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.7rem}
 .place{margin-top:1.1rem;font-size:var(--tp-t-small);color:var(--tp-dim)}
 /* a tablet: the lattice keeps a modest size and its controls and caption
@@ -221,7 +227,7 @@ ol,ul{list-style:none}
 .reach dt{padding-top:.1rem}
 .reach dd{display:flex;flex-wrap:wrap;gap:.1rem .9rem;white-space:nowrap}
 
-@media (max-width:40em){ .face{width:112px;height:112px} }
+@media (max-width:40em){ .face{width:112px;height:112px} .facets div{grid-template-columns:6.2rem minmax(0,1fr);gap:.7rem} }
 @media (pointer:coarse){ .links a,.reach a{padding-block:12px} }
 @media (prefers-reduced-motion:reduce){ .lat *{transition:none!important} }
 @media print{
@@ -258,7 +264,11 @@ ol,ul{list-style:none}
     <div>
       <img class="face" src="/img/tushar-pandey-b-320.webp" srcset="/img/tushar-pandey-b-320.webp 320w, /img/tushar-pandey-b.webp 640w" sizes="(max-width:40em) 112px, 144px" width="640" height="640" decoding="async" alt="Tushar Pandey">
       <h1>Tushar Pandey</h1>
-      <p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>
+      <dl class="facets">
+        <div><dt>Engineering</dt><dd>Senior Software Engineer at DataRobot, on LLM inference</dd></div>
+        <div><dt>Research</dt><dd><a href="/research.html">Quantum error correction</a>; Ph.D. in mathematics, Texas A&amp;M</dd></div>
+        <div><dt>Writing</dt><dd><a href="/books.html">Three books</a> and <a href="/qec-in-practice/">a course</a></dd></div>
+      </dl>
       <div class="actions">
         <a class="tp-btn" href="/cv.html">Curriculum Vitae</a>
         <a class="tp-btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
@@ -282,6 +292,34 @@ ol,ul{list-style:none}
   <section id="work" aria-labelledby="h-work">
     <div class="sec-head"><h2 id="h-work">Selected work</h2></div>
     <div class="works">
+
+
+      <article class="work">
+        <figure class="fig tp-plate">
+          <svg viewBox="0 0 260 140" aria-hidden="true" focusable="false">
+            <defs><pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V4" stroke="currentColor" stroke-width="1" stroke-opacity=".7"/></pattern></defs>
+            <g class="ln">
+              <rect class="fp" x="24" y="98" width="18" height="20"/><rect fill="url(#hatch)" x="24" y="68" width="18" height="30"/><rect class="ft acc" x="24" y="46" width="18" height="22"/>
+              <rect class="fp" x="52" y="84" width="18" height="34"/><rect fill="url(#hatch)" x="52" y="66" width="18" height="18"/><rect class="ft acc" x="52" y="36" width="18" height="30"/>
+              <rect class="fp" x="80" y="92" width="18" height="26"/><rect fill="url(#hatch)" x="80" y="52" width="18" height="40"/><rect class="ft acc" x="80" y="38" width="18" height="14"/>
+              <rect class="fp" x="108" y="102" width="18" height="16"/><rect fill="url(#hatch)" x="108" y="78" width="18" height="24"/><rect class="ft acc" x="108" y="38" width="18" height="40"/>
+              <rect class="fp" x="136" y="78" width="18" height="40"/><rect fill="url(#hatch)" x="136" y="58" width="18" height="20"/><rect class="ft acc" x="136" y="38" width="18" height="20"/>
+              <rect class="fp" x="164" y="96" width="18" height="22"/><rect fill="url(#hatch)" x="164" y="60" width="18" height="36"/><rect class="ft acc" x="164" y="34" width="18" height="26"/>
+              <rect class="fp" x="192" y="88" width="18" height="30"/><rect fill="url(#hatch)" x="192" y="74" width="18" height="14"/><rect class="ft acc" x="192" y="38" width="18" height="36"/>
+              <rect class="fp" x="220" y="100" width="18" height="18"/><rect fill="url(#hatch)" x="220" y="70" width="18" height="30"/><rect class="ft acc" x="220" y="40" width="18" height="30"/>
+              <path d="M14 118H250"/>
+            </g>
+            <path class="ln acc" d="M14 30H250" stroke-dasharray="5 4"/>
+            <text x="250" y="24" text-anchor="end">token capacity</text>
+            <text x="250" y="134" text-anchor="end">time</text>
+          </svg>
+          <figcaption>Three tenants (outline, hatched, tinted) share one model. Each request is counted by its tokens against one shared capacity.</figcaption>
+        </figure>
+        <p class="tp-lbl">LLM inference</p>
+        <h3>TokenGrid</h3>
+        <p>LLM inference at DataRobot: co-author of <b>TokenGrid</b>, a token-aware capacity scheduler for multi-tenant model serving.</p>
+        <p class="links"><a class="tp-link" href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener">TokenGrid, on the DataRobot blog</a></p>
+      </article>
 
       <article class="work">
         <figure class="fig tp-plate">
@@ -322,33 +360,6 @@ ol,ul{list-style:none}
         <h3>Adaptive Graph of Thoughts</h3>
         <p><b>AGoT</b> grows chains, trees and graphs as it runs. Shipped at Agnostiq as a production agentic-AI blueprint (2024&ndash;25); code open source.</p>
         <p class="links"><a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">The code, open source</a><a class="tp-link" href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener">The paper, <span class="tp-id">arXiv:2502.05078</span></a><a class="tp-link" href="/papers/adaptive-graph-of-thoughts.html">Companion page</a></p>
-      </article>
-
-      <article class="work">
-        <figure class="fig tp-plate">
-          <svg viewBox="0 0 260 140" aria-hidden="true" focusable="false">
-            <defs><pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V4" stroke="currentColor" stroke-width="1" stroke-opacity=".7"/></pattern></defs>
-            <g class="ln">
-              <rect class="fp" x="24" y="98" width="18" height="20"/><rect fill="url(#hatch)" x="24" y="68" width="18" height="30"/><rect class="ft acc" x="24" y="46" width="18" height="22"/>
-              <rect class="fp" x="52" y="84" width="18" height="34"/><rect fill="url(#hatch)" x="52" y="66" width="18" height="18"/><rect class="ft acc" x="52" y="36" width="18" height="30"/>
-              <rect class="fp" x="80" y="92" width="18" height="26"/><rect fill="url(#hatch)" x="80" y="52" width="18" height="40"/><rect class="ft acc" x="80" y="38" width="18" height="14"/>
-              <rect class="fp" x="108" y="102" width="18" height="16"/><rect fill="url(#hatch)" x="108" y="78" width="18" height="24"/><rect class="ft acc" x="108" y="38" width="18" height="40"/>
-              <rect class="fp" x="136" y="78" width="18" height="40"/><rect fill="url(#hatch)" x="136" y="58" width="18" height="20"/><rect class="ft acc" x="136" y="38" width="18" height="20"/>
-              <rect class="fp" x="164" y="96" width="18" height="22"/><rect fill="url(#hatch)" x="164" y="60" width="18" height="36"/><rect class="ft acc" x="164" y="34" width="18" height="26"/>
-              <rect class="fp" x="192" y="88" width="18" height="30"/><rect fill="url(#hatch)" x="192" y="74" width="18" height="14"/><rect class="ft acc" x="192" y="38" width="18" height="36"/>
-              <rect class="fp" x="220" y="100" width="18" height="18"/><rect fill="url(#hatch)" x="220" y="70" width="18" height="30"/><rect class="ft acc" x="220" y="40" width="18" height="30"/>
-              <path d="M14 118H250"/>
-            </g>
-            <path class="ln acc" d="M14 30H250" stroke-dasharray="5 4"/>
-            <text x="250" y="24" text-anchor="end">token capacity</text>
-            <text x="250" y="134" text-anchor="end">time</text>
-          </svg>
-          <figcaption>Three tenants (outline, hatched, tinted) share one model. Each request is counted by its tokens against one shared capacity.</figcaption>
-        </figure>
-        <p class="tp-lbl">LLM inference</p>
-        <h3>TokenGrid</h3>
-        <p>LLM inference at DataRobot: co-author of <b>TokenGrid</b>, a token-aware capacity scheduler for multi-tenant model serving.</p>
-        <p class="links"><a class="tp-link" href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener">TokenGrid, on the DataRobot blog</a></p>
       </article>
 
       <article class="work">
