@@ -208,15 +208,12 @@ for i, slug in enumerate(COVERS):
 if 'class="seal' in books:
     fail.append('books.html: the drawn plates are still there')
 
-# homepage: the regraded portrait, in the JSON-LD and on the page; covers in the shelf
+# homepage: the regraded portrait, in the JSON-LD and on the page
 home = read(ROOT / 'index.html')
 if f'"image": "{SITE}img/tushar-pandey-b.webp"' not in home:
     fail.append('index.html: Person JSON-LD image is not img/tushar-pandey-b.webp')
 if not any(a.get('src', '').startswith(PORTRAIT) and a.get('class') == 'face' for a in imgs(home)):
     fail.append('index.html: the portrait is not tushar-pandey-b')
-for slug in COVERS:
-    if not any(a.get('src') == f'/img/covers/{slug}-300.webp' for a in imgs(home)):
-        fail.append(f'index.html: the shelf has no cover {slug}-300.webp')
 if 'tushar-pandey-320.webp' in home or '"/img/tushar-pandey.webp' in home:
     fail.append('index.html: still uses the old portrait')
 
@@ -246,9 +243,6 @@ if '--tp-accent' in research or any('--tp-accent' in s for s in figs.values()):
 
 # copy that must hold on the owned pages: (page, pattern, wanted present, reason)
 COPY = [
-    ('index.html', r'2015 &ndash; 2019</span><span><b>IIT Kanpur', True, 'IIT Kanpur row is not 2015 - 2019'),
-    ('index.html', r'2025 &ndash; now</span><span><b>DataRobot', True, 'DataRobot row does not start 2025'),
-    ('index.html', r'National Science Foundation Mathematical Sciences Graduate Internship', True, 'NSF-MSGI not expanded'),
     ('index.html', r'Every paper and preprint', False, 'research link claims completeness'),
     ('cv.html', r'The full list, with summaries', False, 'research link claims completeness'),
     ('cv.html', r'Co-organizer', False, 'Co-organizer, not Organizer'),
@@ -257,14 +251,10 @@ COPY = [
     ('cv.html', r'<meta property="og:description" content="[^"]*Senior Software Engineer at DataRobot', True, 'og:description does not name role and employer'),
     ('books.html', r'(?i)twenty two', False, '"twenty two" without the hyphen'),
     ('books.html', r'An Unpolarized Life \(about 35 minutes\)', True, 'lede does not offer An Unpolarized Life to new readers'),
-    ('index.html', r'some codes share a mark|share a mark', True, 'Fig. 4 caption does not explain 18 marks for 27 codes'),
     ('index.html', r'Begun at Oak Ridge\. Sole author', False, 'semion card still reads as fragments'),
     ('index.html', r'>The record<', False, 'Google Site link still labelled "The record"'),
     ('index.html', r'href="https://sites.google.com/view/tusharpandey"[^>]*>Talks and older work<', True, 'Google Site link not labelled "Talks and older work"'),
     ('research.html', r'href="https://sites.google.com/view/tusharpandey"[^>]*>Talks and older work<', True, 'Google Site link not labelled "Talks and older work"'),
-    ('index.html', r'In plain words', True, 'no plain-words paragraph under the hero'),
-    ('index.html', r'href="/why-error-correction.html"[^>]*>Why quantum computers need error correction<', True, 'no link to the explainer'),
-    ('index.html', r'aria-label="Start here"', True, 'no Start here strip'),
     ('research.html', r'<p class="area-title"', False, 'area titles are not headings'),
     ('research.html', r'<h2 class="area-title"', True, 'area titles are not h2'),
     ('research.html', r'<p class="why">', True, 'no plain why-it-matters line under the area titles'),
@@ -276,13 +266,16 @@ for page in ('index.html', 'cv.html', 'books.html', 'research.html', '404.html')
 for page, pat, want, why in COPY:
     if (re.search(pat, read(ROOT / page)) is not None) != want:
         fail.append(f'{page}: {why}')
-# the start-here strip offers the three paths
-start = re.search(r'<nav class="start".*?</nav>', home, re.S)
-for h in ('/why-error-correction.html', '/books.html', '/qec-in-practice/', '/tools/bb-codes.html', '/research.html', '#companions'):
-    if not start or f'href="{h}"' not in start.group(0):
-        fail.append(f'index.html: Start here strip has no link to {h}')
-if len(re.findall(r'<article class="work">.*?<p class="plain">', home.split('id="work"')[-1], re.S)) != 4:
-    fail.append('index.html: a selected-work card has no plain sentence before its citation')
+# the homepage is a personal page: hero, selected work, contact, and no more
+for pat, why in ((r'class="n"', 'section numbers'), (r'<b>Fig\.', 'figure numbers'), (r'In plain words', 'the plain-words paragraph'),
+                 (r'Start here', 'the Start here strip'), (r'id="(try|books|record)"', 'a section the top navigation already covers'),
+                 (r'<p class="plain">', 'a second summary sentence on a work card')):
+    if re.search(pat, home):
+        fail.append(f'index.html: still has {why}')
+if re.findall(r'<section[^>]*?(?:id|class)="([^"]+)"', home) != ['hero', 'work', 'contact']:
+    fail.append('index.html: sections are not hero, work, contact')
+if home.count('<article class="work">') != 4:
+    fail.append('index.html: not four selected-work cards')
 # research: every paper title sits under its area's h2
 if re.search(r'<article class="paper"[^>]*>.*?<h2>', research, re.S) or research.count('<p class="why">') != 5:
     fail.append('research.html: paper titles are not h3 under the area h2, or an area lacks its why line')
