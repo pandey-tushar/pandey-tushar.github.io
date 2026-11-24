@@ -143,13 +143,8 @@ ol,ul{list-style:none}
 /* the text column and the figure panel share one centre line */
 .hero{display:grid;gap:clamp(2.2rem,4vw,4.5rem);align-items:center}
 .face{display:block;width:144px;height:144px;border-radius:50%;object-fit:cover;border:1px solid var(--tp-rule);margin-bottom:1.6rem}
-.facets{margin-top:1.3rem;max-width:32em;font-size:clamp(1.04rem,1rem + .3vw,1.16rem);line-height:1.5}
-.facets div{display:grid;grid-template-columns:7.2rem minmax(0,1fr);gap:1rem;padding:.45rem 0;border-top:1px solid var(--tp-rule)}
-.facets div:last-child{border-bottom:1px solid var(--tp-rule)}
-.facets dt{font-size:var(--tp-t-small);color:var(--tp-dim);padding-top:.15rem}
-.facets dd{color:var(--tp-text)}
-.facets a{color:var(--tp-ink);text-decoration:underline 1px;text-decoration-color:var(--tp-rule);text-underline-offset:.2em}
-.facets a:hover,.facets a:focus-visible{color:var(--tp-acc);text-decoration-color:currentColor}
+.lede{margin-top:1.1rem;max-width:32em;font-size:clamp(1.08rem,1rem + .4vw,1.22rem);line-height:1.55;color:var(--tp-text)}
+.doing p{max-width:30em;font:400 clamp(1.5rem,1.15rem + 1.3vw,2.2rem)/1.35 var(--tp-serif);color:var(--tp-ink);text-wrap:balance}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.7rem}
 .place{margin-top:1.1rem;font-size:var(--tp-t-small);color:var(--tp-dim)}
 /* a tablet: the lattice keeps a modest size and its controls and caption
@@ -227,7 +222,7 @@ ol,ul{list-style:none}
 .reach dt{padding-top:.1rem}
 .reach dd{display:flex;flex-wrap:wrap;gap:.1rem .9rem;white-space:nowrap}
 
-@media (max-width:40em){ .face{width:112px;height:112px} .facets div{grid-template-columns:6.2rem minmax(0,1fr);gap:.7rem} }
+@media (max-width:40em){ .face{width:112px;height:112px} }
 @media (pointer:coarse){ .links a,.reach a{padding-block:12px} }
 @media (prefers-reduced-motion:reduce){ .lat *{transition:none!important} }
 @media print{
@@ -264,11 +259,7 @@ ol,ul{list-style:none}
     <div>
       <img class="face" src="/img/tushar-pandey-b-320.webp" srcset="/img/tushar-pandey-b-320.webp 320w, /img/tushar-pandey-b.webp 640w" sizes="(max-width:40em) 112px, 144px" width="640" height="640" decoding="async" alt="Tushar Pandey">
       <h1>Tushar Pandey</h1>
-      <dl class="facets">
-        <div><dt>Engineering</dt><dd>Senior Software Engineer at DataRobot, on LLM inference</dd></div>
-        <div><dt>Research</dt><dd><a href="/research.html">Quantum error correction</a>; Ph.D. in mathematics, Texas A&amp;M</dd></div>
-        <div><dt>Writing</dt><dd><a href="/books.html">Three books</a> and <a href="/qec-in-practice/">a course</a></dd></div>
-      </dl>
+      <p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>
       <div class="actions">
         <a class="tp-btn" href="/cv.html">Curriculum Vitae</a>
         <a class="tp-btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
@@ -287,6 +278,10 @@ ol,ul{list-style:none}
       <p class="lat-status" id="lat-status" aria-live="polite">Two qubits flipped; <b>four checks</b> lit.</p>
       <figcaption>A distance-5 toric code: click a qubit to cause an error, the checks that light up show where the code notices it, and Correct makes the decoder&rsquo;s best guess at what went wrong.</figcaption>
     </figure>
+  </section>
+
+  <section class="doing" aria-label="What I do">
+    <p>Building LLM inference at DataRobot. Correcting quantum errors. Proving theorems about knots. Writing books and a course.</p>
   </section>
 
   <section id="work" aria-labelledby="h-work">

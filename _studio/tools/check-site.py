@@ -272,11 +272,14 @@ for pat, why in ((r'class="n"', 'section numbers'), (r'<b>Fig\.', 'figure number
                  (r'<p class="plain">', 'a second summary sentence on a work card')):
     if re.search(pat, home):
         fail.append(f'index.html: still has {why}')
-if re.findall(r'<section[^>]*?(?:id|class)="([^"]+)"', home) != ['hero', 'work', 'contact']:
-    fail.append('index.html: sections are not hero, work, contact')
+if re.findall(r'<section[^>]*?(?:id|class)="([^"]+)"', home) != ['hero', 'doing', 'work', 'contact']:
+    fail.append('index.html: sections are not hero, doing, work, contact')
 hero = re.search(r'<section class="hero".*?</section>', home, re.S).group(0)
-if re.findall(r'<dt>([^<]+)</dt>', hero) != ['Engineering', 'Research', 'Writing'] or 'class="lede"' in hero:
-    fail.append('index.html: the hero does not say what I do in three lines (Engineering, Research, Writing)')
+if '<p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>' not in hero or '<dl' in hero:
+    fail.append('index.html: the hero lede is not the original sentence')
+doing = re.search(r'</section>\s*<section class="doing"[^>]*>\s*<p>Building LLM inference at DataRobot\. Correcting quantum errors\. Proving theorems about knots\. Writing books and a course\.</p>\s*</section>\s*<section id="work"', home)
+if not doing:
+    fail.append('index.html: no pane with the four fragments between the hero and Selected work')
 if [h for h in re.findall(r'<h3>([^<]+)</h3>', home)] != ['TokenGrid', 'Error correction for the doubled semion model', 'Adaptive Graph of Thoughts', 'The volume conjecture']:
     fail.append('index.html: work cards are not TokenGrid, semion, AGoT, volume conjecture')
 if home.count('<article class="work">') != 4:
