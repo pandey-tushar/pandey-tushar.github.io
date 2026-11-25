@@ -5,9 +5,7 @@
 .bb [hidden] { display: none !important; }
 .bb sup, .bb sub { line-height: 0; font-size: max(12px, .75em); }
 
-.bb-head { max-width: 52rem; }
-.bb-head h1 { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.6rem); line-height: 1.12; margin: .6rem 0 .9rem; }
-.bb-head .lead { margin: 0; max-width: var(--tp-measure); font-size: 1.06rem; color: var(--tp-text); }
+.bb-lead { margin: 1.8rem 0 0; max-width: var(--tp-measure); font-size: 1.06rem; color: var(--tp-text); }
 
 .bb-tool { margin: 2rem 0 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--tp-rule); }
 .bb-tool h2, .bb-essay h2 { font-size: 1.45rem; margin: 0 0 .8rem; }

@@ -170,7 +170,7 @@ test('course layout in a browser', { skip: chromium ? false : why }, async t => 
         const hits = [];
         const max = document.documentElement.scrollHeight - innerHeight;
         for (let k = 0; k <= 24; k++) {
-          scrollTo(0, max * k / 24);
+          scrollTo({ top: max * k / 24, behavior: "instant" }); // the site scrolls smoothly; jump, so the rail is measured where it lands
           const r = box(rail);
           for (const f of [...document.querySelectorAll('main figure, .tp-foot')]) if (!rail.contains(f)) {
             const b = box(f);

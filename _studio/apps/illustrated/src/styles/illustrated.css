@@ -172,60 +172,21 @@ body {
 
 /* ---------- frontispiece ---------- */
 
+/* the title is the opening window before it (@qubit/reader/hero); the
+   frontispiece is a plate like any other */
 .front-track { min-height: var(--plate); }
 
-.front-type {
-  position: relative;
-  z-index: 1;
-  isolation: isolate;
-  margin-top: calc(var(--plate) * -1);
-  min-height: var(--plate);
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  text-align: center;
-  padding: 0 var(--pad);
-}
-
-/* the same kind of ground under the title, so the plate's lines pass behind it */
-.front-type::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: radial-gradient(34rem 13rem at 50% 50%,
-    rgba(var(--scrim), .9) 0%, rgba(var(--scrim), .82) 55%, rgba(var(--scrim), 0) 100%);
-}
-
-/* labels: sans capitals, as on the rest of the site */
-.front-type .kicker,
+/* labels: the homepage's mono label */
 .movement-rule .label,
 .canto-head .numeral,
 .apparatus h3,
 .pred .tag {
   margin: 0;
-  font: 600 var(--tp-t-app)/1.3 var(--tp-sans);
-  letter-spacing: .07em;
+  font: 400 .75rem/1.3 var(--tp-mono);
+  letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--tp-dim);
 }
-
-.front-type h1 {
-  margin: .9rem 0 0;
-  font: 400 clamp(2.6rem, 1.6rem + 4.2vw, 4.6rem)/1.04 var(--tp-serif);
-  letter-spacing: -.015em;
-  color: var(--tp-ink);
-}
-
-.front-type .sub {
-  margin: 1rem 0 0;
-  max-width: 30rem;
-  color: var(--tp-dim);
-  font-style: italic;
-}
-
-.front-type .cue { margin: 2.4rem 0 0; font: 400 1rem/1.9 var(--tp-sans); color: var(--tp-dim); }
-.front-type .cue a { padding: .6em .15em; }
 
 a { color: var(--tp-acc); text-decoration: underline 1px var(--tp-a40); text-underline-offset: .18em; }
 a:hover, a:focus-visible { text-decoration-color: currentColor; }
@@ -506,12 +467,7 @@ body > .tp-foot { margin-inline: max(var(--tp-gut), calc((100% - 76.5rem) / 2));
   .column::before,
   .column::after { display: none; }
 
-  .front-track { min-height: 100svh; }
-  /* the frontispiece is the one place text over art is still wanted, so it
-     keeps the overlay the beats give up. The band above is raised to z-index 2
-     so canto text passes under it, which would bury the title as well unless
-     the cover type is lifted over the band in turn. */
-  .front-type { margin-top: -44svh; min-height: 44svh; z-index: 3; }
+  .front-track { min-height: 0; }
 
   .rail { display: none; }
   .apparatus { padding-bottom: 4rem; }
@@ -526,8 +482,7 @@ body > .tp-foot { margin-inline: max(var(--tp-gut), calc((100% - 76.5rem) / 2));
   .stage-inner { aspect-ratio: 8 / 5; height: auto; }
   .stage-inner .poster { object-fit: contain; }
   .stage-inner .live { display: none; }
-  .beats, .front-type { margin-top: 0; }
-  .front-type { min-height: 0; padding-top: 3rem; padding-bottom: 3rem; }
+  .beats { margin-top: 0; }
   .front-track { min-height: 0; }
   .beat {
     min-height: 0;
@@ -549,11 +504,8 @@ body > .tp-foot { margin-inline: max(var(--tp-gut), calc((100% - 76.5rem) / 2));
 html[data-motion="reduce"] .stage { position: static; height: auto; }
 html[data-motion="reduce"] .stage-inner { aspect-ratio: 8 / 5; height: auto; }
 html[data-motion="reduce"] .stage-inner .poster { object-fit: contain; }
-html[data-motion="reduce"] .beats,
-html[data-motion="reduce"] .front-type { margin-top: 0; }
-html[data-motion="reduce"] .front-type,
+html[data-motion="reduce"] .beats { margin-top: 0; }
 html[data-motion="reduce"] .front-track { min-height: 0; }
-html[data-motion="reduce"] .front-type { padding: 3rem var(--pad); }
 html[data-motion="reduce"] .beat {
   min-height: 0;
   padding: 1.8rem var(--pad);

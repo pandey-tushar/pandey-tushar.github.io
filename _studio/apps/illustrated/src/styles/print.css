@@ -55,7 +55,6 @@
   /* ---------- everything that only makes sense with a pointer ---------- */
 
   .rail,
-  .cue,
   .stage-inner .live,
   .stage::after,
   canvas,
@@ -70,7 +69,8 @@
   /* the dark bloom that lifts text off the plate has no plate to sit on */
   .column::before,
   .column::after,
-  .front-type::before { display: none !important }
+  .rd-hero .tp-pane-viz,
+  .rd-actions { display: none !important }
 
   /* ---------- unpin the scroll machinery ---------- */
 
@@ -89,7 +89,6 @@
   .stage { order: 1 }
   .front > .legend,
   article.canto > .legend { order: 2 }
-  .front-type,
   .beats { order: 3 }
   .apparatus { order: 4 }
   .stage {
@@ -98,8 +97,7 @@
     z-index: auto !important;
     margin: 0 0 .6em !important;
   }
-  .beats,
-  .front-type { margin-top: 0 !important }
+  .beats { margin-top: 0 !important }
   .beat {
     display: block !important;
     min-height: 0 !important;
@@ -165,18 +163,18 @@
     page-break-after: always;
   }
   .front-track { min-height: 0 !important }
-  .front-type {
-    min-height: 0 !important;
-    padding: 1.6em 0 0 !important;
-    z-index: auto !important;
-  }
-  .front-type h1 {
-    font-size: 34pt;
+  /* the opening window prints as the title, above the frontispiece */
+  .rd-hero { height: auto !important; min-height: 0 !important; border: 0 !important; text-align: center }
+  .rd-hero .tp-pane-in { display: block !important; padding: 1.6em 0 1.2em !important }
+  .rd-hero .tp-pane-text { display: block !important; max-width: none }
+  .rd-hero h1 {
+    font: 400 34pt/1.1 var(--serif) !important;
+    letter-spacing: 0 !important;
     color: #1a1a2e !important;
-    margin: .35em 0 0;
+    margin: .35em auto 0 !important;
   }
-  .front-type .kicker { color: #6b4a12 !important; font-size: 8pt }
-  .front-type .sub { color: #333 !important; margin-top: .8em }
+  .rd-hero .tp-pane-tag { color: #6b4a12 !important; font-size: 8pt }
+  .rd-hero .tp-pane-line { color: #333 !important; margin-top: .8em; font-family: var(--serif); font-style: italic }
 
   /* ---------- one canto, one opening page ---------- */
 

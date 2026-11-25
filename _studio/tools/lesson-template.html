@@ -50,6 +50,8 @@
 </script>
 <link rel="stylesheet" href="css/site.css">
 <script type="module" src="js/lesson.js"></script>
+<link rel="stylesheet" href="/lib/article.css">
+<script src="/lib/article.js" defer></script>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -73,9 +75,18 @@
 </header>
 
 <main id="main" class="page" data-lesson="{{n}}">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a>{{nav}}</nav>
-  <p class="tp-lbl step-of">{{stepof}}</p>
-  <h1 id="lesson-title">Lesson {{n}}: {{title}}</h1>
+  <header class="ar-hero" data-art="patch">
+    <canvas class="ar-viz" aria-hidden="true"></canvas>
+    <div class="ar-in tp-wrap">
+     <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a>{{nav}}</nav>
+     <div class="ar-text">
+      <p class="tp-lbl step-of">{{stepof}}</p>
+      <h1 id="lesson-title">Lesson {{n}}: {{title}}</h1>
+      <p class="ar-line">{{part}}</p>
+     </div>
+     <a class="ar-cue" href="#lesson-intro">Read<i aria-hidden="true"></i></a>
+    </div>
+  </header>
   <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">{{plain}}</p></aside>
   <p class="lead" id="lesson-intro">{{intro}}</p>
 

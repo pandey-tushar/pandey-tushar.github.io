@@ -51,6 +51,8 @@
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/explore.css">
 <script type="module" src="js/repetition-page.js"></script>
+<link rel="stylesheet" href="/lib/article.css">
+<script src="/lib/article.js" defer></script>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -74,9 +76,18 @@
 </header>
 
 <main id="main" class="essay course-essay">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="next" href="lesson-1.html">Next<span class="nav-long">: Lesson 1: A surface code patch</span>&nbsp;&rarr;</a></nav>
-  <p class="tp-lbl step-of">Step 1 of 8</p>
-  <h1>The repetition code</h1>
+  <header class="ar-hero" data-art="rep">
+    <canvas class="ar-viz" aria-hidden="true"></canvas>
+    <div class="ar-in tp-wrap">
+     <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="next" href="lesson-1.html">Next<span class="nav-long">: Lesson 1: A surface code patch</span>&nbsp;&rarr;</a></nav>
+     <div class="ar-text">
+      <p class="tp-lbl step-of">Step 1 of 8</p>
+      <h1>The repetition code</h1>
+      <p class="ar-line">Quantum Error Correction in Practice, part 1: Errors and decoding</p>
+     </div>
+     <a class="ar-cue" href="#one-bit-written-d-times">Read<i aria-hidden="true"></i></a>
+    </div>
+  </header>
   <div class="course-rail">
   <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">A qubit can be flipped by noise without anyone noticing. Here we store one bit in a row of qubits and compare neighbours, so a single flip shows up as a disagreement and can be outvoted. You can flip qubits yourself and see when the vote goes wrong.</p></aside>
   <nav class="course-toc" aria-label="On this page"><p class="tp-lbl">On this page</p><ol><li><a href="#one-bit-written-d-times">One bit, written d times</a></li><li class="toc-fig"><a href="#fig-flip">Fig. 1</a></li><li><a href="#decoding-a-guess-from-the-syndrome">Decoding: a guess from the syndrome</a></li><li class="toc-fig"><a href="#fig-decode">Fig. 2</a></li><li><a href="#does-it-help">Does it help?</a></li><li class="toc-fig"><a href="#fig-plot">Fig. 3</a></li><li><a href="#what-the-repetition-code-cannot-do">What the repetition code cannot do</a></li></ol></nav>

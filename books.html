@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="tp-full">
+<html lang="en" class="tp-full tp-geist tp-print-sheets">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -132,168 +132,15 @@
 <meta name="twitter:description" content="Two books and an illustrated edition. Two voices, one night at a time. Read online or take the PDF.">
 <meta name="twitter:image" content="https://pandey-tushar.com/og-book.png">
 <style>
-/* -------------------------------------------------------------------
-   THE CATALOGUE. The site ground, type and inks from /lib/site.css; each
-   entry leads with its cover.
-   ------------------------------------------------------------------- */
-
-:root{--step:clamp(2.6rem,1.4rem + 3.4vw,4.6rem)}
-
-body,h1,h2,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
-ol,ul{list-style:none}
-
-/* ---------- masthead ---------- */
-.masthead{padding-block:clamp(2.4rem,1.2rem + 4vw,4.6rem) 0}
-.eyebrow{
-  display:flex;align-items:center;gap:12px;
-  margin-bottom:clamp(16px,2.6vh,28px);
-}
-.eyebrow::after{content:"";height:1px;flex:1 1 auto;background:var(--tp-rule)}
-
-h1{font-size:clamp(2.65rem,8vw,4.6rem);line-height:.96;margin-left:-.028em}
-.lede{
-  margin-top:clamp(18px,2.4vw,26px);
-  max-width:34em;
-  font-size:clamp(1.08rem,1rem + .4vw,1.22rem);
-  line-height:1.55;
-  color:var(--tp-text);
-}
-.note{
-  margin-top:clamp(14px,1.8vw,20px);
-  display:flex;gap:10px;align-items:baseline;
-  max-width:42em;
-  font-size:var(--tp-t-small);line-height:1.6;
-  color:var(--tp-dim);
-}
-.note i{display:none}
-
-/* ---------- the catalogue ---------- */
-.catalogue{
-  padding-block:clamp(2.6rem,1.4rem + 3.6vw,4.4rem) clamp(3rem,2rem + 3vw,5rem);
-}
-/* one column on a phone; the cover swings into a margin at tablet width;
-   the specification swings into a second margin on a wide screen, so the
-   measure never stretches past what a serif can hold */
-.entry{
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  row-gap:1.45rem;
-  align-items:start;
-  padding-block:var(--step);
-  border-top:1px solid var(--tp-rule);
-}
-
-/* the cover: the book's own jacket, on a hairline so the paper-coloured
-   jackets still read as objects on the paper ground */
-.cover{display:block;width:132px;height:auto;aspect-ratio:2/3;border:1px solid var(--tp-rule);border-radius:2px;
-  background:var(--tp-void2);box-shadow:0 1px 2px rgba(0,0,0,.06),0 6px 18px -8px rgba(0,0,0,.22)}
-
-.body{min-width:0}
-/* nowrap, so a long title breaks inside itself rather than dropping the
-   numeral onto a line of its own */
-.head{display:flex;align-items:baseline;gap:.8rem;flex-wrap:nowrap}
-.rn{
-  font-family:var(--tp-serif);font-size:clamp(1.3rem,2.6vw,1.8rem);line-height:1.1;
-  color:var(--tp-dim);flex:0 0 auto;
-}
-h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
-.voice{
-  margin-top:.85rem;
-  max-width:36em;
-  font-family:var(--tp-serif);font-style:italic;
-  font-size:clamp(1.06rem,1rem + .3vw,1.18rem);
-  line-height:1.5;
-  color:var(--tp-text);
-}
-.what{
-  margin-top:1.15rem;
-  max-width:38em;
-  color:var(--tp-text);
-  line-height:1.62;
-}
-
-/* the specification block: apparatus label, then value */
-.spec{
-  display:grid;
-  grid-template-columns:5.6rem minmax(0,1fr);
-  gap:.5rem 1.1rem;
-  align-items:baseline;
-  max-width:34em;
-}
-.spec dt{justify-self:start}
-.spec dd{
-  font-size:var(--tp-t-small);line-height:1.5;
-  color:var(--tp-text);
-}
-
-/* ---------- actions ---------- */
-.actions{display:flex;flex-wrap:wrap;gap:10px}
-.tp-btn .sub{color:var(--tp-dim);font-weight:400}
+/* Books: a live hero, then one window-sized pane per book, its cover stood in
+   the figure, opening into a sheet with the full entry and the ways to read it.
+   Panes, rail, sheet, hero and the figures: /lib/site.css and /lib/site.js. */
+.voice{font-style:italic;color:var(--tp-text)}
+.what{color:var(--tp-text)}
 /* the first way in: the accent, quietly */
-.tp-btn.go{color:var(--tp-acc);border-color:var(--tp-a40)}
-.tp-btn.go:hover,.tp-btn.go:focus-visible{border-color:var(--tp-acc)}
-
-/* a phone: the cover sits beside the title, as on the homepage shelf, and
-   the text runs full width below them */
-@media (max-width:43.99em){
-  .entry{grid-template-columns:6rem minmax(0,1fr);column-gap:1.1rem;row-gap:1.1rem}
-  .cover{width:6rem;grid-column:1;grid-row:1}
-  .body{display:contents}
-  .head{grid-column:2;grid-row:1;align-self:center}
-  .voice,.what,.spec,.actions{grid-column:1 / -1}
-  .voice,.what{margin-top:0}
-}
-
-/* >= 44em: the cover swings out into a margin column */
-@media (min-width:44em){
-  .entry{
-    grid-template-columns:168px minmax(0,1fr);
-    column-gap:clamp(26px,3.6vw,52px);
-    row-gap:1.35rem;
-  }
-  .cover{width:168px;grid-column:1;grid-row:1 / span 3}
-  .body{grid-column:2;grid-row:1}
-  .spec{grid-column:2;grid-row:2}
-  .actions{grid-column:2;grid-row:3}
-}
-
-/* >= 70em: the specification becomes a second margin column, set right,
-   so the measure stays a measure and the rules are not left holding an
-   empty third of the page */
-@media (min-width:70em){
-  .entry{grid-template-columns:200px minmax(0,34em) minmax(0,1fr)}
-  .cover{width:200px;grid-row:1 / span 2}
-  .body{grid-column:2;grid-row:1}
-  .actions{grid-column:2;grid-row:2}
-  .spec{
-    grid-column:3;grid-row:1;
-    grid-template-columns:minmax(0,1fr);
-    gap:.16rem;
-    max-width:none;
-    justify-self:end;
-    text-align:right;
-    padding-top:.4rem;
-  }
-  .spec dt{justify-self:end}
-  .spec dd + dt{margin-top:.9rem}
-  /* the masthead on the same three columns: the lede over the cover and
-     text columns, the notes set right in the specification column */
-  .masthead{display:grid;grid-template-columns:200px minmax(0,34em) minmax(0,1fr);column-gap:clamp(26px,3.6vw,52px);align-items:end}
-  .masthead .eyebrow{grid-column:1 / -1}
-  .masthead h1,.lede{grid-column:1 / 3}
-  .lede{max-width:none}
-  .notes{grid-column:3;grid-row:2 / span 2;justify-self:end;max-width:22rem;text-align:right}
-  .note{justify-content:flex-end}
-}
-
-@media (max-width:34em){
-  .spec{grid-template-columns:minmax(0,1fr);gap:.25rem}
-  .spec dd{margin-bottom:.55rem}
-}
-
+.tp-sheet-links a.go{color:var(--tp-acc)}
 @media print{
-  .lede,.voice,.what,.spec dd,.note{color:#000}
-  .actions{display:none}
+  .tp-hero-lede,.tp-hero-note,.voice,.what,.spec dd{color:#000}
 }
 </style>
 </head>
@@ -320,105 +167,131 @@ h2{min-width:0;font-size:clamp(1.6rem,3.4vw,2.35rem);line-height:1.1}
 </header>
 
 <main id="main">
-
-  <div class="tp-wrap">
-    <div class="masthead">
-      <p class="tp-lbl eyebrow">Catalogue</p>
-      <h1>Books</h1>
-      <p class="lede">Two books and one illustrated edition. The Qubit Dialogues argues about quantum computing in two voices, the illustrated edition sets the same text with engraved plates, and An Unpolarized Life is a separate, shorter book that keeps the two voices and leaves the physics out. New here? Start with The Qubit Dialogues, read online. With no physics background, start instead with An Unpolarized Life (about 35 minutes), or read only the dialogue of The Qubit Dialogues (about 80 minutes).</p>
-      <div class="notes">
-        <p class="note"><i>&#10022;</i><span>Every book reads in the browser and downloads as a PDF. Nothing is behind a form, a login or a price.</span></p>
-        <p class="note"><i>&#10022;</i><span>Related reading: <a class="tp-link" href="/qec-in-practice/">Quantum Error Correction in Practice</a>, eight lessons.</span></p>
+  <section class="tp-hero" aria-label="Introduction">
+    <canvas data-fig="prose" aria-hidden="true"></canvas>
+    <div class="tp-hero-in tp-wrap">
+      <div class="tp-hero-text">
+        <p class="tp-hero-tag">Catalogue</p>
+        <h1>Books</h1>
+        <p class="tp-hero-lede">Two books and one illustrated edition. The Qubit Dialogues argues about quantum computing in two voices, the illustrated edition sets the same text with engraved plates, and An Unpolarized Life is a separate, shorter book that keeps the two voices and leaves the physics out. New here? Start with The Qubit Dialogues, read online. With no physics background, start instead with An Unpolarized Life (about 35 minutes), or read only the dialogue of The Qubit Dialogues (about 80 minutes).</p>
+        <p class="tp-hero-note">Every book reads in the browser and downloads as a PDF. Nothing is behind a form, a login or a price.</p>
+        <p class="tp-hero-note">Related reading: <a class="tp-link" href="/qec-in-practice/">Quantum Error Correction in Practice</a>, eight lessons.</p>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="tp-wrap">
-    <ol class="catalogue">
+  <section id="shelf" class="tp-panes" aria-label="Books">
+    <article class="tp-pane" id="pane-qubit-dialogues" aria-labelledby="pane-qubit-dialogues-t">
+      <div class="tp-pane-viz"><canvas data-fig="bloch" aria-hidden="true"></canvas><img class="tp-pane-cover" src="/img/covers/qubit-dialogues.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="(min-width:56em) 24rem, 50vw" width="600" height="900" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Book</p>
+          <h2 class="tp-pane-name" id="pane-qubit-dialogues-t">The Qubit Dialogues</h2>
+          <p class="tp-pane-line">A Book of Possibilities</p>
+          <a class="tp-pane-open" href="#qubit-dialogues" aria-haspopup="dialog" aria-label="Open The Qubit Dialogues">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
 
-      <li>
-        <article class="entry">
-          <img class="cover" src="/img/covers/qubit-dialogues-300.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 96px" width="300" height="450" decoding="async" alt="Cover of The Qubit Dialogues, A Book of Possibilities: a Bloch sphere drawn in line, its state vector in warm ink.">
+    <article class="tp-pane tp-pane-end" id="pane-an-unpolarized-life" aria-labelledby="pane-an-unpolarized-life-t">
+      <div class="tp-pane-viz"><canvas data-fig="polar" aria-hidden="true"></canvas><img class="tp-pane-cover" src="/img/covers/an-unpolarized-life.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="(min-width:56em) 24rem, 50vw" width="600" height="900" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Book</p>
+          <h2 class="tp-pane-name" id="pane-an-unpolarized-life-t">An Unpolarized Life</h2>
+          <p class="tp-pane-line">A Book of Questions</p>
+          <a class="tp-pane-open" href="#an-unpolarized-life" aria-haspopup="dialog" aria-label="Open An Unpolarized Life">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
 
-          <div class="body">
-            <div class="head">
-              <span class="rn" aria-hidden="true">I</span>
-              <h2>The Qubit Dialogues</h2>
-            </div>
-            <p class="voice">A Seeker stands in front of the quantum machine with every reasonable doubt a careful person carries, and an Oracle from a few decades ahead keeps finding the assumption folded inside the doubt.</p>
-            <p class="what">Twenty-two cantos in two voices, on superposition, entanglement, error correction and the price of the impossible. Each canto ends with a prediction, an honest measure of how much to trust it, and a question turned back at you. Where a claim is contested, the book says so in the open.</p>
-          </div>
+    <article class="tp-pane tp-pane-mid" id="pane-qubit-dialogues-illustrated" aria-labelledby="pane-qubit-dialogues-illustrated-t">
+      <div class="tp-pane-viz"><canvas data-fig="plate" aria-hidden="true"></canvas><img class="tp-pane-cover" src="/img/covers/qubit-dialogues-illustrated.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="(min-width:56em) 24rem, 50vw" width="600" height="900" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Book</p>
+          <h2 class="tp-pane-name" id="pane-qubit-dialogues-illustrated-t">The Qubit Dialogues, Illustrated</h2>
+          <p class="tp-pane-line">Illustrated Edition</p>
+          <a class="tp-pane-open" href="#qubit-dialogues-illustrated" aria-haspopup="dialog" aria-label="Open The Qubit Dialogues, Illustrated">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+  </section>
 
-          <dl class="spec">
-            <dt class="tp-lbl">Extent</dt><dd>22 cantos &middot; 99 pages in print</dd>
-            <dt class="tp-lbl">Reading</dt><dd>About two hours; about 80 minutes for the dialogue alone</dd>
-            <dt class="tp-lbl">For</dt><dd>Readers curious about quantum computing; the science asides add the maths</dd>
-            <dt class="tp-lbl">Form</dt><dd>Dialogue, with interactive figures</dd>
-          </dl>
+  <nav class="tp-rail" aria-label="Panes">
+    <a href="#pane-qubit-dialogues"><span>The Qubit Dialogues</span></a>
+    <a href="#pane-an-unpolarized-life"><span>An Unpolarized Life</span></a>
+    <a href="#pane-qubit-dialogues-illustrated"><span>The Qubit Dialogues, Illustrated</span></a>
+  </nav>
 
-          <div class="actions">
-            <a class="tp-btn go" href="/qubit-dialogues.html">Read online</a>
-            <a class="tp-btn" href="/qubit-dialogues.pdf">PDF <span class="sub">99pp</span></a>
-          </div>
-        </article>
-      </li>
+  <dialog class="tp-sheet" id="qubit-dialogues" aria-labelledby="qubit-dialogues-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Book</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media tp-sheet-cover"><img class="cover" src="/img/covers/qubit-dialogues-300.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="280px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of The Qubit Dialogues, A Book of Possibilities: a Bloch sphere drawn in line, its state vector in warm ink."></div>
+      <div class="tp-sheet-body">
+        <h2 id="qubit-dialogues-t">The Qubit Dialogues</h2>
+        <p class="tp-sheet-sub">A Book of Possibilities</p>
+        <p class="voice">A Seeker stands in front of the quantum machine with every reasonable doubt a careful person carries, and an Oracle from a few decades ahead keeps finding the assumption folded inside the doubt.</p>
+        <p class="what">Twenty-two cantos in two voices, on superposition, entanglement, error correction and the price of the impossible. Each canto ends with a prediction, an honest measure of how much to trust it, and a question turned back at you. Where a claim is contested, the book says so in the open.</p>
+        <dl class="spec tp-sheet-spec">
+          <dt>Extent</dt><dd>22 cantos &middot; 99 pages in print</dd>
+          <dt>Reading</dt><dd>About two hours; about 80 minutes for the dialogue alone</dd>
+          <dt>For</dt><dd>Readers curious about quantum computing; the science asides add the maths</dd>
+          <dt>Form</dt><dd>Dialogue, with interactive figures</dd>
+        </dl>
+        <ul class="tp-sheet-links">
+          <li><a class="go" href="/qubit-dialogues.html">Read online<small>about two hours</small></a></li>
+          <li><a href="/qubit-dialogues.pdf">PDF<small>99pp</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
 
-      <li>
-        <article class="entry">
-          <img class="cover" src="/img/covers/an-unpolarized-life-300.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 96px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of An Unpolarized Life, A Book of Questions: three overlapping circles, their common region tinted.">
+  <dialog class="tp-sheet" id="an-unpolarized-life" aria-labelledby="an-unpolarized-life-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Book</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media tp-sheet-cover"><img class="cover" src="/img/covers/an-unpolarized-life-300.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="280px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of An Unpolarized Life, A Book of Questions: three overlapping circles, their common region tinted."></div>
+      <div class="tp-sheet-body">
+        <h2 id="an-unpolarized-life-t">An Unpolarized Life</h2>
+        <p class="tp-sheet-sub">A Book of Questions</p>
+        <p class="voice">The same two voices, no physics at all. A Seeker drives to a house at the end of a road carrying a question they have to answer by Friday, and by morning the question has not moved an inch and they can stand next to it.</p>
+        <p class="what">Twelve chapters on deciding, on what choosing costs, on being watched, on what you are entitled to keep private, on repair, and on what survives you. One object sits on the table: a square of dark glass that admits light of a single orientation and turns the rest away. The filter is a picture. The book says so out loud, in the chapter, at the time, and never claims that physics runs a human life.</p>
+        <dl class="spec tp-sheet-spec">
+          <dt>Extent</dt><dd>12 chapters &middot; 42 pages in print</dd>
+          <dt>Reading</dt><dd>About 35 minutes</dd>
+          <dt>For</dt><dd>Anyone facing a decision; no physics at all</dd>
+          <dt>Form</dt><dd>Dialogue, text only, readable in a sitting</dd>
+        </dl>
+        <ul class="tp-sheet-links">
+          <li><a class="go" href="/life/">Read online<small>about 35 minutes</small></a></li>
+          <li><a href="/an-unpolarized-life.pdf">PDF<small>42pp</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
 
-          <div class="body">
-            <div class="head">
-              <span class="rn" aria-hidden="true">II</span>
-              <h2>An Unpolarized Life</h2>
-            </div>
-            <p class="voice">The same two voices, no physics at all. A Seeker drives to a house at the end of a road carrying a question they have to answer by Friday, and by morning the question has not moved an inch and they can stand next to it.</p>
-            <p class="what">Twelve chapters on deciding, on what choosing costs, on being watched, on what you are entitled to keep private, on repair, and on what survives you. One object sits on the table: a square of dark glass that admits light of a single orientation and turns the rest away. The filter is a picture. The book says so out loud, in the chapter, at the time, and never claims that physics runs a human life.</p>
-          </div>
-
-          <dl class="spec">
-            <dt class="tp-lbl">Extent</dt><dd>12 chapters &middot; 42 pages in print</dd>
-            <dt class="tp-lbl">Reading</dt><dd>About 35 minutes</dd>
-            <dt class="tp-lbl">For</dt><dd>Anyone facing a decision; no physics at all</dd>
-            <dt class="tp-lbl">Form</dt><dd>Dialogue, text only, readable in a sitting</dd>
-          </dl>
-
-          <div class="actions">
-            <a class="tp-btn go" href="/life/">Read online</a>
-            <a class="tp-btn" href="/an-unpolarized-life.pdf">PDF <span class="sub">42pp</span></a>
-          </div>
-        </article>
-      </li>
-
-      <li>
-        <article class="entry">
-          <img class="cover" src="/img/covers/qubit-dialogues-illustrated-300.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="(min-width:70em) 200px, (min-width:44em) 168px, 96px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of The Qubit Dialogues, Illustrated Edition: a glowing Bloch sphere on a dark plate.">
-
-          <div class="body">
-            <div class="head">
-              <span class="rn" aria-hidden="true">III</span>
-              <h2>The Qubit Dialogues, Illustrated</h2>
-            </div>
-            <p class="voice">The same cantos cut as engraved plates, each one drawn from a shared vocabulary of motifs and moved by nothing but your own scroll.</p>
-            <p class="what">Every plate is seeded, so it renders the same on every machine and every visit. The prose is the finished prose from the main edition.</p>
-          </div>
-
-          <dl class="spec">
-            <dt class="tp-lbl">Extent</dt><dd>22 cantos &middot; 96 pages in print</dd>
-            <dt class="tp-lbl">Reading</dt><dd>About two hours, the same text as the main edition</dd>
-            <dt class="tp-lbl">For</dt><dd>Readers who want the cantos with the art, or a second reading</dd>
-            <dt class="tp-lbl">Form</dt><dd>Generative artwork, drawn live in the browser</dd>
-          </dl>
-
-          <div class="actions">
-            <a class="tp-btn go" href="/illustrated/">Read online</a>
-            <a class="tp-btn" href="/illustrated.pdf">PDF <span class="sub">96pp</span></a>
-          </div>
-        </article>
-      </li>
-
-    </ol>
-  </div>
+  <dialog class="tp-sheet" id="qubit-dialogues-illustrated" aria-labelledby="qubit-dialogues-illustrated-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Book</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media tp-sheet-cover"><img class="cover" src="/img/covers/qubit-dialogues-illustrated-300.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="280px" width="300" height="450" loading="lazy" decoding="async" alt="Cover of The Qubit Dialogues, Illustrated Edition: a glowing Bloch sphere on a dark plate."></div>
+      <div class="tp-sheet-body">
+        <h2 id="qubit-dialogues-illustrated-t">The Qubit Dialogues, Illustrated</h2>
+        <p class="tp-sheet-sub">Illustrated Edition</p>
+        <p class="voice">The same cantos cut as engraved plates, each one drawn from a shared vocabulary of motifs and moved by nothing but your own scroll.</p>
+        <p class="what">Every plate is seeded, so it renders the same on every machine and every visit. The prose is the finished prose from the main edition.</p>
+        <dl class="spec tp-sheet-spec">
+          <dt>Extent</dt><dd>22 cantos &middot; 96 pages in print</dd>
+          <dt>Reading</dt><dd>About two hours, the same text as the main edition</dd>
+          <dt>For</dt><dd>Readers who want the cantos with the art, or a second reading</dd>
+          <dt>Form</dt><dd>Generative artwork, drawn live in the browser</dd>
+        </dl>
+        <ul class="tp-sheet-links">
+          <li><a class="go" href="/illustrated/">Read online<small>about two hours</small></a></li>
+          <li><a href="/illustrated.pdf">PDF<small>96pp</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
 
 </main>
 

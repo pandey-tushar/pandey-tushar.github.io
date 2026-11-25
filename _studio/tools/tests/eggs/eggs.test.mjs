@@ -146,8 +146,28 @@ test('in the browser', { skip: chromium ? false : why }, async t => {
     }
   });
 
-  await t.test('lattice: a logical error, by hand or by the decoder, opens the door; nothing else does', async () => {
+  await t.test('sheets: a pane opens its sheet by click and by hash, Esc and back close it', async () => {
     const { page, errors } = await open('/');
+    const sheet = page.locator('#toric-code');
+    assert.equal(await sheet.isVisible(), false, 'closed at the start');
+    await page.locator('a.tp-pane-open[href="#toric-code"]').click();
+    await sheet.waitFor({ state: 'visible' });
+    assert.ok(page.url().endsWith('#toric-code'), 'the hash follows the sheet');
+    assert.ok(await page.evaluate(() => document.querySelector('#toric-code').contains(document.activeElement)), 'focus moves into the sheet');
+    await page.keyboard.press('Escape');
+    await sheet.waitFor({ state: 'hidden' });
+    assert.ok(!page.url().includes('#'), 'Esc clears the hash');
+    assert.equal(await page.evaluate(() => document.activeElement.getAttribute('href')), '#toric-code', 'focus returns to the entry');
+    await page.locator('a.tp-pane-open[href="#tokengrid"]').click();
+    await page.locator('#tokengrid').waitFor({ state: 'visible' });
+    await page.goBack();
+    await page.locator('#tokengrid').waitFor({ state: 'hidden' });
+    assert.deepEqual(errors, []);
+    await page.close();
+  });
+
+  await t.test('lattice: a logical error, by hand or by the decoder, opens the door; nothing else does', async () => {
+    const { page, errors } = await open('/#toric-code');
     const st = page.locator('#lat-status'), door = st.locator('a[href="/logical/"]');
     const q = n => page.locator(`#lattice .q[data-q="${n}"]`);
     const flipAll = async ns => { for (const n of ns) await q(n).click(); };

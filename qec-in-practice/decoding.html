@@ -51,6 +51,8 @@
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/explore.css">
 <script type="module" src="js/decoding-page.js"></script>
+<link rel="stylesheet" href="/lib/article.css">
+<script src="/lib/article.js" defer></script>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -74,9 +76,18 @@
 </header>
 
 <main id="main" class="essay course-essay">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="lesson-1.html">&larr; Previous<span class="nav-long">: Lesson 1: A surface code patch</span></a> <a id="next" href="threshold.html">Next<span class="nav-long">: The threshold</span>&nbsp;&rarr;</a></nav>
-  <p class="tp-lbl step-of">Step 3 of 8</p>
-  <h1>Errors, syndromes and decoding</h1>
+  <header class="ar-hero" data-art="uf">
+    <canvas class="ar-viz" aria-hidden="true"></canvas>
+    <div class="ar-in tp-wrap">
+     <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="lesson-1.html">&larr; Previous<span class="nav-long">: Lesson 1: A surface code patch</span></a> <a id="next" href="threshold.html">Next<span class="nav-long">: The threshold</span>&nbsp;&rarr;</a></nav>
+     <div class="ar-text">
+      <p class="tp-lbl step-of">Step 3 of 8</p>
+      <h1>Errors, syndromes and decoding</h1>
+      <p class="ar-line">Quantum Error Correction in Practice, part 1: Errors and decoding</p>
+     </div>
+     <a class="ar-cue" href="#two-kinds-of-error-two-kinds-of-check">Read<i aria-hidden="true"></i></a>
+    </div>
+  </header>
   <div class="course-rail">
   <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">The checks only say that something went wrong nearby, not exactly where. A decoder is the program that turns the pattern of fired checks into a guess at the error and undoes it. Here you watch one decoder work step by step, and see an error it gets wrong.</p></aside>
   <nav class="course-toc" aria-label="On this page"><p class="tp-lbl">On this page</p><ol><li><a href="#two-kinds-of-error-two-kinds-of-check">Two kinds of error, two kinds of check</a></li><li class="toc-fig"><a href="#fig-patch">Fig. 1</a></li><li><a href="#the-decoder-step-by-step">The decoder, step by step</a></li><li class="toc-fig"><a href="#fig-uf">Fig. 2</a></li><li><a href="#why-the-decoder-can-be-fooled">Why the decoder can be fooled</a></li><li class="toc-fig"><a href="#fig-fool">Fig. 3</a></li><li><a href="#when-the-checks-themselves-are-wrong">When the checks themselves are wrong</a></li><li class="toc-fig"><a href="#fig-time">Fig. 4</a></li></ol></nav>

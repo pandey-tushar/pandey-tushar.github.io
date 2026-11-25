@@ -15,6 +15,7 @@ export default defineConfig({
     alias: [
       { find: '@qubit/tokens/tokens.css', replacement: at('../../packages/tokens/src/tokens.css') },
       { find: '@qubit/tokens', replacement: at('../../packages/tokens/src/index.ts') },
+      { find: '@qubit/reader/hero', replacement: at('../../packages/reader/src/hero.ts') },
       { find: '@qubit/motifs', replacement: at('../../packages/motifs/src/index.ts') },
       { find: '@qubit/content/schema', replacement: at('../../content/schema.ts') },
       { find: '@qubit/content', replacement: at('../../content/index.ts') },

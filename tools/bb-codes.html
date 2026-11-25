@@ -47,6 +47,8 @@
 <meta name="twitter:image" content="https://pandey-tushar.com/og-research.png">
 <link rel="stylesheet" href="/tools/bb-codes.css">
 <script type="module" src="/tools/js/bb-page.js"></script>
+<link rel="stylesheet" href="/lib/article.css">
+<script src="/lib/article.js" defer></script>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -71,11 +73,18 @@
 
 <main id="main" class="bb">
  <div class="tp-wrap bb-cols">
-  <header class="bb-head">
-    <p class="tp-lbl">Tool</p>
-    <h1>Bivariate bicycle code explorer</h1>
-    <p class="lead">Bivariate bicycle codes are quantum low-density parity-check codes introduced by Bravyi, Cross, Gambetta, Maslov, Rall and Yoder. Each one is fixed by two whole numbers, l and m, and two polynomials, A and B, in the variables x and y. Type them below or pick a code from the paper&rsquo;s table to see how many physical and logical qubits the code has, the weights of its checks and how the checks sit on a torus, and to search for a low-weight logical operator. You can copy a link that reproduces the code and download its check matrices. Everything is computed in your browser.</p>
+  <header class="ar-hero" data-art="bb">
+    <canvas class="ar-viz" aria-hidden="true"></canvas>
+    <div class="ar-in tp-wrap">
+     <div class="ar-text">
+      <p class="tp-lbl">Tool</p>
+      <h1>Bivariate bicycle code explorer</h1>
+      <p class="ar-line">Everything is computed in your browser.</p>
+     </div>
+     <a class="ar-cue" href="#tool-h">Explore<i aria-hidden="true"></i></a>
+    </div>
   </header>
+  <p class="lead bb-lead">Bivariate bicycle codes are quantum low-density parity-check codes introduced by Bravyi, Cross, Gambetta, Maslov, Rall and Yoder. Each one is fixed by two whole numbers, l and m, and two polynomials, A and B, in the variables x and y. Type them below or pick a code from the paper&rsquo;s table to see how many physical and logical qubits the code has, the weights of its checks and how the checks sit on a torus, and to search for a low-weight logical operator. You can copy a link that reproduces the code and download its check matrices.</p>
 
   <section class="bb-tool" aria-labelledby="tool-h">
     <h2 id="tool-h">The code</h2>

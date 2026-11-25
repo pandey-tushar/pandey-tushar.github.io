@@ -6,6 +6,7 @@ import './styles/illustrated.css';
 /* after the edition's own sheet, so the paper overrides win */
 import './styles/print.css';
 
+import { heroElement, liveHero } from '@qubit/reader/hero';
 import { en } from '@qubit/content';
 import type { Canto } from '@qubit/content/schema';
 import { artFor, type CantoArt } from './cantos/index.js';
@@ -74,19 +75,23 @@ function makeStage(canto: number, art: CantoArt, track: HTMLElement): HTMLElemen
 const caption = (legend: string): string =>
   legend.replace(/^(Plate [IVXLC]+|Frontispiece)\.\s*/, '<b>$1</b>');
 
-/* ---------- frontispiece ---------- */
+/* ---------- the opening window, then the frontispiece ---------- */
 
-const front = el('header', 'front');
+/* the homepage's pane for this book: the engraved spheres, the cover lit in
+   them, the title and the ways in */
+const hero = heroElement({
+  tag: 'Illustrated edition', title: 'The Qubit Dialogues',
+  line: 'Twenty two cantos between a Seeker and an Oracle, set as plates.', cover: 'qubit-dialogues-illustrated',
+  start: { href: '#canto-1', label: 'Begin reading' },
+  more: [{ href: '/qubit-dialogues.html', label: 'Text edition' }],
+  place: 'tp-pane-mid',
+});
+
+/* the frontispiece stands as a plate of its own, captioned like the rest */
+const front = el('div', 'front');
 const frontTrack = el('div', 'track front-track');
 const frontArt = artFor(0);
 if (frontArt) frontTrack.append(makeStage(0, frontArt, frontTrack));
-frontTrack.append(el('div', 'front-type',
-  '<p class="kicker">Illustrated edition</p>' +
-  '<h1>The Qubit Dialogues</h1>' +
-  '<p class="sub">Twenty two cantos between a Seeker and an Oracle, set as plates.</p>' +
-  '<p class="cue"><a href="#canto-1">Begin reading</a> &middot; ' +
-  '<a href="/qubit-dialogues.html">Text edition</a></p>',
-));
 front.append(frontTrack);
 if (frontArt) front.append(el('p', 'legend', caption(frontArt.legend)));
 
@@ -176,9 +181,10 @@ colophon.setAttribute('aria-label', 'About this edition');
 
 /* the site header and footer are in index.html; the book goes between them */
 const siteFoot = document.querySelector('.tp-foot');
-const parts = [rail, front, book, colophon];
+const parts = [rail, hero, front, book, colophon];
 if (siteFoot) siteFoot.before(...parts);
 else document.body.append(...parts);
+liveHero(hero, 'plate');
 
 /* ---------- posters ---------- */
 

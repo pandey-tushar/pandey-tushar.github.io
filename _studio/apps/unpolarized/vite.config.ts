@@ -17,6 +17,7 @@ export default defineConfig({
       { find: '@qubit/tokens', replacement: at('../../packages/tokens/src/index.ts') },
       { find: '@qubit/content/schema', replacement: at('../../content/schema.ts') },
       { find: '@qubit/content/unpolarized', replacement: at('../../content/unpolarized.ts') },
+      { find: '@qubit/reader/hero', replacement: at('../../packages/reader/src/hero.ts') },
       { find: '@qubit/reader', replacement: at('../../packages/reader/src/index.ts') },
     ],
   },

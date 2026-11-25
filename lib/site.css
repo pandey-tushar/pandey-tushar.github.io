@@ -8,6 +8,11 @@
    links. Values and rules: _studio/site-system.md.
    ================================================================= */
 
+/* Geist and Geist Mono (OFL, lib/fonts/OFL.txt): declared for every page,
+   fetched only by a page whose CSS names them */
+@font-face{font-family:"Geist";src:url(/lib/fonts/Geist.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Geist Mono";src:url(/lib/fonts/GeistMono.woff2) format("woff2");font-weight:100 900;font-display:swap}
+
 :root{
   --tp-void:#0d1320; --tp-void2:#131b2b; --tp-bar:#0d1320;
   --tp-ink:#e9eef5; --tp-head:#e9eef5; --tp-text:#d3dbe6; --tp-dim:#97a3b4;
@@ -198,13 +203,209 @@
 .tp-plate figcaption b{font-weight:600;color:var(--tp-ink)}
 .tp-plate figcaption b::after{content:". "}
 
+/* ---------- panes ----------
+   A run of window-sized panes, one entry each, that the reader scrolls
+   through: a live figure filling the whole pane as its background, and over
+   it a small mono tag, the name, one short line and one Open link, usually
+   to a sheet (below). The Open link covers the whole pane, so a click
+   anywhere opens it. The words sit at the bottom left by default, at the
+   centre left with tp-pane-mid, the bottom right with tp-pane-end or the top
+   left with tp-pane-top; a soft scrim from that corner, and the figure kept
+   quiet near them, keep them legible. On a phone they always sit at the
+   bottom. A book's cover (tp-pane-cover) stands in the figure, placed by the
+   page's script in the room the words leave (--x, --y, --h). Markup:
+   <article class="tp-pane" id="pane-slug" aria-labelledby="pane-slug-t">
+     <div class="tp-pane-viz"><canvas data-live=".." aria-hidden="true"></canvas>
+       (optional) <img class="tp-pane-cover" alt=""></div>
+     <div class="tp-pane-in tp-wrap">
+       <div class="tp-pane-text"><p class="tp-pane-tag">..</p>
+         <h2 class="tp-pane-name" id="pane-slug-t">..</h2><p class="tp-pane-line">..</p>
+         <a class="tp-pane-open" href="#slug" aria-label="Open ..">Open<i aria-hidden="true"></i></a></div>
+     </div>
+   </article> */
+:root:has(.tp-pane){scroll-padding-top:var(--tp-barh)}
+@media (prefers-reduced-motion:no-preference){ :root:has(.tp-pane){scroll-snap-type:y proximity} }
+.tp-pane{position:relative;isolation:isolate;height:calc(100svh - var(--tp-barh));min-height:34rem;overflow:hidden;scroll-snap-align:start;border-top:1px solid var(--tp-rule);--tp-scrim:color-mix(in srgb,var(--tp-void) 86%,transparent)}
+.tp-pane-in{display:grid;height:100%;grid-template-columns:minmax(0,1fr);padding-block:clamp(1.5rem,7vh,5rem)}
+.tp-pane-text{display:grid;justify-items:start;align-self:end;justify-self:start;gap:.85rem;max-width:40rem}
+.tp-pane-viz{position:absolute;inset:0;z-index:-1}
+.tp-pane-viz > canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+.tp-pane-viz::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to top,var(--tp-scrim) 0,transparent 62%)}
+.tp-pane-tag{margin:0;font:400 .8125rem/1.3 var(--tp-mono);color:var(--tp-dim)}
+.tp-pane .tp-pane-name{margin:0;max-width:10em;font:600 clamp(2.4rem,1rem + 4.2vw,5.4rem)/.94 var(--tp-sans);letter-spacing:-.05em;color:var(--tp-head);text-wrap:balance}
+.tp-pane-line{margin:0;max-width:30em;font-size:clamp(1.02rem,.95rem + .35vw,1.25rem);line-height:1.45;color:var(--tp-text)}
+.tp-pane-open{
+  display:inline-flex;align-items:center;gap:.85em;min-height:46px;margin-top:.85rem;padding:0 16px 0 20px;
+  font:500 .9375rem/1 var(--tp-sans);color:var(--tp-ink);text-decoration:none;
+  background:color-mix(in srgb,var(--tp-void) 72%,transparent);border:1px solid var(--tp-rule);border-radius:2px;
+  transition:color .2s,border-color .2s;
+}
+.tp-pane-open::after{content:"";position:absolute;inset:0;z-index:1}
+.tp-pane-open i{position:relative;width:11px;height:11px;transition:transform .4s cubic-bezier(.2,.75,.15,1)}
+.tp-pane-open i::before,.tp-pane-open i::after{content:"";position:absolute;background:currentColor}
+.tp-pane-open i::before{left:0;right:0;top:5px;height:1px}
+.tp-pane-open i::after{top:0;bottom:0;left:5px;width:1px}
+.tp-pane:hover .tp-pane-open,.tp-pane-open:focus-visible{color:var(--tp-acc);border-color:var(--tp-acc)}
+.tp-pane:hover .tp-pane-open i,.tp-pane-open:focus-visible i{transform:rotate(90deg)}
+/* the cover stands softly lit in the figure; hidden until the script places it */
+.tp-pane-cover{
+  position:absolute;left:var(--x,50%);top:var(--y,50%);display:block;visibility:hidden;
+  height:var(--h,60%);width:auto;aspect-ratio:2/3;transform:translate(-50%,-50%);
+  border-radius:3px;box-shadow:0 0 0 1px color-mix(in srgb,var(--tp-ink) 10%,transparent),0 50px 110px -40px rgba(0,0,0,.9),0 0 120px -10px var(--tp-a14);
+}
+.tp-pane-cover[style]{visibility:visible}
+:root[data-theme="light"] .tp-pane-cover{box-shadow:0 0 0 1px rgba(22,32,46,.08),0 44px 90px -40px rgba(22,32,46,.55),0 0 120px -10px var(--tp-a14)}
+@media (min-width:56em){
+  .tp-pane-viz::after{background:radial-gradient(85% 95% at 0% 100%,var(--tp-scrim) 0,transparent 68%)}
+  .tp-pane-mid .tp-pane-text{align-self:center}
+  .tp-pane-mid .tp-pane-viz::after{background:radial-gradient(70% 90% at 0% 50%,var(--tp-scrim) 0,transparent 70%)}
+  .tp-pane-end .tp-pane-text{justify-self:end}
+  .tp-pane-end .tp-pane-viz::after{background:radial-gradient(85% 95% at 100% 100%,var(--tp-scrim) 0,transparent 68%)}
+  .tp-pane-top .tp-pane-text{align-self:start}
+  .tp-pane-top .tp-pane-viz::after{background:radial-gradient(85% 95% at 0% 0%,var(--tp-scrim) 0,transparent 68%)}
+}
+
+/* ---------- the rail ----------
+   A column of ticks at the right edge, one link per pane, the one in view
+   longer and in the accent; the pane's name shows on hover or focus.
+   site.js marks the current link (aria-current) and shows the rail while
+   a pane is in view; it stays reachable by Tab throughout. Hidden on a
+   phone. Markup: <nav class="tp-rail" aria-label="Panes">
+   <a href="#pane-slug"><span>Name</span></a>..</nav> */
+.tp-rail{position:fixed;right:clamp(4px,1.1vw,18px);top:50%;z-index:20;display:flex;flex-direction:column;transform:translateY(-50%);opacity:0;pointer-events:none;transition:opacity .3s}
+.tp-rail[data-on],.tp-rail:focus-within{opacity:1;pointer-events:auto}
+.tp-rail a{position:relative;display:flex;align-items:center;justify-content:flex-end;width:40px;height:26px;color:var(--tp-dim);text-decoration:none}
+.tp-rail a::after{content:"";width:12px;height:1px;background:currentColor;transition:width .3s,background-color .3s}
+.tp-rail a:hover::after{width:18px;background:var(--tp-ink)}
+.tp-rail a[aria-current]::after{width:26px;height:2px;background:var(--tp-acc)}
+.tp-rail a:focus-visible{outline-offset:-2px}
+.tp-rail span{position:absolute;right:46px;padding:.45em .65em;white-space:nowrap;font:400 .75rem/1 var(--tp-mono);color:var(--tp-ink);background:var(--tp-void2);border:1px solid var(--tp-rule);border-radius:2px;opacity:0;pointer-events:none;transition:opacity .2s}
+.tp-rail a:hover span,.tp-rail a:focus-visible span{opacity:1}
+@media (max-width:40em){ .tp-rail{display:none} }
+
+/* ---------- a sheet ----------
+   A full-screen <dialog class="tp-sheet" id="slug" aria-labelledby="..">
+   that a pane's Open link grows into. site.js (TP.sheet) opens it from any link
+   to #slug or from the URL hash, and closes it on Esc, the back button or
+   a .tp-sheet-close button; focus stays inside while it is open. Markup:
+   <div class="tp-sheet-bar"><span class="tp-sheet-tag">..</span>
+     <button class="tp-sheet-close" type="button">Close <kbd>Esc</kbd></button></div>
+   <div class="tp-sheet-in tp-wrap">
+     <div class="tp-sheet-media">canvas, svg or .tp-sheet-cover img</div>
+     <div class="tp-sheet-body"><h2>..</h2><p>..</p><ul class="tp-sheet-links">..</ul></div>
+   </div> */
+.tp-full.tp-sheet-open,.tp-sheet-open body{overflow:hidden}
+.tp-sheet{
+  position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;
+  background:var(--tp-void);color:var(--tp-text);overflow-y:auto;overscroll-behavior:contain;
+  font-family:var(--tp-sans);line-height:1.6;
+}
+.tp-sheet::backdrop{background:rgba(5,8,14,.45)}
+.tp-sheet-bar{
+  position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  height:var(--tp-barh);padding-inline:max(var(--tp-gut),calc((100% - 72rem) / 2));
+  background:var(--tp-void);border-bottom:1px solid var(--tp-rule);
+}
+.tp-sheet-tag{font:400 .75rem/1.3 var(--tp-mono);color:var(--tp-dim)}
+.tp-sheet-close{
+  display:inline-flex;align-items:center;gap:.6rem;min-height:36px;margin:0;padding:0 5px 0 14px;cursor:pointer;
+  font:500 .875rem/1 var(--tp-sans);color:var(--tp-ink);background:transparent;
+  border:1px solid var(--tp-rule);border-radius:999px;transition:border-color .15s,color .15s;
+}
+.tp-sheet-close:hover,.tp-sheet-close:focus-visible{border-color:var(--tp-acc);color:var(--tp-acc)}
+.tp-sheet-close kbd{font:400 .75rem/1 var(--tp-mono);padding:.35em .55em;border-radius:999px;background:var(--tp-void2);color:var(--tp-dim)}
+.tp-sheet-in{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.6rem,4vw,4.5rem);align-items:start;padding-block:clamp(1.5rem,6vh,5rem)}
+@media (min-width:56em){ .tp-sheet-in{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)} }
+.tp-sheet-media{position:relative;min-height:clamp(220px,52vh,540px);background:var(--tp-void2);border:1px solid var(--tp-rule);border-radius:12px;overflow:hidden}
+.tp-sheet-media > canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+.tp-sheet-media.tp-sheet-cover{display:flex;justify-content:center;align-items:center;min-height:0;padding:clamp(1.2rem,4vw,3rem)}
+.tp-sheet-cover img{display:block;width:min(100%,280px);height:auto;border:1px solid var(--tp-rule);border-radius:4px;box-shadow:0 24px 60px -30px rgba(0,0,0,.75)}
+.tp-sheet-body{display:grid;gap:1.15rem;max-width:36rem}
+.tp-sheet .tp-sheet-body h2{font-size:clamp(2rem,1.3rem + 2.6vw,3.3rem);line-height:1.02;letter-spacing:-.04em;color:var(--tp-head)}
+.tp-sheet-body p{margin:0;max-width:var(--tp-measure)}
+.tp-sheet-body b{font-weight:600;color:var(--tp-ink)}
+.tp-sheet-sub{color:var(--tp-dim)}
+.tp-sheet-links{list-style:none;margin:.8rem 0 0;padding:0;border-top:1px solid var(--tp-rule)}
+.tp-sheet-links li{margin:0;padding:0;border-bottom:1px solid var(--tp-rule)}
+.tp-sheet-links a{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;min-height:48px;padding:.8rem 0;color:var(--tp-ink);text-decoration:none;transition:color .15s}
+.tp-sheet-links a:hover,.tp-sheet-links a:focus-visible{color:var(--tp-acc)}
+.tp-sheet-links small{flex:none;font:400 .75rem/1.3 var(--tp-mono);color:var(--tp-dim)}
+
+/* a sheet that holds several entries: the figure stays in view beside them,
+   an entry linked by its id opens the sheet at it */
+.tp-sheet [id]{scroll-margin-top:calc(var(--tp-barh) + 1.2rem)}
+@media (min-width:56em){ .tp-sheet-media{position:sticky;top:calc(var(--tp-barh) + clamp(1.5rem,6vh,5rem))} }
+.tp-sheet-body h3{margin:0;font-family:var(--tp-sans);font-size:clamp(1.12rem,1rem + .45vw,1.35rem);font-weight:600;line-height:1.28;letter-spacing:-.02em;color:var(--tp-head)}
+.tp-sheet-item{display:grid;gap:.8rem;margin-top:.8rem;padding-top:1.6rem;border-top:1px solid var(--tp-rule)}
+.tp-sheet-item .tp-sheet-links{margin-top:.2rem}
+.tp-sheet-spec{display:grid;grid-template-columns:6rem minmax(0,1fr);gap:.35rem 1rem;align-items:baseline;margin:0}
+.tp-sheet-spec dt{font:400 .75rem/1.5 var(--tp-mono);color:var(--tp-dim)}
+.tp-sheet-spec dd{margin:0;font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-text)}
+.tp-sheet-rows{list-style:none;margin:0;padding:0;border-top:1px solid var(--tp-rule)}
+.tp-sheet-rows > li{display:grid;grid-template-columns:8.5rem minmax(0,1fr);gap:.2rem 1.25rem;align-items:baseline;margin:0;padding:.85rem 0;border-bottom:1px solid var(--tp-rule)}
+.tp-sheet-when{font:400 .75rem/1.6 var(--tp-mono);color:var(--tp-dim)}
+@media (max-width:34em){ .tp-sheet-rows > li,.tp-sheet-spec{grid-template-columns:minmax(0,1fr)} }
+
+/* ---------- Geist ----------
+   The homepage's type, for any page that takes it: <html class="tp-full tp-geist">.
+   Body and headings in Geist, labels and tags in Geist Mono. */
+.tp-geist{--tp-sans:"Geist",ui-sans-serif,system-ui,"Segoe UI",Roboto,Arial,sans-serif;--tp-mono:"Geist Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+.tp-geist h1,.tp-geist h2,.tp-geist h3{font-family:var(--tp-sans);font-weight:500;letter-spacing:-.025em}
+.tp-geist .tp-mark span{font:500 1rem/1 var(--tp-sans);letter-spacing:-.01em}
+.tp-geist .tp-lbl{font:400 .75rem/1.3 var(--tp-mono);letter-spacing:.14em}
+.tp-geist .tp-btn{border-radius:2px}
+
+/* ---------- a hero ----------
+   A page's opening: a live figure filling the window under the header (a
+   canvas run by TP.live, data-fig in site.js), and over it a small tag, the h1,
+   a lede, optional notes and buttons, kept to the bottom left. Markup:
+   <section class="tp-hero" aria-label="Introduction">
+     <canvas data-fig=".." aria-hidden="true"></canvas>
+     <div class="tp-hero-in tp-wrap"><div class="tp-hero-text">
+       <p class="tp-hero-tag">..</p><h1>..</h1><p class="tp-hero-lede">..</p>
+       (optional) <p class="tp-hero-note">..</p> <p class="tp-hero-actions"><a class="tp-btn pri" ..>..</a></p>
+     </div></div>
+   </section> */
+.tp-hero{position:relative;isolation:isolate;display:flex;align-items:flex-end;min-height:calc(88svh - var(--tp-barh));overflow:hidden;scroll-snap-align:start;--tp-scrim:color-mix(in srgb,var(--tp-void) 80%,transparent)}
+.tp-hero > canvas{position:absolute;inset:0;z-index:-1;display:block;width:100%;height:100%}
+.tp-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(to top,var(--tp-scrim) 0,transparent 55%)}
+.tp-hero-in{width:100%;padding-block:clamp(6rem,16vh,11rem) clamp(2.6rem,7vh,5rem)}
+.tp-hero-text{max-width:44rem}
+.tp-hero-tag{display:flex;align-items:center;gap:.9rem;margin:0 0 1.6rem;font:400 .75rem/1.3 var(--tp-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--tp-dim)}
+.tp-hero-tag::before{content:"";flex:none;width:22px;height:8px;background:var(--tp-acc);-webkit-mask:url(/img/mark-edge.svg) center/contain no-repeat;mask:url(/img/mark-edge.svg) center/contain no-repeat}
+.tp-hero h1{margin:0;max-width:9.6em;font-size:clamp(2.9rem,1.4rem + 5.6vw,6.8rem);line-height:.95;letter-spacing:-.05em;color:var(--tp-head)}
+.tp-hero-lede{margin:1.8rem 0 0;max-width:34em;font-size:clamp(1.06rem,1rem + .35vw,1.22rem);line-height:1.6;color:var(--tp-text)}
+.tp-hero-note{margin:1rem 0 0;max-width:42em;font-size:var(--tp-t-small);line-height:1.6;color:var(--tp-dim)}
+.tp-hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin:2.2rem 0 0;padding:0;list-style:none}
+.tp-hero-actions li{margin:0;padding:0}
+.tp-hero .tp-btn{min-height:44px;padding:0 18px;border-radius:2px;background:color-mix(in srgb,var(--tp-void) 70%,transparent);font:500 .9375rem/1.2 var(--tp-sans)}
+.tp-hero .tp-btn.pri{border-color:var(--tp-acc);color:var(--tp-acc);background:transparent}
+.tp-hero .tp-btn.pri:hover,.tp-hero .tp-btn.pri:focus-visible{background:var(--tp-a08)}
+@media (min-width:56em){ .tp-hero::after{background:radial-gradient(80% 95% at 0% 100%,var(--tp-scrim) 0,transparent 66%)} }
+:root:has(.tp-pane) .tp-foot{scroll-snap-align:end}
+
+/* ---------- a coda ----------
+   A short, quiet band after a run of panes for what belongs to the whole page
+   (a note on sources, how to cite). Markup: <section class="tp-coda" aria-label="..">
+   <div class="tp-wrap"><p>..</p></div></section> */
+.tp-coda{padding-block:clamp(2.4rem,8vh,4.5rem);background:var(--tp-void2);border-top:1px solid var(--tp-rule)}
+.tp-coda p{margin:0;max-width:46em;font-size:var(--tp-t-small);line-height:1.6;color:var(--tp-text)}
+.tp-coda p + p{margin-top:.7rem}
+
 @media (prefers-reduced-motion:reduce){
   .tp-full{scroll-behavior:auto}
-  .tp-bar *,.tp-foot *,.tp-btn,.tp-link{transition:none!important}
+  .tp-bar *,.tp-foot *,.tp-btn,.tp-link,.tp-pane *,.tp-rail,.tp-rail *,.tp-sheet *{transition:none!important}
 }
 
 @media print{
-  .tp-skip,.tp-bar,.tp-toggle{display:none!important}
+  .tp-skip,.tp-bar,.tp-toggle,.tp-pane-viz,.tp-pane-open,.tp-rail,.tp-sheet{display:none!important}
+  .tp-pane{height:auto;min-height:0;border:0}
+  .tp-hero{min-height:0}
+  .tp-hero > canvas,.tp-hero::after{display:none}
+  /* <html class=".. tp-print-sheets">: the sheets print in place, as a document */
+  .tp-print-sheets .tp-sheet{display:block!important;position:static;width:auto;height:auto;overflow:visible;background:none;color:#000}
+  .tp-print-sheets .tp-sheet-bar,.tp-print-sheets .tp-sheet-media,.tp-print-sheets .tp-pane{display:none!important}
+  .tp-print-sheets .tp-sheet-in{display:block;padding:0}
   .tp-full body{background:#fff;color:#000}
   .tp-full h1,.tp-full h2,.tp-full h3{color:#000}
   .tp-foot{margin:8mm 0 0;padding-top:3mm;border-top:.4pt solid #000;color:#000}

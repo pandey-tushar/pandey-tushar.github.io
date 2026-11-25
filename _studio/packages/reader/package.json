@@ -9,6 +9,7 @@
     ".": "./src/index.ts",
     "./scenes": "./src/scenes/index.ts",
     "./math": "./src/math.ts",
+    "./hero": "./src/hero.ts",
     "./devanagari.css": "./src/styles/devanagari.css"
   },
   "dependencies": {

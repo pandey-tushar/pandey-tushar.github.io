@@ -1,0 +1,149 @@
+/* =================================================================
+   ARTICLE PAGES. The papers, the note, the explainer, the course pages,
+   the explorer and the game, in the homepage's voice: Geist for headings
+   and the interface, Geist Mono for labels, the site tokens for every
+   colour. Each page opens on a window-sized hero, a live figure
+   (lib/article.js, run by TP.live) behind a small mono tag, the h1, one
+   line and a cue to the text, then reads as before. Load it last, after
+   the page's own CSS. Markup:
+   <header class="ar-hero" data-art="patch">
+     <canvas class="ar-viz" aria-hidden="true"></canvas>
+     <div class="ar-in tp-wrap">
+       (optional) <nav class="secnav">..</nav>
+       <div class="ar-text"><p class="tp-lbl">tag</p><h1>..</h1>
+         <p class="ar-line">..</p> (optional meta and buttons)</div>
+       <a class="ar-cue" href="#first-thing-below">Read<i aria-hidden="true"></i></a>
+     </div>
+   </header>
+   ================================================================= */
+
+:root{
+  --tp-sans:"Geist",ui-sans-serif,system-ui,"Segoe UI",Roboto,Arial,sans-serif;
+  --tp-mono:"Geist Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+/* the hero runs edge to edge from inside any column: cqw is the body's width, scrollbar excluded */
+.tp-full body{container-type:inline-size}
+
+/* ---------- type: the homepage's ---------- */
+.tp-full h1,.tp-full h2,.tp-full h3{font-family:var(--tp-sans);font-weight:600;letter-spacing:-.025em}
+.tp-full h2{letter-spacing:-.03em}
+.tp-mark span{font:500 1rem/1 var(--tp-sans);letter-spacing:-.01em}
+/* labels: one mono voice for every small heading the pages set as an eyebrow */
+.tp-lbl,.pc-rail .pc-rail-h,.bb-rail .bb-rail-h,.panel h2,.pc-controls legend,.agot-sel span,.ar-hero .secnav a{
+  font-family:var(--tp-mono);font-weight:400;letter-spacing:.1em;
+}
+.tp-lbl,.pc-rail .pc-rail-h,.bb-rail .bb-rail-h,.panel h2,.pc-controls legend,.agot-sel span{font-size:.75rem}
+/* numbers set large in the explorer and the glossary terms: Geist, not the serif */
+.bb-params .bb-big,.bb-readout b{font-family:var(--tp-sans);font-weight:500;letter-spacing:-.02em}
+.terms dt{font-family:var(--tp-sans);font-weight:600;letter-spacing:-.02em}
+.tp-id,.tp-full code{font-family:var(--tp-mono)}
+
+/* headings inside the reading column */
+.pc-essay h2,.pc-cite h2,.nt-essay h2,.essay h2,.xp h2,.bb-essay h2,.bb-tool h2{font-weight:600;letter-spacing:-.03em;line-height:1.15}
+.pc-essay h2,.pc-cite h2,.xp h2,.bb-essay h2,.bb-tool h2{font-size:clamp(1.35rem,1.15rem + .7vw,1.65rem)}
+.pc-essay p,.essay p,.xp p,.bb-essay p{line-height:1.68}
+
+/* surfaces: hairlines, small radii, as the homepage's buttons and sheets */
+.tp-btn{border-radius:2px;font:500 .9375rem/1.2 var(--tp-sans);letter-spacing:.005em}
+.tp-plate,.pc-plainwords,.bb-plainwords,.plain,.pc-bib,.course-end{border-radius:3px}
+.panel{border-radius:4px}
+.tp-plate figcaption b{font-weight:600}
+
+/* ---------- the hero ---------- */
+.ar-hero{
+  position:relative;isolation:isolate;display:flex;
+  min-height:max(34rem,calc(100svh - var(--tp-barh)));
+  margin:0 calc(50% - 50cqw);padding:0;overflow:hidden;
+  border-bottom:1px solid var(--tp-rule);
+  --ar-scrim:color-mix(in srgb,var(--tp-void) 86%,transparent);
+}
+main:has(.ar-hero){padding-top:0}
+.ar-viz{position:absolute;inset:0;z-index:-1;display:block;width:100%;height:100%}
+.ar-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(to top,var(--ar-scrim) 0,transparent 66%)}
+.ar-in{
+  flex:1;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr auto auto;
+  gap:1.6rem;width:100%;padding-block:clamp(.6rem,2vh,1.2rem) clamp(1.8rem,7vh,5rem);
+}
+.ar-in > nav{grid-row:1;align-self:start}
+.ar-text{grid-row:3;display:grid;justify-items:start;gap:.85rem;max-width:56rem}
+.ar-cue{grid-row:4}
+.ar-hero .ar-text > .tp-lbl{
+  margin:0;font-size:.8125rem;line-height:1.3;letter-spacing:0;text-transform:none;color:var(--tp-dim);
+}
+.ar-hero h1,.ar-hero #lesson-title{
+  margin:0;max-width:12em;
+  font:600 clamp(2.4rem,1rem + 4.2vw,5.4rem)/.96 var(--tp-sans);letter-spacing:-.05em;
+  color:var(--tp-head);text-wrap:balance;
+}
+.ar-long h1{max-width:20em;font-size:clamp(1.9rem,.9rem + 3vw,4rem);line-height:1.02;letter-spacing:-.04em}
+.ar-line{margin:0;max-width:34em;font-size:clamp(1.02rem,.95rem + .35vw,1.25rem);line-height:1.5;color:var(--tp-text)}
+.ar-text .pc-by{font-weight:400;color:var(--tp-text)}
+.ar-text .pc-status{margin:0;font:400 .8125rem/1.4 var(--tp-mono);color:var(--tp-dim)}
+.ar-text .pc-status .tp-id{font-size:inherit}
+.ar-text .pc-status.ar-line{font:400 clamp(1.02rem,.95rem + .35vw,1.25rem)/1.5 var(--tp-sans);color:var(--tp-text)}
+.ar-text .pc-actions{margin:.6rem 0 0}
+.ar-text .tp-btn{min-height:44px;padding:0 18px;background:color-mix(in srgb,var(--tp-void) 72%,transparent)}
+.ar-text .tp-btn:hover,.ar-text .tp-btn:focus-visible{background:var(--tp-a08)}
+
+/* the course row over the figure */
+.ar-hero .secnav a{font-size:.75rem;letter-spacing:.04em;color:var(--tp-dim)}
+.ar-hero .secnav a:hover,.ar-hero .secnav a:focus-visible{color:var(--tp-acc)}
+
+/* the cue: a word and a line that runs down toward the text */
+.ar-cue{
+  display:inline-flex;align-items:center;gap:.8rem;justify-self:start;min-height:44px;
+  font:400 .75rem/1 var(--tp-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--tp-dim);
+  text-decoration:none;transition:color .2s;
+}
+.ar-cue i{position:relative;display:block;width:1px;height:28px;overflow:hidden;background:var(--tp-rule)}
+.ar-cue i::after{content:"";position:absolute;left:0;top:0;width:1px;height:12px;background:var(--tp-acc);transform:translateY(-12px)}
+.ar-hero a.ar-cue{color:var(--tp-dim);text-decoration:none}
+.ar-hero a.ar-cue:hover,.ar-hero a.ar-cue:focus-visible{color:var(--tp-acc)}
+@media (prefers-reduced-motion:no-preference){
+  .ar-cue i::after{animation:ar-drip 2.6s cubic-bezier(.4,0,.2,1) infinite}
+}
+@keyframes ar-drip{0%{transform:translateY(-12px)}60%,100%{transform:translateY(28px)}}
+
+@media (min-width:56em){
+  .ar-hero::after{background:radial-gradient(90% 95% at 0% 100%,var(--ar-scrim) 0,transparent 70%)}
+  .ar-in{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto 1fr auto}
+  .ar-in > nav{grid-column:1 / -1}
+  .ar-cue{grid-row:3;grid-column:2;align-self:end;flex-direction:column-reverse;gap:.7rem}
+  .ar-cue i{height:44px}
+  @keyframes ar-drip{0%{transform:translateY(-12px)}60%,100%{transform:translateY(44px)}}
+}
+@media (max-width:600px){
+  .ar-in{gap:1.2rem}
+  .ar-hero .secnav{gap:0 14px}
+}
+
+/* ---------- the hero inside each page's own layout ---------- */
+/* papers and the note: the hero is the first row of the two-column grid, the rail starts under it */
+@media (min-width:70em){
+  .pc-cols > .ar-hero{grid-column:1 / -1;grid-row:1}
+  .pc-cols > .pc-rail{grid-row:2 / span 40;margin-top:2.4rem}
+  .pc-cols > .ar-hero + .pc-rail + *{margin-top:2.4rem}
+  .bb-cols > .ar-hero{grid-column:1 / -1;grid-row:1}
+  .bb-cols > .bb-rail{grid-row:2 / span 40;margin-top:2.4rem}
+  .course-essay > .ar-hero{grid-column:1 / -1;grid-row:1}
+  .course-essay > .course-rail{grid-row:2;margin-top:2rem}
+  .course-essay > .essay-flow{margin-top:.6rem}
+}
+.pc .pc-rail{margin-top:1.8rem}
+/* the course pages: the plain-words box and the lead under the hero */
+.ar-hero + .plain,.ar-hero + .course-rail{margin-top:1.6rem}
+.page > .ar-hero + .plain{margin-top:1.6rem}
+/* the explainer, the game and the explorer: room above the first block under the hero */
+.ar-hero + .tp-wrap > .xp{padding-top:clamp(2rem,1rem + 3vw,3.6rem)}
+
+@media (prefers-reduced-motion:reduce){
+  .ar-cue,.ar-cue *{transition:none!important;animation:none!important}
+}
+@media print{
+  .ar-viz,.ar-cue,.ar-hero::after,.ar-hero .secnav{display:none!important}
+  .ar-hero{min-height:0;margin:0;border:0;overflow:visible}
+  .ar-in{padding:0 0 6mm}
+  .ar-hero h1,.ar-hero #lesson-title{font-size:22pt;color:#000;max-width:none}
+  .ar-line,.ar-text .pc-status{color:#000}
+}

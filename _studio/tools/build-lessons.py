@@ -232,6 +232,10 @@ def endlink(e, rel):
     return f'<a href="{e["page"]}">' + (f'&larr; Previous: {t}' if rel == 'prev' else f'Next: {t} &rarr;') + '</a>'
 
 
+# the line under a page's title in its hero: the course and the part the page belongs to, as the course list numbers them
+PARTS = list(dict.fromkeys(e['part'] for e in order))
+part_line = lambda e: f"Quantum Error Correction in Practice, part {PARTS.index(e['part']) + 1}: {state_html(e['part'])}"
+
 thumbs = {}
 for i, e in enumerate(order):
     if 'lesson' not in e:
@@ -253,7 +257,7 @@ for i, e in enumerate(order):
         '{{description}}': plain(info['intro'].replace('_L', '')), '{{steps}}': steps,
         '{{nav}}': ''.join(' ' + link(o, rel) for o, rel in near),
         '{{endnav}}': ' '.join(endlink(o, rel) for o, rel in near),
-        '{{stepof}}': f'Step {i + 1} of {len(order)}', '{{plain}}': state_html(info['plain']),
+        '{{stepof}}': f'Step {i + 1} of {len(order)}', '{{part}}': part_line(e), '{{plain}}': state_html(info['plain']),
         '{{results_note}}': '\n'.join(f'      <p>{state_html(p)}</p>' for p in info['results_note']),
         '{{shows}}': '\n'.join(f'    <p>{state_html(p)}</p>' for p in info['shows']),
         '{{try}}': '\n'.join(f'      <li>{state_html(p)}</li>' for p in info['try']),
@@ -262,21 +266,49 @@ for i, e in enumerate(order):
     io.open(QEC / f'lesson-{n}.html', 'w', encoding='utf-8', newline='\n').write(page)
     print(f'wrote lesson-{n}.html')
 
-parts, k = [], 0
-for j, name in enumerate(dict.fromkeys(e['part'] for e in order)):
-    cards = []
-    for e in (e for e in order if e['part'] == name):
-        k += 1
-        key, fig = thumbs[e['page']]
-        # the step is the place in the course; a numbered lesson keeps its number next to it and its own title below
-        num, title = (f'Step {k} &middot; Lesson {e["lesson"]}', lessons[str(e['lesson'])]['title']) if 'lesson' in e else (f'Step {k}', e['title'])
-        cards.append(f'      <li><a class="lcard" href="{e["page"]}"><!-- thumb {key} -->{fig}<!-- /thumb -->'
-                     f'<span class="num">{num}</span><b>{state_html(title)}</b><span>{state_html(e["card"])}</span></a></li>')
-    first = k - len(cards) + 1
-    parts.append(f'  <section class="part" aria-labelledby="part-{j + 1}">\n'
-                 f'    <p class="tp-lbl">Part {j + 1}, steps {first} to {k}</p>\n'
-                 f'    <h2 id="part-{j + 1}">{state_html(name)}</h2>\n'
-                 f'    <ol class="cards" start="{first}">\n' + '\n'.join(cards) + '\n    </ol>\n  </section>')
+# The course index: one window-sized pane per page of the course, in order, tagged with its
+# part, its card picture's caption as the line, opening into a sheet with the picture, the
+# card text and the link (lib/site.css tp-pane, tp-rail, tp-sheet; the figures are TP.live.fig)
+FIGS = {'repetition-code.html': 'rep', 'lesson-1.html': 'surface', 'decoding.html': 'toric', 'threshold.html': 'crossing',
+        'lesson-2.html': 'circuit', 'lesson-3.html': 'bloch', 'lesson-4.html': 'bell', 'lattice-surgery.html': 'seam'}
+PLACES = ['', ' tp-pane-mid', ' tp-pane-end', ' tp-pane-top']
+panes, rail, sheets = [], [], []
+for k, e in enumerate(order, 1):
+    key, fig = thumbs[e['page']]
+    sid, live = e['page'].removesuffix('.html'), FIGS[e['page']]
+    cap = re.search(r'<figcaption>(.*?)</figcaption>', fig).group(1)
+    # the step is the place in the course; a numbered lesson keeps its number next to it
+    step, title = (f'Step {k}, Lesson {e["lesson"]}', lessons[str(e['lesson'])]['title']) if 'lesson' in e else (f'Step {k}', e['title'])
+    t, part = state_html(title), state_html(e['part'])
+    go = 'Open the lesson' if 'lesson' in e else 'Open the essay'
+    panes.append(f'''    <article class="tp-pane{PLACES[(k - 1) % 4]}" id="pane-{sid}" aria-labelledby="pane-{sid}-t">
+      <div class="tp-pane-viz"><canvas data-fig="{live}" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">{part}</p>
+          <h2 class="tp-pane-name" id="pane-{sid}-t">{t}</h2>
+          <p class="tp-pane-line">{cap}</p>
+          <a class="tp-pane-open" href="#{sid}" aria-haspopup="dialog" aria-label="Open {plain(title)}">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>''')
+    rail.append(f'    <a href="#pane-{sid}"><span>{plain(title)}</span></a>')
+    sheets.append(f'''  <dialog class="tp-sheet" id="{sid}" aria-labelledby="{sid}-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">{part}</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media lesson-fig"><!-- thumb {key} -->{fig}<!-- /thumb --></div>
+      <div class="tp-sheet-body">
+        <h2 id="{sid}-t">{t}</h2>
+        <p class="tp-sheet-sub">{step}</p>
+        <p>{state_html(e["card"])}</p>
+        <ul class="tp-sheet-links">
+          <li><a class="lesson-go" href="{e["page"]}">{go}</a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>''')
+parts = [f'  <section id="course" class="tp-panes" aria-label="The course">\n' + '\n\n'.join(panes) + '\n  </section>\n\n'
+         + '  <nav class="tp-rail" aria-label="Panes">\n' + '\n'.join(rail) + '\n  </nav>\n\n' + '\n\n'.join(sheets)]
 hub_path = QEC / 'index.html'
 hub, found = re.subn(r'(<!-- course -->).*?(\n *<!-- /course -->)',
                      lambda m: m.group(1) + '\n' + '\n'.join(parts) + m.group(2), read(hub_path), flags=re.S)

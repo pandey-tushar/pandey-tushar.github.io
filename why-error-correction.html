@@ -69,6 +69,8 @@
 <meta name="twitter:image" content="https://pandey-tushar.com/og-qec.png">
 <link rel="stylesheet" href="/explainer/explainer.css">
 <script type="module" src="/explainer/explainer.js"></script>
+<link rel="stylesheet" href="/lib/article.css">
+<script src="/lib/article.js" defer></script>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -92,13 +94,21 @@
 </header>
 
 <main id="main">
+<header class="ar-hero" data-art="rep">
+  <canvas class="ar-viz" aria-hidden="true"></canvas>
+  <div class="ar-in tp-wrap">
+   <div class="ar-text">
+    <p class="tp-lbl">Explainer</p>
+    <h1>Why quantum computers need error correction</h1>
+    <p class="lede ar-line">A short explanation for anyone, with one figure you can play with. No physics needed.</p>
+   </div>
+   <a class="ar-cue" href="#qubits-make-mistakes">Read<i aria-hidden="true"></i></a>
+  </div>
+</header>
 <div class="tp-wrap">
 <article class="xp">
 
-  <h1>Why quantum computers need error correction</h1>
-  <p class="lede">A short explanation for anyone, with one figure you can play with. No physics needed.</p>
-
-  <h2>Qubits make mistakes</h2>
+  <h2 id="qubits-make-mistakes">Qubits make mistakes</h2>
   <p>An ordinary computer stores information as bits, each a 0 or a 1, held by tiny electronic switches. These switches almost never make a mistake on their own.</p>
   <p>A quantum computer stores information in qubits. A qubit can hold more than a plain 0 or 1, and that is part of where its power comes from. Holding that in-between state is also what makes qubits fragile. Heat disturbs them. Stray electric and magnetic fields disturb them. Even the operations the machine performs on them add small mistakes. Qubits make mistakes all the time.</p>
 

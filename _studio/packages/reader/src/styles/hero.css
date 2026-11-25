@@ -1,0 +1,33 @@
+/* A book edition in the homepage's dress: the chrome in Geist with Geist Mono
+   labels (both declared in /lib/site.css), and the opening hero built on the
+   shared pane (.tp-pane). The book's own text keeps its serif; each edition's
+   sheet sets its labels and contents in these two faces. */
+
+:root {
+  --tp-sans: "Geist", ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --tp-mono: "Geist Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+.tp-mark span { font: 500 1rem/1 var(--tp-sans); letter-spacing: -.01em }
+
+/* a reader is one long text: the hero is a pane, not a snap point */
+:root:has(.rd-hero) { scroll-snap-type: none }
+
+.rd-hero {
+  position: relative; overflow: hidden; margin: 0; border-top: 0;
+  font-family: var(--tp-sans); font-size: 1rem; line-height: 1.6; color: var(--tp-text); text-align: left;
+}
+.rd-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: .85rem }
+.rd-hero .tp-btn {
+  min-height: 44px; padding: 0 18px; border-radius: 2px;
+  background: color-mix(in srgb, var(--tp-void) 70%, transparent);
+  font: 500 .9375rem/1.2 var(--tp-sans); letter-spacing: .005em; color: var(--tp-ink); text-decoration: none;
+}
+.rd-hero .tp-btn:hover, .rd-hero .tp-btn:focus-visible { color: var(--tp-acc); border-color: var(--tp-acc) }
+.rd-hero .tp-btn.pri { border-color: var(--tp-acc); color: var(--tp-acc) }
+.rd-hero .tp-btn.pri::after { content: "\2192"; content: "\2192" / ""; margin-left: .6em; transition: transform .2s }
+.rd-hero .tp-btn.pri:hover, .rd-hero .tp-btn.pri:focus-visible { background: var(--tp-a08) }
+.rd-hero .tp-btn.pri:hover::after { transform: translateX(3px) }
+.rd-hero :focus-visible { outline: 2px solid var(--tp-acc); outline-offset: 3px }
+
+@media (prefers-reduced-motion: reduce) { .rd-hero .tp-btn.pri::after { transition: none } }
+@media print { .rd-actions { display: none } }

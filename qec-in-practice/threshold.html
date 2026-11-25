@@ -51,6 +51,8 @@
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/threshold.css">
 <script type="module" src="js/threshold-page.js"></script>
+<link rel="stylesheet" href="/lib/article.css">
+<script src="/lib/article.js" defer></script>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -74,9 +76,18 @@
 </header>
 
 <main id="main" class="page threshold course-essay">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="decoding.html">&larr; Previous<span class="nav-long">: Errors, syndromes and decoding</span></a> <a id="next" href="lesson-2.html">Next<span class="nav-long">: Lesson 2: Logical CNOT between two patches</span>&nbsp;&rarr;</a></nav>
-  <p class="tp-lbl step-of">Step 4 of 8</p>
-  <h1 id="lesson-title">The threshold</h1>
+  <header class="ar-hero" data-art="curves">
+    <canvas class="ar-viz" aria-hidden="true"></canvas>
+    <div class="ar-in tp-wrap">
+     <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="decoding.html">&larr; Previous<span class="nav-long">: Errors, syndromes and decoding</span></a> <a id="next" href="lesson-2.html">Next<span class="nav-long">: Lesson 2: Logical CNOT between two patches</span>&nbsp;&rarr;</a></nav>
+     <div class="ar-text">
+      <p class="tp-lbl step-of">Step 4 of 8</p>
+      <h1 id="lesson-title">The threshold</h1>
+      <p class="ar-line">Quantum Error Correction in Practice, part 1: Errors and decoding</p>
+     </div>
+     <a class="ar-cue" href="#the-central-promise">Read<i aria-hidden="true"></i></a>
+    </div>
+  </header>
   <div class="course-rail">
   <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">Adding qubits to a code only helps if each qubit is good enough. Below a certain error rate, the threshold, a bigger code fails much less often; above it, a bigger code fails more often. This page lets you find that point with simulations that run in your browser.</p></aside>
   <nav class="course-toc" aria-label="On this page"><p class="tp-lbl">On this page</p><ol><li><a href="#the-central-promise">The central promise</a></li><li><a href="#reading-the-plot">Reading the plot</a></li><li class="toc-fig"><a href="#fig-main">Fig. 1</a></li><li><a href="#below-threshold">Below threshold</a></li><li class="toc-fig"><a href="#fig-lambda">Fig. 2</a></li><li><a href="#when-the-checks-themselves-are-noisy">When the checks themselves are noisy</a></li><li><a href="#what-these-models-leave-out">What these models leave out</a></li><li><a href="#why-the-number-depends-on-the-decoder">Why the number depends on the decoder</a></li><li class="toc-fig"><a href="#fig-ref">Fig. 3</a></li></ol></nav>

@@ -22,6 +22,7 @@
       "@qubit/reader": ["packages/reader/src/index.ts"],
       "@qubit/reader/scenes": ["packages/reader/src/scenes/index.ts"],
       "@qubit/reader/math": ["packages/reader/src/math.ts"],
+      "@qubit/reader/hero": ["packages/reader/src/hero.ts"],
       "@qubit/reader/*": ["packages/reader/*"],
       "@qubit/motifs": ["packages/motifs/src/index.ts"],
       "@qubit/motifs/*": ["packages/motifs/*"],

@@ -21,6 +21,3 @@
 @media (min-width: 70em) { .nt-about { padding-top: 1.4rem; } }
 .tp-full body:has(> main.nt-home) { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
 main.nt-home { flex: 1 0 auto; }
-
-/* a note's essay, figure and citation hold the measure, so its header rule does too */
-.nt-note .pc-head { max-width: var(--tp-measure); }

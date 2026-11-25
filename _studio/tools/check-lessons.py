@@ -83,12 +83,13 @@ for i, e in enumerate(order):
         continue
     main = main_of(read(page))
     step = f'<p class="tp-lbl step-of">Step {i + 1} of {len(order)}</p>'
-    h1 = re.search(r'<h1[\s>].*?</h1>\s*', main, re.S)
+    # the title, its step and the course row sit in the page's hero; the plain-words box comes right after it
+    h1 = re.search(r'<header class="ar-hero"[^>]*>(?:(?!</header>).)*?<h1[\s>].*?</h1>.*?</header>\s*', main, re.S)
     if step not in main:
         fail.append(f'{e["page"]}: no "{step}"')
     # on the essay pages the box opens the rail, which sits under the title below 70em
     if not h1 or not re.match(r'(<div class="course-rail">\s*)?<aside class="plain" aria-label="In plain words">', main[h1.end():]):
-        fail.append(f'{e["page"]}: no "In plain words" box right under the h1')
+        fail.append(f'{e["page"]}: no "In plain words" box right under the hero that holds the h1')
     top = re.search(r'<nav class="secnav" aria-label="Course">(.*?)</nav>', main, re.S)
     top = top.group(1) if top else ''
     end = re.search(r'<nav class="secnav endnav" aria-label="Course, end of lesson">(.*?)</nav>', main, re.S)
@@ -153,9 +154,14 @@ if not re.search(r'Wang, Harrington and Preskill \(2003\)[^.]*10\.3%[^.]*2\.9%',
 if not re.search(r'^\.secnav a \{[^}]*min-height: 40px', read(QEC / 'css' / 'site.css'), re.M):
     fail.append('css/site.css: .secnav a has no min-height: 40px tap area')
 hub = read(QEC / 'index.html')
-cards = re.findall(r'<a class="lcard" href="([^"]*)">(.*?)</a></li>', hub, re.S)
+# one pane per page, in order, each opening a sheet that holds the page's picture and links the page
+sheets = dict(re.findall(r'<dialog class="tp-sheet[^"]*" id="([\w-]+)"[^>]*>(.*?)</dialog>', hub, re.S))
+cards = []
+for sid in re.findall(r'<a class="tp-pane-open" href="#([\w-]+)"', hub):
+    go = re.search(r'<a class="lesson-go" href="([^"]*)"', sheets.get(sid, ''))
+    cards.append((go.group(1) if go else None, sheets.get(sid, '')))
 if [h for h, _ in cards] != pages:
-    fail.append(f'index.html: the cards link to {[h for h, _ in cards]}, not the course order {pages}')
+    fail.append(f'index.html: the panes open the pages {[h for h, _ in cards]}, not the course order {pages}')
 fail += [f'index.html: no picture on the card for {h}' for h, body in cards if not re.search(r'<figure[^>]*>\s*<svg', body)]
 fail += [f'index.html: no card picture for lesson {n}' for n in lessons if f'<!-- thumb {n} --><figure' not in hub]
 for need in ('href="glossary.html"', 'href="/why-error-correction.html"', 'What is this, and why does it matter?'):

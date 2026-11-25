@@ -251,7 +251,7 @@ HEAD = '''<!doctype html>
 </script>
 <link rel="stylesheet" href="/papers/paper.css">
 <link rel="stylesheet" href="/notes/notes.css">
-</head>
+{extra}</head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
 <header class="tp-bar">
@@ -297,8 +297,12 @@ FOOT = ''' </div>
 '''
 
 
-def head(title, desc, url, ogtype, ld, main='pc'):
-    return (HEAD.replace('{main}', main).replace('{title}', title).replace('{desc}', desc).replace('{url}', url)
+# a note opens on the live hero of the article pages (lib/article.css, lib/article.js); the index does not
+ARTICLE = '<link rel="stylesheet" href="/lib/article.css">\n<script src="/lib/article.js" defer></script>\n'
+
+
+def head(title, desc, url, ogtype, ld, main='pc', extra=''):
+    return (HEAD.replace('{main}', main).replace('{extra}', extra).replace('{title}', title).replace('{desc}', desc).replace('{url}', url)
             .replace('{ogtype}', ogtype).replace('{jsonld}', json.dumps(ld, indent=1)))
 
 
@@ -332,11 +336,17 @@ def note_page(n):
           'description': n['description'], 'datePublished': n['date'],
           'author': {'@id': f'{SITE}/#person'}, 'url': url}
     title = f"{esc(n['title'])} &middot; Tushar Pandey"
-    return (head(title, esc(n['description']), url, 'article', ld, 'pc nt-note')
-            + f'''  <header class="pc-head">
-    <p class="tp-lbl">Note</p>
-    <h1>{esc(n['title'])}</h1>
-    <p class="pc-status"><time datetime="{n['date']}">{day(n['date'])}</time></p>
+    return (head(title, esc(n['description']), url, 'article', ld, 'pc nt-note', ARTICLE)
+            + f'''  <header class="ar-hero" data-art="curves">
+    <canvas class="ar-viz" aria-hidden="true"></canvas>
+    <div class="ar-in tp-wrap">
+     <div class="ar-text">
+      <p class="tp-lbl">Note</p>
+      <h1>{esc(n['title'])}</h1>
+      <p class="pc-status ar-line"><time datetime="{n['date']}">{day(n['date'])}</time></p>
+     </div>
+     <a class="ar-cue" href="#plain">Read<i aria-hidden="true"></i></a>
+    </div>
   </header>
 
   <aside class="pc-rail" aria-label="Summary and contents">
@@ -371,25 +381,67 @@ def index_page(notes):
           'author': {'@id': f'{SITE}/#person'},
           'blogPost': [{'@type': 'BlogPosting', 'headline': n['title'], 'datePublished': n['date'],
                         'url': f"{SITE}/notes/{n['slug']}.html"} for n in notes]}
-    items = '\n'.join(f'''      <li>
-        <h2><a class="tp-link" href="/notes/{n['slug']}.html">{esc(n['title'])}</a></h2>
-        <p class="pc-status"><time datetime="{n['date']}">{day(n['date'])}</time></p>
+    # the index is a hero and one window-sized pane per note, each opening into a
+    # sheet (lib/site.css tp-hero, tp-pane, tp-sheet); it takes the site type, not the essay's
+    places = ['', ' tp-pane-mid', ' tp-pane-end', ' tp-pane-top']
+    panes, rail, sheets = [], [], []
+    for k, n in enumerate(notes):
+        s, t, when = n['slug'], esc(n['title']), f'<time datetime="{n["date"]}">{day(n["date"])}</time>'
+        panes.append(f'''    <article class="tp-pane{places[k % 4]}" id="pane-{s}" aria-labelledby="pane-{s}-t">
+      <div class="tp-pane-viz"><canvas data-fig="toric" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Note</p>
+          <h2 class="tp-pane-name" id="pane-{s}-t">{t}</h2>
+          <p class="tp-pane-line">{when}</p>
+          <a class="tp-pane-open" href="#{s}" aria-haspopup="dialog" aria-label="Open {t}">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>''')
+        rail.append(f'    <a href="#pane-{s}"><span>{t}</span></a>')
+        sheets.append(f'''  <dialog class="tp-sheet" id="{s}" aria-labelledby="{s}-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Note</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media"><canvas data-fig="toric" aria-hidden="true"></canvas></div>
+      <div class="tp-sheet-body">
+        <h2 id="{s}-t">{t}</h2>
+        <p class="tp-sheet-sub">{when}</p>
         <p>{esc(n['description'])}</p>
-      </li>''' for n in notes)
-    return (head('Notes &middot; Tushar Pandey', esc(desc), url, 'website', ld, 'pc nt-home')
-            + f'''  <header class="pc-head">
-    <h1>Notes</h1>
-    <p class="pc-status">Newest first.</p>
-  </header>
+        <ul class="tp-sheet-links">
+          <li><a href="/notes/{s}.html">Read the note<small>pandey-tushar.com</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>''')
+    page = head('Notes &middot; Tushar Pandey', esc(desc), url, 'website', ld, 'pc nt-home')
+    page = page.replace('<link rel="stylesheet" href="/papers/paper.css">\n<link rel="stylesheet" href="/notes/notes.css">\n',
+                        '<style>\n/* Notes: a live hero, then one pane per note, newest first, each opening\n'
+                        '   into a sheet. Everything is in /lib/site.css and /lib/site.js. */\n'
+                        '.nt-about p{margin:1rem 0 0;max-width:42em;font-size:var(--tp-t-small);line-height:1.6;color:var(--tp-dim)}\n'
+                        '</style>\n', 1).replace('<html lang="en" class="tp-full">', '<html lang="en" class="tp-full tp-geist">', 1)
+    page = page[:page.index(' <div class="tp-wrap pc-cols">')]
+    return (page + f'''  <section class="tp-hero" aria-label="Introduction">
+    <canvas data-fig="crossing" aria-hidden="true"></canvas>
+    <div class="tp-hero-in tp-wrap">
+      <div class="tp-hero-text">
+        <h1>Notes</h1>
+        <p class="tp-hero-lede">Newest first.</p>
+        <aside class="nt-about" aria-label="About the notes">
+          <p>{ABOUT} New notes also appear in the <a class="tp-link" href="/notes/feed.xml">RSS feed</a>.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
 
-  <aside class="nt-about pc-rail" aria-label="About the notes">
-    <p>{ABOUT} New notes also appear in the <a class="tp-link" href="/notes/feed.xml">RSS feed</a>.</p>
-  </aside>
+  <section id="notes" class="tp-panes" aria-label="Notes">
+''' + '\n\n'.join(panes) + '''
+  </section>
 
-  <ol class="nt-list">
-{items}
-  </ol>
-''' + FOOT)
+  <nav class="tp-rail" aria-label="Panes">
+''' + '\n'.join(rail) + '''
+  </nav>
+
+''' + '\n\n'.join(sheets) + '\n' + FOOT.replace(' </div>\n</main>', '</main>', 1))
 
 
 def feed(notes):

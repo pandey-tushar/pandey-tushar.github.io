@@ -5,6 +5,7 @@
    other's JSON. */
 import { unpolarized, frontUnpolarized } from '@qubit/content/unpolarized';
 import { esc, mountReader } from '@qubit/reader';
+import { heroElement, liveHero } from '@qubit/reader/hero';
 import './life.css';
 
 /* This book has no scene blocks and no science asides, so no scene mounter is
@@ -27,36 +28,23 @@ const main = document.getElementById('content');
 if (main) main.id = 'main';
 document.querySelector('#book > footer')?.setAttribute('role', 'none');
 
-/* The cover becomes a title page in the manner of the printed cover: a rule,
-   the title, the subtitle set as a title, the three-circle figure, the author,
-   and the ways in. A contents list follows it. */
+/* The reader's cover gives way to the opening window of the homepage's book
+   panes: the circles field, the cover lit in it, the title, the subtitle set
+   as a title, and the ways in. A contents list opens the book after it. */
 const title = (s: string): string => s.toLowerCase().split(' ')
   .map((w, i) => (i > 0 && ['a', 'of', 'and', 'the'].includes(w) ? w : w.charAt(0).toUpperCase() + w.slice(1)))
   .join(' ');
 
-const FIGURE =
-  '<svg class="figure" viewBox="40 30 320 300" width="270" height="253" aria-hidden="true">' +
-  '<defs><clipPath id="lens-b"><circle cx="137.93" cy="235.93" r="88.2"/></clipPath>' +
-  '<clipPath id="lens-c"><circle cx="262.07" cy="235.93" r="88.2"/></clipPath></defs>' +
-  '<g clip-path="url(#lens-b)"><g clip-path="url(#lens-c)">' +
-  '<circle class="fig-core" cx="200" cy="128.13" r="88.2"/></g></g>' +
-  '<circle class="fig-lens" cx="200" cy="128.13" r="88.2"/>' +
-  '<circle class="fig-lens" cx="137.93" cy="235.93" r="88.2"/>' +
-  '<circle class="fig-lens" cx="262.07" cy="235.93" r="88.2"/></svg>';
-
-const cover = document.getElementById('cover');
-if (cover) {
-  cover.querySelector('#cover3d')?.remove();
-  cover.querySelector('.om')?.replaceWith(Object.assign(document.createElement('span'), { className: 'bar' }));
-  const sub = cover.querySelector('.sub');
-  if (sub) {
-    sub.textContent = title(frontUnpolarized.cover.sub);
-    sub.insertAdjacentHTML('afterend', FIGURE + '<p class="author">Tushar Pandey</p>' +
-      '<p class="cover-links"><a href="/an-unpolarized-life.pdf">PDF</a> &middot; ' +
-      '<a href="#invocation">Begin reading</a> &middot; <a href="#contents">Contents</a></p>');
-  }
-  cover.querySelector('.scrollcue')?.remove();
-  cover.querySelector('.cover-copy')?.remove();
+const book = document.getElementById('book');
+document.getElementById('cover')?.remove();
+if (book) {
+  const hero = heroElement({
+    tag: 'Book', title: frontUnpolarized.cover.title, line: title(frontUnpolarized.cover.sub), cover: 'an-unpolarized-life',
+    start: { href: '#invocation', label: 'Begin reading' },
+    more: [{ href: '#contents', label: 'Contents' }, { href: '/an-unpolarized-life.pdf', label: 'PDF' }],
+  });
+  book.before(hero);
+  liveHero(hero, 'polar');
 
   const items = unpolarized.map((c) =>
     (c.movement ? '<li class="mv">' + esc(c.movement.title) + '</li>' : '') +
@@ -72,7 +60,7 @@ if (cover) {
     '<li class="mv">' + esc(frontUnpolarized.appendix.label) + '</li>' +
     '<li><a href="#references"><span class="n"></span><span class="t">' +
     esc(frontUnpolarized.appendix.title) + '</span></a></li></ol>';
-  cover.after(toc);
+  book.prepend(toc);
 
   /* a chapter entry opens its chapter through its own head, then lands on it */
   toc.addEventListener('click', (e) => {

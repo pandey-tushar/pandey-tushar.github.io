@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="tp-full">
+<html lang="en" class="tp-full tp-geist">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -25,12 +25,6 @@
 <script src="/lib/site.js" defer></script>
 <title>Page not found &middot; Tushar Pandey</title>
 <meta name="robots" content="noindex">
-<style>
-.lost{padding-block:clamp(3rem,2rem + 8vh,7rem) clamp(3rem,10vh,6rem);min-height:calc(100vh - var(--tp-barh) - 7rem)}
-.lost .tp-lbl{margin:0 0 clamp(16px,2.6vh,28px)}
-.lost p{max-width:52ch;margin:clamp(14px,2vh,22px) 0 0;color:var(--tp-text)}
-.lost ul{display:flex;flex-wrap:wrap;gap:12px;margin:clamp(22px,3vh,34px) 0 0;padding:0;list-style:none}
-</style>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -53,19 +47,24 @@
   <button class="tp-toggle" type="button" aria-label="Switch theme"><b aria-hidden="true">&#9680;</b><span>Auto</span></button>
 </header>
 
-<main id="main" class="tp-wrap">
-  <div class="lost">
-    <p class="tp-lbl">Error 404</p>
-    <h1>This page is not here.</h1>
-    <p>The address may be mistyped, or the page has moved. One of these should get you where you meant to go.</p>
-    <ul>
-      <li><a class="tp-btn" href="/">Home</a></li>
-      <li><a class="tp-btn" href="/research.html">Research</a></li>
-      <li><a class="tp-btn" href="/books.html">Books</a></li>
-      <li><a class="tp-btn" href="/qec-in-practice/">Lessons</a></li>
-      <li><a class="tp-btn" href="/cv.html">CV</a></li>
-    </ul>
-  </div>
+<main id="main">
+  <section class="tp-hero" aria-label="Page not found">
+    <canvas data-fig="knot" aria-hidden="true"></canvas>
+    <div class="tp-hero-in tp-wrap">
+      <div class="tp-hero-text">
+        <p class="tp-hero-tag">Error 404</p>
+        <h1>This page is not here.</h1>
+        <p class="tp-hero-lede">The address may be mistyped, or the page has moved. One of these should get you where you meant to go.</p>
+        <ul class="tp-hero-actions">
+          <li><a class="tp-btn pri" href="/">Home</a></li>
+          <li><a class="tp-btn" href="/research.html">Research</a></li>
+          <li><a class="tp-btn" href="/books.html">Books</a></li>
+          <li><a class="tp-btn" href="/qec-in-practice/">Lessons</a></li>
+          <li><a class="tp-btn" href="/cv.html">CV</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="tp-foot">

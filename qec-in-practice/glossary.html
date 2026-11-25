@@ -50,6 +50,8 @@
 </script>
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/explore.css">
+<link rel="stylesheet" href="/lib/article.css">
+<script src="/lib/article.js" defer></script>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -73,14 +75,23 @@
 </header>
 
 <main id="main" class="essay glossary course-essay">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a></nav>
-  <p class="tp-lbl step-of">Quantum error correction in practice</p>
-  <h1>Glossary</h1>
+  <header class="ar-hero" data-art="patch">
+    <canvas class="ar-viz" aria-hidden="true"></canvas>
+    <div class="ar-in tp-wrap">
+     <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a></nav>
+     <div class="ar-text">
+      <p class="tp-lbl step-of">Quantum error correction in practice</p>
+      <h1>Glossary</h1>
+      <p class="ar-line">The terms the course uses, in the order a reader meets them.</p>
+     </div>
+     <a class="ar-cue" href="#qubit">Read<i aria-hidden="true"></i></a>
+    </div>
+  </header>
   <div class="course-rail">
   <nav class="course-toc" aria-label="Terms"><p class="tp-lbl">Terms</p><ol><li><a href="#qubit">Qubit</a></li><li><a href="#bit-flip">Bit flip</a></li><li><a href="#phase-flip">Phase flip</a></li><li><a href="#check">Parity check, stabilizer</a></li><li><a href="#syndrome">Syndrome</a></li><li><a href="#fired">Fired</a></li><li><a href="#distance">Distance</a></li><li><a href="#logical-qubit">Logical qubit</a></li><li><a href="#patch">Patch</a></li><li><a href="#decoder">Decoder</a></li><li><a href="#union-find">Union-find decoder</a></li><li><a href="#matching">Matching decoder</a></li><li><a href="#threshold">Threshold</a></li><li><a href="#lambda">Lambda</a></li><li><a href="#bell-pair">Bell pair</a></li><li><a href="#t-state">T state</a></li><li><a href="#teleportation">Teleportation</a></li><li><a href="#lattice-surgery">Lattice surgery</a></li><li><a href="#pauli-frame">Pauli frame</a></li></ol></nav>
   </div>
   <div class="essay-flow">
-  <p class="lead">The terms the course uses, in the order a reader meets them. Each has one plain sentence and one technical sentence, with a link to the page that introduces it.</p>
+  <p class="lead">Each has one plain sentence and one technical sentence, with a link to the page that introduces it.</p>
   <dl class="terms">
     <dt id="qubit">Qubit</dt>
     <dd>

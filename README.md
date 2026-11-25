@@ -112,7 +112,6 @@ nothing in it is published. The editions are built from `_studio/apps/*`
 - `check-editions.py`: built editions carry their text; prints `editions ok`
 - `check-qd.py`: qubit-dialogues.html loads lib/, stays small and its animation driver honours
   reduced motion (behaviour in `tests/qd/reduced-motion.test.mjs`); prints `qd ok`
-- `check-perf.py`: homepage idle frame cost on a slowed phone; prints `perf ok`
 
 `python _studio/tools/run-tests.py` runs all of them and every `tests/**/*.test.mjs` with
 `node --test`, one line per suite.

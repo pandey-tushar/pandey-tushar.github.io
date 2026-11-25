@@ -50,6 +50,8 @@
 </script>
 <link rel="stylesheet" href="css/site.css">
 <script type="module" src="js/lesson.js"></script>
+<link rel="stylesheet" href="/lib/article.css">
+<script src="/lib/article.js" defer></script>
 </head>
 <body>
 <a class="tp-skip" href="#main">Skip to content</a>
@@ -73,9 +75,18 @@
 </header>
 
 <main id="main" class="page" data-lesson="4">
-  <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="lesson-3.html">&larr; Previous<span class="nav-long">: Lesson 3: Preparing a T state</span></a> <a id="next" href="lattice-surgery.html">Next<span class="nav-long">: Lattice surgery</span>&nbsp;&rarr;</a></nav>
-  <p class="tp-lbl step-of">Step 7 of 8</p>
-  <h1 id="lesson-title">Lesson 4: Teleporting the T state</h1>
+  <header class="ar-hero" data-art="patch">
+    <canvas class="ar-viz" aria-hidden="true"></canvas>
+    <div class="ar-in tp-wrap">
+     <nav class="secnav" aria-label="Course"><a href="/qec-in-practice/">&larr;&nbsp;<span class="nav-long">Back to the course</span><span class="nav-short">Course</span></a> <a href="glossary.html">Glossary</a> <a id="prev" href="lesson-3.html">&larr; Previous<span class="nav-long">: Lesson 3: Preparing a T state</span></a> <a id="next" href="lattice-surgery.html">Next<span class="nav-long">: Lattice surgery</span>&nbsp;&rarr;</a></nav>
+     <div class="ar-text">
+      <p class="tp-lbl step-of">Step 7 of 8</p>
+      <h1 id="lesson-title">Lesson 4: Teleporting the T state</h1>
+      <p class="ar-line">Quantum Error Correction in Practice, part 2: Computing with logical qubits</p>
+     </div>
+     <a class="ar-cue" href="#lesson-intro">Read<i aria-hidden="true"></i></a>
+    </div>
+  </header>
   <aside class="plain" aria-label="In plain words"><p class="tp-lbl">In plain words</p><p class="plain-text">Teleportation moves a qubit's state onto another qubit using a shared Bell pair and two measured bits, without sending the qubit itself. Here the T state from lesson 3 is teleported from one nine-qubit patch to another, and the two measured bits decide which fix is applied to the result.</p></aside>
   <p class="lead" id="lesson-intro">Patch A holds |T&#10217;&#8288;<sub>L</sub> (lesson 3), B and C become a logical Bell pair (lesson 2), then a logical CNOT A to B and the readouts of A in X and B in Z teleport the T state to C, up to a Pauli fix applied to the measured bits.</p>
 

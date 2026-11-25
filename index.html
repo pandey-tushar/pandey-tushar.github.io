@@ -123,45 +123,60 @@
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/lib/fonts/Geist.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/lib/site.css">
 <script src="/lib/site.js" defer></script>
 <style>
-/* The homepage, set like a paper: one interactive figure beside the name,
-   then numbered sections, each figure drawn in line with a caption.
-   Ground, type, header, footer and tokens: /lib/site.css. */
+/* The homepage: a live toric code behind the headline, then one window-sized
+   pane per entry, each a large live figure, its name and one line, opening
+   into a sheet, then contact as the last pane. Set in Geist, labels in Geist
+   Mono. Tokens, chrome, the panes (tp-pane), the rail (tp-rail), the sheet
+   (tp-sheet) and the canvas loop (TP.live): /lib/site.css and /lib/site.js. */
+
+:root{--tp-sans:"Geist",ui-sans-serif,system-ui,"Segoe UI",Roboto,Arial,sans-serif;--tp-mono:"Geist Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+.tp-full h1,.tp-full h2,.tp-full h3{font-family:var(--tp-sans);font-weight:500;letter-spacing:-.025em}
+.tp-mark span{font:500 1rem/1 var(--tp-sans);letter-spacing:-.01em}
+.tp-lbl{font:400 .75rem/1.3 var(--tp-mono);letter-spacing:.14em}
+.eyebrow{display:flex;align-items:center;gap:.9rem;font:400 .75rem/1.3 var(--tp-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--tp-dim)}
+.eyebrow::before{content:"";flex:none;width:22px;height:8px;background:var(--tp-acc);-webkit-mask:url(/img/mark-edge.svg) center/contain no-repeat;mask:url(/img/mark-edge.svg) center/contain no-repeat}
+.home .tp-btn{min-height:44px;padding:0 18px;border-radius:2px;background:transparent;font:500 .9375rem/1.2 var(--tp-sans);letter-spacing:.005em}
+.home .tp-btn.pri{border-color:var(--tp-acc);color:var(--tp-acc)}
+.home .tp-btn.pri::after{content:"\2192";content:"\2192" / "";margin-left:.6em;transition:transform .2s}
+.home .tp-btn.pri:hover,.home .tp-btn.pri:focus-visible{background:var(--tp-a08);color:var(--tp-acc)}
+.home .tp-btn.pri:hover::after{transform:translateX(3px)}
 
 body,h1,h2,h3,p,ol,ul,li,figure,dl,dd{margin:0;padding:0}
 ol,ul{list-style:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-.home > section{padding-block:clamp(3rem,2rem + 3.5vw,5rem);border-top:1px solid var(--tp-rule)}
-.home > .hero{border-top:0;padding-block:clamp(2.2rem,1rem + 4vw,4.4rem) clamp(2.8rem,1.6rem + 4vw,5rem)}
-.sec-head{display:flex;align-items:baseline;gap:.8rem;margin-bottom:clamp(1.6rem,1rem + 2vw,2.6rem)}
-.more{margin-top:clamp(1.6rem,1rem + 1.6vw,2.4rem);font-size:var(--tp-t-small)}
-
-/* ---------- hero ---------- */
-/* the text column and the figure panel share one centre line */
-.hero{display:grid;gap:clamp(2.2rem,4vw,4.5rem);align-items:center}
-.face{display:block;width:144px;height:144px;border-radius:50%;object-fit:cover;border:1px solid var(--tp-rule);margin-bottom:1.6rem}
-.lede{margin-top:1.1rem;max-width:32em;font-size:clamp(1.08rem,1rem + .4vw,1.22rem);line-height:1.55;color:var(--tp-text)}
-.doing p{max-width:30em;font:400 clamp(1.5rem,1.15rem + 1.3vw,2.2rem)/1.35 var(--tp-serif);color:var(--tp-ink);text-wrap:balance}
-.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1.7rem}
-.place{margin-top:1.1rem;font-size:var(--tp-t-small);color:var(--tp-dim)}
-/* a tablet: the lattice keeps a modest size and its controls and caption
-   stand beside it, so the figure fills the column */
-@media (min-width:40em) and (max-width:61.99em){
-  .hero .lat{display:grid;grid-template-columns:minmax(0,20rem) minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:1.4rem;align-items:start}
-  .hero .lat svg{grid-column:1;grid-row:1 / span 3}
-  .hero .lat > :not(svg){grid-column:2}
-  .hero .lat .lat-ctl{margin-top:0}
-  .hero .lat figcaption{margin-top:4px}
-}
+/* ---------- hero: the headline over a running toric code ---------- */
+.home > .hero{position:relative;isolation:isolate;display:flex;align-items:flex-end;
+  margin-inline:calc(50% - 50vw);padding:0;min-height:calc(88svh - var(--tp-barh));overflow:hidden}
+.hero canvas{position:absolute;inset:0;z-index:-1;display:block;width:100%;height:100%}
+.hero-in{width:100%;padding-block:clamp(6rem,16vh,11rem) clamp(2.6rem,7vh,5rem);display:grid;gap:2.4rem;align-items:end}
+.hero .eyebrow{margin-bottom:1.6rem;font:400 .75rem/1.3 var(--tp-mono);letter-spacing:.16em;color:var(--tp-dim);text-wrap:pretty}
+.hero .head{max-width:9.6em;font-family:var(--tp-sans);font-weight:500;font-size:clamp(2.9rem,1.4rem + 5.6vw,6.8rem);line-height:.95;letter-spacing:-.05em;color:var(--tp-head);text-wrap:balance}
+.lede{margin-top:1.8rem;max-width:31em;font-size:clamp(1.06rem,1rem + .35vw,1.22rem);line-height:1.6;color:var(--tp-text)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:2.4rem}
+.hero .tp-btn:not(.pri){background:color-mix(in srgb,var(--tp-void) 70%,transparent)}
+.legend{display:flex;flex-wrap:wrap;gap:.5rem 1.4rem;font:400 .75rem/1.3 var(--tp-mono);letter-spacing:.08em;color:var(--tp-dim)}
+.legend span{display:inline-flex;align-items:center;gap:.55rem}
+.legend i{display:inline-block;width:14px;height:2px;background:var(--tp-ink)}
+.legend .k{width:9px;height:9px;border-radius:50%;background:var(--tp-warm);box-shadow:0 0 0 3px color-mix(in srgb,var(--tp-warm) 22%,transparent)}
+.legend .c{height:3px;background:var(--tp-acc)}
 @media (min-width:62em){
-  .hero{grid-template-columns:minmax(0,1fr) minmax(0,29rem)}
+  .hero-in{grid-template-columns:minmax(0,1fr) auto}
+  .legend{flex-direction:column;align-items:flex-start;padding-bottom:.6rem}
 }
 
-/* the lattice: qubits on edges, checks on vertices */
-.lat svg{display:block;width:100%;height:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+/* ---------- the panes run edge to edge; the top and the foot are rests for the snap ---------- */
+.home > #work,.home > #contact{margin-inline:calc(50% - 50vw)}
+.home > .hero{scroll-snap-align:start}
+.tp-foot{scroll-snap-align:end}
+
+/* ---------- the toric code you can work by hand, in its sheet ---------- */
+.lat .tp-sheet-media{display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem)}
+.lat svg{display:block;width:100%;max-width:30rem;height:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .lat svg *{vector-effect:non-scaling-stroke}
 .lat .e{stroke:var(--tp-dim);stroke-width:1.25;stroke-opacity:.6}
 .lat .s{stroke:var(--tp-ink);stroke-width:2.5;opacity:0}
@@ -179,54 +194,31 @@ ol,ul{list-style:none}
 .lat .c.on .halo{opacity:1}
 .lat .ghost{opacity:.38}
 .lat .fx{stroke:var(--tp-acc);stroke-width:2.6;stroke-linecap:round;fill:none;vector-effect:none}
-.lat-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+.lat-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
 .lat-ctl .tp-btn:disabled{opacity:.5;cursor:default;color:var(--tp-dim);border-color:var(--tp-rule)}
-.lat-status{margin-top:10px;min-height:3.2em;font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-text)}
+.lat-status{min-height:3.2em;font-size:var(--tp-t-small);line-height:1.5;color:var(--tp-dim)}
 .lat-status b{font-weight:600;color:var(--tp-warm)}
 
-/* ---------- static figures ---------- */
-.fig svg{color:var(--tp-ink)}
-.fig svg *{vector-effect:non-scaling-stroke}
-.fig .ln{fill:none;stroke:currentColor;stroke-width:1.25;stroke-linejoin:round;stroke-linecap:round}
-.fig .bold{stroke-width:2}
-.fig .faint{fill:none;stroke:var(--tp-dim);stroke-width:1;stroke-opacity:.55}
-.fig .acc{stroke:var(--tp-acc)}
-.fig .warm{stroke:var(--tp-warm)}
-.fig .fw{fill:var(--tp-warm);stroke:none}
-.fig .fi{fill:currentColor;stroke:none}
-.fig .fp{fill:var(--tp-void2)}
-.fig .ft{fill:var(--tp-acc);fill-opacity:.18}
-.fig .fwt{fill:var(--tp-warm);fill-opacity:.16}
-.fig .fa{fill:var(--tp-acc)}
-.fig .pd{fill:none;stroke:var(--tp-dim);stroke-width:1}
-.fig text{font:12px var(--tp-sans);fill:var(--tp-dim)}
-.fig .agot text{font-size:13.5px}
+/* ---------- contact: the last pane, the only address on the page, quiet and short ---------- */
+.contact{height:auto;min-height:0;background:var(--tp-void2)}
+.contact .tp-pane-in{height:auto;gap:1.6rem 3rem;align-items:start;padding-block:clamp(3rem,10vh,6rem) clamp(3rem,9vh,5rem)}
+.contact-lbl{padding-bottom:.9rem;border-bottom:1px solid var(--tp-rule);font:400 .8125rem/1.3 var(--tp-mono);color:var(--tp-dim)}
+.who{display:flex;align-items:center;gap:1rem}
+.face{display:block;width:56px;height:56px;border-radius:50%;object-fit:cover;border:1px solid var(--tp-rule)}
+.where{font:400 .8125rem/1.3 var(--tp-mono);color:var(--tp-dim)}
+.reach{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:.7rem 1.25rem;align-items:baseline}
+.reach dd{display:flex;flex-wrap:wrap;gap:.1rem 1.1rem}
+.contact .tp-btn{justify-self:start}
+@media (min-width:56em){
+  .contact .tp-pane-in{grid-template-columns:12rem minmax(0,1fr) auto}
+  .contact-lbl{grid-column:1/-1}
+  .who{flex-direction:column;align-items:flex-start;gap:.9rem}
+}
 
-/* ---------- selected work ---------- */
-.works{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2.4rem,3vw,3.2rem) clamp(1.6rem,3.4vw,3.4rem)}
-@media (min-width:52em){ .works{grid-template-columns:repeat(2,minmax(0,1fr))} }
-.work .tp-plate{margin-bottom:1.2rem}
-.work .tp-plate svg{width:100%;height:150px}
-.work .tp-lbl{margin-bottom:.4rem}
-.work h3{font-size:clamp(1.25rem,1.1rem + .5vw,1.45rem)}
-.work p{margin-top:.55rem;max-width:var(--tp-measure)}
-.work b{font-weight:600;color:var(--tp-ink)}
-.links{display:flex;flex-wrap:wrap;gap:.2rem 1.3rem;margin-top:.8rem;font-size:var(--tp-t-small)}
-.links a{display:inline-block;padding-block:4px}
-
-/* ---------- about and contact ---------- */
-.about{display:grid;grid-template-columns:minmax(0,1fr);gap:2rem clamp(2rem,5vw,5rem)}
-@media (min-width:62em){ .about{grid-template-columns:minmax(0,1fr) minmax(0,24rem)} }
-.bio{max-width:var(--tp-measure);font-size:1.06rem;line-height:1.65}
-.reach{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:.55rem 1rem;align-content:start;align-items:baseline}
-.reach dt{padding-top:.1rem}
-.reach dd{display:flex;flex-wrap:wrap;gap:.1rem .9rem;white-space:nowrap}
-
-@media (max-width:40em){ .face{width:112px;height:112px} }
-@media (pointer:coarse){ .links a,.reach a{padding-block:12px} }
+@media (pointer:coarse){ .reach a{padding-block:12px} }
 @media (prefers-reduced-motion:reduce){ .lat *{transition:none!important} }
 @media print{
-  .lat-ctl,.actions{display:none}
+  .hero canvas,.legend,.actions{display:none}
   .home > section{break-inside:avoid}
 }
 </style>
@@ -256,136 +248,311 @@ ol,ul{list-style:none}
 <main id="main" class="home tp-wrap">
 
   <section class="hero" aria-label="Introduction">
-    <div>
-      <img class="face" src="/img/tushar-pandey-b-320.webp" srcset="/img/tushar-pandey-b-320.webp 320w, /img/tushar-pandey-b.webp 640w" sizes="(max-width:40em) 112px, 144px" width="640" height="640" decoding="async" alt="Tushar Pandey">
-      <h1>Tushar Pandey</h1>
-      <p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>
-      <div class="actions">
-        <a class="tp-btn" href="/cv.html">Curriculum Vitae</a>
-        <a class="tp-btn" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a>
-        <a class="tp-btn" href="mailto:wtatushar@gmail.com">Email</a>
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="hero-in tp-wrap">
+      <div>
+        <h1 class="eyebrow">Tushar Pandey / Research and engineering</h1>
+        <p class="head">Inference, error correction, and proofs.</p>
+        <p class="lede">Senior Software Engineer at DataRobot, working on LLM inference, and a researcher in quantum error correction with a Ph.D. in mathematics from Texas A&amp;M.</p>
+        <div class="actions">
+          <a class="tp-btn pri" href="#work">See the work</a>
+          <a class="tp-btn" href="#contact">Get in touch</a>
+        </div>
       </div>
-      <p class="place">Dallas, TX</p>
+      <p class="legend" aria-hidden="true"><span><i></i>Error</span><span><i class="k"></i>Check lit</span><span><i class="c"></i>Correction</span></p>
     </div>
+  </section>
 
-    <figure class="lat tp-plate">
-      <svg id="lattice" viewBox="0 0 360 360" role="group" aria-label="Toric code lattice with 50 qubits" aria-describedby="lat-help"></svg>
-      <p class="sr" id="lat-help">Each qubit is a button: Tab reaches the lattice, the arrow keys move between qubits, and Enter or Space flips one. The status line below says which checks are lit.</p>
-      <div class="lat-ctl">
-        <button class="tp-btn" type="button" id="fix">Correct</button>
-        <button class="tp-btn" type="button" id="reset">Reset</button>
+  <section id="work" class="tp-panes" aria-label="Work">
+
+    <article class="tp-pane" id="pane-tokengrid" aria-labelledby="pane-tokengrid-t">
+      <div class="tp-pane-viz"><canvas data-live="tokens" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Inference</p>
+          <h2 class="tp-pane-name" id="pane-tokengrid-t">TokenGrid</h2>
+          <p class="tp-pane-line">A token-aware capacity scheduler for multi-tenant model serving</p>
+          <a class="tp-pane-open" href="#tokengrid" aria-haspopup="dialog" aria-label="Open TokenGrid">Open<i aria-hidden="true"></i></a>
+        </div>
       </div>
-      <p class="lat-status" id="lat-status" aria-live="polite">Two qubits flipped; <b>four checks</b> lit.</p>
-      <figcaption>A distance-5 toric code: click a qubit to cause an error, the checks that light up show where the code notices it, and Correct makes the decoder&rsquo;s best guess at what went wrong.</figcaption>
-    </figure>
+    </article>
+
+    <article class="tp-pane tp-pane-mid" id="pane-doubled-semion" aria-labelledby="pane-doubled-semion-t">
+      <div class="tp-pane-viz"><canvas data-live="semion" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Error correction</p>
+          <h2 class="tp-pane-name" id="pane-doubled-semion-t">Error correction for the doubled semion model</h2>
+          <p class="tp-pane-line">Sole author, APL Quantum, 2025</p>
+          <a class="tp-pane-open" href="#doubled-semion" aria-haspopup="dialog" aria-label="Open Error correction for the doubled semion model">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tp-pane tp-pane-end" id="pane-agot" aria-labelledby="pane-agot-t">
+      <div class="tp-pane-viz"><canvas data-live="graph" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Reasoning</p>
+          <h2 class="tp-pane-name" id="pane-agot-t">Adaptive Graph of Thoughts</h2>
+          <p class="tp-pane-line">Grows chains, trees and graphs as it runs</p>
+          <a class="tp-pane-open" href="#agot" aria-haspopup="dialog" aria-label="Open Adaptive Graph of Thoughts">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tp-pane tp-pane-mid" id="pane-volume-conjecture" aria-labelledby="pane-volume-conjecture-t">
+      <div class="tp-pane-viz"><canvas data-live="knot" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Topology</p>
+          <h2 class="tp-pane-name" id="pane-volume-conjecture-t">The volume conjecture</h2>
+          <p class="tp-pane-line">Ph.D. work under Tian Yang in quantum topology</p>
+          <a class="tp-pane-open" href="#volume-conjecture" aria-haspopup="dialog" aria-label="Open The volume conjecture">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tp-pane" id="pane-qubit-dialogues" aria-labelledby="pane-qubit-dialogues-t">
+      <div class="tp-pane-viz"><canvas data-live="bloch" aria-hidden="true"></canvas><img class="tp-pane-cover" src="/img/covers/qubit-dialogues.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="(min-width:56em) 24rem, 50vw" width="600" height="900" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Book</p>
+          <h2 class="tp-pane-name" id="pane-qubit-dialogues-t">The Qubit Dialogues</h2>
+          <p class="tp-pane-line">A Book of Possibilities</p>
+          <a class="tp-pane-open" href="#qubit-dialogues" aria-haspopup="dialog" aria-label="Open The Qubit Dialogues">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tp-pane tp-pane-end" id="pane-an-unpolarized-life" aria-labelledby="pane-an-unpolarized-life-t">
+      <div class="tp-pane-viz"><canvas data-live="polar" aria-hidden="true"></canvas><img class="tp-pane-cover" src="/img/covers/an-unpolarized-life.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="(min-width:56em) 24rem, 50vw" width="600" height="900" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Book</p>
+          <h2 class="tp-pane-name" id="pane-an-unpolarized-life-t">An Unpolarized Life</h2>
+          <p class="tp-pane-line">A Book of Questions</p>
+          <a class="tp-pane-open" href="#an-unpolarized-life" aria-haspopup="dialog" aria-label="Open An Unpolarized Life">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tp-pane tp-pane-mid" id="pane-qubit-dialogues-illustrated" aria-labelledby="pane-qubit-dialogues-illustrated-t">
+      <div class="tp-pane-viz"><canvas data-live="plate" aria-hidden="true"></canvas><img class="tp-pane-cover" src="/img/covers/qubit-dialogues-illustrated.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="(min-width:56em) 24rem, 50vw" width="600" height="900" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Book</p>
+          <h2 class="tp-pane-name" id="pane-qubit-dialogues-illustrated-t">The Qubit Dialogues, Illustrated</h2>
+          <p class="tp-pane-line">Illustrated Edition</p>
+          <a class="tp-pane-open" href="#qubit-dialogues-illustrated" aria-haspopup="dialog" aria-label="Open The Qubit Dialogues, Illustrated">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tp-pane tp-pane-top" id="pane-qec-in-practice" aria-labelledby="pane-qec-in-practice-t">
+      <div class="tp-pane-viz"><canvas data-live="rep" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Course</p>
+          <h2 class="tp-pane-name" id="pane-qec-in-practice-t">Quantum Error Correction in Practice</h2>
+          <p class="tp-pane-line">A course in eight interactive lessons</p>
+          <a class="tp-pane-open" href="#qec-in-practice" aria-haspopup="dialog" aria-label="Open Quantum Error Correction in Practice">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="tp-pane tp-pane-end" id="pane-toric-code" aria-labelledby="pane-toric-code-t">
+      <div class="tp-pane-viz"><canvas data-live="toric" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">Interactive</p>
+          <h2 class="tp-pane-name" id="pane-toric-code-t">Toric code playground</h2>
+          <p class="tp-pane-line">Click a qubit to cause an error</p>
+          <a class="tp-pane-open" href="#toric-code" aria-haspopup="dialog" aria-label="Open Toric code playground">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>
+
   </section>
 
-  <section class="doing" aria-label="What I do">
-    <p>Building LLM inference at DataRobot. Correcting quantum errors. Proving theorems about knots. Writing books and a course.</p>
-  </section>
+  <nav class="tp-rail" aria-label="Panes">
+    <a href="#pane-tokengrid"><span>TokenGrid</span></a>
+    <a href="#pane-doubled-semion"><span>Doubled semion</span></a>
+    <a href="#pane-agot"><span>Adaptive Graph of Thoughts</span></a>
+    <a href="#pane-volume-conjecture"><span>The volume conjecture</span></a>
+    <a href="#pane-qubit-dialogues"><span>The Qubit Dialogues</span></a>
+    <a href="#pane-an-unpolarized-life"><span>An Unpolarized Life</span></a>
+    <a href="#pane-qubit-dialogues-illustrated"><span>The Qubit Dialogues, Illustrated</span></a>
+    <a href="#pane-qec-in-practice"><span>Quantum Error Correction in Practice</span></a>
+    <a href="#pane-toric-code"><span>Toric code playground</span></a>
+    <a href="#contact"><span>Contact</span></a>
+  </nav>
 
-  <section id="work" aria-labelledby="h-work">
-    <div class="sec-head"><h2 id="h-work">Selected work</h2></div>
-    <div class="works">
-
-
-      <article class="work">
-        <figure class="fig tp-plate">
-          <svg viewBox="0 0 260 140" aria-hidden="true" focusable="false">
-            <defs><pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V4" stroke="currentColor" stroke-width="1" stroke-opacity=".7"/></pattern></defs>
-            <g class="ln">
-              <rect class="fp" x="24" y="98" width="18" height="20"/><rect fill="url(#hatch)" x="24" y="68" width="18" height="30"/><rect class="ft acc" x="24" y="46" width="18" height="22"/>
-              <rect class="fp" x="52" y="84" width="18" height="34"/><rect fill="url(#hatch)" x="52" y="66" width="18" height="18"/><rect class="ft acc" x="52" y="36" width="18" height="30"/>
-              <rect class="fp" x="80" y="92" width="18" height="26"/><rect fill="url(#hatch)" x="80" y="52" width="18" height="40"/><rect class="ft acc" x="80" y="38" width="18" height="14"/>
-              <rect class="fp" x="108" y="102" width="18" height="16"/><rect fill="url(#hatch)" x="108" y="78" width="18" height="24"/><rect class="ft acc" x="108" y="38" width="18" height="40"/>
-              <rect class="fp" x="136" y="78" width="18" height="40"/><rect fill="url(#hatch)" x="136" y="58" width="18" height="20"/><rect class="ft acc" x="136" y="38" width="18" height="20"/>
-              <rect class="fp" x="164" y="96" width="18" height="22"/><rect fill="url(#hatch)" x="164" y="60" width="18" height="36"/><rect class="ft acc" x="164" y="34" width="18" height="26"/>
-              <rect class="fp" x="192" y="88" width="18" height="30"/><rect fill="url(#hatch)" x="192" y="74" width="18" height="14"/><rect class="ft acc" x="192" y="38" width="18" height="36"/>
-              <rect class="fp" x="220" y="100" width="18" height="18"/><rect fill="url(#hatch)" x="220" y="70" width="18" height="30"/><rect class="ft acc" x="220" y="40" width="18" height="30"/>
-              <path d="M14 118H250"/>
-            </g>
-            <path class="ln acc" d="M14 30H250" stroke-dasharray="5 4"/>
-            <text x="250" y="24" text-anchor="end">token capacity</text>
-            <text x="250" y="134" text-anchor="end">time</text>
-          </svg>
-          <figcaption>Three tenants (outline, hatched, tinted) share one model. Each request is counted by its tokens against one shared capacity.</figcaption>
-        </figure>
-        <p class="tp-lbl">LLM inference</p>
-        <h3>TokenGrid</h3>
+  <dialog class="tp-sheet" id="tokengrid" aria-labelledby="tokengrid-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Inference</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media"><canvas data-live="tokens" aria-hidden="true"></canvas></div>
+      <div class="tp-sheet-body">
+        <h2 id="tokengrid-t">TokenGrid</h2>
         <p>LLM inference at DataRobot: co-author of <b>TokenGrid</b>, a token-aware capacity scheduler for multi-tenant model serving.</p>
-        <p class="links"><a class="tp-link" href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener">TokenGrid, on the DataRobot blog</a></p>
-      </article>
-
-      <article class="work">
-        <figure class="fig tp-plate">
-          <svg viewBox="0 0 233 97" aria-hidden="true" focusable="false">
-            <path class="faint" d="M6 14.5V31.5M6 14.5L20.7 6M6 31.5L20.7 40M6 65.5V82.5M6 65.5L20.7 57M6 82.5L20.7 91M20.7 6L35.4 14.5M20.7 40V57M20.7 40L35.4 31.5M20.7 57L35.4 65.5M20.7 91L35.4 82.5M35.4 14.5V31.5M35.4 14.5L50.2 6M35.4 31.5L50.2 40M35.4 65.5V82.5M35.4 65.5L50.2 57M35.4 82.5L50.2 91M50.2 6L64.9 14.5M50.2 40V57M50.2 40L64.9 31.5M50.2 57L64.9 65.5M50.2 91L64.9 82.5M64.9 14.5V31.5M64.9 14.5L79.6 6M64.9 31.5L79.6 40M64.9 65.5V82.5M64.9 65.5L79.6 57M64.9 82.5L79.6 91M79.6 6L94.3 14.5M79.6 40V57M79.6 40L94.3 31.5M79.6 57L94.3 65.5M79.6 91L94.3 82.5M94.3 14.5V31.5M94.3 14.5L109.1 6M94.3 31.5L109.1 40M94.3 65.5V82.5M94.3 65.5L109.1 57M94.3 82.5L109.1 91M109.1 6L123.8 14.5M109.1 40V57M109.1 40L123.8 31.5M109.1 57L123.8 65.5M109.1 91L123.8 82.5M123.8 14.5V31.5M123.8 14.5L138.5 6M123.8 31.5L138.5 40M123.8 65.5V82.5M123.8 65.5L138.5 57M123.8 82.5L138.5 91M138.5 6L153.2 14.5M138.5 40V57M138.5 40L153.2 31.5M138.5 57L153.2 65.5M138.5 91L153.2 82.5M153.2 14.5V31.5M153.2 14.5L167.9 6M153.2 31.5L167.9 40M153.2 65.5V82.5M153.2 65.5L167.9 57M153.2 82.5L167.9 91M167.9 6L182.7 14.5M167.9 40V57M167.9 40L182.7 31.5M167.9 57L182.7 65.5M167.9 91L182.7 82.5M182.7 14.5V31.5M182.7 14.5L197.4 6M182.7 31.5L197.4 40M182.7 65.5V82.5M182.7 65.5L197.4 57M182.7 82.5L197.4 91M197.4 6L212.1 14.5M197.4 40V57M197.4 40L212.1 31.5M197.4 57L212.1 65.5M197.4 91L212.1 82.5M212.1 14.5V31.5M212.1 31.5L226.8 40M212.1 65.5V82.5M212.1 65.5L226.8 57M226.8 40V57"/>
-            <path class="ln bold" d="M50.2 40L64.9 31.5L79.6 40L94.3 31.5L109.1 40V57L94.3 65.5L79.6 57L64.9 65.5L50.2 57Z"/>
-            <path class="ln bold" d="M182.7 14.5V31.5L167.9 40L153.2 31.5V14.5L167.9 6Z"/>
-            <path class="ln bold warm" d="M123.8 82.5V65.5L138.5 57L153.2 65.5L167.9 57"/>
-            <circle class="fw" cx="123.8" cy="82.5" r="3.6"/><circle class="fw" cx="167.9" cy="57" r="3.6"/>
-          </svg>
-          <figcaption>The doubled semion ground state is a signed sum over closed loops on the honeycomb lattice, like the two here. An open string (warm) violates the vertices at its ends; those are what error correction has to find.</figcaption>
-        </figure>
-        <p class="tp-lbl">Quantum error correction</p>
-        <h3>Error correction for the doubled semion model</h3>
-        <p>I began this work at Oak Ridge and published it as sole author in APL Quantum in 2025. <b>Variational eigensolvers</b> on real processors, first author, Physica Scripta 2026.</p>
-        <p class="links"><a class="tp-link" href="https://doi.org/10.1063/5.0255351" target="_blank" rel="noopener">APL Quantum, 2025</a><a class="tp-link" href="https://doi.org/10.1088/1402-4896/ae9e06" target="_blank" rel="noopener">Physica Scripta, 2026</a><a class="tp-link" href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">Talks and older work</a></p>
-      </article>
-
-      <article class="work">
-        <figure class="fig tp-plate">
-          <svg class="agot" viewBox="0 0 260 168" aria-hidden="true" focusable="false">
-            <rect class="faint" x="94" y="74" width="72" height="50" rx="6" stroke-dasharray="4 3"/>
-            <path class="ln" d="M130 14L56 54M130 14V54M130 14L204 54M130 54L114 90M130 54L146 90M114 90L130 110M146 90L130 110M130 110V148M56 54Q56 148 130 148M204 54Q204 148 130 148"/>
-            <circle class="ln fp" cx="130" cy="14" r="5"/>
-            <circle class="ln fp" cx="56" cy="54" r="5"/>
-            <circle class="ln fp" cx="204" cy="54" r="5"/>
-            <circle class="ln fp" cx="114" cy="90" r="4"/>
-            <circle class="ln fp" cx="146" cy="90" r="4"/>
-            <circle class="ln fp" cx="130" cy="110" r="4"/>
-            <circle class="ln bold warm fp" cx="130" cy="54" r="6"/>
-            <circle class="fi" cx="130" cy="148" r="5"/>
-            <text x="116" y="18" text-anchor="end">query</text>
-            <text x="130" y="166" text-anchor="middle">answer</text>
-          </svg>
-          <figcaption>AGoT breaks a query into a graph of subproblems and expands only the hard one (warm) into a nested graph of its own.</figcaption>
-        </figure>
-        <p class="tp-lbl">LLM reasoning</p>
-        <h3>Adaptive Graph of Thoughts</h3>
-        <p><b>AGoT</b> grows chains, trees and graphs as it runs. Shipped at Agnostiq as a production agentic-AI blueprint (2024&ndash;25); code open source.</p>
-        <p class="links"><a class="tp-link" href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">The code, open source</a><a class="tp-link" href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener">The paper, <span class="tp-id">arXiv:2502.05078</span></a><a class="tp-link" href="/papers/adaptive-graph-of-thoughts.html">Companion page</a></p>
-      </article>
-
-      <article class="work">
-        <figure class="fig tp-plate">
-          <svg viewBox="0 0 160 160" aria-hidden="true" focusable="false">
-            <path class="ln bold" d="M100.76 44.94L100.61 48.88L99.82 52.91L98.51 56.95L96.82 60.89L94.87 64.58L92.74 67.9L90.2 70.81L87.35 73.48L84.37 76.06L81.42 78.72L78.49 81.61L74.98 84.61L71.35 87.67L68.28 90.75L66.42 93.84L66.42 96.89L68.28 99.93L71.35 102.98L74.98 106.02L74.98 106.02M84.15 115.25L86.92 118.38L89.69 121.45L92.46 124.41L95.2 127.22L97.82 130.07L100.42 132.83L103.12 135.34L106.08 137.44L109.41 139.05L113.18 140.52L117.2 141.65L121.28 142.15L125.21 141.71L128.89 140.08L132.64 137.38L136.32 133.78L139.69 129.4L142.53 124.38L144.65 118.72L146.23 111.96L147.31 104.45L147.89 96.69L147.97 89.18L147.55 82.24L146.6 75.25L145.15 68.37L143.22 61.94L140.86 56.28L138.13 51.67L135.18 47.97L131.82 45.01L127.83 42.67L122.97 40.8L116.97 39.34L109.63 38.58L101.37 38.35L92.7 38.43L84.11 38.58L75.89 38.58L67.3 38.43L67.3 38.43M53.39 38.44L45.65 38.98L39.12 40.19L33.88 41.92L29.59 44.07L26.02 46.78L22.95 50.19L20.13 54.42L17.62 59.71L15.52 65.89L13.89 72.64L12.74 79.63L12.12 86.53L12.02 93.82L12.42 101.54L13.31 109.2L14.7 116.31L16.59 122.36L19.17 127.58L22.37 132.22L25.96 136.13L29.71 139.18L33.39 141.24L37.22 142.11L41.27 141.93L45.33 141L49.22 139.62L52.73 138.08L55.8 136.18L58.59 133.81L61.21 131.12L63.81 128.29L66.5 125.47L69.27 122.58L72.04 119.54L74.81 116.42L77.58 113.29L80.35 110.21L83.66 107.17L87.32 104.12L90.68 101.08L93.07 98.03L93.83 94.99L92.6 91.91L89.9 88.82L86.41 85.75L85.02 84.61M75.25 75.74L72.28 73.15L69.46 70.47L66.97 67.51L64.88 64.14L62.95 60.41L61.3 56.45L60.05 52.4L59.34 48.39L59.27 44.43L59.77 40.27L60.77 36.11L62.21 32.17L64.01 28.68L66.21 25.73L69 22.98L72.19 20.61L75.55 18.85L78.83 17.93L81.97 18.07L85.29 19.22L88.63 21.15L91.74 23.64L94.4 26.45L96.47 29.5L97.79 32.17"/>
-          </svg>
-          <figcaption>The figure-eight knot. A generalized Bonahon&ndash;Wong&ndash;Yang volume conjecture is proved for its complement.</figcaption>
-        </figure>
-        <p class="tp-lbl">Quantum topology</p>
-        <h3>The volume conjecture</h3>
-        <p>Ph.D. work under Tian Yang in quantum topology. A generalized <b>Bonahon&ndash;Wong&ndash;Yang volume conjecture</b>, proved for the figure-eight knot complement with Ka Ho Wong (Algebraic &amp; Geometric Topology, to appear); and, sole author, the conjecture verified for four-puncture sphere bundles under technical conditions.</p>
-        <p class="links"><a class="tp-link" href="https://arxiv.org/abs/2402.04483" target="_blank" rel="noopener">Figure-eight knot, <span class="tp-id">arXiv:2402.04483</span></a><a class="tp-link" href="https://arxiv.org/abs/2311.13151" target="_blank" rel="noopener">Four-puncture sphere, <span class="tp-id">arXiv:2311.13151</span></a></p>
-      </article>
-
+        <ul class="tp-sheet-links">
+          <li><a href="https://www.datarobot.com/blog/llm-inference-rate-limiting-tokengrid/" target="_blank" rel="noopener">TokenGrid, on the DataRobot blog<small>datarobot.com</small></a></li>
+        </ul>
+      </div>
     </div>
-    <p class="more"><a class="tp-link" href="/research.html">Papers and preprints, with summaries</a></p>
-  </section>
+  </dialog>
 
-  <section id="contact" aria-labelledby="h-contact">
-    <div class="sec-head"><h2 id="h-contact">About and contact</h2></div>
-    <div class="about">
-      <p class="bio">I am a math Ph.D. from Texas A&amp;M University, where I worked under Tian Yang in quantum topology and the volume conjecture, and I did my undergraduate degree at IIT Kanpur in mathematics and scientific computing. I am currently a Senior Software Engineer at DataRobot; before that I worked at Agnostiq as a research software engineer on gen-AI algorithms. I have worked on quantum algorithms, error correction, topological quantum computing, ZX-calculus, machine learning, NLP and gen-AI.</p>
+  <dialog class="tp-sheet" id="doubled-semion" aria-labelledby="doubled-semion-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Error correction</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media"><canvas data-live="semion" aria-hidden="true"></canvas></div>
+      <div class="tp-sheet-body">
+        <h2 id="doubled-semion-t">Error correction for the doubled semion model</h2>
+        <p>I began this work at Oak Ridge and published it as sole author in APL Quantum in 2025. <b>Variational eigensolvers</b> on real processors, first author, Physica Scripta 2026.</p>
+        <ul class="tp-sheet-links">
+          <li><a href="https://doi.org/10.1063/5.0255351" target="_blank" rel="noopener">APL Quantum, 2025<small>doi.org</small></a></li>
+          <li><a href="https://doi.org/10.1088/1402-4896/ae9e06" target="_blank" rel="noopener">Physica Scripta, 2026<small>doi.org</small></a></li>
+          <li><a href="https://sites.google.com/view/tusharpandey" target="_blank" rel="noopener">Talks and older work<small>sites.google.com</small></a></li>
+          <li><a href="/research.html">Papers and preprints, with summaries<small>pandey-tushar.com</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="tp-sheet" id="agot" aria-labelledby="agot-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Reasoning</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media"><canvas data-live="graph" aria-hidden="true"></canvas></div>
+      <div class="tp-sheet-body">
+        <h2 id="agot-t">Adaptive Graph of Thoughts</h2>
+        <p><b>AGoT</b> grows chains, trees and graphs as it runs. Shipped at Agnostiq as a production agentic-AI blueprint (2024&ndash;25); code open source.</p>
+        <ul class="tp-sheet-links">
+          <li><a href="https://github.com/AgnostiqHQ/multi-agent-llm" target="_blank" rel="noopener">The code, open source<small>github.com</small></a></li>
+          <li><a href="https://arxiv.org/abs/2502.05078" target="_blank" rel="noopener"><span>The paper, <span class="tp-id">arXiv:2502.05078</span></span><small>arxiv.org</small></a></li>
+          <li><a href="/papers/adaptive-graph-of-thoughts.html">Companion page<small>pandey-tushar.com</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="tp-sheet" id="volume-conjecture" aria-labelledby="volume-conjecture-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Topology</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media"><canvas data-live="knot" aria-hidden="true"></canvas></div>
+      <div class="tp-sheet-body">
+        <h2 id="volume-conjecture-t">The volume conjecture</h2>
+        <p>Ph.D. work under Tian Yang in quantum topology. A generalized <b>Bonahon&ndash;Wong&ndash;Yang volume conjecture</b>, proved for the figure-eight knot complement with Ka Ho Wong (Algebraic &amp; Geometric Topology, to appear); and, sole author, the conjecture verified for four-puncture sphere bundles under technical conditions.</p>
+        <ul class="tp-sheet-links">
+          <li><a href="https://arxiv.org/abs/2402.04483" target="_blank" rel="noopener"><span>Figure-eight knot, <span class="tp-id">arXiv:2402.04483</span></span><small>arxiv.org</small></a></li>
+          <li><a href="https://arxiv.org/abs/2311.13151" target="_blank" rel="noopener"><span>Four-puncture sphere, <span class="tp-id">arXiv:2311.13151</span></span><small>arxiv.org</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="tp-sheet" id="qubit-dialogues" aria-labelledby="qubit-dialogues-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Book</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media tp-sheet-cover"><img src="/img/covers/qubit-dialogues-300.webp" srcset="/img/covers/qubit-dialogues-300.webp 300w, /img/covers/qubit-dialogues.webp 600w" sizes="280px" width="300" height="450" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-sheet-body">
+        <h2 id="qubit-dialogues-t">The Qubit Dialogues</h2>
+        <p class="tp-sheet-sub">A Book of Possibilities</p>
+        <p>A Seeker stands in front of the quantum machine with every reasonable doubt a careful person carries, and an Oracle from a few decades ahead keeps finding the assumption folded inside the doubt.</p>
+        <ul class="tp-sheet-links">
+          <li><a href="/qubit-dialogues.html">Read online<small>about two hours</small></a></li>
+          <li><a href="/qubit-dialogues.pdf">PDF<small>99pp</small></a></li>
+          <li><a href="/books.html">All books, with reading times</a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="tp-sheet" id="an-unpolarized-life" aria-labelledby="an-unpolarized-life-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Book</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media tp-sheet-cover"><img src="/img/covers/an-unpolarized-life-300.webp" srcset="/img/covers/an-unpolarized-life-300.webp 300w, /img/covers/an-unpolarized-life.webp 600w" sizes="280px" width="300" height="450" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-sheet-body">
+        <h2 id="an-unpolarized-life-t">An Unpolarized Life</h2>
+        <p class="tp-sheet-sub">A Book of Questions</p>
+        <p>The same two voices, no physics at all. A Seeker drives to a house at the end of a road carrying a question they have to answer by Friday, and by morning the question has not moved an inch and they can stand next to it.</p>
+        <ul class="tp-sheet-links">
+          <li><a href="/life/">Read online<small>about 35 minutes</small></a></li>
+          <li><a href="/an-unpolarized-life.pdf">PDF<small>42pp</small></a></li>
+          <li><a href="/books.html">All books, with reading times</a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="tp-sheet" id="qubit-dialogues-illustrated" aria-labelledby="qubit-dialogues-illustrated-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Book</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media tp-sheet-cover"><img src="/img/covers/qubit-dialogues-illustrated-300.webp" srcset="/img/covers/qubit-dialogues-illustrated-300.webp 300w, /img/covers/qubit-dialogues-illustrated.webp 600w" sizes="280px" width="300" height="450" loading="lazy" decoding="async" alt=""></div>
+      <div class="tp-sheet-body">
+        <h2 id="qubit-dialogues-illustrated-t">The Qubit Dialogues, Illustrated</h2>
+        <p class="tp-sheet-sub">Illustrated Edition</p>
+        <p>The same cantos cut as engraved plates, each one drawn from a shared vocabulary of motifs and moved by nothing but your own scroll.</p>
+        <ul class="tp-sheet-links">
+          <li><a href="/illustrated/">Read online<small>about two hours</small></a></li>
+          <li><a href="/illustrated.pdf">PDF<small>96pp</small></a></li>
+          <li><a href="/books.html">All books, with reading times</a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="tp-sheet" id="qec-in-practice" aria-labelledby="qec-in-practice-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Course</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media"><canvas data-live="rep" aria-hidden="true"></canvas></div>
+      <div class="tp-sheet-body">
+        <h2 id="qec-in-practice-t">Quantum Error Correction in Practice</h2>
+        <p class="tp-sheet-sub">A course in eight interactive lessons</p>
+        <p>A course in eight interactive lessons, from the repetition code to lattice surgery, with a stabilizer simulator and a union-find decoder running in the browser.</p>
+        <ul class="tp-sheet-links">
+          <li><a href="/qec-in-practice/">Open the course<small>eight lessons</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="tp-sheet" id="toric-code" aria-labelledby="toric-code-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">Interactive</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap lat">
+      <div class="tp-sheet-media">
+        <svg id="lattice" viewBox="0 0 360 360" role="group" aria-label="Toric code lattice with 50 qubits" aria-describedby="lat-help"></svg>
+      </div>
+      <div class="tp-sheet-body">
+        <h2 id="toric-code-t">Toric code playground</h2>
+        <p class="sr" id="lat-help">Each qubit is a button: Tab reaches the lattice, the arrow keys move between qubits, and Enter or Space flips one. The status line below says which checks are lit.</p>
+        <p>A distance-5 toric code: click a qubit to cause an error, the checks that light up show where the code notices it, and Correct makes the decoder&rsquo;s best guess at what went wrong.</p>
+        <p class="lat-ctl">
+          <button class="tp-btn" type="button" id="fix">Correct</button>
+          <button class="tp-btn" type="button" id="reset">Reset</button>
+        </p>
+        <p class="lat-status" id="lat-status" aria-live="polite">Two qubits flipped; <b>four checks</b> lit.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <section id="contact" class="tp-pane contact" aria-label="Contact">
+    <div class="tp-pane-in tp-wrap">
+      <p class="contact-lbl">Contact</p>
+      <div class="who">
+        <img class="face" src="/img/tushar-pandey-b-320.webp" srcset="/img/tushar-pandey-b-320.webp 320w, /img/tushar-pandey-b.webp 640w" sizes="56px" width="640" height="640" loading="lazy" decoding="async" alt="Tushar Pandey">
+        <p class="where">Dallas, TX</p>
+      </div>
       <dl class="reach">
         <dt class="tp-lbl">Email</dt>
         <dd><a class="tp-link" href="mailto:wtatushar@gmail.com">wtatushar [at] gmail [dot] com</a></dd>
         <dt class="tp-lbl">Elsewhere</dt>
         <dd><a class="tp-link" href="https://www.linkedin.com/in/tpmath/" target="_blank" rel="noopener">LinkedIn</a><a class="tp-link" href="https://github.com/pandey-tushar" target="_blank" rel="noopener">GitHub</a><a class="tp-link" href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" target="_blank" rel="noopener">Scholar</a></dd>
+        <dt class="tp-lbl">CV</dt>
+        <dd><a class="tp-link" href="/cv.html">Curriculum Vitae</a></dd>
         <dt class="tp-lbl">R&eacute;sum&eacute;</dt>
         <dd><a class="tp-link" href="Tushar_Pandey_Resume_AI.pdf" aria-label="R&eacute;sum&eacute;, AI track, PDF">AI</a><a class="tp-link" href="Tushar_Pandey_Resume_Quantum.pdf" aria-label="R&eacute;sum&eacute;, quantum track, PDF">Quantum</a></dd>
       </dl>
+      <a class="tp-btn" href="mailto:wtatushar@gmail.com">Get in touch</a>
     </div>
   </section>
 
@@ -592,6 +759,812 @@ fixB.addEventListener("click", correct);
 resetB.addEventListener("click", reset);
 reset();
 })();
+
+/* The live figures: a toric code behind the headline, one large figure per
+   pane, and the same figure again in its sheet. TP.live (lib/site.js) runs
+   them at about 30 fps, only on screen, in a visible tab and not behind an
+   open sheet, as still frames under reduced motion. Colours come from the
+   site tokens, so both themes work. Each pane's figure is one kind of field:
+   dim structure past every edge, quiet near the words, with the warm, accent
+   and ink events of the hero. Each maker takes pane: true for the pane. */
+document.addEventListener("DOMContentLoaded", function(){
+"use strict";
+if (!window.TP || !TP.live) return;
+var live = TP.live, C = live.C, rgba = live.rgba, clamp = live.clamp, ss = live.ss, reduce = live.still;
+function rnd(n){ return (Math.random() * n) | 0; }
+/* a pane's words, as a box in its canvas, and a weight that quiets the
+   figure near them (1 everywhere when there are no words over it) */
+function words(cv){
+  var p = cv.closest(".tp-pane"), t = p && p.querySelector(".tp-pane-text");
+  if (!t) return null;
+  var c = cv.getBoundingClientRect(), r = t.getBoundingClientRect();
+  return { l: r.left - c.left, r: r.right - c.left, t: r.top - c.top, b: r.bottom - c.top };
+}
+function calm(b, pad){
+  return function(x, y){
+    if (!b) return 1;
+    var dx = Math.max(b.l - x, 0, x - b.r), dy = Math.max(b.t - y, 0, y - b.b);
+    return .1 + .9 * ss(0, pad, Math.hypot(dx, dy));
+  };
+}
+/* the room the words leave in a pane, as [cx, cy, w, h]: the largest of the
+   four bands beside, above and below them for a figure of aspect a (width
+   over height), kept clear of the edges and of the rail; on a wide screen a
+   band beside the words is preferred */
+function room(cv, w, h, a){
+  var b = words(cv), gx = Math.max(24, w * .05), gy = Math.max(24, h * .07), best = null, sc = -1;
+  if (!b) return [w / 2, h / 2, w * .9, h * .9];
+  [[b.r + gx, gy, w - gx - 40, h - gy], [gx, gy, b.l - gx, h - gy], [gx, gy, w - gx, b.t - gy], [gx, b.b + gy, w - gx, h - gy]].forEach(function(r, i){
+    var rw = r[2] - r[0], rh = r[3] - r[1], f = Math.min(rw, rh * a) * (i > 1 && w >= 896 ? .75 : 1);
+    if (rw > 0 && rh > 0 && f > sc) { sc = f; best = [(r[0] + r[2]) / 2, (r[1] + r[3]) / 2, rw, rh]; }
+  });
+  return best || [w / 2, h / 2, w * .9, h * .9];
+}
+/* a book's cover, stood in the room the words leave; returns its centre,
+   its height and the room's smaller side */
+function cover(cv, w, h){
+  var im = cv.parentNode.querySelector(".tp-pane-cover");
+  if (!im) return null;
+  var R = room(cv, w, h, 2 / 3), ch = Math.min(R[3] * .8, R[2] * .8 * 1.5, 620);
+  im.style.cssText = "--x:" + R[0].toFixed(1) + "px;--y:" + R[1].toFixed(1) + "px;--h:" + ch.toFixed(1) + "px";
+  return [R[0], R[1], ch, Math.min(R[2], R[3])];
+}
+/* an offscreen canvas the size of the scene's, for the parts that do not move */
+function layer(s){
+  var L = s.layer || (s.layer = document.createElement("canvas"));
+  L.width = s.cv.width; L.height = s.cv.height;
+  var g = L.getContext("2d");
+  g.setTransform(s.d, 0, 0, s.d, 0, 0);
+  return g;
+}
+/* a field quieted near the words: a small mask, alpha 1 - W(x, y), and a
+   pass that erases through it, so the figure fades there on any ground */
+function mask(W, w, h){
+  var n = 8, cw = Math.ceil(w / n), ch = Math.ceil(h / n), m = document.createElement("canvas");
+  m.width = cw; m.height = ch;
+  var x = m.getContext("2d"), im = x.createImageData(cw, ch);
+  for (var j = 0; j < ch; j++) for (var i = 0; i < cw; i++) im.data[(j * cw + i) * 4 + 3] = 255 * (1 - W((i + .5) * n, (j + .5) * n));
+  x.putImageData(im, 0, 0);
+  return m;
+}
+function hush(g, m, w, h){
+  g.globalCompositeOperation = "destination-out"; g.drawImage(m, 0, 0, w, h); g.globalCompositeOperation = "source-over";
+}
+
+/* an error event: flipped qubits (ink), the two checks they light (warm),
+   then the correction drawn edge by edge from one check to the other (accent) */
+function evEnd(ev){ return 1.5 + ev.cor.length * .22 + 1.8; }
+function drawEvent(g, ev, R){
+  var a = ev.age, tc = 1.5 + ev.cor.length * .22, out = 1 - clamp((a - tc - .9) / .9), m = ev.m, k, s;
+  var e = clamp(a / .3) * out * m;
+  g.lineCap = "round";
+  g.strokeStyle = rgba(C.ink, .85 * e); g.lineWidth = Math.min(2, R * .3);
+  g.beginPath();
+  for (k = 0; k < ev.err.length; k++) { s = ev.err[k]; g.moveTo(s[0], s[1]); g.lineTo(s[2], s[3]); }
+  g.stroke();
+  g.fillStyle = rgba(C.ink, e);
+  for (k = 0; k < ev.err.length; k++) { s = ev.err[k]; g.beginPath(); g.arc((s[0] + s[2]) / 2, (s[1] + s[3]) / 2, R * .34, 0, 7); g.fill(); }
+  var c = clamp((a - .45) / .25) * (1 - clamp((a - tc) / .35)) * m;
+  if (c > 0) for (k = 0; k < 2; k++) {
+    var p = ev.ends[k];
+    g.beginPath(); g.arc(p[0], p[1], R * 1.25, 0, 7);
+    g.fillStyle = rgba(C.warm, .16 * c); g.fill();
+    g.strokeStyle = rgba(C.warm, .6 * c); g.lineWidth = 1.25; g.stroke();
+    g.beginPath(); g.arc(p[0], p[1], R * .45, 0, 7); g.fillStyle = rgba(C.warm, c); g.fill();
+  }
+  g.strokeStyle = rgba(C.acc, out * m); g.lineWidth = Math.min(2.6, R * .38);
+  g.beginPath();
+  for (k = 0; k < ev.cor.length; k++) {
+    var q = clamp((a - 1.5 - k * .22) / .22);
+    if (q <= 0) break;
+    s = ev.cor[k]; g.moveTo(s[0], s[1]); g.lineTo(s[0] + (s[2] - s[0]) * q, s[1] + (s[3] - s[1]) * q);
+  }
+  g.stroke();
+}
+function segs(pts){ var o = []; for (var i = 1; i < pts.length; i++) o.push([pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1]]); return o; }
+/* a random walk of 1 to n steps from (i, j) inside ok(x, y), and the
+   correction: a shortest path between its two ends, one leg then the other */
+function walk(i, j, n, ok){
+  var path = [[i, j]], seen = {}, x = i, y = j;
+  seen[i + "," + j] = 1;
+  for (var k = 0; k < n; k++) {
+    var D = [[1, 0], [-1, 0], [0, 1], [0, -1]].sort(function(){ return Math.random() - .5; });
+    for (var d = 0; d < 4; d++) {
+      var nx = x + D[d][0], ny = y + D[d][1];
+      if (!ok(nx, ny) || seen[nx + "," + ny]) continue;
+      x = nx; y = ny; seen[x + "," + y] = 1; path.push([x, y]); break;
+    }
+  }
+  var cor = [[i, j]], cx = i, cy = j, hx = Math.random() < .5;
+  for (var leg = 0; leg < 2; leg++, hx = !hx) {
+    while (hx ? cx !== x : cy !== y) { if (hx) cx += x > cx ? 1 : -1; else cy += y > cy ? 1 : -1; cor.push([cx, cy]); }
+  }
+  return { path: path, cor: cor, x: x, y: y };
+}
+
+/* ---------- hero: a toric code lattice, errors found and corrected ---------- */
+var H = { still: 0, dpr: 1.5, ev: [], next: .4, px: -1e4, py: -1e4, tx: -1e4, ty: -1e4 };
+H.pt = function(i, j){ return [H.ox + i * H.S, H.oy + j * H.S]; };
+H.setup = function(w, h){
+  var S = H.S = w < 640 ? 40 : 52, narrow = w < 992, i, j;
+  /* the words' box, relative to the canvas: the lattice stays quiet behind it */
+  var words = H.cv.parentNode.querySelector(".hero-in > div"), cr = H.cv.getBoundingClientRect();
+  var wr = words ? words.getBoundingClientRect() : { left: 0, right: w * .6, top: h * .4, bottom: h };
+  var bl = wr.left - cr.left, br = wr.right - cr.left, bt = wr.top - cr.top, bb = wr.bottom - cr.top;
+  H.cols = Math.ceil(w / S) + 1; H.rows = Math.ceil(h / S) + 1;
+  H.ox = (w - (H.cols - 1) * S) / 2; H.oy = (h - (H.rows - 1) * S) / 2;
+  H.wt = new Float32Array(H.cols * H.rows);
+  /* quiet behind the words, brightest to the right and above */
+  for (j = 0; j < H.rows; j++) for (i = 0; i < H.cols; i++) {
+    var x = H.ox + i * S, y = H.oy + j * S;
+    var dx = Math.max(bl - x, 0, x - br), dy = Math.max(bt - y, 0, y - bb);
+    var near = .1 + .9 * ss(0, 2.2 * S, Math.hypot(dx, dy));
+    H.wt[j * H.cols + i] = near * ss(0, h * .12, y) * ss(h, h * .8, y) * (narrow ? 1 : .35 + .65 * ss(0, w * .5, x));
+  }
+  var L = H.layer || (H.layer = document.createElement("canvas"));
+  L.width = H.cv.width; L.height = H.cv.height;
+  var g = L.getContext("2d");
+  g.setTransform(H.d, 0, 0, H.d, 0, 0); g.lineWidth = 1;
+  for (j = 0; j < H.rows; j++) for (i = 0; i < H.cols; i++) {
+    var a = H.wt[j * H.cols + i], p = H.pt(i, j);
+    if (i + 1 < H.cols) { g.strokeStyle = rgba(C.dim, .3 * (a + H.wt[j * H.cols + i + 1]) / 2); g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(p[0] + S, p[1]); g.stroke(); }
+    if (j + 1 < H.rows) { g.strokeStyle = rgba(C.dim, .3 * (a + H.wt[(j + 1) * H.cols + i]) / 2); g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(p[0], p[1] + S); g.stroke(); }
+    g.fillStyle = rgba(C.ink, .55 * a); g.beginPath(); g.arc(p[0], p[1], 1.7, 0, 7); g.fill();
+  }
+  H.max = narrow ? 3 : 6;
+  H.ev = [];
+  [.9, 1.75, 2.3, 3.0, .2, 3.6].slice(0, H.max).forEach(function(age){ H.spawn(age); });
+};
+H.spawn = function(age){
+  for (var tries = 0; tries < 40; tries++) {
+    var i = 1 + rnd(H.cols - 2), j = 1 + rnd(H.rows - 2), wgt = H.wt[j * H.cols + i];
+    if (wgt < .5) continue;
+    if (H.ev.some(function(e){ return Math.abs(e.i - i) + Math.abs(e.j - j) < 5; })) continue;
+    var w = walk(i, j, 1 + rnd(3), function(x, y){ return x >= 1 && y >= 1 && x <= H.cols - 2 && y <= H.rows - 2; });
+    if (w.path.length < 2) continue;
+    if (w.path.concat(w.cor).some(function(q){ return H.wt[q[1] * H.cols + q[0]] < .4; })) continue;
+    H.ev.push({ i: i, j: j, age: age, m: .45 + .55 * wgt,
+      err: segs(w.path.map(function(q){ return H.pt(q[0], q[1]); })),
+      cor: segs(w.cor.map(function(q){ return H.pt(q[0], q[1]); })),
+      ends: [H.pt(i, j), H.pt(w.x, w.y)] });
+    return;
+  }
+};
+H.step = function(dt){
+  H.ev.forEach(function(e){ e.age += dt; });
+  H.ev = H.ev.filter(function(e){ return e.age < evEnd(e); });
+  if ((H.next -= dt) <= 0 && H.ev.length < H.max) { H.spawn(0); H.next = .6 + Math.random() * .9; }
+  if (H.tx > -1e3) { var f = Math.min(1, dt * 7); H.px += (H.tx - H.px) * f; H.py += (H.ty - H.py) * f; }
+};
+H.draw = function(g, w, h){
+  g.drawImage(H.layer, 0, 0, w, h);
+  if (H.tx > -1e3 && !reduce.matches) {
+    /* the pointer: edges and vertices near it light in the accent */
+    var S = H.S, R = 180, i0 = Math.max(0, Math.floor((H.px - H.ox - R) / S)), i1 = Math.min(H.cols - 1, Math.ceil((H.px - H.ox + R) / S));
+    var j0 = Math.max(0, Math.floor((H.py - H.oy - R) / S)), j1 = Math.min(H.rows - 1, Math.ceil((H.py - H.oy + R) / S));
+    g.lineWidth = 1;
+    for (var j = j0; j <= j1; j++) for (var i = i0; i <= i1; i++) {
+      var p = H.pt(i, j), f = 1 - Math.hypot(p[0] - H.px, p[1] - H.py) / R;
+      if (f <= 0) continue;
+      f *= f * (.35 + .65 * H.wt[j * H.cols + i]);
+      g.strokeStyle = rgba(C.acc, .55 * f);
+      g.beginPath();
+      if (i < i1) { g.moveTo(p[0], p[1]); g.lineTo(p[0] + S, p[1]); }
+      if (j < j1) { g.moveTo(p[0], p[1]); g.lineTo(p[0], p[1] + S); }
+      g.stroke();
+      g.fillStyle = rgba(C.acc, f); g.beginPath(); g.arc(p[0], p[1], 1.7 + 1.6 * f, 0, 7); g.fill();
+    }
+  }
+  for (var k = 0; k < H.ev.length; k++) drawEvent(g, H.ev[k], 8);
+};
+var heroEl = document.querySelector(".hero");
+if (live.add(document.getElementById("field"), H) && heroEl) {
+  heroEl.addEventListener("pointermove", function(e){
+    if (e.pointerType === "touch") return;
+    var r = H.cv.getBoundingClientRect();
+    H.tx = e.clientX - r.left; H.ty = e.clientY - r.top;
+    if (H.px < -1e3) { H.px = H.tx; H.py = H.ty; }
+  });
+  heroEl.addEventListener("pointerleave", function(){ H.tx = H.ty = H.px = H.py = -1e4; });
+}
+
+/* ---------- TokenGrid: requests from three tenants stream through a grid ---------- */
+function tokens(pane){
+  var T = { still: 0, dpr: pane ? 1.5 : 2, lanes: [] };
+  function gen(L){
+    if (L.left > 0) { L.left--; return L.who; }
+    if (L.gap > 0) { L.gap--; return 0; }
+    L.who = 1 + rnd(3); L.left = 1 + rnd(7); L.gap = 2 + rnd(9);
+    return L.who;
+  }
+  T.setup = function(w, h){
+    var p = T.p = pane ? Math.max(14, Math.min(26, h / 26)) : Math.max(7, Math.min(18, h / 10)), r, c;
+    T.rows = pane ? Math.floor((h - p) / p) : Math.max(3, Math.min(18, Math.floor((h - 2 * p) / p)));
+    T.cols = Math.max(4, Math.floor((w - (pane ? p : 2 * p)) / p));
+    T.x0 = (w - T.cols * p) / 2; T.y0 = (h - T.rows * p) / 2;
+    /* in a pane: each cell's weight, and the empty grid drawn once */
+    var W = calm(pane && words(T.cv), 4 * p), s = p * .72, o = (p - s) / 2;
+    T.wt = new Float32Array(T.rows * T.cols);
+    for (r = 0; r < T.rows; r++) for (c = 0; c < T.cols; c++) T.wt[r * T.cols + c] = W(T.x0 + (c + .5) * p, T.y0 + (r + .5) * p);
+    if (pane) {
+      var g = layer(T);
+      g.lineWidth = 1;
+      for (r = 0; r < T.rows; r++) for (c = 0; c < T.cols; c++) {
+        g.strokeStyle = rgba(C.dim, .22 * T.wt[r * T.cols + c]);
+        g.strokeRect(T.x0 + c * p + o, T.y0 + r * p + o, s, s);
+      }
+    }
+    T.lanes = [];
+    for (r = 0; r < T.rows; r++) {
+      var L = { cells: [], off: 0, v: 3.2 + Math.random() * 2.6, left: 0, gap: rnd(6), who: 0 };
+      for (c = 0; c < T.cols + 2; c++) L.cells.unshift(gen(L));
+      T.lanes.push(L);
+    }
+  };
+  T.step = function(dt){
+    T.lanes.forEach(function(L){
+      L.off += L.v * dt;
+      while (L.off >= 1) { L.off -= 1; L.cells.unshift(gen(L)); L.cells.pop(); }
+    });
+  };
+  T.draw = function(g, w, h){
+    var p = T.p, s = p * .72, o = (p - s) / 2, r, c;
+    if (pane) g.drawImage(T.layer, 0, 0, w, h);
+    else {
+      g.strokeStyle = rgba(C.dim, .22); g.lineWidth = 1;
+      g.beginPath();
+      for (r = 0; r < T.rows; r++) for (c = 0; c < T.cols; c++) g.rect(T.x0 + c * p + o, T.y0 + r * p + o, s, s);
+      g.stroke();
+    }
+    var ink = [null, C.acc, C.warm, C.ink];
+    for (r = 0; r < T.rows; r++) {
+      var L = T.lanes[r], y = T.y0 + r * p + o;
+      for (c = 0; c < L.cells.length; c++) {
+        var who = L.cells[c];
+        if (!who) continue;
+        var x = T.x0 + (c - 1 + L.off) * p + o, mid = (x - T.x0) / (T.cols * p);
+        var ci = Math.max(0, Math.min(T.cols - 1, Math.round(c - 1 + L.off)));
+        var a = ss(-.02, .1, mid) * ss(1.02, .86, mid) * (who === 3 ? .7 : 1) * (pane ? .36 : 1) * T.wt[r * T.cols + ci];
+        if (a <= 0) continue;
+        g.fillStyle = rgba(ink[who], a);
+        g.fillRect(x, y, s, s);
+      }
+    }
+  };
+  return T;
+}
+
+/* ---------- doubled semion: errors on the honeycomb, the decoder pairs them ---------- */
+function semion(pane){
+  var M = { still: 0, dpr: pane ? 1.5 : 2, ev: [], next: .3, max: pane ? 4 : 2 };
+  M.setup = function(w, h){
+    var s = M.s = pane ? Math.max(16, Math.min(32, h / 15)) : Math.max(9, Math.min(22, h / (h < 160 ? 5.5 : 11))), dx = s * Math.sqrt(3) / 2, i, j;
+    var cols = M.cols = Math.ceil(w / dx) + 2, rows = M.rows = Math.ceil(h / (1.5 * s)) + 2;
+    var ox = (w - (cols - 1) * dx) / 2, oy = (h - (rows - 1) * 1.5 * s) / 2 - .25 * s;
+    M.p = []; M.nb = [];
+    for (j = 0; j < rows; j++) for (i = 0; i < cols; i++) {
+      M.p.push([ox + i * dx, oy + j * 1.5 * s + ((i + j) & 1 ? 0 : .5 * s)]);
+      var n = [];
+      if (i > 0) n.push(j * cols + i - 1);
+      if (i < cols - 1) n.push(j * cols + i + 1);
+      if ((i + j) & 1) { if (j > 0) n.push((j - 1) * cols + i); } else if (j < rows - 1) n.push((j + 1) * cols + i);
+      M.nb.push(n);
+    }
+    /* two closed loops, the ground state's kind of string */
+    M.loops = [];
+    for (var t = 0; t < (pane ? 3 : 2); t++) {
+      var li = 2 + rnd(cols - 6), lj = 1 + rnd(rows - 3);
+      if ((li + lj) & 1) li++;
+      M.loops.push([[li, lj], [li + 1, lj], [li + 2, lj], [li + 2, lj + 1], [li + 1, lj + 1], [li, lj + 1]].map(function(q){ return M.p[q[1] * cols + q[0]]; }));
+    }
+    M.W = calm(pane && words(M.cv), 3 * s);
+    M.ev = [];
+    M.spawn(2.05); M.spawn(.5);
+    if (pane) { M.spawn(3.1); M.spawn(1.2); }
+  };
+  M.spawn = function(age){
+    var w = M.w, h = M.h;
+    for (var tries = 0; tries < 40; tries++) {
+      var a = rnd(M.p.length), pa = M.p[a];
+      if (pa[0] < w * .12 || pa[0] > w * .88 || pa[1] < h * .18 || pa[1] > h * .82) continue;
+      if (M.ev.some(function(e){ return Math.hypot(e.c[0] - pa[0], e.c[1] - pa[1]) < M.s * 5; })) continue;
+      var path = [a], seen = {}, n = 2 + rnd(3), v = a;
+      seen[a] = 1;
+      for (var k = 0; k < n; k++) {
+        var opts = M.nb[v].filter(function(u){ var q = M.p[u]; return !seen[u] && q[0] > 8 && q[0] < w - 8 && q[1] > 8 && q[1] < h - 8; });
+        if (!opts.length) break;
+        v = opts[rnd(opts.length)]; seen[v] = 1; path.push(v);
+      }
+      if (path.length < 3 || path.some(function(z){ return M.W(M.p[z][0], M.p[z][1]) < .9; })) continue;
+      /* breadth-first search: the shortest string joining the two defects */
+      var prev = {}, queue = [a], b = v;
+      prev[a] = -1;
+      while (queue.length && !(b in prev)) {
+        var u = queue.shift(), ns = M.nb[u].slice().sort(function(){ return Math.random() - .5; });
+        for (var q = 0; q < ns.length; q++) if (!(ns[q] in prev)) { prev[ns[q]] = u; queue.push(ns[q]); }
+      }
+      var cor = [];
+      for (var x = b; x !== -1; x = prev[x]) cor.unshift(M.p[x]);
+      M.ev.push({ c: pa, age: age, m: 1, err: segs(path.map(function(z){ return M.p[z]; })), cor: segs(cor), ends: [pa, M.p[b]] });
+      return;
+    }
+  };
+  M.step = function(dt){
+    M.ev.forEach(function(e){ e.age += dt; });
+    M.ev = M.ev.filter(function(e){ return e.age < evEnd(e); });
+    if ((M.next -= dt) <= 0 && M.ev.length < M.max) { M.spawn(0); M.next = (pane ? .7 : 1.2) + Math.random() * 1.2; }
+  };
+  M.draw = function(g){
+    var k, n;
+    g.strokeStyle = rgba(C.dim, .32); g.lineWidth = 1;
+    g.beginPath();
+    for (k = 0; k < M.p.length; k++) for (n = 0; n < M.nb[k].length; n++) if (M.nb[k][n] > k) {
+      var a = M.p[k], b = M.p[M.nb[k][n]]; g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]);
+    }
+    g.stroke();
+    g.strokeStyle = rgba(C.ink, .3); g.lineWidth = Math.min(1.8, M.s * .1); g.lineJoin = "round";
+    M.loops.forEach(function(L){ g.beginPath(); g.moveTo(L[0][0], L[0][1]); for (var i = 1; i < 6; i++) g.lineTo(L[i][0], L[i][1]); g.closePath(); g.stroke(); });
+    for (k = 0; k < M.ev.length; k++) drawEvent(g, M.ev[k], M.s * .4);
+  };
+  return M;
+}
+
+/* ---------- AGoT: a graph of thoughts across the pane; a thought branches and merges down it ---------- */
+function graph(pane){
+  var G = { still: 2.4, dpr: pane ? 1.5 : 2, ev: [], next: .4, max: pane ? 4 : 2 };
+  function near(x, list){ return list.slice().sort(function(a, b){ return Math.abs(G.n[a].x - x) - Math.abs(G.n[b].x - x); }); }
+  G.setup = function(w, h){
+    var z = Math.min(h, w * 1.4), s = G.s = pane ? Math.max(40, Math.min(64, z / 12)) : Math.max(26, Math.min(44, z / 8)), i, j;
+    var rows = Math.ceil(h / s) + 2, cols = Math.ceil(w / s) + 2, ox = (w - (cols - 1) * s) / 2, oy = (h - (rows - 1) * s) / 2;
+    G.W = calm(pane && words(G.cv), 2.5 * s);
+    G.n = []; G.row = [];
+    for (j = 0; j < rows; j++) {
+      var R = [];
+      for (i = 0; i < cols; i++) if (Math.random() < .7) {
+        R.push(G.n.length);
+        G.n.push({ x: ox + (i + (j & 1 ? .25 : -.25) + (Math.random() - .5) * .5) * s, y: oy + (j + (Math.random() - .5) * .35) * s, out: [] });
+      }
+      G.row.push(R);
+    }
+    /* each thought leads to the nearest one or two in the next row, and every
+       one has a parent, so the paths branch and merge */
+    for (j = 0; j + 1 < rows; j++) {
+      var A = G.row[j], B = G.row[j + 1];
+      A.forEach(function(u){
+        var c = near(G.n[u].x, B);
+        if (c.length) G.n[u].out.push(c[0]);
+        if (c.length > 1 && Math.random() < .45 && Math.abs(G.n[c[1]].x - G.n[u].x) < 1.6 * s) G.n[u].out.push(c[1]);
+      });
+      B.forEach(function(v){
+        if (!A.some(function(u){ return G.n[u].out.indexOf(v) >= 0; })) { var u = near(G.n[v].x, A)[0]; if (u != null) G.n[u].out.push(v); }
+      });
+    }
+    var g = layer(G), r = pane ? 3 : 2.4;
+    g.strokeStyle = rgba(C.dim, .3); g.lineWidth = 1;
+    g.beginPath();
+    G.n.forEach(function(a){ a.out.forEach(function(v){ g.moveTo(a.x, a.y); g.lineTo(G.n[v].x, G.n[v].y); }); });
+    g.stroke();
+    G.n.forEach(function(a){
+      g.beginPath(); g.arc(a.x, a.y, r, 0, 7);
+      g.globalCompositeOperation = "destination-out"; g.fill(); g.globalCompositeOperation = "source-over";
+      g.strokeStyle = rgba(C.ink, .5); g.stroke();
+    });
+    if (pane) hush(g, mask(G.W, w, h), w, h);
+    G.ev = [];
+    G.spawn(2.6); G.spawn(.6);
+    if (pane) { G.spawn(3.6); G.spawn(1.5); }
+  };
+  G.spawn = function(age){
+    var w = G.w, h = G.h;
+    for (var tries = 0; tries < 40; tries++) {
+      var a = rnd(G.n.length), A = G.n[a];
+      if (A.x < w * .06 || A.x > w * .94 || A.y < h * .06 || A.y > h * .6) continue;
+      if (G.W(A.x, A.y) < .9 || G.ev.some(function(e){ return Math.hypot(e.x - A.x, e.y - A.y) < G.s * 4; })) continue;
+      var D = 3 + rnd(3), front = [a], E = [], seen = {}, ok = true;
+      seen[a] = 1;
+      for (var d = 0; d < D && ok && front.length; d++) {
+        var nf = [];
+        front.forEach(function(u){
+          var o = G.n[u].out.slice().sort(function(){ return Math.random() - .5; }), take = o.length > 1 && front.length < 3 && Math.random() < .5 ? 2 : 1;
+          for (var q = 0; q < Math.min(take, o.length); q++) { E.push([u, o[q], d]); if (!seen[o[q]]) { seen[o[q]] = 1; nf.push(o[q]); } }
+        });
+        ok = nf.every(function(v){ return G.W(G.n[v].x, G.n[v].y) > .8 && G.n[v].y < h - 8; });
+        front = nf;
+      }
+      if (!ok || !front.length) continue;
+      G.ev.push({ x: A.x, y: A.y, a: a, age: age, E: E, end: front, D: D });
+      return;
+    }
+  };
+  function tEnd(e){ return 1 + e.D * .45 + 2.5; }
+  G.step = function(dt){
+    G.ev.forEach(function(e){ e.age += dt; });
+    G.ev = G.ev.filter(function(e){ return e.age < tEnd(e); });
+    if ((G.next -= dt) <= 0 && G.ev.length < G.max) { G.spawn(0); G.next = (pane ? .7 : 1.2) + Math.random() * 1.2; }
+  };
+  /* a thought: the subproblem it expands (warm), its branches lit edge by
+     edge (accent), and where they land (ink) */
+  G.draw = function(g, w, h){
+    g.drawImage(G.layer, 0, 0, w, h);
+    var R = 9, k;
+    g.lineCap = "round";
+    G.ev.forEach(function(e){
+      var a = e.age, tc = 1 + e.D * .45, out = 1 - clamp((a - tc - 1.6) / .9), c = clamp((a - .2) / .3) * (1 - clamp((a - tc) / .5));
+      if (c > 0) {
+        g.beginPath(); g.arc(e.x, e.y, R * 1.25, 0, 7);
+        g.fillStyle = rgba(C.warm, .16 * c); g.fill();
+        g.strokeStyle = rgba(C.warm, .6 * c); g.lineWidth = 1.25; g.stroke();
+        g.beginPath(); g.arc(e.x, e.y, R * .45, 0, 7); g.fillStyle = rgba(C.warm, c); g.fill();
+      }
+      g.strokeStyle = rgba(C.acc, out); g.lineWidth = 2.2;
+      g.beginPath();
+      for (k = 0; k < e.E.length; k++) {
+        var q = clamp((a - 1 - e.E[k][2] * .45) / .45);
+        if (q <= 0) continue;
+        var u = G.n[e.E[k][0]], v = G.n[e.E[k][1]];
+        g.moveTo(u.x, u.y); g.lineTo(u.x + (v.x - u.x) * q, u.y + (v.y - u.y) * q);
+      }
+      g.stroke();
+      var f = clamp((a - tc) / .3) * out;
+      if (f > 0) { g.fillStyle = rgba(C.ink, f); e.end.forEach(function(v){ g.beginPath(); g.arc(G.n[v].x, G.n[v].y, R * .38, 0, 7); g.fill(); }); }
+    });
+  };
+  return G;
+}
+
+/* ---------- the volume conjecture: one knot diagram across the whole pane ----------
+   A Lissajous knot, (cos(fx u + p), cos(fy u), cos(fz u + q)), drawn past every
+   edge so its strands cross the pane as one even mesh. The phases drift, so
+   the strands slide and the crossings slowly change; each strand is cut where
+   it passes under another, and a stretch of the knot travels along it. */
+function gcd(a, b){ return b ? gcd(b, a % b) : a; }
+function knot(pane){
+  var K = { still: 3, dpr: pane ? 1.5 : 2 }, NB = 24;
+  K.setup = function(w, h){
+    var z = Math.min(h, w * 1.4), s = pane ? Math.max(38, Math.min(54, z / 15)) : Math.max(28, Math.min(40, z / 9)), pad = s;
+    K.ax = w / 2 + pad; K.ay = h / 2 + pad;
+    var fx = Math.max(2, Math.round(K.ay / s)), fy = Math.max(3, Math.round(K.ax / s)), fz = fx + fy;
+    while (gcd(fx, fy) > 1) fy++;
+    while (gcd(fz, fx) > 1 || gcd(fz, fy) > 1) fz++;
+    K.f = [fx, fy, fz];
+    K.n = Math.min(3600, Math.round(2 * Math.PI * Math.hypot(K.ax * fx, K.ay * fy) / Math.SQRT2 / 12));
+    K.W = calm(pane && words(K.cv), 2.2 * s);
+    K.mask = pane ? mask(K.W, w, h) : null;
+  };
+  K.draw = function(g, w, h, t){
+    var n = K.n, f = K.f, p = .3 + t * .012, q = .7 + t * .035, cx = w / 2, cy = h / 2, P = [], i, b, k;
+    for (i = 0; i <= n; i++) {
+      var u = 2 * Math.PI * i / n;
+      P.push([cx + K.ax * Math.cos(f[0] * u + p), cy + K.ay * Math.cos(f[1] * u), Math.cos(f[2] * u + q)]);
+    }
+    /* two stretches travel the knot: [start, length] as fractions of it */
+    var run = [(t * .0035) % 1, ((t * .0035) + .5) % 1], len = 360 / (2 * Math.PI * Math.hypot(K.ax * f[0], K.ay * f[1]) / Math.SQRT2);
+    function lit(i){ for (var r = 0; r < 2; r++) { var d = (i / n - run[r] + 1) % 1; if (d < len) return true; } return false; }
+    var B = [];
+    for (b = 0; b < NB; b++) B.push([]);
+    for (i = 0; i < n; i++) {
+      var a = P[i], c = P[i + 1];
+      if (Math.max(a[0], c[0]) < -8 || Math.min(a[0], c[0]) > w + 8 || Math.max(a[1], c[1]) < -8 || Math.min(a[1], c[1]) > h + 8) continue;
+      B[Math.min(NB - 1, Math.floor(((a[2] + c[2]) / 2 + 1) / 2 * NB))].push(i);
+    }
+    /* from the deepest strands up: cut a gap, then draw, so what passes over shows the crossing */
+    for (b = 0; b < NB; b++) {
+      var S = B[b], dep = b / (NB - 1), A = [];
+      if (!S.length) continue;
+      g.globalCompositeOperation = "destination-out"; g.lineCap = "butt"; g.lineWidth = 8; g.beginPath();
+      for (k = 0; k < S.length; k++) { g.moveTo(P[S[k]][0], P[S[k]][1]); g.lineTo(P[S[k] + 1][0], P[S[k] + 1][1]); }
+      g.stroke();
+      g.globalCompositeOperation = "source-over"; g.lineCap = "round"; g.lineWidth = 1.25;
+      g.strokeStyle = rgba(C.dim, .28 + .4 * dep); g.beginPath();
+      for (k = 0; k < S.length; k++) {
+        if (lit(S[k])) { A.push(S[k]); continue; }
+        g.moveTo(P[S[k]][0], P[S[k]][1]); g.lineTo(P[S[k] + 1][0], P[S[k] + 1][1]);
+      }
+      g.stroke();
+      if (A.length) {
+        g.strokeStyle = rgba(C.acc, .55 + .45 * dep); g.lineWidth = 2.2; g.beginPath();
+        for (k = 0; k < A.length; k++) { g.moveTo(P[A[k]][0], P[A[k]][1]); g.lineTo(P[A[k] + 1][0], P[A[k] + 1][1]); }
+        g.stroke();
+      }
+    }
+    /* the head of each stretch (warm) */
+    run.forEach(function(r){
+      var m = P[Math.floor((r + len) % 1 * n)];
+      g.beginPath(); g.arc(m[0], m[1], 9, 0, 7); g.fillStyle = rgba(C.warm, .16); g.fill();
+      g.beginPath(); g.arc(m[0], m[1], 4, 0, 7); g.fillStyle = C.warm; g.fill();
+    });
+    if (K.mask) hush(g, K.mask, w, h);
+  };
+  return K;
+}
+
+/* ---------- The Qubit Dialogues: a field of Bloch spheres, their states precessing ---------- */
+function bloch(pane){
+  var B = { still: 1.1, dpr: 1.5, ev: [], next: .5, max: 3 }, tl = .36;
+  B.setup = function(w, h){
+    B.at = cover(B.cv, w, h);
+    var s = B.s = Math.max(52, Math.min(84, Math.min(h, w * 1.4) / 9)), R = B.R = s * .32, i, j;
+    B.cols = Math.ceil(w / s) + 1; B.rows = Math.ceil(h / s) + 1;
+    B.ox = (w - (B.cols - 1) * s) / 2; B.oy = (h - (B.rows - 1) * s) / 2;
+    B.W = calm(pane && words(B.cv), 2 * s);
+    B.mask = mask(B.W, w, h);
+    var g = layer(B);
+    g.lineWidth = 1;
+    g.strokeStyle = rgba(C.dim, .32); g.beginPath();
+    for (j = 0; j < B.rows; j++) for (i = 0; i < B.cols; i++) { var x = B.ox + i * s, y = B.oy + j * s; g.moveTo(x + R, y); g.arc(x, y, R, 0, 7); }
+    g.stroke();
+    g.strokeStyle = rgba(C.dim, .2); g.beginPath();
+    for (j = 0; j < B.rows; j++) for (i = 0; i < B.cols; i++) { g.moveTo(B.ox + i * s + R, B.oy + j * s); g.ellipse(B.ox + i * s, B.oy + j * s, R, R * Math.sin(tl), 0, 0, Math.PI); }
+    g.stroke();
+    B.ev = []; B.spawn(2.2); B.spawn(.4); B.spawn(1.3);
+  };
+  /* the state at sphere (i, j): one latitude per row, its phase a slow wave across the pane */
+  function th(j){ return .7 + .5 * Math.sin(j * 1.3); }
+  function tip(i, j, t, R){
+    var x = B.ox + i * B.s, y = B.oy + j * B.s, a = th(j), ph = t * .3 - i * .42 - j * .2, lr = R * Math.sin(a), ly = y - R * Math.cos(a) * Math.cos(tl);
+    return [x, y, x + lr * Math.cos(ph), ly + lr * Math.sin(ph) * Math.sin(tl), lr, ly];
+  }
+  B.spawn = function(age){
+    for (var tries = 0; tries < 40; tries++) {
+      var i = 1 + rnd(B.cols - 2), j = 1 + rnd(B.rows - 2), x = B.ox + i * B.s, y = B.oy + j * B.s;
+      if (B.W(x, y) < .9 || B.ev.some(function(e){ return Math.abs(e.i - i) + Math.abs(e.j - j) < 4; })) continue;
+      if (B.at && Math.abs(x - B.at[0]) < B.at[2] / 3 + B.s && Math.abs(y - B.at[1]) < B.at[2] / 2 + B.s) continue;
+      B.ev.push({ i: i, j: j, age: age });
+      return;
+    }
+  };
+  B.step = function(dt){
+    B.ev.forEach(function(e){ e.age += dt; });
+    B.ev = B.ev.filter(function(e){ return e.age < 4.6; });
+    if ((B.next -= dt) <= 0 && B.ev.length < B.max) { B.spawn(0); B.next = 1 + Math.random() * 1.4; }
+  };
+  B.draw = function(g, w, h, t){
+    g.drawImage(B.layer, 0, 0, w, h);
+    var i, j, p;
+    g.strokeStyle = rgba(C.ink, .55); g.lineWidth = 1.2; g.lineCap = "round";
+    g.beginPath();
+    for (j = 0; j < B.rows; j++) for (i = 0; i < B.cols; i++) { p = tip(i, j, t, B.R); g.moveTo(p[0], p[1]); g.lineTo(p[2], p[3]); }
+    g.stroke();
+    if (B.mask) hush(g, B.mask, w, h);
+    /* a state followed: its latitude (accent), the vector (ink) and the state (warm) */
+    B.ev.forEach(function(e){
+      var f = clamp(e.age / .5) * (1 - clamp((e.age - 3.6) / 1)), q = tip(e.i, e.j, t, B.R), r = 3.2;
+      g.strokeStyle = rgba(C.acc, .8 * f); g.lineWidth = 1.6;
+      g.beginPath(); g.ellipse(q[0], q[5], q[4], q[4] * Math.sin(tl), 0, 0, 7); g.stroke();
+      g.strokeStyle = rgba(C.ink, f); g.lineWidth = 1.6; g.beginPath(); g.moveTo(q[0], q[1]); g.lineTo(q[2], q[3]); g.stroke();
+      g.beginPath(); g.arc(q[2], q[3], r * 2.2, 0, 7); g.fillStyle = rgba(C.warm, .2 * f); g.fill();
+      g.beginPath(); g.arc(q[2], q[3], r, 0, 7); g.fillStyle = rgba(C.warm, f); g.fill();
+    });
+  };
+  return B;
+}
+
+/* ---------- An Unpolarized Life: a field of circles; three at a time find their common region ---------- */
+function polar(pane){
+  var Y = { still: 2, dpr: 1.5, ev: [], next: .6, max: 3 };
+  Y.setup = function(w, h){
+    Y.at = cover(Y.cv, w, h);
+    var d = Y.sp = Math.max(80, Math.min(128, Math.min(h, w * 1.4) / 5.6)), dy = d * Math.sqrt(3) / 2, i, j;
+    Y.r = d * .64; Y.cols = Math.ceil(w / d) + 3; Y.rows = Math.ceil(h / dy) + 3;
+    Y.ox = (w - (Y.cols - 1) * d) / 2; Y.oy = (h - (Y.rows - 1) * dy) / 2; Y.dy = dy;
+    Y.W = calm(pane && words(Y.cv), 1.2 * d);
+    var g = layer(Y);
+    g.strokeStyle = rgba(C.dim, .26); g.lineWidth = 1; g.beginPath();
+    for (j = 0; j < Y.rows; j++) for (i = 0; i < Y.cols; i++) { var p = Y.c(i, j); g.moveTo(p[0] + Y.r, p[1]); g.arc(p[0], p[1], Y.r, 0, 7); }
+    g.stroke();
+    hush(g, mask(Y.W, w, h), w, h);
+    Y.ev = []; Y.spawn(2); Y.spawn(.6); Y.spawn(3.4);
+  };
+  Y.c = function(i, j){ return [Y.ox + (i + (j & 1 ? .5 : 0)) * Y.sp, Y.oy + j * Y.dy]; };
+  Y.spawn = function(age){
+    for (var tries = 0; tries < 40; tries++) {
+      var i = 1 + rnd(Y.cols - 3), j = 1 + rnd(Y.rows - 3), k = j & 1;
+      var P = [Y.c(i, j), Y.c(i + 1, j), Y.c(i + k, j + 1)], cx = (P[0][0] + P[1][0] + P[2][0]) / 3, cy = (P[0][1] + P[1][1] + P[2][1]) / 3;
+      if (cx < Y.r || cx > Y.w - Y.r || cy < Y.r || cy > Y.h - Y.r) continue;
+      if (P.some(function(p){ return Y.W(p[0], p[1]) < .8; }) || Y.W(cx, cy) < .95) continue;
+      if (Y.at && Math.abs(cx - Y.at[0]) < Y.at[2] / 3 + Y.r && Math.abs(cy - Y.at[1]) < Y.at[2] / 2 + Y.r) continue;
+      if (Y.ev.some(function(e){ return Math.hypot(e.x - cx, e.y - cy) < Y.sp * 2.5; })) continue;
+      Y.ev.push({ P: P, x: cx, y: cy, age: age });
+      return;
+    }
+  };
+  Y.step = function(dt){
+    Y.ev.forEach(function(e){ e.age += dt; });
+    Y.ev = Y.ev.filter(function(e){ return e.age < 5.4; });
+    if ((Y.next -= dt) <= 0 && Y.ev.length < Y.max) { Y.spawn(0); Y.next = 1.2 + Math.random() * 1.4; }
+  };
+  /* three circles (ink), the region they share (accent) and its centre (warm) */
+  Y.draw = function(g, w, h){
+    g.drawImage(Y.layer, 0, 0, w, h);
+    Y.ev.forEach(function(e){
+      var f = ss(0, 1, e.age) * (1 - ss(4.2, 5.4, e.age)), k;
+      g.save();
+      for (k = 0; k < 2; k++) { g.beginPath(); g.arc(e.P[k][0], e.P[k][1], Y.r, 0, 7); g.clip(); }
+      g.beginPath(); g.arc(e.P[2][0], e.P[2][1], Y.r, 0, 7); g.fillStyle = rgba(C.acc, .2 * f); g.fill();
+      g.restore();
+      g.strokeStyle = rgba(C.ink, .6 * f); g.lineWidth = 1.25;
+      for (k = 0; k < 3; k++) { g.beginPath(); g.arc(e.P[k][0], e.P[k][1], Y.r, 0, 7); g.stroke(); }
+      g.beginPath(); g.arc(e.x, e.y, 3.6, 0, 7); g.fillStyle = rgba(C.warm, f); g.fill();
+    });
+  };
+  return Y;
+}
+
+/* ---------- the Illustrated edition: a field of engraved spheres under a moving light ----------
+   On the night ground the strokes are the light; on paper they are the shade. */
+function plate(pane){
+  var E = { still: 2.2, dpr: 1.5 };
+  E.setup = function(w, h){
+    E.at = cover(E.cv, w, h);
+    E.R = Math.max(40, Math.min(84, Math.min(h, w * 1.4) / 8)); E.sp = E.R * 2.6; E.st = Math.max(5, Math.min(7, E.R / 10));
+    E.W = calm(pane && words(E.cv), 2 * E.R);
+    E.mask = mask(E.W, w, h);
+  };
+  E.draw = function(g, w, h, t){
+    var R = E.R, sp = E.sp, st = E.st, seg = 12, la = t * .3, b, k, ink = document.documentElement.dataset.theme !== "light";
+    var L = [Math.cos(la) * .75, -.5, Math.sin(la) * .5 + .55], ln = Math.hypot(L[0], L[1], L[2]);
+    var P = [[], [], [], [], [], [], [], []];
+    for (var y = st / 2; y < h; y += st) {
+      var j = Math.round(y / sp - .5), cy = (j + .5) * sp;
+      for (var x0 = 0; x0 < w; x0 += seg) {
+        var xm = x0 + seg / 2, i = Math.round((xm - (j & 1 ? sp / 2 : 0)) / sp - .5), cx = (i + .5) * sp + (j & 1 ? sp / 2 : 0);
+        var dx = (xm - cx) / R, dy = (y - cy) / R, q = dx * dx + dy * dy, a;
+        if (q < 1) { b = Math.max(0, (dx * L[0] + dy * L[1] + Math.sqrt(1 - q) * L[2]) / ln); a = .05 + .5 * (ink ? b * b : (1 - b) * (1 - b)); }
+        else a = .06;
+        P[Math.min(7, Math.floor(a * 14))].push(x0, y);
+      }
+    }
+    g.lineWidth = st * .42; g.lineCap = "butt";
+    for (b = 0; b < 8; b++) {
+      if (!P[b].length) continue;
+      g.strokeStyle = rgba(C.ink, (b + .5) / 14); g.beginPath();
+      for (k = 0; k < P[b].length; k += 2) { g.moveTo(P[b][k], P[b][k + 1]); g.lineTo(P[b][k] + seg, P[b][k + 1]); }
+      g.stroke();
+    }
+    if (E.mask) hush(g, E.mask, w, h);
+  };
+  return E;
+}
+
+/* ---------- the course: rows of repetition codes; a bit flips, its two checks light ---------- */
+function rep(pane){
+  var Rp = { still: 1.9, dpr: pane ? 1.5 : 2, ev: [], next: .5, max: pane ? 4 : 2 };
+  Rp.setup = function(w, h){
+    var z = Math.min(h, w * 1.4), s = Rp.s = pane ? Math.max(40, Math.min(68, z / 11)) : Math.max(28, Math.min(44, z / 6)), i, j;
+    Rp.dy = s * 1.3; Rp.r = s * .17;
+    Rp.cols = Math.ceil(w / s) + 2; Rp.rows = Math.ceil(h / Rp.dy) + 1;
+    Rp.ox = (w - (Rp.cols - 1) * s) / 2; Rp.oy = (h - (Rp.rows - 1) * Rp.dy) / 2;
+    Rp.W = calm(pane && words(Rp.cv), 2 * s);
+    var g = layer(Rp), r = Rp.r, q = r * .9;
+    g.lineWidth = 1;
+    g.strokeStyle = rgba(C.dim, .3); g.beginPath();
+    for (j = 0; j < Rp.rows; j++) { var y = Rp.oy + j * Rp.dy; g.moveTo(0, y); g.lineTo(w, y); }
+    g.stroke();
+    for (j = 0; j < Rp.rows; j++) for (i = 0; i < Rp.cols; i++) {
+      var p = Rp.at(i, j);
+      g.globalCompositeOperation = "destination-out";
+      g.beginPath(); g.arc(p[0], p[1], r, 0, 7); g.fill();
+      g.fillRect(p[0] + s / 2 - q / 2, p[1] - q / 2, q, q);
+      g.globalCompositeOperation = "source-over";
+      g.strokeStyle = rgba(C.ink, .5); g.beginPath(); g.arc(p[0], p[1], r, 0, 7); g.stroke();
+      g.strokeStyle = rgba(C.dim, .55); g.strokeRect(p[0] + s / 2 - q / 2, p[1] - q / 2, q, q);
+    }
+    if (pane) hush(g, mask(Rp.W, w, h), w, h);
+    Rp.ev = []; Rp.spawn(1.9); Rp.spawn(.5);
+    if (pane) { Rp.spawn(3.1); Rp.spawn(1.2); }
+  };
+  Rp.at = function(i, j){ return [Rp.ox + (i + (j & 1 ? .5 : 0)) * Rp.s, Rp.oy + j * Rp.dy]; };
+  Rp.spawn = function(age){
+    for (var tries = 0; tries < 40; tries++) {
+      var i = 1 + rnd(Rp.cols - 3), j = rnd(Rp.rows), p = Rp.at(i, j);
+      if (p[0] < Rp.s || p[0] > Rp.w - Rp.s || p[1] < Rp.r * 3 || p[1] > Rp.h - Rp.r * 3) continue;
+      if (Rp.W(p[0] - Rp.s, p[1]) < .9 || Rp.W(p[0] + Rp.s, p[1]) < .9) continue;
+      if (Rp.ev.some(function(e){ return Math.abs(e.j - j) + Math.abs(e.i - i) < 4; })) continue;
+      Rp.ev.push({ i: i, j: j, age: age });
+      return;
+    }
+  };
+  Rp.step = function(dt){
+    Rp.ev.forEach(function(e){ e.age += dt; });
+    Rp.ev = Rp.ev.filter(function(e){ return e.age < 4.2; });
+    if ((Rp.next -= dt) <= 0 && Rp.ev.length < Rp.max) { Rp.spawn(0); Rp.next = (pane ? .7 : 1.2) + Math.random() * 1.2; }
+  };
+  /* the flipped bit (ink), the two checks beside it (warm), the correction (accent) */
+  Rp.draw = function(g, w, h){
+    g.drawImage(Rp.layer, 0, 0, w, h);
+    var s = Rp.s, r = Rp.r, q = r * .9;
+    Rp.ev.forEach(function(e){
+      var a = e.age, p = Rp.at(e.i, e.j);
+      var f = clamp(a / .3) * (1 - clamp((a - 2.6) / .3));
+      var lit = clamp((a - .6) / .25) * (1 - clamp((a - 2.6) / .3));
+      var fix = clamp((a - 1.9) / .4) * (1 - clamp((a - 3.6) / .6));
+      if (f > 0) { g.beginPath(); g.arc(p[0], p[1], r * .62, 0, 7); g.fillStyle = rgba(C.ink, f); g.fill(); }
+      if (lit > 0) [-1, 1].forEach(function(k){
+        var cx = p[0] + k * s / 2;
+        g.beginPath(); g.arc(cx, p[1], q * 1.3, 0, 7); g.fillStyle = rgba(C.warm, .16 * lit); g.fill();
+        g.strokeStyle = rgba(C.warm, .6 * lit); g.lineWidth = 1.25; g.stroke();
+        g.fillStyle = rgba(C.warm, lit); g.fillRect(cx - q / 2, p[1] - q / 2, q, q);
+      });
+      if (fix > 0) { g.beginPath(); g.arc(p[0], p[1], r + 4, 0, 7); g.strokeStyle = rgba(C.acc, fix); g.lineWidth = 2.2; g.stroke(); }
+    });
+  };
+  return Rp;
+}
+
+/* ---------- the playground: a small toric code, errors found and corrected ---------- */
+function toric(pane){
+  var Q = { still: 0, dpr: pane ? 1.5 : 2, ev: [], next: .4, max: pane ? 4 : 2 };
+  function P(q){ return [Q.ox + q[0] * Q.S, Q.oy + q[1] * Q.S]; }
+  Q.setup = function(w, h){
+    var S = Q.S = pane ? Math.max(48, Math.min(80, Math.min(h, w * 1.4) / 9)) : Math.max(12, Math.min(48, h / 6)), i, j;
+    /* a pane runs the lattice past its edges; a sheet keeps it inside */
+    Q.cols = pane ? Math.ceil(w / S) + 1 : Math.floor((w - 8) / S) + 1; Q.rows = pane ? Math.ceil(h / S) + 1 : Math.floor((h - 8) / S) + 1;
+    Q.ox = (w - (Q.cols - 1) * S) / 2; Q.oy = (h - (Q.rows - 1) * S) / 2;
+    var W = calm(pane && words(Q.cv), 1.5 * S);
+    Q.wt = new Float32Array(Q.cols * Q.rows);
+    for (j = 0; j < Q.rows; j++) for (i = 0; i < Q.cols; i++) Q.wt[j * Q.cols + i] = W(Q.ox + i * S, Q.oy + j * S);
+    if (pane) {
+      /* edges, the checks on the vertices and the qubits on the edges, drawn once */
+      var g = layer(Q), a, p;
+      g.lineWidth = 1;
+      for (j = 0; j < Q.rows; j++) for (i = 0; i < Q.cols; i++) {
+        a = Q.wt[j * Q.cols + i]; p = P([i, j]);
+        if (i + 1 < Q.cols) {
+          var ah = (a + Q.wt[j * Q.cols + i + 1]) / 2;
+          g.strokeStyle = rgba(C.dim, .3 * ah); g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(p[0] + S, p[1]); g.stroke();
+          g.fillStyle = rgba(C.ink, .4 * ah); g.beginPath(); g.arc(p[0] + S / 2, p[1], 2.4, 0, 7); g.fill();
+        }
+        if (j + 1 < Q.rows) {
+          var av = (a + Q.wt[(j + 1) * Q.cols + i]) / 2;
+          g.strokeStyle = rgba(C.dim, .3 * av); g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(p[0], p[1] + S); g.stroke();
+          g.fillStyle = rgba(C.ink, .4 * av); g.beginPath(); g.arc(p[0], p[1] + S / 2, 2.4, 0, 7); g.fill();
+        }
+        g.fillStyle = rgba(C.ink, .5 * a); g.beginPath(); g.arc(p[0], p[1], 3.2, 0, 7); g.fill();
+      }
+    }
+    Q.ev = []; Q.spawn(1.9); Q.spawn(.3);
+    if (pane) { Q.spawn(3.2); Q.spawn(1.1); }
+  };
+  Q.spawn = function(age){
+    for (var tries = 0; tries < 40; tries++) {
+      var i = 1 + rnd(Q.cols - 2), j = 1 + rnd(Q.rows - 2);
+      if (Q.wt[j * Q.cols + i] < .7) continue;
+      if (Q.ev.some(function(e){ return Math.abs(e.i - i) + Math.abs(e.j - j) < 4; })) continue;
+      var w = walk(i, j, 1 + rnd(2), function(x, y){ return x >= 0 && y >= 0 && x < Q.cols && y < Q.rows; });
+      if (w.path.length < 2) continue;
+      if (w.path.concat(w.cor).some(function(q){ return Q.wt[q[1] * Q.cols + q[0]] < .6; })) continue;
+      Q.ev.push({ i: i, j: j, age: age, m: 1, err: segs(w.path.map(P)), cor: segs(w.cor.map(P)), ends: [P([i, j]), P([w.x, w.y])] });
+      return;
+    }
+  };
+  Q.step = function(dt){
+    Q.ev.forEach(function(e){ e.age += dt; });
+    Q.ev = Q.ev.filter(function(e){ return e.age < evEnd(e); });
+    if ((Q.next -= dt) <= 0 && Q.ev.length < Q.max) { Q.spawn(0); Q.next = (pane ? .6 : 1.1) + Math.random() * 1.1; }
+  };
+  Q.draw = function(g, w, h){
+    var S = Q.S, i, j, x, y;
+    if (pane) g.drawImage(Q.layer, 0, 0, w, h);
+    else {
+      g.strokeStyle = rgba(C.dim, .32); g.lineWidth = 1;
+      g.beginPath();
+      for (j = 0; j < Q.rows; j++) { y = Q.oy + j * S; g.moveTo(Q.ox, y); g.lineTo(Q.ox + (Q.cols - 1) * S, y); }
+      for (i = 0; i < Q.cols; i++) { x = Q.ox + i * S; g.moveTo(x, Q.oy); g.lineTo(x, Q.oy + (Q.rows - 1) * S); }
+      g.stroke();
+      g.fillStyle = rgba(C.ink, .5);
+      for (j = 0; j < Q.rows; j++) for (i = 0; i < Q.cols; i++) { g.beginPath(); g.arc(Q.ox + i * S, Q.oy + j * S, Math.max(1.2, S * .04), 0, 7); g.fill(); }
+    }
+    for (var k = 0; k < Q.ev.length; k++) drawEvent(g, Q.ev[k], S * (pane ? .12 : .17));
+  };
+  return Q;
+}
+
+var MAKE = { tokens: tokens, semion: semion, graph: graph, knot: knot, bloch: bloch, polar: polar, plate: plate, rep: rep, toric: toric };
+Array.prototype.forEach.call(document.querySelectorAll("canvas[data-live]"), function(cv){
+  var make = MAKE[cv.getAttribute("data-live")];
+  if (make) live.add(cv, make(!!cv.closest(".tp-pane")));
+});
+});
 
 /* analytics, after the page is done painting: GA4 is not requested until
    load has fired, so it never sits in front of first paint */

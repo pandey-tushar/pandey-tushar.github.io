@@ -21,9 +21,10 @@ const MIME = {
   '.ttf': 'font/ttf',
 };
 
-/* index.html links the site chrome by root URL (/lib/site.css, /lib/site.js),
-   which lives at the site root, not in dist/. */
-const LIB = resolve(fileURLToPath(new URL('../../../../lib', import.meta.url)));
+/* index.html links the site chrome by root URL (/lib/site.css, /lib/site.js)
+   and the opening window shows the cover from /img/covers/; both live at the
+   site root, not in dist/. */
+const SITE = resolve(fileURLToPath(new URL('../../../..', import.meta.url)));
 
 export async function serve(root) {
   const base = resolve(root);
@@ -37,9 +38,10 @@ export async function serve(root) {
     const url = new URL(req.url ?? '/', 'http://localhost');
     let file = decodeURIComponent(url.pathname);
     if (file.endsWith('/')) file += 'index.html';
-    const lib = file.startsWith('/lib/');
-    const target = lib ? resolve(join(LIB, file.slice(4))) : resolve(join(base, file));
-    if (!target.startsWith(lib ? LIB : base)) {
+    const site = file.startsWith('/lib/') || file.startsWith('/img/');
+    const target = resolve(join(site ? SITE : base, file));
+    const within = site ? join(SITE, file.slice(1, 4)) : base;
+    if (!target.startsWith(within)) {
       res.writeHead(403).end();
       return;
     }

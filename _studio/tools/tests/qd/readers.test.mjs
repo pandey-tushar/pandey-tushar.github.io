@@ -80,6 +80,104 @@ test('readers in a browser', { skip: chromium ? false : why }, async t => {
     }
   });
 
+  // the three readers open on a window-sized live hero in the homepage's
+  // pane system: a TP.live field behind the whole window with the cover lit in
+  // it, the title in Geist, one line and a way in; the book keeps its serif
+  const HEROES = [
+    { url: '/qubit-dialogues.html', title: 'The Qubit Dialogues', cover: 'qubit-dialogues', start: '#invocation',
+      line: 'A Book of Possibilities', serif: '#invocation .dlg p', label: '.canto-num', themes: ['dark', 'light'],
+      contents: '#contents' },
+    { url: '/life/', title: 'An Unpolarized Life', cover: 'an-unpolarized-life', start: '#invocation',
+      line: 'A Book of Questions', serif: '#invocation .dlg p', label: '.canto-num', themes: ['dark', 'light'] },
+    { url: '/illustrated/', title: 'The Qubit Dialogues', cover: 'qubit-dialogues-illustrated', start: '#canto-1',
+      line: 'Twenty two cantos between a Seeker and an Oracle, set as plates.', serif: '#canto-1 .turn p:not(.who)',
+      label: '#canto-1 .numeral', themes: ['dark'] },
+  ];
+  await t.test('the readers: a live hero, Geist chrome, serif text', async () => {
+    for (const h of HEROES) for (const theme of h.themes) for (const [w, ht] of [[1440, 900], [390, 844]]) {
+      const page = await browser.newPage({ viewport: { width: w, height: ht } });
+      const errors = [];
+      page.on('pageerror', e => errors.push(String(e)));
+      await page.route(u => !u.host.startsWith('127.0.0.1'), r => r.abort());
+      await page.addInitScript(th => localStorage.setItem('tp-theme', th), theme);
+      await page.goto(base + h.url, { waitUntil: 'load' });
+      await page.waitForTimeout(700);
+      const at = `${h.url} ${theme} ${w}`;
+      const m = await page.evaluate(() => {
+        const hero = document.querySelector('.rd-hero.tp-pane');
+        if (!hero) return null;
+        const r = hero.getBoundingClientRect(), bar = document.querySelector('.tp-bar').getBoundingClientRect();
+        const cv = hero.querySelector('.tp-pane-viz > canvas'), img = hero.querySelector('img.tp-pane-cover');
+        const px = cv && cv.width ? cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data : [];
+        let ink = 0; for (let i = 3; i < px.length; i += 4) if (px[i]) ink++;
+        const ff = s => { const e = document.querySelector(s); return e ? getComputedStyle(e).fontFamily : ''; };
+        const start = hero.querySelector('a.rd-start');
+        return { top: r.top, barBottom: bar.bottom, left: r.left, width: r.width, height: r.height,
+          cw: document.documentElement.clientWidth, sw: document.documentElement.scrollWidth, vh: innerHeight,
+          h1s: document.querySelectorAll('h1').length, h1: hero.querySelector('h1')?.textContent,
+          line: hero.querySelector('.tp-pane-line')?.textContent, tag: hero.querySelector('.tp-pane-tag')?.textContent,
+          ink, live: !!(window.TP && TP.live),
+          cover: img ? { src: img.currentSrc || img.src, vis: getComputedStyle(img).visibility, ok: img.complete && img.naturalWidth > 0,
+            in: (b => b.left >= r.left && b.right <= r.right + 1 && b.top >= r.top - 1 && b.bottom <= r.bottom + 1)(img.getBoundingClientRect()) } : null,
+          start: start && { href: start.getAttribute('href'), text: start.textContent.trim() },
+          fName: ff('.rd-hero h1'), fTag: ff('.rd-hero .tp-pane-tag'), fNav: ff('.tp-nav a') };
+      });
+      assert.ok(m, `${at}: no .rd-hero.tp-pane`);
+      near(m.top, m.barBottom, 1, `${at} hero starts under the bar`);
+      near(m.left, 0, 0.5, `${at} hero left edge`);
+      near(m.width, m.cw, 0.5, `${at} hero is full-bleed`);
+      near(m.height, Math.max(m.vh - m.barBottom, 34 * 16), 2, `${at} hero is the window under the bar`);
+      assert.ok(m.sw <= m.cw, `${at}: scrolls sideways ${m.sw} vs ${m.cw}`);
+      assert.equal(m.h1s, 1, `${at}: one h1`);
+      assert.equal(m.h1, h.title);
+      assert.equal(m.line, h.line);
+      assert.ok(m.tag && m.tag.length > 0, `${at}: no tag`);
+      assert.ok(m.live, `${at}: TP.live missing`);
+      assert.ok(m.ink > 1000, `${at}: the hero canvas is blank (${m.ink} painted pixels)`);
+      assert.ok(m.cover && m.cover.src.includes('/img/covers/' + h.cover) && m.cover.ok && m.cover.vis === 'visible' && m.cover.in,
+        `${at}: the cover is not lit inside the hero: ${JSON.stringify(m.cover)}`);
+      assert.deepEqual(m.start, { href: h.start, text: 'Begin reading' }, `${at}: start-reading link`);
+      if (h.contents) assert.equal(await page.locator(`.rd-hero .rd-actions a[href="${h.contents}"]`).textContent(), 'Contents', `${at}: contents link`);
+      assert.match(m.fName, /^"?Geist"?,/, `${at}: title font ${m.fName}`);
+      assert.match(m.fTag, /^"?Geist Mono"?,/, `${at}: tag font ${m.fTag}`);
+      assert.match(m.fNav, /^"?Geist"?,/, `${at}: nav font ${m.fNav}`);
+      await page.locator('.rd-hero a.rd-start').click();
+      await page.waitForTimeout(900);
+      const landed = await page.evaluate(s => {
+        const r = document.querySelector(s).getBoundingClientRect();
+        return { top: r.top, bar: document.querySelector('.tp-bar').getBoundingClientRect().bottom };
+      }, h.start);
+      assert.ok(landed.top >= landed.bar - 2 && landed.top < landed.bar + 140, `${at}: Begin reading lands at ${landed.top}`);
+      const f = await page.evaluate(([a, b]) => [a, b].map(s => { const e = document.querySelector(s); return e ? getComputedStyle(e).fontFamily : ''; }), [h.serif, h.label]);
+      assert.match(f[0], /Iowan Old Style/, `${at}: book text is not the serif: ${f[0]}`);
+      assert.match(f[1], /^"?Geist Mono"?,/, `${at}: reader label font ${f[1]}`);
+      assert.deepEqual(errors, [], at);
+      await page.close();
+    }
+  });
+
+  await t.test('life/ and qubit-dialogues.html: the contents list is set in Geist', async () => {
+    for (const url of ['/life/', '/qubit-dialogues.html']) {
+    const { page } = await open(url, 1440);
+    const f = await page.evaluate(() => ['.contents h2', '.contents a .t', '.contents a .n'].map(s => getComputedStyle(document.querySelector(s)).fontFamily));
+    assert.match(f[0], /^"?Geist Mono"?,/);
+    assert.match(f[1], /^"?Geist"?,/);
+    assert.match(f[2], /^"?Geist Mono"?,/);
+    await page.close();
+    }
+  });
+
+  await t.test('heroes animate only while motion is allowed', async () => {
+    for (const url of ['/life/', '/illustrated/', '/qubit-dialogues.html']) for (const rm of ['no-preference', 'reduce']) {
+      const { page } = await open(url, 1440, 900, { reducedMotion: rm });
+      const snap = () => page.evaluate(() => document.querySelector('.rd-hero canvas').toDataURL());
+      const a = await snap(); await page.waitForTimeout(800); const b = await snap();
+      if (rm === 'reduce') assert.equal(a, b, `${url}: moves under reduced motion`);
+      else assert.notEqual(a, b, `${url}: the hero is not live`);
+      await page.close();
+    }
+  });
+
   await t.test('life/: the end links share the text column and are centred', async () => {
     for (const w of [1440, 768, 390]) {
       const { page } = await open('/life/', w);

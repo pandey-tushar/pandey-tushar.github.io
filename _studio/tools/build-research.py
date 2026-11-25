@@ -24,10 +24,6 @@ def rich(s):
     return re.sub(r'10\^(\d+)', r'10<sup>\1</sup>', esc(s))
 
 
-def roman(n):
-    return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'][n - 1]
-
-
 # an area's motif in papers.json -> its emblem in img/figures/ (drawn by
 # _studio/tools/assets/emblems.py), inlined so currentColor and the tokens
 # follow the theme
@@ -71,61 +67,95 @@ def role(p):
     return f'{"first" if a[0] == ME else "author " + str(a.index(ME) + 1)} of {len(a)} authors'
 
 
-def entry(p, n):
+# an area's motif -> the live figure behind its pane and in its sheet (TP.live.fig in lib/site.js)
+FIGS = {'lattice': 'toric', 'circuit': 'circuit', 'graph': 'graph', 'knot': 'knot', 'primes': 'primes'}
+# where the words sit on each pane in turn, never twice in a row in one place
+PLACES = ['', ' tp-pane-mid', ' tp-pane-end', ' tp-pane-top']
+
+
+def where(href):
+    """The place a link goes, as the sheet's small label after it."""
+    m = re.match(r'https?://(?:www\.)?([^/]+)', href)
+    return m.group(1) if m else 'pandey-tushar.com'
+
+
+def label(text):
+    """A link label: an identifier (doi:, arXiv:) is set in mono."""
+    return f'<span class="tp-id">{esc(text)}</span>' if re.match(r'(doi|arXiv):', text) else esc(text)
+
+
+def entry(p):
     pid = p['id']
     status = esc(p['status']) + (f" &middot; {esc(p['note'])}" if p.get('note') else '')
-    claim = f'\n          <p class="claim">{rich(p["claim"])}</p>' if p.get('claim') else ''
+    claim = f'\n              <p class="claim">{rich(p["claim"])}</p>' if p.get('claim') else ''
     rel = lambda h: ' rel="noopener"' if h.startswith('http') else ''
-    lk = ''.join(f'<a class="tp-link" href="{h}"{rel(h)}>{esc(t)}</a>' for h, t in links(p))
-    lk = lk or '<span>No public copy online</span>'
-    return f'''      <li>
-        <article class="paper" id="{pid}">
-          <a class="no tp-plate" href="#{pid}" aria-label="Link to entry {n}">{n:02d}</a>
-          <div class="body">
-            <h3>{esc(p['title'])}</h3>
-            <p class="by">{byline(p)}</p>
-            <p class="sum">{rich(p['summary'])}</p>{claim}
-          </div>
-          <dl class="spec">
-            <dt class="tp-lbl">Venue</dt><dd>{esc(p['venue'])}</dd>
-            <dt class="tp-lbl">Year</dt><dd>{p['year']}</dd>
-            <dt class="tp-lbl">Status</dt><dd>{status}</dd>
-          </dl>
-          <p class="links">{lk}</p>
-        </article>
-      </li>'''
+    lk = ''.join(f'\n                <li><a href="{h}"{rel(h)}>{label(t)}<small>{where(h)}</small></a></li>' for h, t in links(p))
+    lk = f'<ul class="tp-sheet-links">{lk}\n              </ul>' if lk else '<p class="links">No public copy online</p>'
+    return f'''            <article class="paper tp-sheet-item" id="{pid}">
+              <h3>{esc(p['title'])}</h3>
+              <p class="by">{byline(p)}</p>
+              <p class="sum">{rich(p['summary'])}</p>{claim}
+              <dl class="spec tp-sheet-spec">
+                <dt>Venue</dt><dd>{esc(p['venue'])}</dd>
+                <dt>Year</dt><dd>{p['year']}</dd>
+                <dt>Status</dt><dd>{status}</dd>
+              </dl>
+              {lk}
+            </article>'''
 
 
 def counted(data):
     return [p for p in data['papers'] if p.get('kind') != 'thesis']
 
 
-def research_list(data):
+def tally(ps):
+    """An area's count, as its tag: 3 papers, or 2 papers and a thesis."""
+    n = len([p for p in ps if p.get('kind') != 'thesis'])
+    t = f"{n} paper{'' if n == 1 else 's'}"
+    return t + (' and a thesis' if len(ps) > n else '')
+
+
+def count_note(data):
     listed = len(counted(data))
     rest = data['total'] - listed
-    out = [f'''  <p class="note"><i aria-hidden="true">&#10022;</i><span>Listed here: {listed} of Tushar Pandey&rsquo;s {data['total']} papers and preprints, grouped by area, and his doctoral thesis. The other {WORDS[rest]} are earlier arXiv preprints, from 2021 to 2023, listed on <a class="tp-link" href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" rel="noopener">Google Scholar</a>.</span></p>''']
-    n = 0
-    for i, area in enumerate(data['areas'], 1):
+    return f'''        <p class="tp-hero-note note">Listed here: {listed} of Tushar Pandey&rsquo;s {data['total']} papers and preprints, grouped by area, and his doctoral thesis. The other {WORDS[rest]} are earlier arXiv preprints, from 2021 to 2023, listed on <a class="tp-link" href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" rel="noopener">Google Scholar</a>.</p>'''
+
+
+def research_list(data):
+    """One pane per area, the rail, and one sheet per area holding every paper in it."""
+    panes, rail, sheets = [], [], []
+    for i, area in enumerate(data['areas']):
+        aid, title = area['id'], esc(area['title'])
         ps = [p for p in data['papers'] if p['area'] == area['id']]
-        items = []
-        for p in ps:
-            n += 1
-            items.append(entry(p, n))
-        out.append(f'''  <section class="area" aria-labelledby="area-{area['id']}">
-    <div class="area-head">
-      <figure class="motif tp-plate" aria-hidden="true">{motif(area['motif'])}</figure>
-      <div>
-        <p class="tp-lbl">Area {roman(i)} &middot; {len(ps)} {'entry' if len(ps) == 1 else 'entries'}</p>
-        <h2 class="area-title" id="area-{area['id']}">{esc(area['title'])}</h2>
+        fig, tag = FIGS[area['motif']], tally(ps)
+        panes.append(f'''    <article class="tp-pane{PLACES[i % len(PLACES)]}" id="pane-{aid}" aria-labelledby="pane-{aid}-t">
+      <div class="tp-pane-viz"><canvas data-fig="{fig}" aria-hidden="true"></canvas></div>
+      <div class="tp-pane-in tp-wrap">
+        <div class="tp-pane-text">
+          <p class="tp-pane-tag">{tag}</p>
+          <h2 class="tp-pane-name" id="pane-{aid}-t">{title}</h2>
+          <p class="tp-pane-line">{esc(area['blurb'].rstrip('.'))}</p>
+          <a class="tp-pane-open" href="#area-{aid}" aria-haspopup="dialog" aria-label="Open {title}">Open<i aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </article>''')
+        rail.append(f'    <a href="#pane-{aid}"><span>{title}</span></a>')
+        items = '\n'.join(entry(p) for p in ps)
+        sheets.append(f'''  <dialog class="tp-sheet" id="area-{aid}" aria-labelledby="area-{aid}-t">
+    <div class="tp-sheet-bar"><span class="tp-sheet-tag">{tag}</span><button class="tp-sheet-close" type="button" aria-label="Close">Close <kbd>Esc</kbd></button></div>
+    <div class="tp-sheet-in tp-wrap">
+      <div class="tp-sheet-media"><canvas data-fig="{fig}" aria-hidden="true"></canvas></div>
+      <div class="tp-sheet-body">
+        <figure class="motif" aria-hidden="true">{motif(area['motif'])}</figure>
+        <h2 class="area-title" id="area-{aid}-t">{title}</h2>
         <p class="why">{esc(area['why'])}</p>
-        <p class="blurb">{esc(area['blurb'])}</p>
+        <p class="blurb tp-sheet-sub">{esc(area['blurb'])}</p>
+{items}
       </div>
     </div>
-    <ol class="papers">
-{chr(10).join(items)}
-    </ol>
-  </section>''')
-    return '\n'.join(out)
+  </dialog>''')
+    return (f'  <section id="areas" class="tp-panes" aria-label="Research areas">\n' + '\n\n'.join(panes) + '\n  </section>\n\n'
+            + '  <nav class="tp-rail" aria-label="Panes">\n' + '\n'.join(rail) + '\n  </nav>\n\n' + '\n\n'.join(sheets))
 
 
 def selected_list(data):
@@ -186,6 +216,7 @@ def build():
     data = json.loads(read(ROOT / '_studio' / 'content' / 'papers.json'))
     research = read(ROOT / 'research.html')
     research = splice(research, 'jsonld', jsonld(data))
+    research = splice(research, 'count', count_note(data))
     research = splice(research, 'papers', research_list(data))
     cv = splice(read(ROOT / 'cv.html'), 'selected', selected_list(data))
     return {'research.html': research, 'cv.html': cv}
