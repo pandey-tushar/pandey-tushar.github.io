@@ -48,12 +48,14 @@ def links(p):
         out.append((p['page'], 'Companion page'))
     if p.get('code'):
         out.append((p['code'], 'Code'))
+    if p.get('url'):
+        out.append(tuple(p['url']))
     return out
 
 
 def byline(p):
     names = [f'<b class="me">{esc(a)}</b>' if a == ME else esc(a) for a in p['authors']]
-    if len(names) == 1 and p.get('kind') != 'thesis':
+    if len(names) == 1 and p.get('kind') in (None, 'contribution'):
         return names[0] + ', sole author'
     return ', '.join(names)
 
@@ -104,21 +106,43 @@ def entry(p):
             </article>'''
 
 
+# the works that are not papers or preprints, by kind: (one, many)
+KINDS = {'talk': ('a talk', 'talks'),
+         'contribution': ('a doctoral school contribution', 'doctoral school contributions'),
+         'software': ('a software package', 'software packages'), 'thesis': ('a thesis', 'theses')}
+# the JSON-LD type of each kind; a paper or preprint is a ScholarlyArticle
+TYPES = {'thesis': 'Thesis', 'talk': 'CreativeWork',
+         'contribution': 'ScholarlyArticle', 'software': 'SoftwareSourceCode'}
+
+
 def counted(data):
-    return [p for p in data['papers'] if p.get('kind') != 'thesis']
+    return [p for p in data['papers'] if not p.get('kind')]
+
+
+def others(ps):
+    """The works in ps that are not papers, in KINDS order: ['two talks', 'a thesis']."""
+    out = []
+    for k, (one, many) in KINDS.items():
+        m = len([p for p in ps if p.get('kind') == k])
+        if m:
+            out.append(one if m == 1 else f'{WORDS[m]} {many}')
+    return out
 
 
 def tally(ps):
-    """An area's count, as its tag: 3 papers, or 2 papers and a thesis."""
-    n = len([p for p in ps if p.get('kind') != 'thesis'])
-    t = f"{n} paper{'' if n == 1 else 's'}"
-    return t + (' and a thesis' if len(ps) > n else '')
+    """An area's count, as its tag: 3 papers, or 2 papers, a talk and a thesis."""
+    n = len([p for p in ps if not p.get('kind')])
+    t = [f"{n} paper{'' if n == 1 else 's'}"] + others(ps)
+    return t[0] if len(t) == 1 else ', '.join(t[:-1]) + ' and ' + t[-1]
 
 
 def count_note(data):
     listed = len(counted(data))
-    rest = data['total'] - listed
-    return f'''        <p class="tp-hero-note note">Listed here: {listed} of Tushar Pandey&rsquo;s {data['total']} papers and preprints, grouped by area, and his doctoral thesis. The other {WORDS[rest]} are earlier arXiv preprints, from 2021 to 2023, listed on <a class="tp-link" href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" rel="noopener">Google Scholar</a>.</p>'''
+    if listed != data['total']:
+        raise SystemExit(f"papers.json: {listed} papers listed, total says {data['total']}")
+    rest = others(data['papers'])
+    rest = ', '.join(rest[:-1]) + ' and ' + rest[-1]
+    return f'''        <p class="tp-hero-note note">All {data['total']} papers and preprints, grouped by area, with {esc(rest)}. This is every entry on the <a class="tp-link" href="https://scholar.google.com/citations?user=_ivaRgIAAAAJ" rel="noopener">Google Scholar</a> profile.</p>'''
 
 
 def research_list(data):
@@ -182,7 +206,7 @@ def jsonld(data):
     items = []
     for i, p in enumerate(data['papers'], 1):
         work = {
-            '@type': 'Thesis' if p.get('kind') == 'thesis' else 'ScholarlyArticle',
+            '@type': TYPES.get(p.get('kind'), 'ScholarlyArticle'),
             'headline': p['title'], 'name': p['title'],
             'author': [PERSON if a == ME else {'@type': 'Person', 'name': a} for a in p['authors']],
             'datePublished': p.get('date', str(p['year'])),

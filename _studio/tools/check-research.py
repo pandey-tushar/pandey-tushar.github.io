@@ -26,6 +26,35 @@ OLD_IDS = [
     'the-bonahon-wong-yang-volume-conjecture-for-the-four-punctur',
     'an-intermediate-conjecture-between-goldbach-and-dubner-every',
 ]
+# every entry on the Google Scholar profile (user=_ivaRgIAAAAJ, 23 entries, read 2026-11-25),
+# title as Scholar gives it; papers.json lists each, matched without case or dash style
+SCHOLAR = [
+    'Lifted surgery for non-Abelian two-block group-algebra codes',
+    'An intermediate conjecture between Goldbach and Dubner: every even number is the sum of a prime and a twin prime',
+    'When Classical Baselines Are Tuned as Carefully as the Quantum Model, Does Quantum Reservoir Computing Still Win?',
+    'A Quantum Reservoir Architecture for Chaotic Forecasting and a Test of Whether Its High Dimension Helps',
+    'An architectural capacity ceiling, not a barren plateau: why a fixed-encoding variational quantum circuit cannot fit the Lorenz-63 attractor',
+    'Quantum Kernels for Parity-Structured Classification: A Hybrid Pipeline',
+    'Fair Decoder Baselines and Rigorous Finite-Size Scaling for Bivariate Bicycle Codes on the Quantum Erasure Channel',
+    'Efficient variational quantum eigensolver methodologies on quantum processors',
+    'Machine Learning-Driven Quantum Hacking of CHSH-Based QKD: Exploiting Entropy Vulnerabilities in Self-testing Protocols',
+    'Topological phases of matter, quantum error correction, and topological twists',
+    'Verification of qRNG Using qGAN and Classification Models',
+    'qmprs: Quantum Matrix Product Reduced Synthesis',
+    'Adaptive graph of thoughts: Test-time adaptive reasoning unifying chain, tree, and graph structures',
+    'A Study of Bonahon-Wong-Yang Quantum Invariants',
+    'Modeling sea level rise using ensemble techniques: impacts on coastal adaptation, freshwater ecosystems, agriculture and infrastructure',
+    'Generalized Bonahon-Wong-Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure eight knot complement',
+    'The Bonahon-Wong-Yang volume conjecture for the four-puncture sphere',
+    'Geometry of fundamental shadow link complements and applications to the 1-loop conjecture',
+    'Topological understanding of neural networks, a survey',
+    'Quantum invariant for four punctured sphere and volume conjecture',
+    'Topological characterization with a twist, condensation, and reflection',
+    'Category theory and Topological phases of matter',
+    'On the asymptotic expansion for the relative Reshetikhin-Turaev invariants of fundamental shadow link pairs',
+]
+# the arXiv preprints among them that were once left to Scholar
+ARXIV = ['2105.08805', '2308.06643', '2209.11126', '2301.09742']
 
 
 def esc(s):
@@ -55,6 +84,10 @@ for i in OLD_IDS:
         fail.append(f'papers.json: old anchor {i} dropped')
     if f'id="{i}"' not in research:
         fail.append(f'research.html: old anchor #{i} missing')
+norm = lambda s: s.replace('–', '-').casefold()
+titles = {norm(p['title']) for p in papers}
+fail += [f'papers.json: Scholar entry missing: {t}' for t in SCHOLAR if norm(t) not in titles]
+fail += [f'research.html: no link to arXiv:{a}' for a in ARXIV if f'href="https://arxiv.org/abs/{a}"' not in research]
 for page, html in (('research.html', research), ('cv.html', cv)):
     if f'{FIRM} papers and preprints' not in html:
         fail.append(f'{page}: does not state {FIRM} papers and preprints')
@@ -72,7 +105,7 @@ for p in papers:
     if p.get('selected'):
         if esc(p['title']) not in cv or f'/research.html#{p["id"]}' not in cv:
             fail.append(f"cv.html: selected paper {p['id']} missing")
-    elif esc(p['title']) in cv:
+    elif p.get('kind') != 'talk' and esc(p['title']) in cv:  # the CV lists talks apart
         fail.append(f"cv.html: unselected paper {p['id']} listed")
 
     # a companion page (papers/<slug>.html, see README "Paper companion pages") and a code link

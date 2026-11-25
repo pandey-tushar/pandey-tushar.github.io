@@ -6,13 +6,13 @@
      "blurb": "Topological and qLDPC codes: how they detect errors, how they compute, and how fairly their decoders are compared."},
     {"id": "qml", "motif": "circuit", "title": "Quantum algorithms and quantum machine learning",
      "why": "These papers ask what present quantum processors can do in practice, and whether quantum models still win when the classical ones they are compared with are tuned with the same care.",
-     "blurb": "Variational eigensolvers on hardware, quantum reservoirs and kernels, and machine learning that probes quantum random number generators."},
+     "blurb": "Variational eigensolvers on hardware, quantum reservoirs and kernels, machine learning that probes quantum random number generators, and tensor-network circuit compression."},
     {"id": "ai", "motif": "graph", "title": "LLM reasoning and applied machine learning",
      "why": "Language models still fail at many problems that need several steps of reasoning, and sea level forecasts feed decisions about coasts and the infrastructure on them.",
-     "blurb": "Test-time reasoning for language models, and ensemble forecasting."},
+     "blurb": "Test-time reasoning for language models, ensemble forecasting, and a survey of the topology of neural networks."},
     {"id": "topo", "motif": "knot", "title": "Quantum topology",
      "why": "Quantum topology ties quantities from quantum physics to the geometry of shapes, and a volume conjecture predicts that those quantities, taken to a limit, give the volume of a three-dimensional shape.",
-     "blurb": "Bonahon–Wong–Yang quantum invariants of surface diffeomorphisms and their volume conjectures."},
+     "blurb": "Bonahon–Wong–Yang quantum invariants of surface diffeomorphisms and their volume conjectures, and the geometry and quantum invariants of fundamental shadow link complements."},
     {"id": "nt", "motif": "primes", "title": "Number theory",
      "why": "Goldbach's conjecture, open since 1742, asks whether every even number greater than 2 is the sum of two primes; the conjecture here asks for more, that from 6 on, one of the two can always be a twin prime.",
      "blurb": "Primes, twin primes and Goldbach."}
@@ -59,6 +59,32 @@
       "page": "/papers/bb-erasure-baselines.html",
       "code": "https://github.com/pandey-tushar/QLDPC",
       "summary": "Shows that unfair decoder baselines distort bivariate bicycle code comparisons on erasure noise, and estimates an asymptotic threshold near 0.488 by finite-size scaling.",
+      "selected": false
+    },
+    {
+      "id": "topological-characterization-with-a-twist-condensation-and-r",
+      "area": "qec",
+      "title": "Topological Characterization with a Twist, Condensation, and Reflection",
+      "authors": ["Tushar Pandey", "Eugene Dumitrescu"],
+      "year": 2022,
+      "date": "2022-09-22",
+      "venue": "arXiv preprint",
+      "status": "Preprint",
+      "arxiv": "2209.11126",
+      "summary": "Proposes near- and medium-term protocols for testing logical operations in twisted Z2 and Z4 gauge theories, shows that a non-contractible twist gives a qubit code with better error distance for some logical errors, and gives an error correction algorithm for Z4 double semion condensation.",
+      "selected": false
+    },
+    {
+      "id": "category-theory-and-topological-phases-of-matter",
+      "area": "qec",
+      "kind": "talk",
+      "title": "Category theory and Topological phases of matter",
+      "authors": ["Tushar Pandey"],
+      "year": 2022,
+      "venue": "Summer research talk, Oak Ridge National Laboratory",
+      "status": "Talk",
+      "url": ["https://www.researchgate.net/publication/362758429_Category_theory_and_Topological_phases_of_matter", "Slides"],
+      "summary": "Covers the category theory needed for topological quantum field theories and topological phases of matter, followed by the different topological orders and phases.",
       "selected": false
     },
     {
@@ -138,6 +164,34 @@
       "selected": false
     },
     {
+      "id": "verification-of-qrng-using-qgan-and-classification-models",
+      "area": "qml",
+      "kind": "contribution",
+      "title": "Verification of qRNG Using qGAN and Classification Models",
+      "authors": ["Hubert Kołcz", "Tushar Pandey", "Yug Shah"],
+      "year": 2025,
+      "date": "2025-05-17",
+      "venue": "Doctoral School",
+      "status": "Doctoral school contribution",
+      "url": ["https://scholar.google.com/citations?view_op=view_citation&hl=en&user=_ivaRgIAAAAJ&citation_for_view=_ivaRgIAAAAJ:4TOpqqG69KYC", "Scholar record"],
+      "summary": "Verifies quantum random number generators with a 12-qubit qGAN, a neural network classifier and Markov chain-enhanced logistic regression, benchmarking Qiskit simulations against Rigetti Aspen-M-3 and IonQ Aria-1 hardware.",
+      "selected": false
+    },
+    {
+      "id": "qmprs-quantum-matrix-product-reduced-synthesis",
+      "area": "qml",
+      "kind": "software",
+      "title": "qmprs: Quantum Matrix Product Reduced Synthesis",
+      "authors": ["Amir Ali Malekani Nezhad", "Tushar Pandey"],
+      "year": 2025,
+      "venue": "Zenodo",
+      "status": "Software",
+      "note": "Version 0.0.0rc1",
+      "doi": "10.5281/zenodo.15437416",
+      "summary": "A package that compresses and compiles quantum circuits with tensor networks such as matrix product states and matrix product operators.",
+      "selected": false
+    },
+    {
       "id": "adaptive-graph-of-thoughts-test-time-adaptive-reasoning-unif",
       "area": "ai",
       "title": "Adaptive Graph of Thoughts: Test-Time Adaptive Reasoning Unifying Chain, Tree, and Graph Structures",
@@ -166,6 +220,20 @@
       "selected": false
     },
     {
+      "id": "topological-understanding-of-neural-networks-a-survey",
+      "area": "ai",
+      "title": "Topological Understanding of Neural Networks, a survey",
+      "authors": ["Tushar Pandey"],
+      "year": 2023,
+      "date": "2023-01-23",
+      "venue": "arXiv preprint",
+      "status": "Preprint",
+      "note": "Literature review",
+      "arxiv": "2301.09742",
+      "summary": "Reviews how activation functions and network architectures shape the internal structure of neural networks, starting from binary classification, and suggests experiments in three directions.",
+      "selected": false
+    },
+    {
       "id": "generalized-bonahon-wong-yang-volume-conjecture-of-quantum-i",
       "area": "topo",
       "title": "Generalized Bonahon–Wong–Yang volume conjecture of quantum invariants of surface diffeomorphisms I: the figure eight knot complement",
@@ -188,6 +256,46 @@
       "arxiv": "2311.13151",
       "summary": "Computes the Bonahon-Wong-Yang invariant for four-puncture sphere diffeomorphisms and verifies the volume conjecture for these bundles under technical conditions.",
       "selected": true
+    },
+    {
+      "id": "geometry-of-fundamental-shadow-link-complements-and-applicat",
+      "area": "topo",
+      "title": "Geometry of fundamental shadow link complements and applications to the 1-loop conjecture",
+      "authors": ["Tushar Pandey", "Ka Ho Wong"],
+      "year": 2023,
+      "date": "2023-08-12",
+      "venue": "arXiv preprint",
+      "status": "Preprint",
+      "arxiv": "2308.06643",
+      "summary": "Builds a geometric ideal triangulation of every fundamental shadow link complement, solves its gluing equations explicitly, and uses it to verify the Dimofte-Garoufalidis 1-loop conjecture for these complements and their long Dehn fillings.",
+      "selected": false
+    },
+    {
+      "id": "quantum-invariant-for-four-punctured-sphere-and-volume-conje",
+      "area": "topo",
+      "kind": "talk",
+      "title": "Quantum invariant for four punctured sphere and volume conjecture",
+      "authors": ["Tushar Pandey"],
+      "year": 2023,
+      "venue": "AMS 2023 Spring Southeastern Sectional Meeting, Georgia Institute of Technology",
+      "status": "Talk",
+      "note": "Special Session on Knots, Skein Modules and Categorification",
+      "url": ["https://meetings.ams.org/math/spring2023se/meetingapp.cgi/Paper/23809", "Abstract"],
+      "summary": "Uses the Chekhov-Fock algebra to compute the Bonahon-Wong-Yang quantum invariants of self-homeomorphisms of the four-punctured sphere, and proves the volume conjecture in this case under geometric and technical assumptions.",
+      "selected": false
+    },
+    {
+      "id": "on-the-asymptotic-expansion-for-the-relative-reshetikhin-tur",
+      "area": "topo",
+      "title": "On the asymptotic expansion for the relative Reshetikhin-Turaev invariants of fundamental shadow link pairs",
+      "authors": ["Tushar Pandey", "Ka Ho Wong"],
+      "year": 2021,
+      "date": "2021-05-18",
+      "venue": "arXiv preprint",
+      "status": "Preprint",
+      "arxiv": "2105.08805",
+      "summary": "Proves the asymptotic expansion conjecture for relative Reshetikhin-Turaev invariants of pairs whose complement is a fundamental shadow link complement, when the logarithmic holonomies are small and every cone angle is below pi, and for pairs with small enough cone angles.",
+      "selected": false
     },
     {
       "id": "phd-thesis-a-study-of-bonahon-wong-yang-quantum-invariants",
