@@ -9,9 +9,6 @@
 }
 .tp-mark span { font: 500 1rem/1 var(--tp-sans); letter-spacing: -.01em }
 
-/* a reader is one long text: the hero is a pane, not a snap point */
-:root:has(.rd-hero) { scroll-snap-type: none }
-
 .rd-hero {
   position: relative; overflow: hidden; margin: 0; border-top: 0;
   font-family: var(--tp-sans); font-size: 1rem; line-height: 1.6; color: var(--tp-text); text-align: left;

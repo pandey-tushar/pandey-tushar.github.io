@@ -169,10 +169,8 @@ ol,ul{list-style:none}
   .legend{flex-direction:column;align-items:flex-start;padding-bottom:.6rem}
 }
 
-/* ---------- the panes run edge to edge; the top and the foot are rests for the snap ---------- */
+/* ---------- the panes run edge to edge ---------- */
 .home > #work,.home > #contact{margin-inline:calc(50% - 50vw)}
-.home > .hero{scroll-snap-align:start}
-.tp-foot{scroll-snap-align:end}
 
 /* ---------- the toric code you can work by hand, in its sheet ---------- */
 .lat .tp-sheet-media{display:flex;align-items:center;justify-content:center;padding:clamp(1rem,3vw,2.5rem)}
@@ -883,7 +881,7 @@ function walk(i, j, n, ok){
 }
 
 /* ---------- hero: a toric code lattice, errors found and corrected ---------- */
-var H = { still: 0, dpr: 1.5, ev: [], next: .4, px: -1e4, py: -1e4, tx: -1e4, ty: -1e4 };
+var H = { still: 0, dpr: 1, ev: [], next: .4, px: -1e4, py: -1e4, tx: -1e4, ty: -1e4 };
 H.pt = function(i, j){ return [H.ox + i * H.S, H.oy + j * H.S]; };
 H.setup = function(w, h){
   var S = H.S = w < 640 ? 40 : 52, narrow = w < 992, i, j;
@@ -970,7 +968,7 @@ if (live.add(document.getElementById("field"), H) && heroEl) {
 
 /* ---------- TokenGrid: requests from three tenants stream through a grid ---------- */
 function tokens(pane){
-  var T = { still: 0, dpr: pane ? 1.5 : 2, lanes: [] };
+  var T = { still: 0, dpr: pane ? 1 : 2, lanes: [] };
   function gen(L){
     if (L.left > 0) { L.left--; return L.who; }
     if (L.gap > 0) { L.gap--; return 0; }
@@ -1036,7 +1034,7 @@ function tokens(pane){
 
 /* ---------- doubled semion: errors on the honeycomb, the decoder pairs them ---------- */
 function semion(pane){
-  var M = { still: 0, dpr: pane ? 1.5 : 2, ev: [], next: .3, max: pane ? 4 : 2 };
+  var M = { still: 0, dpr: pane ? 1 : 2, ev: [], next: .3, max: pane ? 4 : 2 };
   M.setup = function(w, h){
     var s = M.s = pane ? Math.max(16, Math.min(32, h / 15)) : Math.max(9, Math.min(22, h / (h < 160 ? 5.5 : 11))), dx = s * Math.sqrt(3) / 2, i, j;
     var cols = M.cols = Math.ceil(w / dx) + 2, rows = M.rows = Math.ceil(h / (1.5 * s)) + 2;
@@ -1111,7 +1109,7 @@ function semion(pane){
 
 /* ---------- AGoT: a graph of thoughts across the pane; a thought branches and merges down it ---------- */
 function graph(pane){
-  var G = { still: 2.4, dpr: pane ? 1.5 : 2, ev: [], next: .4, max: pane ? 4 : 2 };
+  var G = { still: 2.4, dpr: pane ? 1 : 2, ev: [], next: .4, max: pane ? 4 : 2 };
   function near(x, list){ return list.slice().sort(function(a, b){ return Math.abs(G.n[a].x - x) - Math.abs(G.n[b].x - x); }); }
   G.setup = function(w, h){
     var z = Math.min(h, w * 1.4), s = G.s = pane ? Math.max(40, Math.min(64, z / 12)) : Math.max(26, Math.min(44, z / 8)), i, j;
@@ -1219,7 +1217,7 @@ function graph(pane){
    it passes under another, and a stretch of the knot travels along it. */
 function gcd(a, b){ return b ? gcd(b, a % b) : a; }
 function knot(pane){
-  var K = { still: 3, dpr: pane ? 1.5 : 2 }, NB = 24;
+  var K = { still: 3, dpr: pane ? 1 : 2 }, NB = 24;
   K.setup = function(w, h){
     var z = Math.min(h, w * 1.4), s = pane ? Math.max(38, Math.min(54, z / 15)) : Math.max(28, Math.min(40, z / 9)), pad = s;
     K.ax = w / 2 + pad; K.ay = h / 2 + pad;
@@ -1280,7 +1278,7 @@ function knot(pane){
 
 /* ---------- The Qubit Dialogues: a field of Bloch spheres, their states precessing ---------- */
 function bloch(pane){
-  var B = { still: 1.1, dpr: 1.5, ev: [], next: .5, max: 3 }, tl = .36;
+  var B = { still: 1.1, dpr: pane ? 1 : 1.5, ev: [], next: .5, max: 3 }, tl = .36;
   B.setup = function(w, h){
     B.at = cover(B.cv, w, h);
     var s = B.s = Math.max(52, Math.min(84, Math.min(h, w * 1.4) / 9)), R = B.R = s * .32, i, j;
@@ -1341,7 +1339,7 @@ function bloch(pane){
 
 /* ---------- An Unpolarized Life: a field of circles; three at a time find their common region ---------- */
 function polar(pane){
-  var Y = { still: 2, dpr: 1.5, ev: [], next: .6, max: 3 };
+  var Y = { still: 2, dpr: pane ? 1 : 1.5, ev: [], next: .6, max: 3 };
   Y.setup = function(w, h){
     Y.at = cover(Y.cv, w, h);
     var d = Y.sp = Math.max(80, Math.min(128, Math.min(h, w * 1.4) / 5.6)), dy = d * Math.sqrt(3) / 2, i, j;
@@ -1393,7 +1391,7 @@ function polar(pane){
 /* ---------- the Illustrated edition: a field of engraved spheres under a moving light ----------
    On the night ground the strokes are the light; on paper they are the shade. */
 function plate(pane){
-  var E = { still: 2.2, dpr: 1.5 };
+  var E = { still: 2.2, dpr: pane ? 1 : 1.5 };
   E.setup = function(w, h){
     E.at = cover(E.cv, w, h);
     E.R = Math.max(40, Math.min(84, Math.min(h, w * 1.4) / 8)); E.sp = E.R * 2.6; E.st = Math.max(5, Math.min(7, E.R / 10));
@@ -1428,7 +1426,7 @@ function plate(pane){
 
 /* ---------- the course: rows of repetition codes; a bit flips, its two checks light ---------- */
 function rep(pane){
-  var Rp = { still: 1.9, dpr: pane ? 1.5 : 2, ev: [], next: .5, max: pane ? 4 : 2 };
+  var Rp = { still: 1.9, dpr: pane ? 1 : 2, ev: [], next: .5, max: pane ? 4 : 2 };
   Rp.setup = function(w, h){
     var z = Math.min(h, w * 1.4), s = Rp.s = pane ? Math.max(40, Math.min(68, z / 11)) : Math.max(28, Math.min(44, z / 6)), i, j;
     Rp.dy = s * 1.3; Rp.r = s * .17;
@@ -1493,7 +1491,7 @@ function rep(pane){
 
 /* ---------- the playground: a small toric code, errors found and corrected ---------- */
 function toric(pane){
-  var Q = { still: 0, dpr: pane ? 1.5 : 2, ev: [], next: .4, max: pane ? 4 : 2 };
+  var Q = { still: 0, dpr: pane ? 1 : 2, ev: [], next: .4, max: pane ? 4 : 2 };
   function P(q){ return [Q.ox + q[0] * Q.S, Q.oy + q[1] * Q.S]; }
   Q.setup = function(w, h){
     var S = Q.S = pane ? Math.max(48, Math.min(80, Math.min(h, w * 1.4) / 9)) : Math.max(12, Math.min(48, h / 6)), i, j;

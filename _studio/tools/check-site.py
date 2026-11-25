@@ -435,13 +435,14 @@ for sel in ('.tp-pane{', '.tp-pane-open{', '.tp-rail{', '.tp-sheet{', '.tp-sheet
         fail.append(f'lib/site.css: no shared {sel[:-1]}')
 if 'tp-index' in css or 'tp-index' in js or '_tpAwake' in js:
     fail.append('lib/site.css or lib/site.js: the compact index or its hover wake is still there')
-# a pane is the window under the header; snapping is gentle and off under reduced motion
+# a pane is the window under the header; scrolling is free, never snapped
 pb = block(css, '.tp-pane')
 if 'calc(100svh - var(--tp-barh))' not in pb or 'min-height' not in pb:
     fail.append('lib/site.css: .tp-pane is not window-sized with a min-height')
-snap = re.search(r'@media \(prefers-reduced-motion:no-preference\)\{[^@]*scroll-snap-type:y proximity', css)
-if not snap or 'mandatory' in css:
-    fail.append('lib/site.css: scroll snap is not proximity, or not limited to no-preference motion')
+for page in ['lib/site.css', 'lib/article.css', 'index.html', 'qubit-dialogues.html', 'research.html', 'books.html',
+             'cv.html', 'notes/index.html', 'qec-in-practice/index.html', '404.html']:
+    if 'scroll-snap' in read(ROOT / page):
+        fail.append(f'{page}: scroll snap is back; it pulls short scrolls back')
 for name in ('TP.live', 'TP.sheet'):
     if name + ' =' not in js:
         fail.append(f'lib/site.js: no shared {name}')

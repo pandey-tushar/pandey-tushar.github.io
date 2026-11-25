@@ -165,7 +165,7 @@ function polar(L: Live): Scene {
     }
   };
   const S: Scene = {
-    still: 2, dpr: 1.5,
+    still: 2, dpr: 1,
     setup(w, h) {
       at = cover(S.cv!, w, h);
       sp = Math.max(80, Math.min(128, Math.min(h, w * 1.4) / 5.6)); dy = sp * Math.sqrt(3) / 2;
@@ -208,7 +208,7 @@ function plate(L: Live): Scene {
   const { C, rgba } = L;
   let R = 0, sp = 0, st = 0, m: HTMLCanvasElement | null = null;
   const S: Scene = {
-    still: 2.2, dpr: 1.5,
+    still: 2.2, dpr: 1,
     setup(w, h) {
       cover(S.cv!, w, h);
       R = Math.max(40, Math.min(84, Math.min(h, w * 1.4) / 8)); sp = R * 2.6; st = Math.max(5, Math.min(7, R / 10));

@@ -224,8 +224,7 @@
      </div>
    </article> */
 :root:has(.tp-pane){scroll-padding-top:var(--tp-barh)}
-@media (prefers-reduced-motion:no-preference){ :root:has(.tp-pane){scroll-snap-type:y proximity} }
-.tp-pane{position:relative;isolation:isolate;height:calc(100svh - var(--tp-barh));min-height:34rem;overflow:hidden;scroll-snap-align:start;border-top:1px solid var(--tp-rule);--tp-scrim:color-mix(in srgb,var(--tp-void) 86%,transparent)}
+.tp-pane{position:relative;isolation:isolate;height:calc(100svh - var(--tp-barh));min-height:34rem;overflow:hidden;border-top:1px solid var(--tp-rule);--tp-scrim:color-mix(in srgb,var(--tp-void) 86%,transparent)}
 .tp-pane-in{display:grid;height:100%;grid-template-columns:minmax(0,1fr);padding-block:clamp(1.5rem,7vh,5rem)}
 .tp-pane-text{display:grid;justify-items:start;align-self:end;justify-self:start;gap:.85rem;max-width:40rem}
 .tp-pane-viz{position:absolute;inset:0;z-index:-1}
@@ -366,7 +365,7 @@
        (optional) <p class="tp-hero-note">..</p> <p class="tp-hero-actions"><a class="tp-btn pri" ..>..</a></p>
      </div></div>
    </section> */
-.tp-hero{position:relative;isolation:isolate;display:flex;align-items:flex-end;min-height:calc(88svh - var(--tp-barh));overflow:hidden;scroll-snap-align:start;--tp-scrim:color-mix(in srgb,var(--tp-void) 80%,transparent)}
+.tp-hero{position:relative;isolation:isolate;display:flex;align-items:flex-end;min-height:calc(88svh - var(--tp-barh));overflow:hidden;--tp-scrim:color-mix(in srgb,var(--tp-void) 80%,transparent)}
 .tp-hero > canvas{position:absolute;inset:0;z-index:-1;display:block;width:100%;height:100%}
 .tp-hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(to top,var(--tp-scrim) 0,transparent 55%)}
 .tp-hero-in{width:100%;padding-block:clamp(6rem,16vh,11rem) clamp(2.6rem,7vh,5rem)}
@@ -382,7 +381,6 @@
 .tp-hero .tp-btn.pri{border-color:var(--tp-acc);color:var(--tp-acc);background:transparent}
 .tp-hero .tp-btn.pri:hover,.tp-hero .tp-btn.pri:focus-visible{background:var(--tp-a08)}
 @media (min-width:56em){ .tp-hero::after{background:radial-gradient(80% 95% at 0% 100%,var(--tp-scrim) 0,transparent 66%)} }
-:root:has(.tp-pane) .tp-foot{scroll-snap-align:end}
 
 /* ---------- a coda ----------
    A short, quiet band after a run of panes for what belongs to the whole page
